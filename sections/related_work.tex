@@ -1,0 +1,99 @@
+\begin{table}[t]
+    \centering
+    \caption{Comparison of optimization and convergence guarantee of deep hashing methods.}
+    \label{Table: summary of deep hashing algorithms}
+    \resizebox{\textwidth}{!}{
+\begin{tabular}{cccccc}
+\toprule
+\textbf{Type} & \textbf{Method} & \textbf{Model} 
+  & \textbf{Quantization Loss} & \textbf{Optimization} & \textbf{Complexity} \\
+\midrule
+    \multirow{3}{*}{\centering Discrete} 
+    & DDSH \cite{liDeepSupervisedHashing} & $\min L_s(\bb) + Q(\bu, \bb)$ & \centering $\|\cdot\|^2$ & BQP & \multirow{12}{*}{\centering ---} \\
+    \cmidrule(lr){2-5}
+    & DSDH \cite{li2017deep}& \multirow{2}{*}{\centering $\min L_s(\bu) + Q(\bu, \bb)$} & \multirow{2}{*}{\centering $\|\cdot\|^2$} & $sgn$ update &  \\ 
+    & DPSH \cite{liFeatureLearningBased2016} & &  & DCC &  \\ 
+    \cmidrule(lr){1-5}
+    \multirow{9}{*}{\centering Continuous}
+    & DCH \cite{caoDeepCauchyHashing2018} &\multirow{4}{*}{\centering $\min L_s(\bu) + h(\bu)$} & $\log \left( 1 + \frac{\text{dist}_{\text{h}}(|\bu|, \mathbf{1})}{\gamma} \right)$ & \multirow{4}{*}{\centering SGDM} &  \\
+    & DNNH \cite{laiSimultaneousFeatureLearning2015} & & $\mathcal{I}_{[-1,1]^d}(\bu)$ & &  \\
+    & DSH \cite{liuDeepSupervisedHashing} & & $\| | \bu| - \mathbf{1}\|_1$ &  &  \\ 
+    & DTSH \cite{wang2016DTSH} & & $\| | \bu| - \mathbf{1}\|_2^2$ &  &  \\ 
+    & DHN \cite{zhuDeepHashingNetwork2016} & & $\sum_i\log(\cosh(|u_i|-1))$&  &  \\ 
+    \cmidrule(lr){2-5}
+    & MDSHC \cite{wang2023deep} & \scriptsize $\min L_c(\bu) + L_s (\bu)+ h(\bu)$ & $\| | \bu| - \mathbf{1}\|_1$ & RMSProp &  \\ 
+    \cmidrule(lr){2-5}
+    & HashNet \cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering $\min L_s(\bu)$} & \multirow{2}{*}{\centering -} & SGDM &  \\     
+    & OrthoHash \cite{hoeOneLossAll2021} & & & Adam &  \\
+    % \cmidrule(lr){2-5}
+    % & SBPG \cite{wang2024bregman} & \scriptsize $\min L_s(\bu) + h(\bu)$ & Weakly convex $h$ & SBregman PG & $\mathcal{O}(\varepsilon^{-4})$ \\
+    \cmidrule(lr){2-6}
+   & \textbf{DualHash-StoM} & \multirow{2}{*}{\small $ \min L_s(\bu) + Q(\bu,\bb) + h(\bb)$} & \multirow{2}{*}{$\| | \bb| - \mathbf{1}\|_1$} & \multirow{2}{*}{Sto Primal-Dual} & $\mathcal{O}(\varepsilon^{-4})$ \\
+    & \textbf{DualHash-StoRM} & & & & $\mathcal{O}(\varepsilon^{-3})$ \\
+    \bottomrule
+    \end{tabular}
+    }
+    % \vspace{-5pt}
+    \parbox{\textwidth}{\scriptsize
+    \textbf{Notes}: The \textbf{Type} column indicates whether the method uses discrete or continuous optimization for quantization. The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{Quantization Loss} column specifies the loss (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)) for quantization error, with `-' indicating no explicit loss. The \textbf{Optimization} column describes the training strategy, with discrete methods focusing on binary code updates. DCC stands for Discrete Cyclic Coordinate, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `-' indicating no such analysis.
+    }
+     \vspace{-5pt}
+\end{table}
+\subsection{Related Work}
+\label{Section: related work}
+\blue{We now elucidate these contributions by reviewing some related results on the optimization in deep hashing methods and the 
+the convergence of nonconvex primal-dual optimization algorithm and deep hashing  for (1.1) and some other stochastic algorithms about ?. }
+
+\paragraph{Optimization algorithms for deep hashing} Improving retrieval accuracy and reducing the discrepancy between continuous representations and binary hash codes have long been central
+issues in deep hashing. One line of work adopts continuous relaxation
+and introduces explicit quantization regularization on network outputs;
+in particular, W-type regularizers such as $\||\mathbf{u}|-\mathbf{1}\|_1$
+have been widely used to encourage binary-like activations
+\cite{liuDeepSupervisedHashing,wang2023deep,zhuDeepHashingNetwork2016}.
+Another line refines the discretization objective through greedy coding
+schemes, central similarity targets, or proxy-based supervision
+\cite{su2018greedy,yuanCentralSimilarityQuantization2020,MPDH2024,
+semanticHashCenters2025}. Alternative strategies directly address binary
+constraints by introducing auxiliary hash codes
+\cite{liDeepSupervisedHashing,li2017deep,liFeatureLearningBased2016}.
+
+Recent studies have further strengthened the backbone architecture to
+improve feature quality, extending deep hashing from conventional CNNs
+to hybrid CNN--Transformer frameworks \cite{he2024hybridhash},
+Transformer-based hashing models
+\cite{chen2021transhash,wu2025fth,liu2025capmh}, and state-space
+architectures \cite{he2025mambahash}. Notably, even recent architectures
+retain W-type regularization; for instance, \cite{he2025mambahash}
+employs $\||\mathbf{u}|-\mathbf{1}\|_2^2$ as a smooth surrogate for
+$\||\mathbf{u}|-\mathbf{1}\|_1$ to facilitate gradient-based
+optimization, indicating that the practical relevance of W-type
+regularization has not diminished. The remaining challenge is to
+establish theoretically grounded optimization methods for directly
+handling nonsmooth W-type regularization under nonlinear deep network
+mappings, which is the focus of this work.
+
+\paragraph{Primal-Dual Methods for Nonconvex structured problems} From a constrained optimization perspective, Problem \eqref{Eq: the general nonlinear composite problem in intro} can be reformulated using auxiliary variables, leading to a nonlinearly constrained problem. There has been growing interest in primal-dual methods for such problems, particularly augmented Lagrangian methods (ALM) and their stochastic variants. A Lagrangian-based framework was pioneered for deterministic settings by \cite{bolteNonconvexLagrangian2018}. This line of work was subsequently extended to stochastic settings in \cite{shi2025momentum, jin2022stochastic, lu2024variancereducedfirstordermethodsdeterministically}, which primarily address single-block problem structures. This type of block-separable structure is naturally amenable to the Alternating Direction Method of Multipliers (ADMM), a technique that decomposes complex problems into simpler subproblems. Originally developed for convex optimization \cite{gabay1976dual}, ADMM has well-established convergence guarantees and complexity analyses in the convex setting \cite{he20121,monteiro2013iteration}. Driven by its empirical success in nonconvex applications such as neural network training \cite{taylor2016training}, nonconvex ADMM and its associated complexity analysis have attracted significant research attention \cite{li2015global,hong2016convergence,Boct2019SIOPT,boct2020proximal}. Notably, \cite{huang2019faster} provided a pioneering analysis that established gradient (or sample) complexity bounds for nonconvex stochastic ADMM.
+
+\paragraph{Complexity results for nonconvex stochastic constrained optimization}
+% \textit{Compositional structure with nonlinear mappings:} The key technical hurdle in handling \eqref{Eq: the general nonlinear composite problem in intro} is ensuring tractability of the composite function \(h(\bD_i)\). Existing stochastic methods for nonlinear compositions \cite{duchiStochasticMethodsComposite2018,hu2023non,wang2024complexity,ADMMNolinear2024} typically require one of the following:
+% \textbf{(C1)} \textit{Weak convexity of the composition}: \(h(\bD_i)\) is \(\rho\)-weakly convex, enabling smoothing via Moreau envelopes;
+% \textbf{(C2)} \textit{Convexity of the outer function}: \(h\) is convex (even if nonsmooth), allowing efficient proximal operators.
+% Other studies \cite{bian2021stochastic,Huang2020FasterSA} focus on stochastic optimization with linear compositional structures.
+% In deep hashing, neither condition holds: W-type regularizers like \(\|\,|\bz| - \mathbf{1}\|_1\) are \textit{nonconvex} (violating C2), and their composition with neural network outputs \(\bD_i(\bx)\) is \textit{not weakly convex} (violating C1) due to the non-Lipschitz gradient of \(|\cdot|\) around zero. This regime—nonconvex outer function \(h\) with nonlinear inner mapping \(\bD_i\)—remains largely unaddressed in the stochastic optimization literature. Bolte et al. \cite{bolteNonconvexLagrangian2018} study a Lagrangian-based approach for \eqref{Eq: the general nonlinear composite problem in intro} in the deterministic setting, establishing asymptotic convergence via the Kurdyka-Łojasiewicz property. However, their analysis neither extends to stochastic gradients nor provides non-asymptotic complexity bounds—both critical for assessing algorithmic efficiency in modern deep learning applications.
+
+% \begin{table}[h]
+% \centering
+% \small
+% \caption{Technical approaches for nonconvex composite optimization}
+% \begin{tabular}{lll}
+% \toprule
+% \textbf{Method Class} & \textbf{Key Requirement} & \textbf{Limitation for W-hashing} \\
+% \midrule
+% Bregman PG & Tractable Bregman divergence & Non-differentiability of \(|\cdot|\) \\
+% ADMM & Solve nonconvex subproblems & Prohibitive for deep networks \\
+% DCA & Inner loop for DC structure & Computational overhead \\
+% \textbf{DualHash} & \textbf{Closed-form dual proximal} & \textbf{None (first applicable method)} \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+

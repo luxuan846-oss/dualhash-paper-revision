@@ -1,0 +1,207 @@
+% 共享文档信息 (可以从主文档和补充文档中调用)
+
+% 只保留一次，放在文件最前面
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm,algorithmic}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{url}
+% \usepackage{hyperref}
+\usepackage[pdfencoding=auto, psdextra]{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{cleveref}
+\usepackage{lipsum}
+\usepackage{booktabs, multirow, setspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, shapes.misc}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{nicefrac, xspace, mathrsfs, bm}
+\usepackage{cite}
+\usepackage{nameref}
+\usepackage{stfloats}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+\usepackage{microtype}
+% \usepackage{caption}
+\captionsetup[table]{
+  labelfont=sc,        % 标签使用small caps
+  textfont=sc,         % 文本使用small caps
+  labelsep=newline,    % 标签和标题之间换行
+  justification=centering  % 居中对齐
+}
+\usepackage{newtxtext,newtxmath}  % Times字体包
+%-----------------------------数学符号新命令------------------------------
+\newcommand{\eucalB}{\EuScript{B}}
+\newcommand{\eucalP}{\EuScript{P}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Ex}{\mathsf{E}}
+\newcommand{\Prob}{\mathsf{P}}
+\newcommand{\one}{\mathbbm{1}}
+\newcommand{\One}{\bm{1}}
+\newcommand{\zero}{\bm{0}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Rp}{\RR_+}
+\newcommand{\TT}{\mathbb{T}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\diff}{\mathrm{d}}
+\newcommand{\prox}{\mathrm{prox}}
+\newcommand{\rprox}{\mathrm{rprox}}
+\newcommand{\ran}{\mathrm{ran}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\bA}{\bm{A}}
+\newcommand{\bB}{\bm{B}}
+\newcommand{\bH}{\bm{H}}
+\newcommand{\bF}{\bm{F}}
+\newcommand{\bS}{\bm{S}}
+\newcommand{\bX}{\bm{X}}
+\newcommand{\bx}{\bm{x}}
+\newcommand{\bb}{\bm{b}}
+\newcommand{\bc}{\bm{c}}
+\newcommand{\br}{\bm{r}}
+\newcommand{\bbeta}{\bm{\beta}}
+\newcommand{\bt}{\bm{t}}
+% \newcommand{\eproof}{\hfill $\square$}
+\newcommand{\bh}{\bm{h}}
+\newcommand{\bu}{\bm{u}}
+\newcommand{\bz}{\bm{z}}
+\newcommand{\ba}{\bm{a}}
+\newcommand{\by}{\bm{y}}
+\newcommand{\be}{\bm{e}}
+\newcommand{\bU}{\bm{U}}
+\newcommand{\bZ}{\bm{Z}}
+\newcommand{\bY}{\bm{Y}}
+\newcommand{\blmbd}{\bm{\lambda}}
+\newcommand{\bLmbd}{\bm{\Lambda}}
+\newcommand{\bg}{\bm{g}}
+\newcommand{\bd}{\bm{d}}
+\DeclareMathOperator*{\argmin}{\mathrm{argmin}}
+\DeclareMathOperator*{\Argmin}{\mathrm{Argmin}}
+\DeclareMathOperator*{\minimize}{\mathrm{minimize}\,}
+\DeclareMathOperator*{\maximize}{\mathrm{maximize}}
+\DeclareMathOperator*{\argmax}{\mathrm{argmax}}
+\DeclareMathOperator*{\Diag}{\mathrm{Diag}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\ent}{\mathrm{ent}}
+% \newcommand{\diag}{\mathrm{diag}}
+\newcommand{\dom}{\mathrm{dom}}
+\newcommand{\interior}{\mathrm{int}}
+\newcommand{\zer}{\mathrm{zer}}
+\newcommand{\epi}{\mathrm{epi}}
+\newcommand{\amax}{a_{\max}}
+\newcommand{\amin}{a_{\min}}
+\newcommand{\bmax}{b_{\max}}
+\newcommand{\bmin}{b_{\min}}
+\newcommand{\bp}{\bm{p}}
+\newcommand{\bmu}{\bm{\mu}}
+\newcommand{\bD}{\bm{D}}
+\newcommand{\mW}{\mathrm{W}}
+\newcommand{\bv}{\bm{v}}
+\newcommand{\bw}{\bm{w}}
+\newcommand{\ta}{\tilde{a}}
+\newcommand{\tb}{\tilde{b}}
+\newcommand{\tp}{\widetilde{\bp}}
+\newcommand{\sumn}{\sum_{i=1}^n}
+\newcommand{\sumQ}{\sum_{q=1}^Q}
+\newcommand{\sumq}{\sum_{k=1}^q}
+\newcommand{\summ}{\sum_{i=1}^m}
+\newcommand{\sumd}{\sum_{i=1}^d}
+\newcommand{\sumT}{\sum\limits_{ k =1}^{T}}
+\newcommand{\sumTa}{\frac{1}{T} \sum\limits_{ k =1}^{T}}
+\newcommand{\bC}{\bm{C}}
+\newcommand{\bI}{\bm{I}}
+\newcommand{\bM}{\bm{M}}
+\newcommand{\bR}{\bm{R}}
+\newcommand{\bV}{\bm{V}}
+\newcommand{\bW}{\bm{W}}
+\newcommand{\bxi}{\bm{\xi}}
+\newcommand{\tmu}{\widetilde{\bmu}}
+\newcommand{\tU}{\widetilde{\bU}}
+\newcommand{\tV}{\widetilde{\bV}}
+\newcommand{\tM}{\widetilde{\bM}}
+\newcommand{\bDelta}{\bm{\Delta}}
+\newcommand{\bs}{\bm{s}}
+\newcommand{\ox}{\overline{x}}
+\newcommand{\ob}{\overline{b}}
+\newcommand{\op}{\overline{p}}
+\newcommand{\obp}{\overline{\bp}}
+\newcommand{\obmu}{\overline{\bmu}}
+\newcommand{\obC}{\overline{\bC}}
+\newcommand{\obD}{\overline{\bD}}
+\newcommand{\bsigma}{\bm{\sigma}}
+\newcommand{\bomega}{\bm{\omega}}
+\newcommand{\tomega}{\widetilde{\omega}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\an}{\mathrm{an}}
+\newcommand{\bj}{\bm{j}}
+\newcommand{\bG}{\bm{G}}
+\newcommand{\bcalG}{\bm{\calG}}
+\newcommand{\bcalK}{\bm{\calK}}
+\newcommand{\bcalX}{\bm{\calX}}
+\newcommand{\fX}{\mathfrak{X}}
+\newcommand{\bfX}{\bm{\fX}}
+\newcommand{\bell}{\bm{\ell}}
+\newcommand{\bL}{\bm{L}}
+\newcommand{\hy}{\widehat{y}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\renewcommand{\vec}{\mathrm{vec}}
+\newtheorem{proof}{Proof}
+\newenvironment{noproof}{\par\noindent\textbf{Proof.}\space}{\hfill\par}
+\newtheorem{corollary}[theorem]{Corollary} 
+\newtheorem{remark}{Remark}[section]  % 按节编号的注释环境
+\newtheorem{proposition}{Proposition}
+% \newtheorem{remark}[theorem]{Remark}  % 与theorem共享编号
+
+\newcommand{\bcL}{\overline{\calL}}
+\newcommand{\KL}{K\L\xspace}
+\newcommand{\res}{\mathrm{res}}
+\newcommand{\eproof}{\hfill $\square$}
+
+\newcommand{\commyy}[1]{{\color{red}(yy: #1)}} % Yuan Yao's comments
+
+\numberwithin{equation}{section}
+\newcommand{\blue}[1]{\begin{color}{blue}#1\end{color}} 
+\newcommand{\red}[1]{\begin{color}{red}#1\end{color}}
+
+%% Packages and macros go here
+\usepackage{lipsum}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{algorithmic}
+\ifpdf
+  \DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}
+\else
+  \DeclareGraphicsExtensions{.eps}
+\fi
+
+% Prevent itemized lists from running into the left margin inside theorems and proofs
+\usepackage{enumitem}
+\setlist[enumerate]{leftmargin=.5in}
+\setlist[itemize]{leftmargin=.5in}
+
+% Add a serial/Oxford comma by default.
+\newcommand{\creflastconjunction}{, and~}

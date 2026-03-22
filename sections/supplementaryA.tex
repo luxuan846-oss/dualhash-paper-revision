@@ -1,0 +1,241 @@
+% % !TEX root = main.tex
+% \documentclass[journal]{IEEEtran}
+% \input{tip_shared}
+% \allowdisplaybreaks[2]
+
+% % 跨文档引用配置
+% \usepackage{xr-hyper}  % 推荐使用 xr-hyper（支持hyperref）
+% \usepackage{hyperref}  % 如果需要超链接支持
+
+% \externaldocument{main}  
+
+This supplementary material provides detailed experimental settings and additional results.
+
+% In \Cref{Appendix: Preliminaries and notations}, we give some basic definitions and lemmas for the following analysis.
+
+% In \Cref{Appendix: main proofs}, we discuss the main assumptions.
+
+% In \Cref{Appendix: Experiment details}, we provide the experimental details and additional experiments.
+
+\section{Experiments details}
+\label{Appendix: Experiment details} 
+\subsection{Deep Pairwise Supervised Hashing Formulation}
+\label{Appendix: hashing formulation}
+
+We consider deep supervised pairwise hashing in our experiments, which aims to learn binary codes that minimize Hamming distances for similar pairs and maximize them for dissimilar pairs. Let $\bA = \{\ba_i \in \RR^{d_a} : i = 1, \ldots, n\}$ be the training set with labels $\calY = \{\by_i \in \{0,1\}^C\}$ (one-hot for single-label, multi-hot for multi-label). Key notations are in \Cref{Table:notations_for_deep_hashing}.
+
+
+\paragraph{Network Architecture}  
+A CNN extracts features from $\ba_i$, followed by a fully connected hash layer producing $d$-dimensional outputs $\bC(\bx; \ba_i)$, which are passed through $\tanh$ to yield $\bu_i$.
+
+
+\paragraph{Loss Function}  
+For hash codes in $\{-1,1\}^d$, the Hamming distance is $d_{ij}^h = \tfrac{1}{2}(d - \langle \bh_i, \bh_j \rangle)$. Following \cite{xiaSupervisedHashingImage2014,laiSimultaneousFeatureLearning2015}, similarity $s^o_{ij} = 1$ if samples share labels, else $0$. The likelihood is:
+\[
+P(s^o_{ij} \mid \bh_i, \bh_j) = \sigma(\langle \bh_i, \bh_j \rangle)^{s^o_{ij}} \left(1 - \sigma(\langle \bh_i, \bh_j \rangle)\right)^{1 - s^o_{ij}},
+\]
+where $\sigma(x) = (1 + \exp(-\alpha x))^{-1}$, $\alpha < 1$. Using continuous codes $\bu_i$ and $s^h_{ij} = \tfrac{1}{2} \langle \bu_i, \bu_j \rangle$, the loss becomes:
+\begin{align}
+\label{Eq: the pairwise CE loss}
+\min_{\bx} \; \calL_S(\bx) = -\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\alpha s^o_{ij} s^h_{ij}\right)\right).
+\end{align}
+
+We use the W-type regularization:
+\begin{align}
+\label{Eq: the W-type regularization}
+h(\bZ) = \sum_{i=1}^n h(\bz_i), \quad h(\bz) = \lambda \|\,|\bz| - \bm{1}\,\|_1,
+\end{align}
+where $\lambda > 0$ controls regularization strength.
+
+Combining \eqref{Eq: the pairwise CE loss} and \eqref{Eq: the W-type regularization} into \eqref{Prop: block-wise regularized problem} gives the final loss of DualHash in our experiments.
+\begin{align}
+\label{Eq: the pairwise quantization-based hashing}
+\min_{\bx \in \calX, \bB \in \calB} \; 
+&-\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\alpha s^o_{ij} s^h_{ij}\right)\right) \notag \\
+&+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \bu_i\|_2^2 
++ \sum_{i=1}^n \lambda \|\,|\bb_i| - \bm{1}\,\|_1.
+\end{align}
+
+
+\paragraph{Out-of-sample Extension}  
+For an unseen query $\ba_q \notin \bA$, its binary code is predicted as:
+\[
+\bb_q = \operatorname{sgn}(\bC(\bx; \ba_q)).
+\]
+\begin{table}[t]
+    \centering
+    \caption{Summary of symbols and notations.}
+    \label{Table:notations_for_deep_hashing}
+    \small
+    \begin{tabular}{ll}
+        \toprule 
+        \textbf{Symbol} & \textbf{Description} \\
+        \midrule 
+        $\ba_{i}$, $\by_{i}$ & Input feature and label vector for \\
+                             & $i$-th sample \\
+        $s_{ij}^{o}$, $s_{ij}^{h}$ & Similarity in input space and \\
+                                   & Hamming space \\
+        $d_{ij}^{o}$, $d_{ij}^{h}$ & Distance in input space and \\
+                                   & Hamming space \\
+        $\bC(\bx; \ba_{i})$ & Network output before activation \\
+        $\bb_{i}\in \{-1, 1\}^{d}$ & Binary hash code for $i$-th sample \\
+        $\bu_{i}= \tanh(\bC(\bx; \ba_{i}))$ & Continuous code after activation \\
+        $n$, $d$ & Number of samples and hash \\
+                 & code length \\
+        $\bx$ & Network parameters \\
+        $d_{\ba}$, $d_{x}$ & Dimension of input feature and \\
+                           & parameters \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Details of experiment implementation}
+\label{Appendix: Details of experiment implementation}
+\paragraph{Baseline methods}
+We compare our method with eight baseline approaches, including one traditional discrete hashing method and seven deep supervised hashing methods:
+\begin{enumerate}[label=(\roman{*}),leftmargin=2em]
+    \item \textbf{SDH}~\cite{shenSupervisedDiscreteHashing2015}: A pointwise supervised hashing method using hand-crafted features. It employs discrete cyclic coordinate descent to directly optimize binary codes.
+    
+    \item \textbf{DHN}~\cite{zhuDeepHashingNetwork2016}: A Bayesian framework that minimizes pairwise cross-entropy loss and quantization error using $\tanh$ relaxation and $\sum_i\log(\cosh(|z_i|-1))$ regularization.
+    
+    \item \textbf{DSH}~\cite{liuDeepSupervisedHashing}: Uses max-min pairwise loss with $\||\bz|-\bm{1}\|_1$ regularization to minimize quantization error.
+    
+    \item \textbf{DTSH}~\cite{wang2016DTSH}: Learns hash codes by maximizing triplet likelihood with negative log-triplet loss, using  $\||\bz|-\bm{1}\|^2_2$  quantization regularization and a positive margin $\alpha$ to accelerate training and normalize Hamming distance gaps.
+    
+    \item \textbf{HashNet}~\cite{Cao2017HashNetDL}: Progressively increases $\beta$ in $\tanh(\beta x)$ to approximate the $\text{sgn}$ function, addressing nonconvex optimization challenges.
+    
+    \item \textbf{DSDH}~\cite{li2017deep}: Integrates pairwise labels and classification information using alternating minimization to learn features and binary codes with the $\text{sgn}$ function.
+    
+    \item \textbf{OrthoHash}~\cite{hoeOneLossAll2021}: Uses a single cosine similarity loss to maximize alignment between continuous codes and binary orthogonal codes, ensuring discriminativeness with minimal quantization error.
+    
+    \item \textbf{MDSHC}~\cite{wang2023deep}: A two-stage method that first generates hash centers with minimal Hamming distance constraints, then uses three-part losses with $\||\bz|-\bm{1}\|_1$ regularization to reduce quantization error.
+\end{enumerate}
+
+
+\paragraph{Evaluation Protocols}
+Following \cite{liuDeepSupervisedHashing}, we adopt three evaluation metrics:
+
+\begin{enumerate}[label=\textup{(\roman{*})}, leftmargin=2em]
+    \item \textit{Mean Average Precision (mAP)}: For a query $\bx_q$, the Average Precision is computed as:
+    \[
+        \text{AP}(\bx_q) = \frac{\sum_{k=1}^{N} P(k) \cdot \mathbb{I}_{\text{rel}}(k)}{\min(N, R_q)},
+    \]
+    where $P(k)$ is precision at rank $k$, $\mathbb{I}_{\text{rel}}(k)$ indicates whether the $k$-th result is relevant, $R_q$ is the total relevant samples, and $N$ is the number of retrieved items. mAP averages AP over all queries. For CIFAR-10, we use all returned neighbors; for NUS-WIDE, we consider top-5000 results.
+    
+    \item \textit{Precision at Top K (AP@topK)}: The proportion of true neighbors among top-K retrieved results, averaged over all queries.
+    
+    \item \textit{Precision within Hamming Radius 2 (AP@r)}: Measures retrieval accuracy for items within Hamming distance 2 from the query. This metric is particularly efficient as Hamming radius search has $\mathcal{O}(1)$ time complexity per query.
+    
+    \item \textit{Precision-recall curves of Hamming ranking}: PR curves illustrate
+        precision at various levels of recall, offering insights into the trade-off between precision and recall at different thresholds. These curves are widely
+        recognized as effective indicators of the robustness and overall performance
+        of different algorithms.
+\end{enumerate}
+
+\section{Additional Experiments Results}
+\subsection{Comparison of Optimization Algorithms with Different W-Type Regularizations}
+\begin{table*}[!t]
+    \centering
+    \caption{Configurations of different W-type regularizations and optimization algorithms \\ for DualHash-StoM and three baselines.}
+    \label{tab:4_algorithms_for_hash_regularization_and_update}
+    \resizebox{0.93\textwidth}{!}{
+    \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}lcccc@{}}
+        \toprule 
+        Method & $h(\bz)$ & Convexity & Algorithm & Complexity \\
+        \midrule 
+        DSH \cite{liuDeepSupervisedHashing} & $\| |\bz| - \mathbf{1}\|_{1}$ & Nonconvex & SGDM & -- \\
+        StoMHash-WCR & $\| \bz^{2}- \mathbf{1}\|_{1}$ & Weakly convex & SPGD & -- \\
+        DHN \cite{zhuDeepHashingNetwork2016} & $\sum_{i}\log(\cosh(|z_{i}| - 1))$ & Nonconvex & SGDM & -- \\
+        \textbf{DualHash-StoM} & $\| |\bz| - \mathbf{1}\|_{1}$ & Nonconvex & PD & $\checkmark$ \\
+        \bottomrule
+    \end{tabular*}}
+    \vspace{-3pt}
+    \parbox{0.93\textwidth}{\footnotesize
+    \textbf{Notes}: \textbf{Algorithm} describes the optimization strategy: SGDM (stochastic subgradient descent with momentum), SPGD (stochastic proximal gradient descent), PD (primal-dual). \textbf{Complexity} reports oracle complexity; `--' indicates no analysis available.
+    }
+\end{table*}
+To validate the effectiveness of our primal-dual framework, we compare DualHash-StoM
+against optimization algorithms with different W-type regularizations. \Cref{tab:4_algorithms_for_hash_regularization_and_update}
+summarizes the configurations of different regularization functions and their corresponding optimization approaches. For StoMHash-WCR, we employ the regularization $\lambda \| \bz^{2}- \mathbf{1}\|_1$
+following the iSPALM framework \cite{InertialProximalAlternating}. The proximal
+operator is computed with parameter $\rho > 0$ under the condition
+$\frac{\rho}{\eta}> \frac{1}{2}$, which ensures the subproblem is strongly convex
+with a unique solution.
+% $$\text{prox}_{\rho f}(\bx) = \arg \min_{y}\left( \eta \|\by^{2}- \mathbf{1}\| + \frac{\rho}{2} \|\by - \bx\|^{2}\right).$$
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{results_images/ex3_training_cifar10.pdf}
+    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the CIFAR-10 dataset.}
+    \label{Fig: Comparison of training performance of Different Methods on CIFAR-10}
+\end{figure*}
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{results_images/ex3_training_nuswide.pdf}
+    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the NUS-WIDE dataset.}
+    \label{Fig: Comparison of training performance of Different Methods on NUS-WIDE}
+\end{figure*}
+
+
+\paragraph{Training performance analysis}
+\begin{table*}[htbp]
+    \centering
+    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits \\ on CIFAR-10 and NUS-WIDE datasets}
+    \label{tab:performance_comparison_64bits}
+    \resizebox{0.93\textwidth}{!}{
+    \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}lcccccc@{}}
+        \toprule 
+        \multirow{2}{*}{Methods} & \multicolumn{3}{c}{CIFAR-10} & \multicolumn{3}{c}{NUS-WIDE} \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-7}
+         & mAP@All & AP@r & Time\textsuperscript{*} & mAP@5000 & AP@r & Time\textsuperscript{*} \\
+        \midrule 
+        DSH \cite{liuDeepSupervisedHashing} & 0.8010 & 0.4401 & 7.38 & 0.6634 & 0.4004 & 21.14 \\
+        DHN \cite{zhuDeepHashingNetwork2016} & \textcolor{blue}{0.8051} & 0.5272 & \textcolor{red}{\textbf{6.74}} & 0.7042 & 0.5432 & \textcolor{red}{\textbf{16.47}} \\
+        StoMHash-WCR & 0.7773 & \textcolor{blue}{0.5402} & 7.04 & \textcolor{blue}{0.7225} & \textcolor{blue}{0.5857} & \textcolor{blue}{16.69} \\
+        \textbf{DualHash-StoM} & \textcolor{red}{\textbf{0.8539}} & \textcolor{red}{\textbf{0.6872}} & \textcolor{blue}{6.86} & \textcolor{red}{\textbf{0.7448}} & \textcolor{red}{\textbf{0.6548}} & 16.83 \\
+        \bottomrule
+    \end{tabular*}}
+    
+    \parbox{0.93\textwidth}{\footnotesize
+    \textsuperscript{*}Training time per epoch (seconds). \textbf{\textcolor{red}{Red}} and \textcolor{blue}{blue} indicate highest and second highest values.
+    }
+\end{table*}
+Figures \ref{Fig: Comparison of training performance of Different Methods on CIFAR-10} and \ref{Fig: Comparison of training performance of Different Methods on NUS-WIDE} present
+training dynamics across different optimization approaches, comparing training loss, AP@top1000, and AP@r=2 metrics \textbf{with 64 bits} on both datasets. On
+CIFAR-10, DualHash-StoM demonstrates superior optimization efficiency across all
+metrics. Our method achieves the fastest convergence in training loss while consistently maintaining the highest AP@r and AP@top1000 values throughout the
+optimization process. While StoMHash with weakly convex regularization (StoMHash-WCR)
+shows competitive performance, DualHash-StoM achieves both faster convergence
+and consistently higher performance, demonstrating the effectiveness of our
+primal-dual transformation for handling W-type regularizations. On the more challenging NUS-WIDE dataset with complex multi-label scenarios, DualHash-StoM maintains
+competitive retrieval performance despite slightly slower initial convergence.
+The experimental results on diverse datasets confirm our core motivation:
+utilizing nonconvex nonsmooth regularization with specialized primal-dual
+optimization significantly improves hash code learning and retrieval
+performance in practical applications.
+
+\paragraph{Retrieval performance in hamming space}
+We report mAP, AP@r, and the average time per training epoch on both datasets, all
+with 64-bit codes, for different methods in
+Table~\ref{tab:performance_comparison_64bits}. The results highlight the superior retrieval
+accuracy of DualHash-StoM compared to the baseline methods.
+
+Specifically, on the CIFAR-10 dataset, DualHash-StoM achieves 9.9\% and 27.2\%
+improvements over StoMHash-WCR in mAP@All and AP@r, respectively. Similarly, on the
+NUS-WIDE dataset, DualHash-StoM outperforms StoMHash-WCR with a 3.1\% improvement
+in mAP@5000 and an 11.8\% improvement in AP@r. Computationally, DualHash-StoM shows comparable efficiency to baselines such as DHN
+(e.g., 6.86s vs. 6.74s on CIFAR-10 and 16.83s vs. 16.47s
+on NUS-WIDE). This marginal time increase is justified by the substantial performance gains.
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=0.95\textwidth]{results_images/ex3_testing_2datasets.pdf}
+    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets. (a), (c): AP@topK results;  (b), (d): PR curves.}
+    \label{fig:ex3_testing_2datasets}
+    \vspace{-1ex}
+\end{figure*}
+Furthermore, \Cref{fig:ex3_testing_2datasets} displays AP@topK results and PR curves
+with 64-bit codes on both datasets. DualHash-StoM consistently outperforms all
+comparison methods by large margins in AP@topK. For PR curves, DualHash-StoM
+demonstrates superior performance at lower recall levels, making it especially well-suited
+for precision-critical image retrieval systems.
+
+% \end{document}

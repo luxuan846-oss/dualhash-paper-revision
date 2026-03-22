@@ -1,0 +1,50 @@
+% \section{Problem reformulation}
+% \label{Section: Problem Reformulation}
+% \subsection{W-type Regularized Deep Hashing Model}
+% Deep hashing methods aim to learn network parameters \(\bx \in \calX \subseteq \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space. 
+% A natural approach is to minimize a similarity-preserving loss function \( \frac{1}{n}\sum_{i=1}^n L_s(\text{sgn}(\bC_i(\bx)))\) where $n$ is the number of training samples, $\bC_i(\bx)$ represents the \(i\)-th network output and \(f_i\) is the similarity-preserving loss function (e.g., pairwise cross-entropy loss \cite{zhuDeepHashingNetwork2016}). However, the function \( sgn(\cdot) \) renders standard backpropagation infeasible due to its zero gradient for all nonzero inputs. This discreteness poses a central challenge in deep hashing.
+
+% A W-type regularization (e.g., $\lambda | |z| - 1 |$) has effectively mitigated this issue. This type of regularization encourages outputs to approach binary values \(\{-1, 1\}\) during training. Specifically, the model is trained to produce continuous outputs \(\bu_i = \bD_i(\bx)\) with W-type regularization, and binary codes are obtained post-training via \(\bb_i = \text{sgn}(\bu_i)\).  Consequently, we formulate the core optimization problem for W-type regularized deep hashing methods as follows,
+% \begin{align}
+% \label{Eq: the primal deep hashing problem}
+% \min_{\bx \in \calX} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)), 
+% \end{align}where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
+% % \footnote{In the problem \eqref{Eq: the primal deep hashing problem}, we use vectorized \(\bz\), thus the regularization is also \(\| |\bz| - \bm{1}\|_1 = \sumn | |z_i| - 1 |\)}.
+% \subsection{A Two-Block Structured Reformulation}
+% We then employ variable splitting % \cite{wangLiftedBregmanTraining2022, zengBlockCoordinateDescent2018, lauProximalBlockCoordinate2018}, ]\
+% to reformulate problem \eqref{Eq: the primal deep hashing problem} equivalently as the constrained problem:
+% \begin{align} 
+% \label{Eq: constrained_dlh} 
+% \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}}&\quad \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\ 
+% \text{s.t.} &\quad \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n. 
+% \end{align} Combined with the quadratic penalty method \cite{nocedal1999numerical}, this transformation yields the following two-block finite-sum optimization problem:
+% \begin{align} 
+% \label{Prop: block-wise regularized problem} 
+% \nonumber&\min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} J(\bx, \bB) \\
+% &= \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
+% \end{align} Here, \( \bB = [\bb_1, \bb_2, \dots, \bb_n]\) and \( \gamma > 0 \) is the penalty parameter. This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon this problem, we develop a stochastic primal-dual algorithm that effectively addresses the challenges above.
+\section{Problem reformulation}
+\label{Section: Problem Reformulation}
+\subsection{W-type Regularized Deep Hashing Model}
+Deep hashing methods aim to learn network parameters \(\bx \in \calX \subseteq \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space. 
+A natural approach is to minimize a similarity-preserving loss function \( \frac{1}{n}\sum_{i=1}^n L_s(\text{sgn}(\bC_i(\bx)))\) where $n$ is the number of training samples, $\bC_i(\bx)$ represents the \(i\)-th network output and \(f_i\) is the similarity-preserving loss function (e.g., pairwise cross-entropy loss \cite{zhuDeepHashingNetwork2016}). However, the function \( sgn(\cdot) \) renders standard backpropagation infeasible due to its zero gradient for all nonzero inputs. This discreteness poses a central challenge in deep hashing.
+
+A W-type regularization (e.g., $\lambda | |z| - 1 |$) has effectively mitigated this issue. This type of regularization encourages outputs to approach binary values \(\{-1, 1\}\) during training. Specifically, the model is trained to produce continuous outputs \(\bu_i = \bD_i(\bx)\) with W-type regularization, and binary codes are obtained post-training via \(\bb_i = \text{sgn}(\bu_i)\).  Consequently, we formulate the core optimization problem for W-type regularized deep hashing methods as follows,
+\begin{align}
+\label{Eq: the primal deep hashing problem}
+\min_{\bx \in \calX} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)), 
+\end{align}
+where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
+\subsection{A Two-Block Structured Reformulation}
+We then employ variable splitting to reformulate problem \eqref{Eq: the primal deep hashing problem} equivalently as the constrained problem:
+\begin{align} 
+\label{Eq: constrained_dlh} 
+\min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\ 
+\text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n. 
+\end{align} 
+Combined with the quadratic penalty method \cite{nocedal1999numerical}, this transformation yields the following two-block finite-sum optimization problem:
+\begin{align} 
+\label{Prop: block-wise regularized problem} 
+\min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
+\end{align} 
+Here, \( \bB = [\bb_1, \bb_2, \dots, \bb_n]\) and \( \gamma > 0 \) is the penalty parameter. This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon this problem, we develop a stochastic primal-dual algorithm that effectively addresses the challenges above.

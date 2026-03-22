@@ -1,0 +1,47 @@
+\documentclass{siamonline220329}
+% \usepackage{cleveref}
+\input{ex_shared}
+
+\allowdisplaybreaks[2] 
+% 允许更多浮动体
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{4}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Deep hashing converts high-dimensional feature vectors into compact binary codes, enabling efficient large-scale retrieval. A fundamental challenge in deep hashing stems from the discrete nature of quantization in generating the codes. W-type regularizations, such as $||z|-1|$, have been proven effective as they encourage variables toward binary values. However, existing methods often directly optimize these regularizations without convergence guarantees. While proximal gradient methods offer a promising solution, the coupling between W-type regularizers and neural network outputs results in composite forms that generally lack closed-form proximal solutions. In this paper, we present a stochastic primal-dual hashing algorithm, referred to as DualHash, that provides rigorous complexity bounds. Using Fenchel duality, we partially transform the nonconvex W-type regularization optimization into the dual space, which results in a proximal operator that admits closed-form solutions. We derive two algorithm instances: a momentum-accelerated version with $\mathcal{O}(\varepsilon^{-4})$ complexity and an improved $\mathcal{O}(\varepsilon^{-3})$ version using variance reduction. Experiments on three image retrieval databases demonstrate the superior performance of DualHash.
+\end{abstract}
+
+\begin{keywords}
+hashing, deep learning, image retrieval, quantization error, nonconvex optimization, stochastic optimization
+\end{keywords}
+
+\begin{MSCcodes}
+68T05, 90C26, 65K05, 68U10
+\end{MSCcodes}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/preliminary}
+\input{sections/problem_reformulation}
+\input{sections/methodology}
+\input{sections/convergence}
+\input{sections/numerical_experiments}
+\input{sections/conclusion}
+
+\bibliographystyle{siamplain}
+\bibliography{refers}
+
+\appendix
+\section*{\textbf{Theoretical Appendix}}
+\input{sections/supplementaryB}   % → A, B, C
+% Appendix: Experiments  
+\section*{\textbf{Experimental Appendix}}
+\input{sections/supplementaryA}   % → D, E
+
+\end{document}

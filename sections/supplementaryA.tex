@@ -49,11 +49,11 @@ where $\lambda > 0$ controls regularization strength.
 
 Combining \eqref{Eq: the pairwise CE loss} and \eqref{Eq: the W-type regularization} into \eqref{Prop: block-wise regularized problem} gives the final loss of DualHash in our experiments.
 \begin{align}
-\label{Eq: the pairwise quantization-based hashing}
+% \label{Eq: the pairwise quantization-based hashing}
 \min_{\bx \in \calX, \bB \in \calB} \; 
 &-\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\alpha s^o_{ij} s^h_{ij}\right)\right) \notag \\
 &+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \bu_i\|_2^2 
-+ \sum_{i=1}^n \lambda \|\,|\bb_i| - \bm{1}\,\|_1.
++ \sum_{i=1}^n \lambda \|\,|\bb_i| - \bm{1}\,\|_1. \notag
 \end{align}
 
 

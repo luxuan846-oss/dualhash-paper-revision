@@ -60,9 +60,9 @@ We then make the following assumptions generally used in stochastic optimization
 \Cref{Ass: main assumptions}(ii) implies the following descent lemma for $F$ with
 respect to $\bx$ and $\bB$:
 \begin{align}
-\label{Eq: F smoothness with x}
+% \label{Eq: F smoothness with x}
     F(\bx', \bB) \leq F(\bx, \bB) + \langle \nabla_{\bx}F(\bx, \bB), \bx' -\bx\rangle
-    + \frac{L_{F}}{2}\| \bx - \bx'\|^{2}
+    + \frac{L_{F}}{2}\| \bx - \bx'\|^{2}. \notag
 \end{align}
 for any $\bB \in \calB$; and similarly for $\bB$:
 {\small 
@@ -178,8 +178,8 @@ To handle the oscillation of \eqref{Eq: simplified_lagrangian}, we introduce the
         \label{Eq: the Lyapunov function in SGDM} \\
     \mathcal{Q}^{k} &:= \{\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}, 
         \bB^{k+1}, \bB^{k-1}, \bx^{k+1}, \bx^{k-1}\}, 
-        \quad \{\mathcal{Q}^{k}\}_{k \in \mathbb{N}},
-        \label{Eq: the Lyapunov sequence in SGDM}
+        \quad \{\mathcal{Q}^{k}\}_{k \in \mathbb{N}}, \notag
+        % \label{Eq: the Lyapunov sequence in SGDM}
 \end{align}where the positive coefficients $C_1, C_2, C_3, C_4$ (independent of $k$) are chosen as:
 \begin{align}
     \label{Eq: the coefficients of the Lyapunov function in SGDM}
@@ -255,7 +255,7 @@ Before proceeding, we introduce an additional standard assumption widely used in
 \label{Ass: the mean squared smoothness of F}
     There exists $L_{F} > 0$ such that for any index $i$ selected uniformly from $\{1,2,\ldots,n\}$, $\bx, \bx' \in \calX$, and $\bB, \bB' \in \calB$, it holds that
 \begin{align}
-    \mathbb{E}_{i}\left[ \| \nabla F_{i}(\bx,\bB) - \nabla F_{i}(\bx',\bB')\|^{2}\right] \leq L^{2}_F \left[ \|\bx - \bx'\|^{2} + \|\bB - \bB'\|^{2} \right].
+    \mathbb{E}_{i}\left[ \| \nabla F_{i}(\bx,\bB) - \nabla F_{i}(\bx',\bB')\|^{2}\right] \leq L^{2}_F \left[ \|\bx - \bx'\|^{2} + \|\bB - \bB'\|^{2} \right]. \notag
 \end{align}
 \end{assumption}This assumption is slightly stronger than the \(L_F\)-smoothness of the finite-sum function \(F\) in \Cref{Ass: main assumptions}(ii). In particular, this assumption implies \Cref{Ass: main assumptions}(ii) by Jensen's inequality, but not conversely.
 
@@ -299,37 +299,46 @@ of $\Psi_{storm}$, with the proof provided in \Cref{Subsubsec: proof descent STO
         \left\{ \begin{array}{ll}C_{\bB} \left( \Delta_{\bB}^{k+1} + \Delta_{\bB}^k \right) \leq \Psi_{storm}(\mathcal{Q}^k) - \Psi_{storm}(\mathcal{Q}^{k+1}) + \frac{\eta_{k}}{2} \| \be^k\|^2, \\ C_{\bx}^k \Delta_{\bm{x}}^{k+1} \leq \Psi_{storm}(\mathcal{Q}^k) - \Psi_{storm}(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2} \| \be^k\|^2.\end{array} \right.
     \end{align}
 \end{lemma}
-% For this analysis, we require the parameters $\eta_{k}$, $\rho_{k}$, $\tau$ 
-% and the batch size $b_k$ to satisfy:
-% \begin{align}
-%     \label{Eq: the parameters assumptions in storm in suppl}
-%     \eta_{k+1}\leq \eta_{k}, \quad \eta_{k}\tilde{L}_{F}\leq \frac{1}{2}, \quad 
-%     0 < 8\eta_{1}\eta_{k}L_{F}^{2}\leq \rho_{k}\leq1, \quad 
-%     \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}}, \quad
-%     b_k = \begin{cases} b_1 & k = 1, \\ b & k \geq 2. \end{cases}
-% \end{align}
-% The 
-We now present the convergence rate of \Cref{alg:our_algorithm_storm}. We
- \blue{To ensure \eqref{Eq: the parameters assumptions in storm in suppl}, we set the parameters as follows:
-\[
-    \eta_{k}= \frac{\eta}{\tilde{L}_{F}T^{l}},\quad \rho_{k}= \frac{8\rho\eta^{2}}{T^{q}}
-    , \quad b_{1}= c_{b}T^{p},
-\]where $q \leq 2l$, $0< \eta \leq \frac{1}{2}$,
-$1 \leq \rho \leq \frac{1}{8\eta^{2}}$, $0 < p \leq 1$, and $c_{b}$, $b$ are given constants 
-independent of $T$. Then the upper bound of \eqref{Eq: the averaged stationarity error bound in lemma} is
-\[
-    \text{Rate}= \mathcal{O} (\max \{ T^{l-1}, T^{q-p-1}, T^{-2q}\}).
-\]
-We choose $l = \frac{1}{3}$, $q = 2l = \frac{2}{3}$, and $p=\frac{1}{3}$. Then the upper bound is 
-$\mathcal{O}(T^{-2/3})$, and the oracle complexity is
-\[
-    \text{Complexity} = b_{1}+ (T-1)b = \mathcal{O}(T^{1/3}) + \mathcal{O}(T) = \mathcal{O}(T) = \mathcal{O}(\varepsilon^{-3}).
-\]Based on the above analysis and parameter conditions \eqref{Eq: the parameters assumptions in storm in suppl}, 
-the parameters $\{\eta_{k}\}$, $\{\rho_{k}\}$, and $\tau$ are then set as follows:
+For this analysis, we require the parameters $\eta_{k}$, $\rho_{k}$, $\tau$ 
+and the batch size $b_k$ to satisfy:
 \begin{align}
-    \label{Eq: the parameters conditions in the convergence rate of storm}\eta_{k}= \frac{\eta}{\tilde{L}_{F}T^{1/3}},\quad \rho_{k}= \frac{8\rho\eta^{2}}{T^{2/3}}, \quad \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}},
+    \label{Eq: the parameters assumptions in storm in suppl}
+    \eta_{k+1}\leq \eta_{k}, \quad \eta_{k}\tilde{L}_{F}\leq \frac{1}{2}, \quad 
+    0 < 8\eta_{1}\eta_{k}L_{F}^{2}\leq \rho_{k}\leq1, \quad 
+    \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}}, \quad
+    b_k = \begin{cases} b_1 & k = 1, \\ b & k \geq 2. \end{cases}
 \end{align}
-where $0< \eta \leq \frac{1}{2}$, $1 \leq \rho \leq \frac{1}{8\eta^{2}}$, and $\tilde{\delta}= c_{\delta}\delta^{2}$ are given constants independent of $T$ with some $\delta$, $c_{\delta}> 0$.} 
+\paragraph{Parameter instantiation and rate balancing.}
+To satisfy \eqref{Eq: the parameters assumptions in storm in suppl}, we adopt the
+power-law schedules
+\[
+    \eta_{k}= \frac{\eta}{\tilde{L}_{F}T^{l}},\quad
+    \rho_{k}= \frac{8\rho\eta^{2}}{T^{q}},\quad
+    b_{1}= c_{b}T^{p},\quad
+    b_{k}=b \ (k\ge 2),
+\]
+where $q \leq 2l$, $0< \eta \leq \frac{1}{2}$, $1 \leq \rho \leq \frac{1}{8\eta^{2}}$,
+$0 < p \leq 1$, and $c_{b}, b$ are constants independent of $T$.
+Substituting this setting into the averaged stationarity bound
+\eqref{Eq: the averaged stationarity error bound in lemma}
+(derived in \Cref{subsubsec:proof-avg-stationarity-storm}) yields
+\[
+    \EE[\mathrm{dist}^{2}(0,\partial \calL)] =
+    \mathcal{O}\!\left(\max\{T^{l-1},\,T^{q-p-1},\,T^{-q}\}\right).
+\]
+Balancing the three exponents gives $l=\frac{1}{3}$, $q=\frac{2}{3}$, and
+$p=\frac{1}{3}$, leading to the target rate $\mathcal{O}(T^{-2/3})$.
+Therefore, we use the following parameter setting:
+\begin{align}
+\label{Eq: the parameters conditions in dualhash-storm}
+    \eta_k = \frac{\eta}{\tilde{L}_{F} T^{\frac{1}{3}}}, \quad 
+    \rho_k = \frac{8\rho\eta^2}{T^{\frac{2}{3}}}, \quad 
+    \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_F}, \quad 
+    b_1 = c_b T^{1/3}, \quad b_k = b \ (k \ge 2),
+\end{align}
+where $\eta$, $\rho$, $\tilde{\delta}$, $c_b$, and $b$ are positive constants
+independent of $T$, and $\tilde{\delta}= c_{\delta}\delta^{2}$ with
+$\delta, c_{\delta}> 0$.
 % \begin{align*}
 % \tilde{L}_{\Delta} &:= \frac{S_{4}}{C_{\bB}}\!\left(1 + \frac{8\eta^{2}}{\tilde{L}_{F}}\right) + \frac{2(C_{\delta}+4)\tilde{L}_{F}}{\eta} + (7+3C_{\delta}), \quad
 % \tilde{C}_{\sigma} := 6 + C_{\delta} + \frac{S_{4}\eta}{2C_{\bB}\tilde{L}_{F}}, \quad
@@ -337,24 +346,13 @@ where $0< \eta \leq \frac{1}{2}$, $1 \leq \rho \leq \frac{1}{8\eta^{2}}$, and $\
 % \end{align*}
 % where $S_4 = \max\{S_1, S_2\}$, $C_{\delta} = 1 + \frac{3\tilde{\delta}}{\tilde{L}_{F}^{2}}$, and $S_1, S_2$ are defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}.
 \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_storm}]
-    \label{Lemma: convergence rate of storm} Under \Cref{Ass: main assumptions} and parameter conditions \eqref{Eq: the parameters conditions in the convergence rate of storm}, for $\forall$ $T \geq 1$, there exists $R$ uniformly selected from $\{2,\ldots,T+1\}$ such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
+    \label{Lemma: convergence rate of storm} Under \Cref{Ass: main assumptions} and parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}, for $\forall$ $T \geq 1$, there exists $R$ uniformly selected from $\{2,\ldots,T+1\}$ such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
     \begin{align}
         \label{Eq: the convergence rate of storm}\EE[\mathrm{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))] \leq \frac{\tilde{L}_{\Delta}\tilde{\Delta}_{1}}{T^{2/3}} + \tilde{C}_{\sigma}\!\left(\frac{\sigma^{2}}{4\rho\eta^{2}b_{1}T} + \frac{32\rho\eta^{2}\sigma^{2}}{b}\cdot\frac{1}{T^{2/3}}\right).
     \end{align}
 \end{lemma}
-From \eqref{Eq: the convergence rate of storm}, achieving the $\mathcal{O}(T^{-2/3})$ 
-convergence rate requires $b_1 = \Theta(T^{1/3})$ and $b_k = \mathcal{O}(1)$ for 
-$k \geq 2$. We therefore adopt the following parameter setting:
-\begin{align}
-\label{Eq: the parameters conditions in dualhash-storm}
-    \eta_k = \frac{\eta}{\tilde{L}_{F} T^{\frac{1}{3}}}, \quad 
-    \rho_k = \frac{8\rho\eta^2}{T^{\frac{2}{3}}}, \quad 
-    \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_F}, \quad 
-    b_1 = c_b T^{1/3},
-\end{align}
-where $\eta$, $\rho$, $\tilde{\delta}$, $c_b$ are positive constants independent of $T$, 
-and $\delta$, $c_{\delta} > 0$. Under this setting, we establish the complexity result 
-in \Cref{Theorem: the oracle complexity in STORM}, with the proof in 
+Under this setting, we establish the final complexity result in
+\Cref{Theorem: the oracle complexity in STORM}, with the detailed proof in
 \Cref{Subsubsec: proof theorem STORM}.
 \begin{theorem}
 \label{Theorem: the oracle complexity in STORM}

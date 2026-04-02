@@ -192,8 +192,8 @@ we consider the equivalent constrained formulation of  the problem \eqref{Prop: 
 \end{align} 
 Recalling the definition of the conjugate function \cite{Rockafellar1998VariationalA}:
 \begin{equation}
-\label{eq:fenchel_conjugate}
-h^*(\bY) := \sup_{\by \in \mathcal{Y}} \{ \langle \bY, \by \rangle - h(\by) \}, \quad \bY \in \mathcal{Y}^*
+% \label{eq:fenchel_conjugate}
+h^*(\bY) := \sup_{\by \in \mathcal{Y}} \{ \langle \bY, \by \rangle - h(\by) \}, \quad \bY \in \mathcal{Y}^* \notag
 \end{equation} and observing that the minimization with respect to $\bY$ in the problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
 \begin{equation}
 \label{Eq: simplified_lagrangian}
@@ -208,7 +208,7 @@ For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate functio
     \end{cases}
 \end{align*} whose proximal operator in the piecewise solution is 
 \begin{align}
-    \label{Eq: the proximal mapping of conjugate function}
+    % \label{Eq: the proximal mapping of conjugate function}
     [\operatorname{prox}_{\tau h^*}(\by)]_i = 
     \begin{cases}
         \lambda, & y_i > \lambda +\tau,\\
@@ -216,7 +216,7 @@ For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate functio
         0, & -\tau \leq y_i \leq\tau, \\
         y_i +\tau, &  - \lambda -\tau \leq y_i < -\tau, \\
         -\lambda, & y_i < -\lambda -\tau.
-    \end{cases}
+    \end{cases} \notag
 \end{align} This motivates us to perform a proximal step to update \(\bLmbd\).
 \begin{figure}[t]
 \centering
@@ -228,9 +228,9 @@ For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate functio
 
 We now outline the \textbf{DualHash} framework, which employs an alternating update scheme for $\bx, \bB, \bm{\Lambda}$. We adopt a stochastic first-order method for the $\bx$-update since computing the full gradient \( \nabla_{\bx} F(\bx, \bB) \) is computationally expensive for a typically large number of samples $n$ in deep learning. Specifically, at each iteration $k$, we uniformly sample a mini-batch \(\calJ_k \subseteq \{1,\cdots,n\}\) with \(b_k = |\calJ_k| \leq n\) and compute:
 \begin{align}
-\label{Eq: the mini batch stochastic gradient estimator of F at x}
+% \label{Eq: the mini batch stochastic gradient estimator of F at x}
 \nabla_{\bx} F(\bx^k, \bB^k; \calJ_k)
-=\, \frac{1}{|\mathcal{J}_k|}\sum_{j \in \mathcal{J}_k} \nabla_{\bx} F_j(\bx^k, \bb_j^k).
+=\, \frac{1}{|\mathcal{J}_k|}\sum_{j \in \mathcal{J}_k} \nabla_{\bx} F_j(\bx^k, \bb_j^k). \notag
 \end{align}
 This formulation accommodates flexible stochastic gradient approximations, enabling the incorporation of advanced variance-reduction or momentum techniques, as detailed in \Cref{Sec: Algorithm implementations}.
 

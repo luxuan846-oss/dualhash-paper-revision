@@ -38,9 +38,9 @@ where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss, \(D_i\) is the
 \subsection{A Two-Block Structured Reformulation}
 We then employ variable splitting to reformulate problem \eqref{Eq: the primal deep hashing problem} equivalently as the constrained problem:
 \begin{align}
-    \label{Eq: constrained_dlh}
+    % \label{Eq: constrained_dlh}
     \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
-    \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n.
+    \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n. \notag
 \end{align}
 Combined with the quadratic penalty method \cite{nocedal1999numerical}, this transformation yields the following two-block finite-sum optimization problem:
 \begin{align}

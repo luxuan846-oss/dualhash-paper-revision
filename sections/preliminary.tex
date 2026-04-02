@@ -40,6 +40,6 @@ variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch 
 
 A function $f: \calX \rightarrow \RR$ is said to be $L_f$-smooth if  $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^n$. A mapping $\mathcal{M} : \mathcal{D} \to \RR^l $ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \mathcal{D}$. A well-known gradient descent lemma for a smooth function is that
 \begin{align}
-\label{Eq: the descent lemma}
-    f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2.
+% \label{Eq: the descent lemma}
+    f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. \notag
 \end{align}

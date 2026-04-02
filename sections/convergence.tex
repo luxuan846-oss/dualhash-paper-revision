@@ -299,16 +299,17 @@ of $\Psi_{storm}$, with the proof provided in \Cref{Subsubsec: proof descent STO
         \left\{ \begin{array}{ll}C_{\bB} \left( \Delta_{\bB}^{k+1} + \Delta_{\bB}^k \right) \leq \Psi_{storm}(\mathcal{Q}^k) - \Psi_{storm}(\mathcal{Q}^{k+1}) + \frac{\eta_{k}}{2} \| \be^k\|^2, \\ C_{\bx}^k \Delta_{\bm{x}}^{k+1} \leq \Psi_{storm}(\mathcal{Q}^k) - \Psi_{storm}(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2} \| \be^k\|^2.\end{array} \right.
     \end{align}
 \end{lemma}
-For this analysis, we require the parameters $\eta_{k}$, $\rho_{k}$, $\tau$ 
-and the batch size $b_k$ to satisfy:
-\begin{align}
-    \label{Eq: the parameters assumptions in storm in suppl}
-    \eta_{k+1}\leq \eta_{k}, \quad \eta_{k}\tilde{L}_{F}\leq \frac{1}{2}, \quad 
-    0 < 8\eta_{1}\eta_{k}L_{F}^{2}\leq \rho_{k}\leq1, \quad 
-    \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}}, \quad
-    b_k = \begin{cases} b_1 & k = 1, \\ b & k \geq 2. \end{cases}
-\end{align}
-
+% For this analysis, we require the parameters $\eta_{k}$, $\rho_{k}$, $\tau$ 
+% and the batch size $b_k$ to satisfy:
+% \begin{align}
+%     \label{Eq: the parameters assumptions in storm in suppl}
+%     \eta_{k+1}\leq \eta_{k}, \quad \eta_{k}\tilde{L}_{F}\leq \frac{1}{2}, \quad 
+%     0 < 8\eta_{1}\eta_{k}L_{F}^{2}\leq \rho_{k}\leq1, \quad 
+%     \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}}, \quad
+%     b_k = \begin{cases} b_1 & k = 1, \\ b & k \geq 2. \end{cases}
+% \end{align}
+% The 
+We now present the convergence rate of \Cref{alg:our_algorithm_storm}. We
  \blue{To ensure \eqref{Eq: the parameters assumptions in storm in suppl}, we set the parameters as follows:
 \[
     \eta_{k}= \frac{\eta}{\tilde{L}_{F}T^{l}},\quad \rho_{k}= \frac{8\rho\eta^{2}}{T^{q}}

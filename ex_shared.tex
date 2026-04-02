@@ -4,7 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsfonts,amssymb}
-
+\usepackage[numbers]{natbib}
 % 图形和表格包
 \usepackage{algorithm,algorithmic}
 \usepackage{array}
@@ -195,8 +195,7 @@
 
 % SIAM定理环境（使用SIAM模板的newsiamthm/newsiamremark）
 % 注意：SIAM模板已预定义 theorem, lemma, corollary, proposition, definition
-% 我们只添加SIAM没有的环境
-\newsiamremark{assumption}{Assumption}
+\newsiamthm{assumption}{Assumption}
 \newsiamremark{remark}{Remark}
 
 % 公式编号按节

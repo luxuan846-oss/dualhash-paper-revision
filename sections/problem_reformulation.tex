@@ -31,20 +31,21 @@ A natural approach is to minimize a similarity-preserving loss function \( \frac
 
 A W-type regularization (e.g., $\lambda | |z| - 1 |$) has effectively mitigated this issue. This type of regularization encourages outputs to approach binary values \(\{-1, 1\}\) during training. Specifically, the model is trained to produce continuous outputs \(\bu_i = \bD_i(\bx)\) with W-type regularization, and binary codes are obtained post-training via \(\bb_i = \text{sgn}(\bu_i)\).  Consequently, we formulate the core optimization problem for W-type regularized deep hashing methods as follows,
 \begin{align}
-\label{Eq: the primal deep hashing problem}
-\min_{\bx \in \calX} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)), 
+    \label{Eq: the primal deep hashing problem}
+    \min_{\bx \in \calX} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
 \end{align}
 where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
 \subsection{A Two-Block Structured Reformulation}
 We then employ variable splitting to reformulate problem \eqref{Eq: the primal deep hashing problem} equivalently as the constrained problem:
-\begin{align} 
-\label{Eq: constrained_dlh} 
-\min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\ 
-\text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n. 
-\end{align} 
+\begin{align}
+    \label{Eq: constrained_dlh}
+    \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
+    \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n.
+\end{align}
 Combined with the quadratic penalty method \cite{nocedal1999numerical}, this transformation yields the following two-block finite-sum optimization problem:
-\begin{align} 
-\label{Prop: block-wise regularized problem} 
-\min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
-\end{align} 
-Here, \( \bB = [\bb_1, \bb_2, \dots, \bb_n]\) and \( \gamma > 0 \) is the penalty parameter. This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon this problem, we develop a stochastic primal-dual algorithm that effectively addresses the challenges above.
+\begin{align}
+    \label{Prop: block-wise regularized problem}
+    \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
+\end{align}
+Here, \( \bB = [\bb_1, \bb_2, \dots, \bb_n]\) and \( \gamma > 0 \) is the penalty parameter. This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. 
+Building upon Problem~\eqref{Prop: block-wise regularized problem}, we develop a stochastic primal-dual algorithm \blue{that addresses the lack of tractable proximal mappings in the nonsmooth composite form and the absence of convergence guarantees in existing deep hashing methods.}

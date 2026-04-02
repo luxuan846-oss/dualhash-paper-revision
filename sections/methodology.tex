@@ -73,7 +73,7 @@
 % % \vspace{5pt}
 % \paragraph{DualHash-StoM}
 % %Numerically, 
-% The heavy ball method \cite{polyakMethodsSpeedingConvergence1964} and Nesterov acceleration \cite{Nesterov1983AMF} can be integrated with stochastic gradient descent (SGD) to yield accelerated variants like SGD with momentum, which significantly speeds up convergence.
+% The heavy ball method \cite{Polyak1964} and Nesterov acceleration \cite{Nesterov1983AMF} can be integrated with stochastic gradient descent (SGD) to yield accelerated variants like SGD with momentum, which significantly speeds up convergence.
 % This approach has become a popular strategy for training neural networks \cite{fotopoulos2024review,Hertrich2020InertialSP}. We thus incorporate this technique and compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_sgdm}) as:
 % \begin{align}
 % \label{Eq: the stochastic approximate in SGDM}
@@ -85,7 +85,7 @@
 % \end{align} The overall algorithm, DualHash-StoM, is detailed in \Cref{alg:our_algorithm_sgdm}.
 % \begin{remark}
 % The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} covers these two accelerations:
-% Nesterov acceleration \cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method \cite{polyakMethodsSpeedingConvergence1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$; In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$. 
+% Nesterov acceleration \cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method \cite{Polyak1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$; In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$. 
 % \end{remark}
 
 % % \vspace{3pt}
@@ -178,35 +178,35 @@
 % \end{remark}
 \section{Algorithm}
 \label{Section: Methodology}
-\subsection{DualHash: A Stochastic Primal-Dual Hashing Algorithm}
+\subsection{DualHash: A Stochastic Primal-Dual Hashing Framework}
 Inspired by PDHG \cite{chambolleFirstOrderPrimalDualAlgorithm2011},
 % and its nonconvex extension PPDG \cite{guoPreconditionedPrimalDualGradient2023}, 
 we consider the equivalent constrained formulation of  the problem \eqref{Prop: block-wise regularized problem}:
 \begin{align} 
-\min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}, \by \in \mathcal{Y}} &\quad F(\bx, \bB) + h(\bY) \notag \\
+\min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}, \bY \in \mathcal{Y}} &\quad F(\bx, \bB) + h(\bY) \notag \\
 \text{s.t. } &\quad \bY = \bB \nonumber ,
 \end{align} whose corresponding dual problem is 
 \begin{align}
 \label{Prop: the dual problem}
-\max_{\bLmbd \in \mathcal{Y}^*} \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}, \by \in \mathcal{Y}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
+\max_{\bLmbd \in \mathcal{Y}^*} \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}, \bY \in \mathcal{Y}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
 \end{align} 
 Recalling the definition of the conjugate function \cite{Rockafellar1998VariationalA}:
 \begin{equation}
 \label{eq:fenchel_conjugate}
-h^*(\bY) := \sup_{\bx \in \mathcal{Y}} \{ \langle \bY, \bx \rangle - h(\bx) \}, \quad \bY \in \mathcal{Y}^*
+h^*(\bY) := \sup_{\by \in \mathcal{Y}} \{ \langle \bY, \by \rangle - h(\by) \}, \quad \bY \in \mathcal{Y}^*
 \end{equation} and observing that the minimization with respect to $\bY$ in the problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
 \begin{equation}
 \label{Eq: simplified_lagrangian}
 \calL(\bx, \bB, \bLmbd) := F(\bx, \bB) + \langle \bB, \bLmbd \rangle - h^*(\bLmbd).
-% \tag{$\calL$}
 \end{equation}
-Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and can optimize \(h^*\) in the dual space. Since $h^*$ is always convex and l.s.c. \cite{Rockafellar1998VariationalA}, it means that the $\text{prox}_{h^*}(\cdot)$ is often much easier to compute (potentially having a closed-form solution) than that of $h$.  For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate function as illustrated in \Cref{fig:w_type_regularization}:
+Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
+For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate function as illustrated in \Cref{fig:w_type_regularization}:
 \begin{align*}
 &h^*(\bx) = \sum_{i=1}^n h^*(x_i),\,\, \text{where } h^*(x_i) = \begin{cases}
     |x_i|, & \text{if } x_i \in [-\lambda, \lambda],\\
     +\infty, & \text{otherwise},
     \end{cases}
-\end{align*} whose proximal operator  in the piecewise solution is 
+\end{align*} whose proximal operator in the piecewise solution is 
 \begin{align}
     \label{Eq: the proximal mapping of conjugate function}
     [\operatorname{prox}_{\tau h^*}(\by)]_i = 
@@ -225,15 +225,16 @@ Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and can opt
 \label{fig:w_type_regularization}
 \vspace{-3 ex}
 \end{figure}
-We now outline \textbf{DualHash}, which employs an alternating update scheme for $\bx, \bB, \bm{\Lambda}$. 
-we adopt a stochastic first-order method for the $\bx$-update since computing the full gradient \( \nabla_{\bx} F(\bx, \bB) \) is computationally expensive for typically the large number of samples $n$ in deep learning. Specifically, at each iteration $k$, we uniformly sample a mini-batch \(\calJ_k \subseteq \{1,\cdots,n\}\) with \(b_k = |\calJ_k| \leq n\) and compute:
+
+We now outline the \textbf{DualHash} framework, which employs an alternating update scheme for $\bx, \bB, \bm{\Lambda}$. We adopt a stochastic first-order method for the $\bx$-update since computing the full gradient \( \nabla_{\bx} F(\bx, \bB) \) is computationally expensive for a typically large number of samples $n$ in deep learning. Specifically, at each iteration $k$, we uniformly sample a mini-batch \(\calJ_k \subseteq \{1,\cdots,n\}\) with \(b_k = |\calJ_k| \leq n\) and compute:
 \begin{align}
 \label{Eq: the mini batch stochastic gradient estimator of F at x}
 \nabla_{\bx} F(\bx^k, \bB^k; \calJ_k)
 =\, \frac{1}{|\mathcal{J}_k|}\sum_{j \in \mathcal{J}_k} \nabla_{\bx} F_j(\bx^k, \bb_j^k).
 \end{align}
-Then we utilize this approximation within an optimization strategy chosen to enhance efficiency (e.g., incorporating momentum or variance reduction), as detailed in \Cref{Sec: Algorithm implementations}.
-Second, the auxiliary variable $\bB$ is updated via a simple gradient descent step \eqref{Eq: the update of B}; this suffices because the objective \eqref{Eq: simplified_lagrangian} with respect to $\bB$ is smooth with an inexpensive gradient, 
+This formulation accommodates flexible stochastic gradient approximations, enabling the incorporation of advanced variance-reduction or momentum techniques, as detailed in \Cref{Sec: Algorithm implementations}.
+
+Second, the auxiliary variable $\bB$ is updated via a vanilla gradient descent step \eqref{Eq: the update of B}; this suffices because the objective \eqref{Eq: simplified_lagrangian} with respect to $\bB$ is smooth with an inexpensive gradient, 
 \begin{align}
    \nonumber \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k)\\
     &= \bB^k - \tau \left( \nabla_{\bB} F(\bx^{k+1}, \bB^k) + \bLmbd^k \right). \label{Eq: the update of B}
@@ -247,11 +248,9 @@ Finally, the dual variable $\bLmbd$ is updated via proximal gradient ascent on $
 
 \subsection{Implementations}
 \label{Sec: Algorithm implementations}
-The unified DualHash framework allows for flexible choices in the $\bx$ update step based on a mini-batch stochastic gradient approximation \eqref{Eq: the mini batch stochastic gradient estimator of F at x}. This flexibility enables us to incorporate advanced stochastic optimization techniques. We thus instantiate the $\bx$-update using two well-established approaches: \textbf{momentum} \cite{Nesterov1983AMF, Polyak1964} and \textbf{variance reduction} \cite{driggs2022biased}, which can improve empirical training efficiency and can also improve the theoretical convergence guarantees \cite{Liu2020AnIA,sutskever2013importance}.
-
 \paragraph{DualHash-StoM}
-The heavy ball method \cite{polyakMethodsSpeedingConvergence1964} and Nesterov acceleration \cite{Nesterov1983AMF} can be integrated with stochastic gradient descent (SGD) to yield accelerated variants like SGD with momentum, which significantly speeds up convergence.
-This approach has become a popular strategy for training neural networks \cite{fotopoulos2024review,Hertrich2020InertialSP}. We thus incorporate this technique and compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_sgdm}) as:
+The heavy ball method \cite{Polyak1964} and Nesterov acceleration \cite{Nesterov1983AMF} has been extensively studied in large-scale nonconvex optimization \cite{gaoNonConvexStochasticComposite2024}.
+Motivated by this, each iteration $k$,  we compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_sgdm}) as:
 \begin{align}
 \label{Eq: the stochastic approximate in SGDM}
     \bG^k = \nabla_{\bx} F(\bz^k, \bB^k; \calJ_k),\, \text{where } \bz^k = \bx^k + \beta_k (\bx^k - \bx^{k-1}).
@@ -261,10 +260,22 @@ This approach has become a popular strategy for training neural networks \cite{f
     \bx^{k+1} = \by^k - \eta_k \bG^k,\,\text{where } \by^k = \bx^k + \alpha_k (\bx^k - \bx^{k-1}). 
 \end{align} The overall algorithm, DualHash-StoM, is detailed in \Cref{alg:our_algorithm_sgdm}.
 \begin{remark}
-The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} covers these two accelerations:
-Nesterov acceleration \cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method \cite{polyakMethodsSpeedingConvergence1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$; In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$. 
+The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} covers these two accelerations: Nesterov acceleration corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$. In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$. 
 \end{remark}
-
+\begin{algorithm}[t]
+\caption{DualHash-StoM}
+\label{alg:our_algorithm_sgdm}
+\begin{algorithmic}[1]
+\STATE \textbf{Initialize:} $\bx^1 = \bz^1 = \by^1 \in \calX $, \( \bB^1 \in \calB,\, \bLmbd^1\in \calY^*\), parameters $\{\eta_k\} $, $\tau$, $b_k$, $\{\alpha_k, \beta_k \in (0,1)\}$
+\FOR{$k = 1, 2, \ldots$}               
+  \STATE Compute \(\bG^k\) by \eqref{Eq: the stochastic approximate in SGDM}
+  \STATE Update $\bx^{k+1}$ by \eqref{Eq: the update of x in SGDM}
+  \STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}
+  \STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}
+\ENDFOR
+\STATE \textbf{Return:} $\bx_R$ where $R$ is uniformly sampled from $\{2, \ldots, T+1\}$
+\end{algorithmic}
+\end{algorithm}
 \paragraph{DualHash-StoRM}
 Alternatively, we employ the StoRM estimator \cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update. StoRM utilizes a recursive momentum mechanism to reduce gradient variance, which is motivated by SGDM. Unlike some other variance reduction techniques (e.g., SVRG \cite{johnsonAcceleratingStochasticGradient2013}, SARAH \cite{SARAH2017}) that require full-gradient or large-batch gradient computations, StoRM achieves variance reduction without such requirements. Given its practical effectiveness in deep learning \cite{cutkoskyMomentumBasedVarianceReduction2019,levy2021storm+}, we compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_storm}) as:
 {\small
@@ -281,23 +292,7 @@ The update of $\bx$ (Line 4 of \Cref{alg:our_algorithm_storm}) is then
 \label{Eq: the update of x in STORM}
     \bx^{k+1} = \bx^k - \eta_k \bD^k.
 \end{align} The overall algorithm, DualHash-StoRM, is detailed in \Cref{alg:our_algorithm_storm}.
-
-\begin{algorithm}[!htbp]
-\caption{DualHash-StoM}
-\label{alg:our_algorithm_sgdm}
-\begin{algorithmic}[1]
-\STATE \textbf{Initialize:} $\bx^1 = \bz^1 = \by^1 \in \calX $, \( \bB^1 \in \calB,\, \bLmbd^1\in \calY^*\), parameters $\{\eta_k\} $, $\tau$, $b_k$, $\{\alpha_k, \beta_k \in (0,1)\}$
-\FOR{$k = 1, 2, \ldots$}               
-  \STATE Compute \(\bG^k\) by \eqref{Eq: the stochastic approximate in SGDM}
-  \STATE Update $\bx^{k+1}$ by \eqref{Eq: the update of x in SGDM}
-  \STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}
-  \STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}
-\ENDFOR
-\STATE \textbf{Return:} $\bx_R$ where $R$ is uniformly sampled from $\{2, \ldots, T+1\}$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[!htbp]
+\begin{algorithm}[t]
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
@@ -312,21 +307,21 @@ The update of $\bx$ (Line 4 of \Cref{alg:our_algorithm_storm}) is then
 \end{algorithmic}
 \end{algorithm}
 
-\begin{remark}
-The update steps for $\bB$ and $\bm{\Lambda}$ imply the following optimality conditions, which may result in explicit closed-solution in deep hashing. The $\bB$-update in \eqref{Eq: the update of B} yields:
-\begin{align}
-    \label{Eq: the optimality condition of Bk}
-    \bB^{k} = \bB^{k-1} - \tau \left( \nabla_{\bB}F(\bx^{k}, \bB^{k-1}) + \bm{\Lambda}^{k-1} \right).
-\end{align}
-For the $\bm{\Lambda}$-update in \eqref{Eq: the update of lambda}, the proximal operator definition gives:
-\[
-    \tau \left( \bm{\Lambda}^{k} + \tau^{-1}(2\bB^{k} - \bB^{k-1}) - \bm{\Lambda}^{k} \right) \in \partial h^{*}(\bm{\Lambda}^{k}),
-\]
-which is equivalent to the existence of $\mathcal{G}_{\bm{\Lambda}}^{k} \in \partial h^{*}(\bm{\Lambda}^{k})$ such that:
-\begin{align}
-    \label{Eq: the optimality condition of lbda}
-    \mathcal{G}_{\bm{\Lambda}}^{k} = (2\bB^{k} - \bB^{k-1}) + \tau(\bm{\Lambda}^{k-1} - \bm{\Lambda}^{k}).
-\end{align}
-If the sequence \(\{ (\bx^k, \bB^k, \bm{\Lambda}^k) \}\) converges to \((\bx^*, \bB^*, \bm{\Lambda}^*)\), then by the outer semicontinuity of $\partial h^{*}(\cdot)$, we have $\bB^* \in \partial h^*(\bm{\Lambda}^*)$.
-This establishes \eqref{Eq: the sufficient and necessary condition for dual}, which is precisely the necessary condition for the second relation in \eqref{Eq: the sufficient and necessary condition}.
-\end{remark}
+% \begin{remark}
+% The update steps for $\bB$ and $\bm{\Lambda}$ imply the following optimality conditions, which may result in explicit closed-solution in deep hashing. The $\bB$-update in \eqref{Eq: the update of B} yields:
+% \begin{align}
+%     \label{Eq: the optimality condition of Bk}
+%     \bB^{k} = \bB^{k-1} - \tau \left( \nabla_{\bB}F(\bx^{k}, \bB^{k-1}) + \bm{\Lambda}^{k-1} \right).
+% \end{align}
+% For the $\bm{\Lambda}$-update in \eqref{Eq: the update of lambda}, the proximal operator definition gives:
+% \[
+%     \tau \left( \bm{\Lambda}^{k} + \tau^{-1}(2\bB^{k} - \bB^{k-1}) - \bm{\Lambda}^{k} \right) \in \partial h^{*}(\bm{\Lambda}^{k}),
+% \]
+% which is equivalent to the existence of $\mathcal{G}_{\bm{\Lambda}}^{k} \in \partial h^{*}(\bm{\Lambda}^{k})$ such that:
+% \begin{align}
+%     \label{Eq: the optimality condition of lbda}
+%     \mathcal{G}_{\bm{\Lambda}}^{k} = (2\bB^{k} - \bB^{k-1}) + \tau(\bm{\Lambda}^{k-1} - \bm{\Lambda}^{k}).
+% \end{align}
+% If the sequence \(\{ (\bx^k, \bB^k, \bm{\Lambda}^k) \}\) converges to \((\bx^*, \bB^*, \bm{\Lambda}^*)\), then by the outer semicontinuity of $\partial h^{*}(\cdot)$, we have $\bB^* \in \partial h^*(\bm{\Lambda}^*)$.
+% This establishes \eqref{Eq: the sufficient and necessary condition for dual}, which is precisely the necessary condition for the second relation in \eqref{Eq: the sufficient and necessary condition}.
+% \end{remark}

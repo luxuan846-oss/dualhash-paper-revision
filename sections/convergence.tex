@@ -299,18 +299,9 @@ of $\Psi_{storm}$, with the proof provided in \Cref{Subsubsec: proof descent STO
         \left\{ \begin{array}{ll}C_{\bB} \left( \Delta_{\bB}^{k+1} + \Delta_{\bB}^k \right) \leq \Psi_{storm}(\mathcal{Q}^k) - \Psi_{storm}(\mathcal{Q}^{k+1}) + \frac{\eta_{k}}{2} \| \be^k\|^2, \\ C_{\bx}^k \Delta_{\bm{x}}^{k+1} \leq \Psi_{storm}(\mathcal{Q}^k) - \Psi_{storm}(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2} \| \be^k\|^2.\end{array} \right.
     \end{align}
 \end{lemma}
-For this analysis, we require the parameters $\eta_{k}$, $\rho_{k}$, $\tau$ 
-and the batch size $b_k$ to satisfy:
-\begin{align}
-    \label{Eq: the parameters assumptions in storm in suppl}
-    \eta_{k+1}\leq \eta_{k}, \quad \eta_{k}\tilde{L}_{F}\leq \frac{1}{2}, \quad 
-    0 < 8\eta_{1}\eta_{k}L_{F}^{2}\leq \rho_{k}\leq1, \quad 
-    \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}}, \quad
-    b_k = \begin{cases} b_1 & k = 1, \\ b & k \geq 2. \end{cases}
-\end{align}
-% \paragraph{Parameter instantiation and rate balancing.}
-To satisfy \eqref{Eq: the parameters assumptions in storm in suppl}, we adopt the
-power-law schedules
+For this analysis, we use the same parameter assumptions as
+\eqref{Eq: the parameters assumptions in storm appendix} in the appendix and
+adopt the following power-law schedules:
 \[
     \eta_{k}= \frac{\eta}{\tilde{L}_{F}T^{l}},\quad
     \rho_{k}= \frac{8\rho\eta^{2}}{T^{q}},\quad
@@ -319,13 +310,19 @@ power-law schedules
 \]
 where $q \leq 2l$, $0< \eta \leq \frac{1}{2}$, $1 \leq \rho \leq \frac{1}{8\eta^{2}}$,
 $0 < p \leq 1$, and $c_{b}, b$ are constants independent of $T$.
-Substituting this setting into the averaged stationarity bound
-\eqref{Eq: the averaged stationarity error bound in lemma}
-(derived in \Cref{subsubsec:proof-avg-stationarity-storm}) yields
-\[
-    \EE[\mathrm{dist}^{2}(0,\partial \calL)] =
-    \mathcal{O}\!\left(\max\{T^{l-1},\,T^{q-p-1},\,T^{-q}\}\right).
-\]
+\begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_storm}]
+    \label{Lemma: convergence rate of storm} Under \Cref{Ass: main assumptions} and parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}, for $\forall$ $T \geq 1$, there exists $R$ uniformly selected from $\{2,\ldots,T+1\}$ such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
+    \begin{align}
+        \label{Eq: the convergence rate of storm}\EE[\mathrm{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))] \leq \frac{\tilde{L}_{\Delta}\tilde{\Delta}_{1}}{T^{2/3}} + \tilde{C}_{\sigma}\!\left(\frac{\sigma^{2}}{4\rho\eta^{2}b_{1}T} + \frac{32\rho\eta^{2}\sigma^{2}}{b}\cdot\frac{1}{T^{2/3}}\right).
+    \end{align}
+\end{lemma}
+% Substituting this setting into the averaged stationarity bound
+% \eqref{Eq: the averaged stationarity error bound in lemma}
+% (derived in \Cref{subsubsec:proof-avg-stationarity-storm}) yields
+% \[
+%     \EE[\mathrm{dist}^{2}(0,\partial \calL)] =
+%     \mathcal{O}\!\left(\max\{T^{l-1},\,T^{q-p-1},\,T^{-q}\}\right).
+% \]
 Balancing the three exponents gives $l=\frac{1}{3}$, $q=\frac{2}{3}$, and
 $p=\frac{1}{3}$, leading to the target rate $\mathcal{O}(T^{-2/3})$.
 Therefore, we use the following parameter setting:
@@ -345,12 +342,6 @@ $\delta, c_{\delta}> 0$.
 % \tilde{\Delta}_{1} := \Psi_{storm}(\calQ^{1}) - \Psi_{storm}^{*},
 % \end{align*}
 % where $S_4 = \max\{S_1, S_2\}$, $C_{\delta} = 1 + \frac{3\tilde{\delta}}{\tilde{L}_{F}^{2}}$, and $S_1, S_2$ are defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}.
-\begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_storm}]
-    \label{Lemma: convergence rate of storm} Under \Cref{Ass: main assumptions} and parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}, for $\forall$ $T \geq 1$, there exists $R$ uniformly selected from $\{2,\ldots,T+1\}$ such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
-    \begin{align}
-        \label{Eq: the convergence rate of storm}\EE[\mathrm{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))] \leq \frac{\tilde{L}_{\Delta}\tilde{\Delta}_{1}}{T^{2/3}} + \tilde{C}_{\sigma}\!\left(\frac{\sigma^{2}}{4\rho\eta^{2}b_{1}T} + \frac{32\rho\eta^{2}\sigma^{2}}{b}\cdot\frac{1}{T^{2/3}}\right).
-    \end{align}
-\end{lemma}
 Under this setting, we establish the final complexity result in
 \Cref{Theorem: the oracle complexity in STORM}, with the detailed proof in
 \Cref{Subsubsec: proof theorem STORM}.

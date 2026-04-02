@@ -4,8 +4,8 @@
 
 The extended real-valued function $f: \mathbb{R}^{q}\rightarrow (-\infty, +\infty]$ is called \textit{proper} if its domain $\text{dom}(f) := \{\bx \in \calX\mid f(\bx) < +\infty\}$ is nonempty and $\inf\limits_{\bx \in \mathbb{R}^q}f > -\infty$; it is \textit{closed} if its epigraph $\text{epi}(f) := \left\{ (\bx, t) \in \mathbb{R}^{q+1}\mid f(\bx) \leq t \right\}$ is closed.  For a proper, closed, and convex function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
 \begin{align}
-    \label{Def: the definition of proximal operator}
-    \operatorname{prox}_{\tau f}(\by) := \argmin\limits_{\bx \in \operatorname{dom}(f)}\left\{ f(\bx) + \frac{1}{2\tau}\|\bx - \by\|^{2}\right\},
+    % \label{Def: the definition of proximal operator}
+    \operatorname{prox}_{\tau f}(\by) := \argmin\limits_{\bx \in \operatorname{dom}(f)}\left\{ f(\bx) + \frac{1}{2\tau}\|\bx - \by\|^{2}\right\}, \notag
 \end{align} 
 where $\tau$ is a positive scalar parameter. The proximal mapping admits the following
 properties.

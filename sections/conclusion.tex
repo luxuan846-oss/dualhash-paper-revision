@@ -3,3 +3,16 @@
 This paper proposed DualHash, a stochastic primal-dual algorithm for deep hashing with rigorous non-asymptotic convergence guarantees. Our approach effectively addressed the fundamental optimization challenge of W-type regularization with nonlinear composition through a novel ``decoupling-dual-structure'' strategy: transforming the nonconvex regularizer into a convex dual space with closed-form proximal updates. We provided a distinct theoretical framework beyond conventional primal-dual analysis, establishing complexity bounds of $\mathcal{O}(\varepsilon^{-4})$ for DualHash-StoM and optimal $\mathcal{O}(\varepsilon^{-3})$ for DualHash-StoRM. Extensive experiments validated  DualHash achieved superior retrieval performance across all metrics, including the highest mAP at 32 bits or more, consistently lower quantization errors, and stronger robustness on both datasets. 
 
 Beyond deep hashing, our core \textbf{decoupling-dual-structure} optimization principle offered a promising pathway for tackling nonconvex regularization challenges in related domains, including neural network quantization \cite{BinaryConnect,Bai2018ProxQuantQN,Yang2019QuantizationN} and sparse regularized neural network training \cite{bui2021structured,louizos2018learning,xu2012l,wen2016learning}.
+
+% \begin{remark}\label{rmk:penalty-surrogate}
+% For any fixed $\gamma > 0$, the penalty problem \eqref{Prop: block-wise regularized problem} 
+% is a surrogate of the constrained formulation and is not equivalent to the 
+% original problem \eqref{Eq: the primal deep hashing problem}. All convergence 
+% results in this paper (Theorems~\ref{Theorem: the oracle complexity in SGDM} 
+% and~\ref{Theorem: the oracle complexity in STORM}) are established for the 
+% Lagrangian of~\eqref{Prop: block-wise regularized problem}. 
+% A formal characterization of the gap between stationary points of 
+% \eqref{Prop: block-wise regularized problem} and those of the original 
+% composite problem as $\gamma \to \infty$ is an interesting direction 
+% for future work.
+% \end{remark}

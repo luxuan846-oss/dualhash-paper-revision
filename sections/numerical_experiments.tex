@@ -111,7 +111,7 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
     }
     \vspace{-4ex}
 \end{table}
-We validate our theoretical results (Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM}) and compare with HashNet, OrthoHash, and MDSHC with 64 bits on both datasets. 
+We provide empirical evidence that is consistent with our theoretical results (Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM}) and compare with HashNet, OrthoHash, and MDSHC with 64 bits on both datasets. 
 \Cref{fig:training_loss_map_2datasets} shows the training loss and validation mAP curves over epochs.
 As shown in \Cref{fig:training_loss_map_2datasets} (a)-(b), DualHash-StoRM achieves the fastest convergence and lowest loss values on both datasets, requiring only approximately 25 epochs on CIFAR-10. This aligns with our theoretical outcome: the variance reduction mechanism accelerates convergence. Though slower than DualHash-StoRM, DualHash-StoM still outperforms other baselines (approximately 75 epochs on CIFAR-10). 
 Meanwhile, \Cref{fig:training_loss_map_2datasets} (c)-(d) show that although DualHash-StoRM converges faster during training, DualHash-StoM ultimately exhibits superior retrieval performance compared to other baselines. 

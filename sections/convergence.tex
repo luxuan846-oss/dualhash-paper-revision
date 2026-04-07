@@ -139,7 +139,7 @@ For notational simplicity, we define
 \end{align} where \(K_1 = 3\delta\tau^{-1}\), \(K_2 = 2\tau^{-1} - L_F - 3\delta\tau(\tau^{-1} + L_F)^2\), \(K_3 = \frac{\tau L_{F}^{2}}{\delta}\), and \(K_4 = 3\delta\tau L_F^2\).
 \end{lemma}
 \begin{proof}
-    Using the smoothness of $F$ with respect to $\bB$ in \eqref{Eq: F smoothness with B}, we conclude that
+    Using the smoothness of $F$ with respect to $\bB$, we conclude that
     \begin{align}
         \label{Eq: the recursive relation of L on B and Lambda} & \calL(\bx^{k+1}, \bB^{k+1}, \bm{\Lambda}^{k+1}) - \calL(\bx^{k+1}, \bB^{k}, \bm{\Lambda}^{k}) \notag                                                                                                                        \\
         \leq                                                    & - \left(\tau^{-1}- \frac{L_{F}}{2}\right) \|\bB^{k+1}- \bB^{k}\|^{2}+ \Big\langle \bm{\Lambda}^{k+1}- \bm{\Lambda}^{k}, \tau \Big( \nabla_{\bB}F(\bx^{k}, \bB^{k-1}) - \nabla_{\bB}F(\bx^{k+1}, \bB^{k}) \Big) \Big\rangle.
@@ -156,7 +156,7 @@ For notational simplicity, we define
     where the first inequality follows from the fact that
     $\left<\ba, \bb\right> \leq \frac{\delta}{2}\|\ba\|^{2}+ \frac{1}{2\delta}\|
     \bb\|^{2}$
-    for some $\delta >0$ and the second inequality follows from \eqref{Eq: F smoothness with B} agian. Then, substituting \eqref{Eq: the inner product in the recursive relation of L on B and Lambda}
+    for some $\delta >0$ and the second inequality follows from the smoothness of $F$ with respect to $\bB$ agian. Then, substituting \eqref{Eq: the inner product in the recursive relation of L on B and Lambda}
     and \eqref{Eq: dual boundedness in proof} into \eqref{Eq: the recursive relation of L on B and Lambda}
     and rearranging the inequality yield \eqref{item: B and Lambda}. 
 \end{proof}

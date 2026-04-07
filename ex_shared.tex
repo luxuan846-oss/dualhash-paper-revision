@@ -193,9 +193,16 @@
 \newcommand{\blue}[1]{\begin{color}{blue}#1\end{color}} 
 \newcommand{\red}[1]{\begin{color}{red}#1\end{color}}
 
-% SIAM定理环境（使用SIAM模板的newsiamthm/newsiamremark）
-% 注意：SIAM模板已预定义 theorem, lemma, corollary, proposition, definition
-\newsiamthm{assumption}{Assumption}
+% SIAM定理环境（编号拆分）
+% theorem: 保持模板默认按 section 编号
+% lemma / assumption: 独立按 section 编号，避免与 theorem 共享计数
+\theoremstyle{plain}
+\theoremheaderfont{\normalfont\sffamily}
+\theorembodyfont{\normalfont\itshape}
+\theoremseparator{.}
+\theoremsymbol{}
+\renewtheorem{lemma}{Lemma}[section]
+\newtheorem{assumption}{Assumption}[section]
 \newsiamremark{remark}{Remark}
 
 % 公式编号按节

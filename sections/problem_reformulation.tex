@@ -34,7 +34,7 @@ A W-type regularization (e.g., $\lambda | |z| - 1 |$) has effectively mitigated 
     \label{Eq: the primal deep hashing problem}
     \min_{\bx \in \calX} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
 \end{align}
-where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
+where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss\footnote{In practice, we include $\ell_2$ weight decay in the training loss, i.e., each $f_i(\bx)$ contains a term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$, which promotes coercivity of the primal objective with respect to $\bx$.}, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
 \subsection{A Two-Block Structured Reformulation}
 We then employ variable splitting to reformulate problem \eqref{Eq: the primal deep hashing problem} equivalently as the constrained problem:
 \begin{align}

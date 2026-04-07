@@ -176,12 +176,12 @@
 % % which corresponds to the necessary condition \eqref{Eq: the sufficient and necessary condition for dual} for the second relation in optimality condition \eqref{Eq: the sufficient and necessary condition}.
 % This establishes \eqref{Eq: the sufficient and necessary condition for dual}, which is precisely the necessary condition for the second relation in \eqref{Eq: the sufficient and necessary condition}.
 % \end{remark}
-\section{Algorithm}
+\section{Stochastic Primal-Dual Hashing Algorithms}
 \label{Section: Methodology}
-\subsection{DualHash: A Stochastic Primal-Dual Hashing Framework}
+\subsection{Algorithmic Framework}
 Inspired by PDHG \cite{chambolleFirstOrderPrimalDualAlgorithm2011},
 % and its nonconvex extension PPDG \cite{guoPreconditionedPrimalDualGradient2023}, 
-we consider the equivalent constrained formulation of  the problem \eqref{Prop: block-wise regularized problem}:
+we consider the equivalent constrained formulation of Problem \eqref{Prop: block-wise regularized problem}:
 \begin{align} 
 \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}, \bY \in \mathcal{Y}} &\quad F(\bx, \bB) + h(\bY) \notag \\
 \text{s.t. } &\quad \bY = \bB \nonumber ,
@@ -194,7 +194,7 @@ Recalling the definition of the conjugate function \cite{Rockafellar1998Variatio
 \begin{equation}
 % \label{eq:fenchel_conjugate}
 h^*(\bY) := \sup_{\by \in \mathcal{Y}} \{ \langle \bY, \by \rangle - h(\by) \}, \quad \bY \in \mathcal{Y}^* \notag
-\end{equation} and observing that the minimization with respect to $\bY$ in the problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
+\end{equation} and observing that the minimization with respect to $\bY$ in Problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
 \begin{equation}
 \label{Eq: simplified_lagrangian}
 \calL(\bx, \bB, \bLmbd) := F(\bx, \bB) + \langle \bB, \bLmbd \rangle - h^*(\bLmbd).
@@ -233,13 +233,13 @@ We now outline the \textbf{DualHash} framework, which employs an alternating upd
 \nabla_{\bx} F(\bx^k, \bB^k; \calJ_k)
 =\, \frac{1}{|\mathcal{J}_k|}\sum_{j \in \mathcal{J}_k} \nabla_{\bx} F_j(\bx^k, \bb_j^k). \notag
 \end{align}
-This formulation accommodates flexible stochastic gradient approximations, enabling the incorporation of advanced variance-reduction or momentum techniques, as detailed in \Cref{Sec: Algorithm implementations}.
+This formulation accommodates flexible stochastic gradient approximations, enabling the incorporation of advanced momentum techniques to enhance both theoretical complexity and practical performance.
 
 Second, the auxiliary variable $\bB$ is updated via a vanilla gradient descent step \eqref{Eq: the update of B}; this suffices because the objective \eqref{Eq: simplified_lagrangian} with respect to $\bB$ is smooth with an inexpensive gradient, 
 \begin{align}
-   \nonumber \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k)\\
-    &= \bB^k - \tau \left( \nabla_{\bB} F(\bx^{k+1}, \bB^k) + \bLmbd^k \right). \label{Eq: the update of B}
+   \bB^{k+1} = \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k) = \bB^k - \tau \left( \nabla_{\bB} F(\bx^{k+1}, \bB^k) + \bLmbd^k \right). \label{Eq: the update of B}
 \end{align}
+
 Finally, the dual variable $\bLmbd$ is updated via proximal gradient ascent on $h^*$, using an extrapolation step introduced in \cite{chambolleFirstOrderPrimalDualAlgorithm2011}. The update solves the following optimization problem:
 \begin{align}
     \bLmbd^{k+1} &= \text{prox}_{(1/\tau h^*)} \left( \bLmbd^k + \left(2\bB^{k+1} - \bB^k  \right) \right) \notag \\
@@ -249,13 +249,13 @@ Finally, the dual variable $\bLmbd$ is updated via proximal gradient ascent on $
 
 \subsection{Implementations}
 \label{Sec: Algorithm implementations}
-\paragraph{DualHash-StoM}
+\subsubsection{DualHash with Momentum Acceleration}
 The heavy ball method \cite{Polyak1964} and Nesterov acceleration \cite{Nesterov1983AMF} has been extensively studied in large-scale nonconvex optimization \cite{gaoNonConvexStochasticComposite2024}.
-Motivated by this, each iteration $k$,  we compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_sgdm}) as:
+Motivated by this, each iteration $k$,  we compute the stochastic gradient estimator as:
 \begin{align}
 \label{Eq: the stochastic approximate in SGDM}
     \bG^k = \nabla_{\bx} F(\bz^k, \bB^k; \calJ_k),\, \text{where } \bz^k = \bx^k + \beta_k (\bx^k - \bx^{k-1}).
-\end{align} The update of \( \bx^k\) (Line 4 of Alg. \ref{alg:our_algorithm_sgdm}) is then:
+\end{align} The update of \( \bx^k\) is then:
 \begin{align}
 \label{Eq: the update of x in SGDM}
     \bx^{k+1} = \by^k - \eta_k \bG^k,\,\text{where } \by^k = \bx^k + \alpha_k (\bx^k - \bx^{k-1}). 
@@ -277,7 +277,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \STATE \textbf{Return:} $\bx_R$ where $R$ is uniformly sampled from $\{2, \ldots, T+1\}$
 \end{algorithmic}
 \end{algorithm}
-\paragraph{DualHash-StoRM}
+\subsubsection{DualHash with Recursive Momentum}
 Alternatively, we employ the StoRM estimator \cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update. StoRM utilizes a recursive momentum mechanism to reduce gradient variance, which is motivated by SGDM. Unlike some other variance reduction techniques (e.g., SVRG \cite{johnsonAcceleratingStochasticGradient2013}, SARAH \cite{SARAH2017}) that require full-gradient or large-batch gradient computations, StoRM achieves variance reduction without such requirements. Given its practical effectiveness in deep learning \cite{cutkoskyMomentumBasedVarianceReduction2019,levy2021storm+}, we compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_storm}) as:
 {\small
 \begin{align}
@@ -288,7 +288,7 @@ Alternatively, we employ the StoRM estimator \cite{cutkoskyMomentumBasedVariance
 (1 - \rho_{k-1}) \big( \bD^{k-1} - \nabla_{\bx} F(\bx^{k-1}, \bB^{k-1};\mathcal{J}_{k-1})\big)+\nabla_{\bx} F(\bx^k, \bB^k; \mathcal{J}_k), & \text{if } k > 1.
 \end{cases}
 \end{align}}
-The update of $\bx$ (Line 4 of \Cref{alg:our_algorithm_storm}) is then 
+The update of $\bx$ is then 
 \begin{align}
 \label{Eq: the update of x in STORM}
     \bx^{k+1} = \bx^k - \eta_k \bD^k.

@@ -7,11 +7,11 @@ We now investigate the complexity analysis for DualHash-StoM (\Cref{alg:our_algo
 \end{equation}
 for a given \(\varepsilon > 0\). We assume in this paper the set \(
 \text{crit} \calL := \{(\bx^*, \bm{B}^*, \bm{\Lambda}^* ) \in \mathcal{X} \times \mathcal{B} \times \mathcal{Y^*}: \bm{0} \in \partial \mathcal{L}(\bx^*, \bm{B}^*, \bm{\Lambda}^*)\}
-\) is nonempty. This focus is standard in non-convex stochastic first-order optimization analysis, as finding a global or even local minimizer for non-convex optimization problems is generally NP-hard. In particular, we prove that a critical point of the Lagrangian function \eqref{Eq: simplified_lagrangian} is a first-order necessary optimal condition of problem \eqref{Prop: block-wise regularized problem} as follows. 
+\) is nonempty. This focus is standard in non-convex stochastic first-order optimization analysis, as finding a global or even local minimizer for non-convex optimization problems is generally NP-hard. In particular, we prove that a critical point of the Lagrangian function \eqref{Eq: simplified_lagrangian} is a first-order necessary optimal condition of Problem \eqref{Prop: block-wise regularized problem} as follows. 
 
 \begin{lemma}
 \label{Lemma: Optimality condition}
-    Suppose that \(\min\limits_{\bx, \bB} \calL(\bx, \bB, \bLmbd) > -\infty\)  and \((\bx^*, \bB^*, \bLmbd^*)\) are the optimal solutions of the problem \eqref{Prop: block-wise regularized problem} and the problem \eqref{Prop: the dual problem}, respectively. Then, it holds that \((\bx^*, \bB^*, \bLmbd^*) \in \text{crit} \calL\), i.e., \(\bm{0} \in \partial \mathcal{L}(\bx^*, \bB^*, \bLmbd^*)\).
+    Suppose that \(\min\limits_{\bx, \bB} \calL(\bx, \bB, \bLmbd) > -\infty\)  and \((\bx^*, \bB^*, \bLmbd^*)\) are the optimal solutions of Problem \eqref{Prop: block-wise regularized problem} and Problem \eqref{Prop: the dual problem}, respectively. Then, it holds that \((\bx^*, \bB^*, \bLmbd^*) \in \text{crit} \calL\), i.e., \(\bm{0} \in \partial \mathcal{L}(\bx^*, \bB^*, \bLmbd^*)\).
 \end{lemma} 
 \setcounter{proof}{0}
 \begin{proof}
@@ -57,20 +57,20 @@ We then make the following assumptions generally used in stochastic optimization
     \item[{(iii)}] Suppose index $i \sim \text{Uniform}\{1, \ldots, n\}$.  For any \(\bB \in \calB\), there exists a constant $\sigma^2 \geq 0$ such that $\mathbb{E}_{i}[\nabla_{\bx} F_i(\bx, \bb_i)] = \nabla_{\bx} F(\bx, \bB)$ and $\mathbb{E}_{i}[\|\nabla_{\bx} F_i(\bx, \bb_i) - \nabla_{\bx} F(\bx, \bB)\|^2] \leq \sigma^2$. 
 \end{itemize}
 \end{assumption}
-\Cref{Ass: main assumptions}(ii) implies the following descent lemma for $F$ with
-respect to $\bx$ and $\bB$:
-\begin{align}
-% \label{Eq: F smoothness with x}
-    F(\bx', \bB) \leq F(\bx, \bB) + \langle \nabla_{\bx}F(\bx, \bB), \bx' -\bx\rangle
-    + \frac{L_{F}}{2}\| \bx - \bx'\|^{2}. \notag
-\end{align}
-for any $\bB \in \calB$; and similarly for $\bB$:
-{\small 
-\begin{align}
-\label{Eq: F smoothness with B}
-    F(\bx, \bB') \leq F(\bx, \bB) + \langle \nabla_{\bB}F(\bx, \bB), \bB' -\bB\rangle
-    + \frac{L_{F}}{2}\| \bB - \bB'\|^{2}
-\end{align}}for any $\bx \in \calX$.
+% \Cref{Ass: main assumptions}(ii) implies the following descent lemma for $F$ with
+% respect to $\bx$ and $\bB$:
+% \begin{align}
+% % \label{Eq: F smoothness with x}
+%     F(\bx', \bB) \leq F(\bx, \bB) + \langle \nabla_{\bx}F(\bx, \bB), \bx' -\bx\rangle
+%     + \frac{L_{F}}{2}\| \bx - \bx'\|^{2}. \notag
+% \end{align}
+% for any $\bB \in \calB$; and similarly for $\bB$:
+% {\small 
+% \begin{align}
+% % \label{Eq: F smoothness with B}
+%     F(\bx, \bB') \leq F(\bx, \bB) + \langle \nabla_{\bB}F(\bx, \bB), \bB' -\bB\rangle
+%     + \frac{L_{F}}{2}\| \bB - \bB'\|^{2}
+% \end{align}}for any $\bx \in \calX$.
 \begin{remark}
 The smoothness constant \(L_F\) remains \(\mathcal{O}(1)\), as the penalty formulation is designed to cancel the potential \(\mathcal{O}(\sqrt{n})\) scaling of individual components. A rigorous analysis is provided in Appendix \ref{Appendix: discussion on assumptions}.
 \end{remark}
@@ -260,7 +260,8 @@ Under \Cref{Ass: main assumptions}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}
 \end{align}Moreover, the total number of SFO is in order of \(\calO(\varepsilon^{-4})\).
 \end{theorem}
 \subsection{Oracle complexity of DualHash-StoRM} 
-Before proceeding, we introduce an additional standard assumption widely used in variance reduction methods \cite{arjevani2023lower}.
+Before proceeding, we introduce an additional assumption, also known as the mean-squared smoothness
+assumption, widely used in variance reduction methods \cite{arjevani2023lower}.
 \begin{assumption}
 \label{Ass: the mean squared smoothness of F}
     There exists $L_{F} > 0$ such that for any index $i$ selected uniformly from $\{1,2,\ldots,n\}$, $\bx, \bx' \in \calX$, and $\bB, \bB' \in \calB$, it holds that

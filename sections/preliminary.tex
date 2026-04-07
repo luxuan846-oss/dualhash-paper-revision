@@ -1,7 +1,4 @@
 \section{Preliminary}
-
-\noindent\textbf{Notations.} We use $a$, $\ba$, and $\bA$ to denote scalars, vectors, and matrices, respectively. Throughout this paper, $\bm{1}$ represents a vector of all ones, and $i, j$ serve as indices. Let $\calX, \calB, \calY$ be finite-dimensional real Hilbert spaces equipped with inner product $\langle \cdot, \cdot \rangle$ and induced norm $\| \cdot \| := \sqrt{\langle \cdot, \cdot \rangle}$. Unless specified otherwise, $\| \cdot \|$ denotes the Euclidean norm for vectors and the Frobenius norm for matrices. We use $\calX^{*}, \calB^{*}, \calY^{*}$ to represent the dual spaces. $|\cdot|$ denotes element-wise absolute value. For a closed set $\calC \subseteq \calX$, the distance from a point $\bx \in \calX$ to $\calC$ is defined as $\text{dist}(\bx, \mathcal{C}) := \min_{\by \in \mathcal{C}}\|\bx - \by\|$.
-
 The extended real-valued function $f: \mathbb{R}^{q}\rightarrow (-\infty, +\infty]$ is called \textit{proper} if its domain $\text{dom}(f) := \{\bx \in \calX\mid f(\bx) < +\infty\}$ is nonempty and $\inf\limits_{\bx \in \mathbb{R}^q}f > -\infty$; it is \textit{closed} if its epigraph $\text{epi}(f) := \left\{ (\bx, t) \in \mathbb{R}^{q+1}\mid f(\bx) \leq t \right\}$ is closed.  For a proper, closed, and convex function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
 \begin{align}
     % \label{Def: the definition of proximal operator}
@@ -9,8 +6,7 @@ The extended real-valued function $f: \mathbb{R}^{q}\rightarrow (-\infty, +\inft
 \end{align} 
 where $\tau$ is a positive scalar parameter. The proximal mapping admits the following
 properties.
-\begin{proposition}[Properties of proximal operators
-\cite{Rockafellar1998VariationalA}]
+\begin{proposition}[\cite{Rockafellar1998VariationalA}]
     Let $f : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper and
     closed. Then, the following holds.
     \begin{enumerate}[label=(\roman{*})]
@@ -23,23 +19,25 @@ properties.
     \end{enumerate}
 \end{proposition}
 
-We introduce the StoRM (STochastic Recursive Momentum) variance reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}. In stochastic optimization problems where $F(\bx) = \mathbb{E}_{\xi}[F(\bx;\xi)]$ with $\xi \in \Xi$, standard momentum methods use
-\begin{align*}
-    \bd^{k}= \rho_{k}\nabla F(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bd^{k-1}, \text{ where }\rho_{k}\in [0, 1],
-\end{align*}
-yielding a biased estimate of $\nabla F(\bx^{k})$.
+Let us introduce the StoRM (Stochastic Recursive Momentum) variance reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}. In stochastic optimization problems where $F(\bx) = \mathbb{E}_{\xi}[F(\bx;\xi)]$ with $\xi \in \Xi$, 
+% standard momentum methods use
+% \begin{align*}
+%     \bd^{k}= \rho_{k}\nabla F(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bd^{k-1}, \text{ where }\rho_{k}\in [0, 1],
+% \end{align*}
+% yielding a biased estimate of $\nabla F(\bx^{k})$.
 StoRM adds a
-correction term, $(1 - \rho_{k}) (\nabla F(\bx^{k}, \xi^{k}) - \nabla F(\bx^{k-1}
-, \xi^{k})$, resulting in:
+correction term, $(1 - \rho_{k}) (\nabla F(\bx^{k}, \xi^{k}) - \nabla F(\bx^{k-1}, \xi^{k}))$, resulting in:
 \begin{align*}
      & \bd^{k}=\left\{\begin{array}{ll}\nabla F\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla F\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_k\right)\left( \bd^{k-1} - \nabla F\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right. \\
      & \bx^{k+1}=\bx^{k}-\eta_{k}\bd^{k}.
 \end{align*}
 This exploits the smoothness of $F(\cdot, \xi)$, leading to efficient
-variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in \Cref{alg:our_algorithm_storm}.
+variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in this paper
 
-A function $f: \calX \rightarrow \RR$ is said to be $L_f$-smooth if  $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^n$. A mapping $\mathcal{M} : \mathcal{D} \to \RR^l $ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \mathcal{D}$. A well-known gradient descent lemma for a smooth function is that
-\begin{align}
-% \label{Eq: the descent lemma}
-    f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. \notag
-\end{align}
+A function $f: \calX \rightarrow \RR$ is said to be $L_f$-smooth if  $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^n$. A mapping $\mathcal{M} : \mathcal{D} \to \RR^l $ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \mathcal{D}$. 
+
+% A well-known gradient descent lemma for a smooth function is that
+% \begin{align}
+% % \label{Eq: the descent lemma}
+%     f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. \notag
+% \end{align}

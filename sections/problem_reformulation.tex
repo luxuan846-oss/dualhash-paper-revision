@@ -42,7 +42,7 @@ We then employ variable splitting to reformulate problem \eqref{Eq: the primal d
     \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
     \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n. \notag
 \end{align}
-Combined with the quadratic penalty method \cite{nocedal1999numerical}, this transformation yields the following two-block finite-sum optimization problem:
+Combined with the quadratic penalty method, this transformation yields the following two-block finite-sum optimization problem:
 \begin{align}
     \label{Prop: block-wise regularized problem}
     \min_{\bx \in \mathcal{X}, \bB \in \mathcal{B}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}

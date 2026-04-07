@@ -208,7 +208,7 @@ For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate functio
     \end{cases}
 \end{align*} whose proximal operator in the piecewise solution is 
 \begin{align}
-    % \label{Eq: the proximal mapping of conjugate function}
+    \label{Eq: the proximal mapping of conjugate function}
     [\operatorname{prox}_{\tau h^*}(\by)]_i = 
     \begin{cases}
         \lambda, & y_i > \lambda +\tau,\\
@@ -216,7 +216,8 @@ For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate functio
         0, & -\tau \leq y_i \leq\tau, \\
         y_i +\tau, &  - \lambda -\tau \leq y_i < -\tau, \\
         -\lambda, & y_i < -\lambda -\tau.
-    \end{cases} \notag
+    \end{cases}
+    %  \notag
 \end{align} This motivates us to perform a proximal step to update \(\bLmbd\).
 \begin{figure}[t]
 \centering

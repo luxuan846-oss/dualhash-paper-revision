@@ -261,10 +261,20 @@ FUNCTION {format.eprintclass}
 FUNCTION {format.eprint}
 { eprint empty$
      { "" }
-     { archive empty$
-      	{"\url{https://arxiv.org/abs/" eprint * "}" * }
-         {"\url{" archive *  "/" * eprint * "} " * }
-       if$ 
+     { eprint #1 #16 substring$ "https://doi.org/" =
+       eprint #1 #15 substring$ "http://doi.org/" =
+       or
+       eprint #1 #18 substring$ "https://dx.doi.org/" =
+       or
+       eprint #1 #17 substring$ "http://dx.doi.org/" =
+       or
+          { "" }
+          { archive empty$
+      	      {"\url{https://arxiv.org/abs/" eprint * "}" * }
+              {"\url{" archive *  "/" * eprint * "} " * }
+            if$ 
+          }
+       if$
      }
      if$
 }
@@ -272,9 +282,23 @@ FUNCTION {format.eprint}
 FUNCTION {format.url}
 { url empty$
     { "" }
-    { urldate empty$ 
-	{ "\url{" url * "}" * }
-	{ "\url{" url * "} (accessed " * urldate * ")" * }
+    { url #1 #16 substring$ "https://doi.org/" =
+      url #1 #15 substring$ "http://doi.org/" =
+      or
+      url #1 #18 substring$ "https://dx.doi.org/" =
+      or
+      url #1 #17 substring$ "http://dx.doi.org/" =
+      or
+      url #1 #20 substring$ "https://www.doi.org/" =
+      or
+      url #1 #19 substring$ "http://www.doi.org/" =
+      or
+        { "" }
+        { urldate empty$ 
+		    { "\url{" url * "}" * }
+		    { "\url{" url * "} (accessed " * urldate * ")" * }
+	        if$
+        }
       if$
     }
   if$
@@ -289,15 +313,7 @@ FUNCTION {format.doiclass}
 }
 
 FUNCTION {format.doi}
-{ doi empty$
-     { "" }
-     { archive empty$
-	{ "\url{https://doi.org/" doi * "}" * }
-	{ "\url{https://doi.org/" doi * "}" * }
-       if$ 
-     }
-     if$
-}
+{ "" }
 
 FUNCTION {format.title}
 { title empty$

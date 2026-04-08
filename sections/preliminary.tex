@@ -20,24 +20,21 @@ properties.
 \end{proposition}
 
 Let us introduce the StoRM (Stochastic Recursive Momentum) variance reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}. In stochastic optimization problems where $F(\bx) = \mathbb{E}_{\xi}[F(\bx;\xi)]$ with $\xi \in \Xi$, 
-% standard momentum methods use
-% \begin{align*}
-%     \bd^{k}= \rho_{k}\nabla F(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bd^{k-1}, \text{ where }\rho_{k}\in [0, 1],
-% \end{align*}
-% yielding a biased estimate of $\nabla F(\bx^{k})$.
+standard momentum methods use
+\begin{align*}
+    \bd^{k}= \rho_{k}\nabla F(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bd^{k-1}, \text{ where }\rho_{k}\in [0, 1],
+\end{align*}
+yielding a biased estimate of $\nabla F(\bx^{k})$.
 StoRM adds a
 correction term, $(1 - \rho_{k}) (\nabla F(\bx^{k}, \xi^{k}) - \nabla F(\bx^{k-1}, \xi^{k}))$, resulting in:
 \begin{align*}
-     & \bd^{k}=\left\{\begin{array}{ll}\nabla F\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla F\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_k\right)\left( \bd^{k-1} - \nabla F\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right. \\
-     & \bx^{k+1}=\bx^{k}-\eta_{k}\bd^{k}.
+     \bd^{k}=\left\{\begin{array}{ll}\nabla F\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla F\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_k\right)\left( \bd^{k-1} - \nabla F\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right.
+    %  & \bx^{k+1}=\bx^{k}-\eta_{k}\bd^{k}.
 \end{align*}
-This exploits the smoothness of $F(\cdot, \xi)$, leading to efficient
-variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in this paper
+which exploits the smoothness of $F(\cdot, \xi)$, leading to efficient variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in this paper.
 
-A function $f: \calX \rightarrow \RR$ is said to be $L_f$-smooth if  $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^n$. A mapping $\mathcal{M} : \mathcal{D} \to \RR^l $ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \mathcal{D}$. 
-
-% A well-known gradient descent lemma for a smooth function is that
-% \begin{align}
-% % \label{Eq: the descent lemma}
-%     f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. \notag
-% \end{align}
+A function $f: \calX \rightarrow \RR$ is said to be $L_f$-smooth if  $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^n$. A mapping $\mathcal{M} : \mathcal{D} \to \RR^l $ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \mathcal{D}$. A well-known gradient descent lemma for a smooth function is that
+\begin{align}
+% \label{Eq: the descent lemma}
+    f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. \notag
+\end{align}

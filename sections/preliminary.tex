@@ -6,7 +6,8 @@ The extended real-valued function $f: \mathbb{R}^{q}\rightarrow (-\infty, +\inft
 \end{align} 
 where $\tau$ is a positive scalar parameter. The proximal mapping admits the following
 properties.
-\begin{proposition}[\cite{Rockafellar1998VariationalA}]
+\begin{proposition}\label{prop:rockafellar}
+\textnormal{\cite{Rockafellar1998VariationalA}}
     Let $f : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper and
     closed. Then, the following holds.
     \begin{enumerate}[label=(\roman{*})]
@@ -28,7 +29,7 @@ yielding a biased estimate of $\nabla F(\bx^{k})$.
 StoRM adds a
 correction term, $(1 - \rho_{k}) (\nabla F(\bx^{k}, \xi^{k}) - \nabla F(\bx^{k-1}, \xi^{k}))$, resulting in:
 \begin{align*}
-     \bd^{k}=\left\{\begin{array}{ll}\nabla F\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla F\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_k\right)\left( \bd^{k-1} - \nabla F\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right.
+     \bd^{k}=\left\{\begin{array}{ll}\nabla F\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla F\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_k\right)\left( \bd^{k-1} - \nabla F\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right. 
     %  & \bx^{k+1}=\bx^{k}-\eta_{k}\bd^{k}.
 \end{align*}
 which exploits the smoothness of $F(\cdot, \xi)$, leading to efficient variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in this paper.

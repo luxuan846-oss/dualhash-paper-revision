@@ -26,7 +26,7 @@
 \section{Problem reformulation}
 \label{Section: Problem Reformulation}
 \subsection{W-type Regularized Deep Hashing Model}
-Deep hashing methods aim to learn network parameters \(\bx \in \calX \subseteq \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space. 
+Deep hashing methods aim to learn network parameters \(\bx \in \calX \subseteq \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space, where \(\calX\) is a closed convex set.
 A natural approach is to minimize a similarity-preserving loss function \( \frac{1}{n}\sum_{i=1}^n L_s(\text{sgn}(\bC_i(\bx)))\) where $n$ is the number of training samples, $\bC_i(\bx)$ represents the \(i\)-th network output and \(f_i\) is the similarity-preserving loss function (e.g., pairwise cross-entropy loss \cite{zhuDeepHashingNetwork2016}). However, the function \( sgn(\cdot) \) renders standard backpropagation infeasible due to its zero gradient for all nonzero inputs. This discreteness poses a central challenge in deep hashing.
 
 A W-type regularization (e.g., $\lambda | |z| - 1 |$) has effectively mitigated this issue. This type of regularization encourages outputs to approach binary values \(\{-1, 1\}\) during training. Specifically, the model is trained to produce continuous outputs \(\bu_i = \bD_i(\bx)\) with W-type regularization, and binary codes are obtained post-training via \(\bb_i = \text{sgn}(\bu_i)\).  Consequently, we formulate the core optimization problem for W-type regularized deep hashing methods as follows,
@@ -34,8 +34,8 @@ A W-type regularization (e.g., $\lambda | |z| - 1 |$) has effectively mitigated 
     \label{Eq: the primal deep hashing problem}
     \min_{\bx \in \calX} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
 \end{align}
-where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss\footnote{In practice, we include $\ell_2$ weight decay in the training loss, i.e., each $f_i(\bx)$ contains a term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$, which promotes coercivity of the primal objective with respect to $\bx$.}, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
-\subsection{A Two-Block Structured Reformulation}
+where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss\footnote{\blue{In practice, we include $\ell_2$ weight decay in the training loss, i.e., each $f_i(\bx)$ contains a term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$, which promotes coercivity of the primal objective with respect to $\bx$.}}, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
+\subsection{ Structured Reformulation}
 We then employ variable splitting to reformulate problem \eqref{Eq: the primal deep hashing problem} equivalently as the constrained problem:
 \begin{align}
     % \label{Eq: constrained_dlh}

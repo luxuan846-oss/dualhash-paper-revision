@@ -1,4 +1,4 @@
-This supplementary material provides useful definitions and propositions, necessary lemmas with detailed proofs, and the complete derivations for the main theoretical results and parameters presented in the primary work.
+% This supplementary material provides useful definitions and propositions, necessary lemmas with detailed proofs, and the complete derivations for the main theoretical results and parameters presented in the primary work.
 \section{Preliminaries}
 \label{Appendix: Preliminaries and notations}
 % The proximal mapping admits the following
@@ -132,7 +132,7 @@ For \Cref{alg:our_algorithm_sgdm}, the key relationships among iterates via the 
 % \]
 % This exploits the smoothness of $F(\cdot, \xi)$, leading to efficient
 % variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in \Cref{alg:our_algorithm_storm}.
-
+% \newpage
 \section{Discussions on \Cref{Ass: main assumptions}(ii) in \Cref{Section: Convergence analysis}}
 
 \label{Appendix: discussion on assumptions} 
@@ -282,12 +282,12 @@ We first present a lemma concerning a property of a continuously differentiable 
         \label{Eq: One-iteration progress in sgdm} & \calL (\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k}) \notag                                                                                                   \\
         \leq \,                                    & K_{1}\Delta_{\bB}^{k+2}- K_{2}\Delta_{\bB}^{k+1}+ K_{3}\Delta_{\bB}^{k}+ K_{4}\Delta_{\bx}^{k+2}- (K_{5}- K_{3})\Delta_{\bx}^{k+1}+ K_{6}\Delta_{\bx}^{k}+ \frac{1}{L_{F}}\|\be^{k}\|^{2}.
     \end{align}
-    Applying the definition of $\Psi_{sgdm}$ from \eqref{Eq: the Lyapunov function in SGDM}
+    Applying the definition of $\Psi_m$ from \eqref{Eq: the Lyapunov function in SGDM}
     to \eqref{Eq: One-iteration progress in sgdm}, rearranging, and taking the
     conditional expectation on both sides, we obtain
     \small{
     \begin{align}
-        \label{the descent property of Lyapunov func in SGDM first} & \EE_{\bxi^{[k+1]}}\left[\Psi_{sgdm}(\mathcal{Q}^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_{sgdm}(\mathcal{Q}^{k})\right]\notag                                                                               \\
+        \label{the descent property of Lyapunov func in SGDM first} & \EE_{\bxi^{[k+1]}}\left[\Psi_m(\mathcal{Q}^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_m(\mathcal{Q}^{k})\right]\notag                                                                               \\
         \leq                                                        & - (C_{1}- K_{1}) \EE_{\bxi^{[k+1]}}[\Delta_{\bm{B}}^{k+2}] -(K_{2}- C_{1}- C_{2}) \EE_{\bxi^{[k+1]}}[\Delta_{\bm{B}}^{k+1}] - (C_{2}- K_{3}) \EE_{\bxi^{[k]}}[\Delta_{\bm{B}}^{k}] \notag                     \\
                                                                     & - (C_{3}-K_{4}) \EE_{\bxi^{[k+1]}}[\Delta_{\bx}^{k+2}]- (K_{5}-K_{3}-C_{3}-C_{4}) \EE_{\bxi^{[k+1]}}[\Delta_{\bx}^{k+1}] - (C_{4}- K_{6}) \EE_{\bxi^{[k]}}[\Delta_{\bx}^{k}] + \frac{\sigma^{2}}{b_{k}L_{F}}.
     \end{align}}
@@ -295,12 +295,12 @@ We first present a lemma concerning a property of a continuously differentiable 
     and parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}
     into \eqref{the descent property of Lyapunov func in SGDM first}, we derive
     \begin{align*}
-             & \EE_{\bxi^{[k+1]}}\left[\Psi_{sgdm}(\mathcal{Q}^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_{sgdm}(\mathcal{Q}^{k})\right] \nonumber                                                                                                                                                        \\
+             & \EE_{\bxi^{[k+1]}}\left[\Psi_m(\mathcal{Q}^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_m(\mathcal{Q}^{k})\right] \nonumber                                                                                                                                                        \\
         \leq & \, -C_{\bB}\left( \EE_{\bxi^{[k+1]}}\left[\Delta_{\bB}^{k+1}\right] + \EE_{\bxi^{[k]}}\left[\Delta_{\bB}^{k}\right] \right) -C_{\bx}\left( \EE_{\bxi^{[k+1]}}\left[\Delta_{\bm{x}}^{k+1}\right]+ \EE_{\bxi^{[k]}}\left[\Delta_{\bm{x}}^{k}\right] \right) + \frac{\sigma^{2}}{b_{k}L_{F}}.
     \end{align*}Taking the full expectation of both sides leads to \eqref{Eq: the descent coefficients of potential function in SGDM},
     thereby completing the proof. 
 \end{proof}
-The technical proof that the coefficients of $\Psi_{sgdm}$ in \eqref{Eq: the coefficients of the Lyapunov function in SGDM} and the descent constants $C_{\bB}$, $C_{\bx}$ are indeed positive is given as follows.
+The technical proof that the coefficients of $\Psi_m$ in \eqref{Eq: the coefficients of the Lyapunov function in SGDM} and the descent constants $C_{\bB}$, $C_{\bx}$ are indeed positive is given as follows.
 \begin{lemma}[Positivity of Lyapunov related coefficients]
     \label{lem:lyapunov-coef-positivity} If parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}
     hold, then the following inequalities are satisfied:
@@ -334,7 +334,7 @@ The technical proof that the coefficients of $\Psi_{sgdm}$ in \eqref{Eq: the coe
     $\eta_{k}= \frac{\eta}{L_{F}}$ where $\eta = \frac{(1 - 2\alpha - \nu)/2}{\frac{\bar{L}_{F}}{L_{F}}
     + \frac{(1 + \nu)\beta^{2}}{(1 - \alpha)\alpha}}$.
 
-    Next, we verify that the coefficients of $\Psi_{sgdm}$ satisfying \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
+    Next, we verify that the coefficients of $\Psi_m$ satisfying \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
     and $\tau$ satisfying \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}
     ensure that $C_{\bB},\, C_{\bx}> 0$. Let us denote $t = \tau L_{F}$. Choosing
     $\delta>0$, we have
@@ -351,7 +351,7 @@ The technical proof that the coefficients of $\Psi_{sgdm}$ in \eqref{Eq: the coe
     Therefore, for some $\delta >0$, setting
     $\tilde{\delta}= c_{\delta}\delta^{2}$ and ensuring
     $\tau^{2}L_{F}^{2}\leq \tilde{\delta}$ guarantee positive coefficients for
-    $\Psi_{sgdm}$ in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
+    $\Psi_m$ in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
     and $C_{\bB}, \, C_{\bx}>0$. 
 \end{proof}
 We then derive an upper error bound on $\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))$ based on
@@ -460,8 +460,8 @@ We then derive an upper error bound on $\text{dist}^{2}(\bm{0}, \partial \calL(\
 % We set $T$ as the maximum number of iterations and denote 
 %     $L_{\Delta}= \frac{\max\{S_{1}, S_{2}\} + \max\{S_{3}, S_{4}\}}{\min\{C_{\bB},
 %     C_{\bx}\}}$, $C_{\sigma}= \frac{L_{\Delta}}{L_{F}}+ 3$, and
-%     $\Delta_{1}= \Psi_{\mathrm{sgdm}}^{1}- \Psi_{\mathrm{sgdm}}(\mathcal{Q}^{*})$
-%     are constants independent of $T$, where \(\Psi_{\mathrm{sgdm}}^{1} = \Psi_{\mathrm{sgdm}}(\calQ^1)\).
+%     $\Delta_{1}= \Psi_m^{1}- \Psi_m(\mathcal{Q}^{*})$
+%     are constants independent of $T$, where \(\Psi_m^{1} = \Psi_m(\calQ^1)\).
 % \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_sgdm}]
 %     \label{lemma: convergence rate sgdm} Under the conditions of Lemma \ref{Lemma:
 %     approximate sufficient descent property in SGDM}, for any $T \geq 1$, there exists
@@ -478,15 +478,15 @@ We then derive an upper error bound on $\text{dist}^{2}(\bm{0}, \partial \calL(\
     Similarly, from \eqref{Eq: the descent property of Lyapunov func in SGDM}, we
     obtain
     \[
-        \EE [\Psi_{sgdm}(\mathcal{Q}^{k+1})] - \EE[\Psi_{sgdm}(\mathcal{Q}^{k})]
+        \EE [\Psi_m(\mathcal{Q}^{k+1})] - \EE[\Psi_m(\mathcal{Q}^{k})]
         \leq -\min \{ C_{\bB}, C_{\bx}\}\EE[\Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}+
         \Delta_{\bm{x}}^{k+1}+ \Delta_{\bm{x}}^{k}] + \frac{\sigma^{2}}{b_{k}L_{F}},
     \]
     which yields that
     \[
         \EE[\Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}+ \Delta_{\bm{x}}^{k+1}+ \Delta_{\bm{x}}
-        ^{k}] \leq \frac{1}{\min \{ C_{\bB}, C_{\bx}\}}\left( \EE [\Psi_{sgdm}(\mathcal{Q}
-        ^{k})] - \EE[\Psi_{sgdm}(\mathcal{Q}^{k+1})] + \frac{\sigma^{2}}{b_{k}L_{F}}
+        ^{k}] \leq \frac{1}{\min \{ C_{\bB}, C_{\bx}\}}\left( \EE [\Psi_m(\mathcal{Q}
+        ^{k})] - \EE[\Psi_m(\mathcal{Q}^{k+1})] + \frac{\sigma^{2}}{b_{k}L_{F}}
         \right)
     \]
     Substituting this inequality into \eqref{Eq: the stationarity error bound in SGDM rearrange},
@@ -494,7 +494,7 @@ We then derive an upper error bound on $\text{dist}^{2}(\bm{0}, \partial \calL(\
     \[
         \frac{1}{T}\sumT \mathbb{E}[\mathrm{dist}^{2}(0, \partial \mathcal{L}(\bx
         ^{k}, \bB^{k}, \bLmbd^{k}))] \leq \frac{L_{\Delta}}{T}\sumT
-        \left(\EE [\Psi_{\mathrm{sgdm}}(\mathcal{Q}^{k})] - \EE [\Psi_{\mathrm{sgdm}}
+        \left(\EE [\Psi_m(\mathcal{Q}^{k})] - \EE [\Psi_m
         (\mathcal{Q}^{k+1})] \right) + ( 3 + L_{\Delta}) \frac{\sigma^{2}}{b_{k}},
     \], which yields the conclusion. Denoting
     $a_{k}= \mathbb{E}[\mathrm{dist}^{2}(0, \partial \mathcal{L}(\bx^{k}, \bB
@@ -554,11 +554,11 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
              & \calL (\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k}) \nonumber                                                                                                                                          \\
         \leq & \,\frac{\eta_{k}}{2}\| \be^{k}\|^{2}- (\eta_{k}^{-1}- L_{F}- K_{3}) \Delta_{\bx}^{k+1}+ K_{1}\Delta_{\bB}^{k+2}+ K_{4}\Delta_{\bx}^{k+2}- K_{2}\Delta_{\bB}^{k+1}+ K_{3}\Delta_{\bB}^{k}.\label{Eq: One-iteration progress in storm}
     \end{align}
-    Applying the definition of $\Psi_{storm}$ from \eqref{Eq: the Lyapunov function in STORM}
+    Applying the definition of $\Psi_r$ from \eqref{Eq: the Lyapunov function in STORM}
     into \eqref{Eq: One-iteration progress in storm}, we rearrange the above
     inequality
     \begin{align}
-        \label{the descent property of Lyapunov func in STORM first} & \Psi_{storm}(\mathcal{Q}^{k+1}) - \Psi_{storm}(\mathcal{Q}^{k}) \notag                                                                                         \\
+        \label{the descent property of Lyapunov func in STORM first} & \Psi_r(\mathcal{Q}^{k+1}) - \Psi_r(\mathcal{Q}^{k}) \notag                                                                                         \\
         \leq                                                         & - (C_{1}- K_{1}) \Delta_{\bm{B}}^{k+2}-(K_{2}- C_{1}- C_{2}) \Delta_{\bm{B}}^{k+1}- (C_{2}- K_{3}) \Delta_{\bm{B}}^{k}- (C_{3}-K_{4}) \Delta_{\bx}^{k+2}\notag \\
                                                                      & -(\eta_{k}^{-1}- L_{F}- K_{3}- C_{3}) \Delta_{\bx}^{k+1}- (C_{4}- K_{6}) \Delta_{\bx}^{k}+ \frac{\eta_{k}}{2}\| \be^{k}\|^{2}.
     \end{align}
@@ -580,7 +580,7 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
     Substituting this inequality into the second inequality of \eqref{Eq: bound B and x in storm}
     and taking the conditional expectation on both sides yields
     \begin{align}
-        \label{Eq: scaling recursive}\EE_{\bxi^{[k+1]}}\left[\Psi_{storm}(\calQ^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_{storm}(\calQ^{k})\right] \leq - \frac{1}{2\eta_{1}}\EE_{\bxi^{[k+1]}}\left[ \Delta_{\bx}^{k+1}\right] + \frac{\eta_{k}}{2}\EE_{\bxi^{[k]}}\left[ \|\be^{k}\|^{2}\right].
+        \label{Eq: scaling recursive}\EE_{\bxi^{[k+1]}}\left[\Psi_r(\calQ^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_r(\calQ^{k})\right] \leq - \frac{1}{2\eta_{1}}\EE_{\bxi^{[k+1]}}\left[ \Delta_{\bx}^{k+1}\right] + \frac{\eta_{k}}{2}\EE_{\bxi^{[k]}}\left[ \|\be^{k}\|^{2}\right].
     \end{align}
     From \Cref{Lemma: Recursive bound on gradient error}, we obtain
     \begin{align}
@@ -595,7 +595,7 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
     Substituting this inequality into \eqref{Eq: scaling recursive}, we obtain
     \small{
     \begin{align}
-             & \EE_{\bxi^{[k+1]}}\left[\Psi_{storm}(\calQ^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_{storm}(\calQ^{k})\right] \notag     \\
+             & \EE_{\bxi^{[k+1]}}\left[\Psi_r(\calQ^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_r(\calQ^{k})\right] \notag     \\
              \leq & \frac{1}{8(1-\rho_k)\eta_1L^2_F}\left(\EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] - \EE_{\bxi^{[k+1]}}\left[\| \be^{k+1}\|^{2}\right] -\rho_k \EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right]+ \frac{2 \rho_{k}^{2}\sigma^{2}}{|\mathcal{J}_{k+1}|}\right) + \frac{\eta_{k}}{2}\EE_{\bxi^{[k]}}\left[ \|\be^{k}\|^{2}\right]  \notag \\
         \leq & \frac{1}{8\eta_{1}L_{F}^{2}}\left(\EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] - \EE_{\bxi^{[k+1]}}\left[\| \be^{k+1}\|^{2}\right] + \frac{2 \rho_{k}^{2}\sigma^{2}}{|\mathcal{J}_{k+1}|}\right) - \left( \frac{\rho_{k}}{8\eta_{1}L_{F}^{2}}- \frac{\eta_{k}}{2}\right)\EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] \notag \\
         &+ \frac{\rho_{k}^{2}\sigma^{2}}{4\eta_{1}L_{F}^{2}| \calJ_{k+1}|}, \label{Eq: scaling recursive 2}
@@ -603,9 +603,9 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
     From \eqref{Eq: the parameters assumptions in storm appendix}, it follows that
     $\frac{\rho_{k}}{8\eta_{1}L_{F}^{2}}- \frac{\eta_{k}}{2}\geq \frac{\rho_{k}}{16\eta_{1}L_{F}^{2}}$.
     Applying this inequality to \eqref{Eq: scaling recursive 2} yields the following
-    expected descent property of the Lyapunov function $\Psi_{storm}$
+    expected descent property of the Lyapunov function $\Psi_r$
     \begin{align}
-        \label{Eq: One-iteration Expected descent} & \EE_{\bxi^{[k+1]}}\left[ \Psi_{storm}(\calQ^{k+1}) + \frac{1}{8\eta_{1}L_{F}^{2}}\| \be^{k+1}\|^{2}\right] - \EE_{\bxi^{[k]}}\left[ \Psi_{storm}(\calQ^{k}) + \frac{1}{8\eta_{1}L_{F}^{2}}\| \be^{k}\|^{2}\right] \notag \\
+        \label{Eq: One-iteration Expected descent} & \EE_{\bxi^{[k+1]}}\left[ \Psi_r(\calQ^{k+1}) + \frac{1}{8\eta_{1}L_{F}^{2}}\| \be^{k+1}\|^{2}\right] - \EE_{\bxi^{[k]}}\left[ \Psi_r(\calQ^{k}) + \frac{1}{8\eta_{1}L_{F}^{2}}\| \be^{k}\|^{2}\right] \notag \\
         \leq                                       & - \frac{\rho_{k}}{16\eta_{1}L_{F}^{2}}\EE_{\bxi^{[k]}}[\| \be^{k}\|^{2}] + \frac{\rho_{k}^{2}\sigma^{2}}{4\eta_{1}L_{F}^{2}| \calJ_{k+1}|}.
     \end{align}
     Finally, summing up \eqref{Eq: One-iteration Expected descent} from $k=1$ to
@@ -653,8 +653,8 @@ and the batch size $b_k$ to satisfy:
     holds:
     \begin{align}
         \label{Eq: weighted cumulative error bound}\frac{1}{T}\sum_{k=1}^{T}\rho_{k}\EE_{\bxi^{[k]}}\left[ \| \be^{k}\|^{2}\right]\leq \frac{16 \eta_{1}L_{F}^{2}\tilde{\Delta}_{1}}{T}+ \frac{2\sigma^{2}}{Tb_{1}}+ \frac{1}{T}\sum_{k=2}^{T}\frac{4\rho_{k}^{2}\sigma^{2}}{b}.
-    \end{align} where $\tilde{\Delta}_{1}= \Psi_{storm}^{1}- \Psi_{storm}^{*}$, $\Psi_{storm}^{1}= \Psi_{storm}(\calQ^{1})$ and $\Psi_{storm}^{*}$ is the lower bound
-of $\Psi_{storm}$.
+    \end{align} where $\tilde{\Delta}_{1}= \Psi_r^{1}- \Psi_r^{*}$, $\Psi_r^{1}= \Psi_r(\calQ^{1})$ and $\Psi_r^{*}$ is the lower bound
+of $\Psi_r$.
 \end{lemma}
 We derive an upper stationarity error bound for the iterates generated by \Cref{alg:our_algorithm_storm}.
 \begin{lemma}[Stationarity error bound]
@@ -734,14 +734,14 @@ We now establish the convergence rate of \Cref{alg:our_algorithm_storm} by takin
     to \eqref{Eq: the stationarity error bound in Lemma in storm} in \Cref{Lemma:
     Stationarity error bound} yields
     \begin{align}
-        \label{Eq: the stationarity error bound in proof storm}\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k})) \leq & \,\frac{S_{4}}{C_{\bB}}\left( \Psi_{storm}(\calQ^{k}) - \Psi_{storm}(\calQ^{k+1}) \right) + S_{3}^{k}\Delta_{\bm{x}}^{k+1}+(2 + \frac{S_{4}\eta_{1}}{2C_{\bB}})\| \be^{k}\|^{2}.
+        \label{Eq: the stationarity error bound in proof storm}\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k})) \leq & \,\frac{S_{4}}{C_{\bB}}\left( \Psi_r(\calQ^{k}) - \Psi_r(\calQ^{k+1}) \right) + S_{3}^{k}\Delta_{\bm{x}}^{k+1}+(2 + \frac{S_{4}\eta_{1}}{2C_{\bB}})\| \be^{k}\|^{2}.
     \end{align}
     For the second term in \eqref{Eq: the stationarity error bound in proof storm},
     by recalling the second inequality in \eqref{Eq: bound B and x in storm}, we
     obtain
     \[
-        \Delta_{\bm{x}}^{k+1}\leq \frac{1}{ C_{\bx}^{k}}\left( \Psi_{storm}(\mathcal{Q}
-        ^{k}) - \Psi_{storm}(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}
+        \Delta_{\bm{x}}^{k+1}\leq \frac{1}{ C_{\bx}^{k}}\left( \Psi_r(\mathcal{Q}
+        ^{k}) - \Psi_r(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}
         \right),
     \] where we use the positive value of $C_{\bx}^{k}$ from \eqref{Eq: the bound coefficient of x}. Therefore, substituting the inequality above and the definition of
     $S_{3}^{k}$ from \eqref{Eq: the coefficients of stationarity error bound in SGDM},
@@ -749,13 +749,13 @@ We now establish the convergence rate of \Cref{alg:our_algorithm_storm} by takin
 \begin{align}
 \label{Eq: the scaling for x sequence}
 &S_{3}^{k}\Delta_{\bx}^{k+1} \notag \\
-\leq &\,\frac{S_{3}^{k}}{C_{\bx}^{k}}\left( \Psi_{storm}(\mathcal{Q}^{k}) - \Psi_{storm}(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right)\notag    \\
-\leq &\, \frac{4 [ 1 + (1 + 3\tau^{2})(\eta_{k}L_{F})^{2}]}{\eta_{k}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_{storm}(\mathcal{Q}^{k}) - \Psi_{storm}(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right) \notag                                                                                                                                    \\
-\leq &\, \frac{4 [ 1 + (1 + \frac{3\tilde{\delta}}{L^2_F})(\eta_{k}L_{F})^{2}]}{\eta_{k}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_{storm}(\mathcal{Q}^{k}) - \Psi_{storm}(\mathcal{Q}^{k+1}) + \frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right) \notag                                                                                                               \\
-\leq &\, \frac{4 [ 1 + (1 + \frac{3\tilde{\delta}}{\tilde{L}^2_F})(\eta_{k}\tilde{L}_{F})^{2}]}{\eta_{1}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_{storm}(\mathcal{Q}^{k}) - \Psi_{storm}(\mathcal{Q}^{k+1})\right) + \frac{2 [ 1 + (1 + \frac{3\tilde{\delta}}{\tilde{L}^2_F})(\eta_{k}\tilde{L}_{F})^{2}]}{1 - \eta_{k}\tilde{L}_{F}}\| \be^{k}\|^{2}\notag \\
-% &\leq \frac{4 [ 1 + C_{\delta}(\eta_k\tilde{L}_F)^2]}{\eta_k (1 - \eta_k\tilde{L}_F)} \left( \Psi_{storm}(\mathcal{Q}^k) - \Psi_{storm}(\mathcal{Q}^{k+1}) \right)  +  \frac{2[ 1 + C_{\delta}(\eta_k\tilde{L}_F)^2]}{\eta_1 (1 - \eta_k\tilde{L}_F)}\| \be^k\|^2\notag \\
-\leq &\,\frac{4 [ 1 + C_{\delta}(\eta_{k}\tilde{L}_{F})^{2}]}{\eta_{1}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_{storm}(\mathcal{Q}^{k}) - \Psi_{storm}(\mathcal{Q}^{k+1})\right) + \frac{2 [ 1 +C_{\delta}(\eta_{k}\tilde{L}_{F})^{2}]}{1 - \eta_{k}\tilde{L}_{F}}\| \be^{k}\|^{2}\notag                                                                     \\
-\leq &\, \frac{2(C_{\delta}+ 4)}{\eta_{1}}\left( \Psi_{storm}(\mathcal{Q}^{k}) - \Psi_{storm}(\mathcal{Q}^{k+1})\right) + (C_{\delta}+ 4) \| \be^{k}\|^{2},
+\leq &\,\frac{S_{3}^{k}}{C_{\bx}^{k}}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right)\notag    \\
+\leq &\, \frac{4 [ 1 + (1 + 3\tau^{2})(\eta_{k}L_{F})^{2}]}{\eta_{k}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right) \notag                                                                                                                                    \\
+\leq &\, \frac{4 [ 1 + (1 + \frac{3\tilde{\delta}}{L^2_F})(\eta_{k}L_{F})^{2}]}{\eta_{k}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1}) + \frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right) \notag                                                                                                               \\
+\leq &\, \frac{4 [ 1 + (1 + \frac{3\tilde{\delta}}{\tilde{L}^2_F})(\eta_{k}\tilde{L}_{F})^{2}]}{\eta_{1}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1})\right) + \frac{2 [ 1 + (1 + \frac{3\tilde{\delta}}{\tilde{L}^2_F})(\eta_{k}\tilde{L}_{F})^{2}]}{1 - \eta_{k}\tilde{L}_{F}}\| \be^{k}\|^{2}\notag \\
+% &\leq \frac{4 [ 1 + C_{\delta}(\eta_k\tilde{L}_F)^2]}{\eta_k (1 - \eta_k\tilde{L}_F)} \left( \Psi_r(\mathcal{Q}^k) - \Psi_r(\mathcal{Q}^{k+1}) \right)  +  \frac{2[ 1 + C_{\delta}(\eta_k\tilde{L}_F)^2]}{\eta_1 (1 - \eta_k\tilde{L}_F)}\| \be^k\|^2\notag \\
+\leq &\,\frac{4 [ 1 + C_{\delta}(\eta_{k}\tilde{L}_{F})^{2}]}{\eta_{1}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1})\right) + \frac{2 [ 1 +C_{\delta}(\eta_{k}\tilde{L}_{F})^{2}]}{1 - \eta_{k}\tilde{L}_{F}}\| \be^{k}\|^{2}\notag                                                                     \\
+\leq &\, \frac{2(C_{\delta}+ 4)}{\eta_{1}}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1})\right) + (C_{\delta}+ 4) \| \be^{k}\|^{2},
 \end{align} where the third inequality follows from $\tau^{2}\leq \tilde{\delta}/ L_{F}^{2}$,
     the fourth inequality is derived from $\tilde{L}_{F}\geq L_{F}$ and
     $\eta_{k}\equiv \eta_{1}$, and the last inequality holds because $(1 + cx^{2}
@@ -766,7 +766,7 @@ We now establish the convergence rate of \Cref{alg:our_algorithm_storm} by takin
     and averaging over $T$, we obtain
     \begin{align}
              & \frac{1}{T}\sumT \EE_{\bxi^{[k]}}\left[\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))\right] \notag                                                                                                                                                                      \\
-        \leq & \,\frac{S_{4}}{C_{\bB}T}\sumT \left( \EE_{\bxi^{[k]}}\left[\Psi_{storm}(\calQ^{k})\right] - \EE_{\bxi^{[k+1]}}\left[\Psi_{storm}(\calQ^{k+1}) \right] \right)+ \frac{1}{T}\sumT S_{3}^{k}\EE_{\bxi^{[k]}}\left[ \Delta_{\bm{x}}^{k+1}\right] \notag                                                     \\
+        \leq & \,\frac{S_{4}}{C_{\bB}T}\sumT \left( \EE_{\bxi^{[k]}}\left[\Psi_r(\calQ^{k})\right] - \EE_{\bxi^{[k+1]}}\left[\Psi_r(\calQ^{k+1}) \right] \right)+ \frac{1}{T}\sumT S_{3}^{k}\EE_{\bxi^{[k]}}\left[ \Delta_{\bm{x}}^{k+1}\right] \notag                                                     \\
              & +\frac{1}{T}\sumT \left( 2 + \frac{S_{4}\eta_{1}}{2C_{\bB}}\right) \EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] \notag                                                                                                                                                                                 \\
         \leq & \frac{\frac{S_4}{C_B}\tilde{\Delta}_{1}}{ T}+ \frac{1}{T}\sumT S_{3}^{k}\EE_{\bxi^{[k+1]}}\left[ \Delta_{\bm{x}}^{k+1}\right]+\left( 2 + \frac{S_{4}\eta_{1}}{2C_{\bB}}\right)\frac{1}{T}\sumT \EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right].\label{Eq: the averaged stationarity error bound in proof}
     \end{align}
@@ -818,7 +818,7 @@ With this parameter choice, we proceed to analyze the oracle complexity of \Cref
 % \] where \(\rho\) and \(\eta\) are independent of \(T\).
 % Let us \(l = \frac{1}{3}\) and \(q = \frac{2}{3}\),
 % we want \(\frac{1}{T}\sum_{k=1}^T\text{dist}^2(\bm{0}, \partial \calL^k) = \mathcal{O}(T^{-\frac{2}{3}})\)
-% We denoteare constant independent of \(T\) and \(\Delta_1 = \Psi_{storm}(\calQ^1) - \Psi_{storm}^* \) and the definitions of the \(\Psi_{storm}\) and \(\calQ\) are detailed in Appendix \ref{Appendix: the complexity analysis of DualHash-StoRM}.
+% We denoteare constant independent of \(T\) and \(\Delta_1 = \Psi_r(\calQ^1) - \Psi_r^* \) and the definitions of the \(\Psi_r\) and \(\calQ\) are detailed in Appendix \ref{Appendix: the complexity analysis of DualHash-StoRM}.
 
 % Let us discuss how to select appropriate parameters.  To ensure the parameter setting \eqref{Eq: the parameters conditions in dualhash-storm}, we set the parameters as follows
 % \[

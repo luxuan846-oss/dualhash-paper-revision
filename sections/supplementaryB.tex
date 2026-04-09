@@ -154,11 +154,11 @@ $\mathcal{D}(\bx) = (\bD_{1}(\bx), \ldots, \bD_{n}(\bx))$ from $\mathcal{X}\subs
 
 Combining \Cref{Ass: main assumptions}(i) and \Cref{Ass: the properties of D},
 we can establish that there exist constants
-$C_{\mathcal{D}}, G_{\mathcal{D}}, C_{\mathcal{D}\mathcal{B}}> 0$ such that:
+$C_{\mathcal{D}}, G_{\mathcal{D}}, C_{\mathcal{D}B}> 0$ such that:
 \[
     \|\mathcal{D}(\bx)\| \leq C_{\mathcal{D}}, \, \|\nabla \mathcal{D}(\bx)\|
     \leq G_{\mathcal{D}}, \, \text{and}\quad \|\mathcal{D}(\bx) - \bB\| \leq C
-    _{\mathcal{D}\mathcal{B}}.
+    _{\mathcal{D}B}.
 \]
 Based on these assumptions, we can establish the smoothness properties of the composite
 function $F$. First, we observe that $P(\bx, \bB)$ is $\frac{\gamma}{n}$-smooth with
@@ -166,14 +166,14 @@ respect to $\bB$ and $\frac{\gamma}{n}(L_{\nabla \mathcal{D}}(C_{\mathcal{D}}+ C
 ) + G_{\mathcal{D}}L_{\mathcal{D}})$-smooth with respect to $\bx$. Combining
 these properties, $P(\bx, \bB)$ has an overall smoothness constant:
 \[
-    L_{s}= \frac{\gamma}{n}\sqrt{2\max\{L^{2}_{\nabla \mathcal{D}}C^{2}_{\mathcal{D}\mathcal{B}}+
+    L_{s}= \frac{\gamma}{n}\sqrt{2\max\{L^{2}_{\nabla \mathcal{D}}C^{2}_{\mathcal{D}B}+
     (2G_{\mathcal{D}}^{2}+ 1)L^{2}_{\mathcal{D}}, 2G_{\mathcal{D}}^{2}+ 1\}}= \mathcal{O}
     (1)
 \]
 
 Consequently, $F(\bx, \bB)$ is $L_{F}$-smooth with respect to $(\bx, \bB)$, where
 $L_{F}= \mathcal{O}(1)$. An important observation is that, despite $C_{\mathcal{D}}$,
-$G_{\mathcal{D}}$ and $C_{\mathcal{D}\mathcal{B}}$ potentially being
+$G_{\mathcal{D}}$ and $C_{\mathcal{D}B}$ potentially being
 $\mathcal{O}(\sqrt{n})$, the overall smoothness constant $L_{F}$ remains independent
 of the sample size $n$, which is crucial for our convergence analysis.
 % This smoothness property implies the following descent lemma for $F$ with
@@ -285,12 +285,11 @@ We first present a lemma concerning a property of a continuously differentiable 
     Applying the definition of $\Psi_m$ from \eqref{Eq: the Lyapunov function in SGDM}
     to \eqref{Eq: One-iteration progress in sgdm}, rearranging, and taking the
     conditional expectation on both sides, we obtain
-    \small{
     \begin{align}
         \label{the descent property of Lyapunov func in SGDM first} & \EE_{\bxi^{[k+1]}}\left[\Psi_m(\mathcal{Q}^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_m(\mathcal{Q}^{k})\right]\notag                                                                               \\
         \leq                                                        & - (C_{1}- K_{1}) \EE_{\bxi^{[k+1]}}[\Delta_{\bm{B}}^{k+2}] -(K_{2}- C_{1}- C_{2}) \EE_{\bxi^{[k+1]}}[\Delta_{\bm{B}}^{k+1}] - (C_{2}- K_{3}) \EE_{\bxi^{[k]}}[\Delta_{\bm{B}}^{k}] \notag                     \\
                                                                     & - (C_{3}-K_{4}) \EE_{\bxi^{[k+1]}}[\Delta_{\bx}^{k+2}]- (K_{5}-K_{3}-C_{3}-C_{4}) \EE_{\bxi^{[k+1]}}[\Delta_{\bx}^{k+1}] - (C_{4}- K_{6}) \EE_{\bxi^{[k]}}[\Delta_{\bx}^{k}] + \frac{\sigma^{2}}{b_{k}L_{F}}.
-    \end{align}}
+    \end{align}
     Then substituting the values of coefficients in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
     and parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}
     into \eqref{the descent property of Lyapunov func in SGDM first}, we derive
@@ -474,7 +473,7 @@ We then derive an upper error bound on $\text{dist}^{2}(\bm{0}, \partial \calL(\
 \subsection{Proof of \Cref{lemma: convergence rate sgdm}}
 \label{Subsubsec: convergence rate SGDM}
 \begin{proof}
-    From \eqref{Eq: the stationarity error bound in SGDM Lemma}, we obtain \small{ \begin{align}\label{Eq: the stationarity error bound in SGDM rearrange}\mathbb{E}[\mathrm{dist}^{2}(0, \partial \mathcal{L}(\bx^{k}, \bB^{k}, \bLmbd^{k}))] \leq ( \max\{S_{1}, S_{2}\} + \max\{S_{3}, S_{4}\}) \EE [\Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}+ \Delta_{\bx}^{k+1}+ \Delta_{\bx}^{k}] + \frac{3 \sigma^{2}}{b_{k}L_{F}}.\end{align}}
+    From \eqref{Eq: the stationarity error bound in SGDM Lemma}, we obtain \begin{align}\label{Eq: the stationarity error bound in SGDM rearrange}\mathbb{E}[\mathrm{dist}^{2}(0, \partial \mathcal{L}(\bx^{k}, \bB^{k}, \bLmbd^{k}))] \leq ( \max\{S_{1}, S_{2}\} + \max\{S_{3}, S_{4}\}) \EE [\Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}+ \Delta_{\bx}^{k+1}+ \Delta_{\bx}^{k}] + \frac{3 \sigma^{2}}{b_{k}L_{F}}.\end{align}
     Similarly, from \eqref{Eq: the descent property of Lyapunov func in SGDM}, we
     obtain
     \[
@@ -593,13 +592,12 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
         \leq&\, \frac{1}{4(1-\rho_{k})^{2}L_{F}^{2}}\left(\EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] - \EE_{\bxi^{[k+1]}}\left[\| \be^{k+1}\|^{2}\right] -\rho_k \EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right]+ \frac{2 \rho_{k}^{2}\sigma^{2}}{|\mathcal{J}_{k+1}|}\right). \nonumber
     \end{align}
     Substituting this inequality into \eqref{Eq: scaling recursive}, we obtain
-    \small{
     \begin{align}
              & \EE_{\bxi^{[k+1]}}\left[\Psi_r(\calQ^{k+1})\right] - \EE_{\bxi^{[k]}}\left[\Psi_r(\calQ^{k})\right] \notag     \\
              \leq & \frac{1}{8(1-\rho_k)\eta_1L^2_F}\left(\EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] - \EE_{\bxi^{[k+1]}}\left[\| \be^{k+1}\|^{2}\right] -\rho_k \EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right]+ \frac{2 \rho_{k}^{2}\sigma^{2}}{|\mathcal{J}_{k+1}|}\right) + \frac{\eta_{k}}{2}\EE_{\bxi^{[k]}}\left[ \|\be^{k}\|^{2}\right]  \notag \\
         \leq & \frac{1}{8\eta_{1}L_{F}^{2}}\left(\EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] - \EE_{\bxi^{[k+1]}}\left[\| \be^{k+1}\|^{2}\right] + \frac{2 \rho_{k}^{2}\sigma^{2}}{|\mathcal{J}_{k+1}|}\right) - \left( \frac{\rho_{k}}{8\eta_{1}L_{F}^{2}}- \frac{\eta_{k}}{2}\right)\EE_{\bxi^{[k]}}\left[\| \be^{k}\|^{2}\right] \notag \\
         &+ \frac{\rho_{k}^{2}\sigma^{2}}{4\eta_{1}L_{F}^{2}| \calJ_{k+1}|}, \label{Eq: scaling recursive 2}
-    \end{align}}where the second inequality follows from $ 1 - \rho_{k}\leq 1$.
+    \end{align}where the second inequality follows from $ 1 - \rho_{k}\leq 1$.
     From \eqref{Eq: the parameters assumptions in storm appendix}, it follows that
     $\frac{\rho_{k}}{8\eta_{1}L_{F}^{2}}- \frac{\eta_{k}}{2}\geq \frac{\rho_{k}}{16\eta_{1}L_{F}^{2}}$.
     Applying this inequality to \eqref{Eq: scaling recursive 2} yields the following

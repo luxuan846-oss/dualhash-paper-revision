@@ -200,7 +200,7 @@ h^*(\bx) := \sup_{\by \in \RR^{n}} \{ \langle \bx, \by \rangle - h(\by) \}, \qua
 \calL(\bx, \bB, \bLmbd) := F(\bx, \bB) + \langle \bB, \bLmbd \rangle - h^*(\bLmbd).
 \end{equation}
 Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
-For the W-type regularization on the matrix variable,
+For the W-type regularization on the matrix variable $\bB \in \RR^{n \times d}$,
 \begin{align*}
 &h(\bB)= \lambda\||\bB|-\bm{1}\|_1 = \sum_{i=1}^{n}\sum_{j=1}^{d}\lambda\big||b_{ij}|-1\big|,
 \end{align*}
@@ -210,7 +210,7 @@ its conjugate is separable element-wise:
     |\Lambda_{ij}|, & \text{if } \Lambda_{ij} \in [-\lambda, \lambda],\\
     +\infty, & \text{otherwise},
     \end{cases}
-\end{align*} whose proximal operator in the piecewise solution is 
+\end{align*} whose proximal operator in the piecewise solution (see \Cref{fig:w-conj-prox} for detail ) is 
 \begin{align}
     \label{Eq: the proximal mapping of conjugate function}
     [\operatorname{prox}_{\tau h^*}(\bY)]_{ij} = 
@@ -222,14 +222,80 @@ its conjugate is separable element-wise:
         -\lambda, & Y_{ij} < -\lambda -\tau.
     \end{cases}
     %  \notag
-\end{align}This motivates us to perform a proximal step to update \(\bLmbd\).
-\begin{figure}[t]
+\end{align}
+This motivates us to perform a proximal step to update \(\bLmbd\).
+\begin{figure}[tbp]
 \centering
-\includegraphics[width=0.6\textwidth]{papers_img/W_type_with_its_conjugate_func.pdf}
-\caption{A scalar W-type regularization slice $h(z) = \lambda ||z| - 1|$ and its conjugate function $h^*(x)$.}
-\label{fig:w_type_regularization}
-\vspace{-3 ex}
+\resizebox{0.98\columnwidth}{!}{
+\begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth,line cap=round,line join=round]
+    % (a) W-type function
+    \begin{scope}[shift={(0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$z$};
+        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
+        \draw[line width=0.9pt] (-2.6,1.6) -- (-1,0) -- (0,1) -- (1,0) -- (2.6,1.6);
+
+        % break-point labels
+        \node at (-1,-0.42) {$-\lambda$};
+        \node at ( 1,-0.42) {$\lambda$};
+
+        \node at (0,-2) {$\text{(a)}\ h(z)=\lambda \left\lVert |z|-1\right\rVert_1, \ \lambda=1$};
+    \end{scope}
+
+    % (b) Conjugate function h^*(x), eta=1
+    \begin{scope}[shift={(8.0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$x$};
+        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
+        \draw[line width=0.9pt] (-1,1) -- (0,0) -- (1,1);
+        \draw[densely dotted,thin] (-1,0) -- (-1,1.5);
+        \draw[densely dotted,thin] ( 1,0) -- ( 1,1.5);
+        \draw[line width=0.9pt,fill=white] (-1,1) circle (0.07);
+        \draw[line width=0.9pt,fill=white] ( 1,1) circle (0.07);
+
+        % break-point labels
+        \node at (-1,-0.42) {$-\lambda$};
+        \node at ( 1,-0.42) {$\lambda$};
+
+        \node at (0,-2) {$\text{(b)}\ h^*(x), \ \lambda=1$};
+    \end{scope}
+
+    % (c) Proximal mapping of h^*(x), lambda=eta=1
+    \begin{scope}[shift={(16.0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$x$};
+        \draw[-{Stealth},thin] (0,-1.35) -- (0,1.35);
+
+        \draw[line width=0.9pt] (-2.8,-1) -- (-2,-1) -- (-1,0) -- (1,0) -- (2,1) -- (2.8,1);
+
+        \draw[densely dotted,thin] (-2,0)--(-2,-1);
+        \draw[densely dotted,thin] (-1,0)--(-1,-1);
+        \draw[densely dotted,thin] ( 1,0)--( 1, 1);
+        \draw[densely dotted,thin] ( 2,0)--( 2, 1);
+        \draw[densely dotted,thin] (-2,-1)--(0,-1);
+        \draw[densely dotted,thin] (0,1)--(2,1);
+
+        \node[above] at (-2,0.10) {$-(\tau+\lambda)$};
+        % \node[above] at (-1,0.10) {$-\lambda$};
+        \node at (-1,-0.42) {$-\lambda$};
+        \node at ( 1,-0.42) {$\lambda$};
+        \node at ( 2,-0.42) {$(\tau+\lambda)$};
+        \node[left] at (0, 1) {$\tau$};
+        \node[left] at (0,-1) {$-\tau$};
+
+        \node at (0,-2) {$\text{(c)}\ \operatorname{prox}_{h^*}(x),\ \lambda=\tau=1$};
+    \end{scope}
+\end{tikzpicture}
+}
+\caption{A W-type function, its conjugate function, and the proximal mapping of $h^*$.}
+\label{fig:w-conj-prox}
+\vspace{-4ex}
 \end{figure}
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.6\textwidth]{papers_img/W_type_with_its_conjugate_func.pdf}
+% \caption{A W-type regularization slice $h(z) = \lambda ||z| - 1|$ and its conjugate function $h^*(x)$.}
+% \label{fig:w_type_regularization}
+% \vspace{-3 ex}
+% \end{figure}
 We now outline the \textbf{DualHash} framework, which employs an alternating update scheme for $\bx, \bB, \bm{\Lambda}$. 
 
 First, we adopt a stochastic first-order method for the $\bx$-update since computing the full gradient \( \nabla_{\bx} F(\bx, \bB) \) is computationally expensive for a typically large number of samples $n$ in deep learning. Specifically, at each iteration $k$, we update $\bx$ by utilizing a stochastic gradient descent step

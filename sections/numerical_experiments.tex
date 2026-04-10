@@ -5,19 +5,19 @@ standard image retrieval datasets. All experiments use PyTorch 1.12.1 with CUDA 
 % Visualizations are implemented using Python on macOS 15.3.2. 
 % % The codes are available at \red{\url{https://anonymous.4open.science/r/DualHash_NeurIPS}.}
 \subsection{Experimental Setup}
-\paragraph{Datesets} \textbf{CIFAR-10}\footnote{\url{https://www.cs.toronto.edu/~kriz/cifar.html}} is a \textbf{single-label} dataset comprising 60,000 $32 \times 32$ color images from 10 classes. 
+\paragraph{Datasets} \textbf{CIFAR-10}\footnote{\url{https://www.cs.toronto.edu/~kriz/cifar.html}} is a \textbf{single-label} dataset comprising 60,000 $32 \times 32$ color images from 10 classes. 
 In our experiment, we randomly sample 1,000 images per class (10,000 total) for training, 500 per class (5,000 total) for validation, and 500 per class (5,000 total) for testing.
 \textbf{NUS-WIDE}\footnote{\url{http://lms.comp.nus.edu.sg/research/NUS-WIDE.htm}} is a \textbf{multi-label} dataset containing approximately 270,000 web images, each annotated with one or more labels from 81 categories. 
 % Following \cite{liuHashingGraphs, laiSimultaneousFeatureLearning2015, liuDeepSupervisedHashing}.
 In our experiment, we use a subset of 195,834 images from the 21 most frequent concepts (each with at least 5,000 images) and randomly sample 700 images per class (14,700 total) for training, 300 per class (6,300 total) for validation, and 300 per class (6,300 total) for testing.
-\textbf{ImageNet}\footnote{\url{https://www.image-net.org/}} is a large-scale image dataset from the Large Scale Visual Recognition Challenge (ILSVRC 2015) [32]. It contains over 1.2M images in the training set and 50K images in the validation set, where each image is \textbf{single-labeled} by one of the 1,000 categories. Following \cite{Cao2017HashNetDL}, in our experiment, we randomly select 100 categories to create ImageNet-100. We use 100 images per category (10,000 total) for training, 30 per category (3,000 total) for validation, and 50 per category (5,000 total) for testing. The training, validation, and testing sets are mutually exclusive with no data overlap.
+\textbf{ImageNet}\footnote{\url{https://www.image-net.org/}} is a large-scale image dataset from the Large Scale Visual Recognition Challenge (ILSVRC 2015). It contains over 1.2 million images in the training set and 50K images in the validation set, where each image is \textbf{single-labeled} by one of the 1,000 categories. Following \cite{Cao2017HashNetDL}, in our experiment, we randomly select 100 categories to create ImageNet-100. We use 100 images per category (10,000 total) for training, 30 per category (3,000 total) for validation, and 50 per category (5,000 total) for testing. The training, validation, and testing sets are mutually exclusive with no data overlap.
 
 % \vspace{3pt}
 \paragraph{Training Setup}  It is worth noting that our method is compatible with different similarity measurement paradigms, including pointwise, pairwise and tripletwise methods. In our experiments, we focus on deep supervised pairwise hashing using a pairwise cross-entropy loss \( f \) and the nonsmooth W-type regularization term \( h(z) = \lambda \| |\bz| -1 \|_1 \). 
 
 % \vspace{3pt}
 \paragraph{Baselines} We compare against eight baselines: SDH \cite{shenSupervisedDiscreteHashing2015}; four deep hashing methods with W-type regularizations (DHN \cite{zhuDeepHashingNetwork2016}, DSH \cite{liuDeepSupervisedHashing}, DTSH \cite{wang2016DTSH}, MDSHC \cite{wang2023deep}); 
-and three state-of-the-art methods addressing quantization error (HashNet \cite{Cao2017HashNetDL}, DSDH \cite{li2017deep}, OrthoHash \cite{hoeOneLossAll2021}). Following \cite{liuDeepSupervisedHashing}, we report the mean Average Precision (mAP), precision curves (AP@topK), and precision within Hamming radius 2 (AP@r=2). Detailed definitions and a full introduction of the baselines are provided in the Supplementary Materials A.
+and three state-of-the-art methods addressing quantization error (HashNet \cite{Cao2017HashNetDL}, DSDH \cite{li2017deep}, OrthoHash \cite{hoeOneLossAll2021}). Following \cite{liuDeepSupervisedHashing}, we report the mean Average Precision (mAP), precision curves (P@topK), and precision within Hamming radius 2 (P@r=2). Detailed definitions and a full introduction of the baselines are provided in the Supplementary Materials A.
 
 % \vspace{3pt}
 \paragraph{Architecture} For fair comparison, all deep learning-based methods employ AlexNet and ResNet-50\footnote{AlexNet is the default backbone unless specified.} as the 
@@ -26,24 +26,24 @@ backbone network and use ELU activation to leverage its
 All images are resized to $256 \times 256$ pixels and center-cropped to 
 $224 \times 224$. We fine-tune the pre-trained convolutional layers 
 (conv1--conv5) and fully connected layers (fc6--fc7), while initializing 
-any newly added layers with Kaiming initialization. \footnote{Although DSDH \cite{li2017deep} uses the CNN-F architecture, it shares a similar structure with AlexNet—both consist of five convolutional layers followed by two fully connected layers.}
-For the non-deep method (SDH \cite{shenSupervisedDiscreteHashing2015}), we use the following hand-crafted features: 512-dimensional GIST vectors for CIFAR-10, 500-dimensional bag-of-words features for NUS-WIDE, and 1024-dimensional CNN features for ImageNet-100. During training, we monitor validation performance in real-time to observe convergence behavior and adjust hyperparameters accordingly. For evaluation, we use the training set as the retrieval database and the test set as queries.
+any newly added layers with Kaiming initialization\footnote{Although DSDH \cite{li2017deep} uses the CNN-F architecture, it shares a similar structure with AlexNet—both consist of five convolutional layers followed by two fully connected layers.}.
+For the non-deep method (SDH \cite{shenSupervisedDiscreteHashing2015}), we use the following input features: 512-dimensional GIST vectors for CIFAR-10, 500-dimensional bag-of-words features for NUS-WIDE, and 1024-dimensional CNN features for ImageNet-100. During training, we monitor validation performance in real-time to observe convergence behavior and adjust hyperparameters accordingly. For evaluation, we use the training set as the retrieval database and the test set as queries.
 \begin{remark}{For standard ReLU-activated backbones, existing nonsmooth stochastic optimization literature establishes convergence guarantees for such networks under weaker tame or weakly convex frameworks \cite{davis2020stochastic,maiConvergenceStochasticGradient2020}, which are fundamentally distinct from our smooth primal-dual analysis. Extending our framework to this nonsmooth setting is an important direction for future work.}
 \end{remark}
 
 % \vspace{3pt}
 \paragraph{Hyperparameter Settings} 
 {Unless the original implementation imposes a method-specific component, all deep baselines are trained under the same data splits, evaluation protocol, backbone family, image preprocessing, and early-stopping rule as DualHash.} All models are trained for a maximum of 300 epochs with early stopping based on validation mAP. We use a fixed mini-batch size of 256 for CIFAR-10 and 128 for NUS-WIDE and ImageNet-100.
-For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ with step decay, approximating $\eta_k \sim O(L_F^{-1})$ without computing $L_F$. For DualHash-StoRM, $\eta_k$ is chosen from $\{5 \times 10^{-3}, 5 \times 10^{-2}, 5 \times 10^{-1}\}$ following $\mathcal{O}(T^{-1/3})$ scaling, and $\rho_k$ is selected from $\{0.01, 0.05, 0.1, 0.2, 0.7\}$ via cross-validation. All methods use momentum parameters $\alpha^k = \beta^k = 0.905$. The proximal operator for $h^*(\cdot)$ requires $\tau < \lambda$ to ensure well-defined updates. We tune $\lambda \in \{10^{-3}, 10^{-2}, 10^{-1}\}$ and set $\tau$ accordingly. For all datasets, we set $\tau = 10^{-2}$, $\lambda = 5 \times 10^{-2}$, and $\gamma = 3$, with the multipliers \(\bm{\Lambda}\) updated using a step size of $0.1\tau$. 
+For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ with step decay, approximating $\eta_k \sim O(L_F^{-1})$ without computing $L_F$. For DualHash-StoRM, $\eta_k$ is chosen from $\{5 \times 10^{-3}, 5 \times 10^{-2}, 5 \times 10^{-1}\}$ following $\mathcal{O}(T^{-1/3})$ scaling, and $\rho_k$ is selected from $\{0.01, 0.05, 0.1, 0.2, 0.7\}$ via cross-validation. For DualHash-StoM, we set the momentum parameters $\alpha_k = \beta_k = 0.905$. Baselines follow their official optimizer settings. The proximal operator for $h^*(\cdot)$ requires $\tau < \lambda$ to ensure well-defined updates. We tune $\lambda \in \{10^{-3}, 10^{-2}, 5\times 10^{-2}, 10^{-1}\}$ and set $\tau$ accordingly. For all datasets, we set $\tau = 10^{-2}$, $\lambda = 5 \times 10^{-2}$, and $\gamma = 3$. In our practical implementation, we use a dual-step-size variant for multipliers \(\bm{\Lambda}\), i.e., the \(\bm{\Lambda}\)-update uses step size \(0.1\tau\), while the theoretical analysis is stated for the unified \(\tau\)-scheme in \Cref{Section: Methodology,Section: Convergence analysis}. 
 % All results represent averages over 10 independent runs. 
 % \vspace{3pt}
 \subsection{Convergence Validation}
 \label{Subsection: Convergence validation and performance efficiency analysis}
 \begin{table}[t]
     \centering
-    \caption{The mAP results of DualHash and baselines with different numbers of bits \\ on CIFAR-10 and NUS-WIDE datasets.}
+    \caption{The mAP results of DualHash and baselines with different numbers of bits on CIFAR-10 and NUS-WIDE datasets.}
     \label{Table: baselines mAP}
-    \resizebox{\textwidth}{!}{
+    \resizebox{\linewidth}{!}{
     % \begin{tabular}{1\textwidth}{@{\extracolsep{\fill}}ccccccccc@{}}
     \begin{tabular}{ccccccccc}
         \toprule
@@ -65,31 +65,31 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
         \textbf{DualHash-StoM} & \textbf{0.8215} & \textbf{0.8481} & \textbf{0.8534} & \textbf{0.8539} & 0.6339 & \textbf{0.7002} & \textbf{0.7248} & \textbf{0.7448} \\
         \bottomrule
     \end{tabular}}
-    \vspace{-1ex}
-    \parbox{0.93\textwidth}{\footnotesize
-    \textsuperscript{*}SDH results on NUS-WIDE cited from HashNet (identical settings and metrics).
+    \vspace{-2ex}
+    \parbox{\linewidth}{\footnotesize
+    \textsuperscript{*}SDH results on NUS-WIDE are cited from HashNet and reported for reference under a similar protocol.
     \textbf{Bold} values indicate the best results.
     }
 \end{table}
 \begin{figure}[t]
     % \vspace{-1mm}
     \centering
-    \includegraphics[width=0.995\textwidth]{results_images/ex1_4figures_new.pdf}
+    \includegraphics[width=0.95\linewidth]{results_images/ex1_4figures_new.pdf}
     \caption{Training loss and the mAP results of DualHash and baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets.}
     \label{fig:training_loss_map_2datasets}
-    \vspace{-4ex}
+    \vspace{-2ex}
 \end{figure}
 \begin{figure}[t]
     % \vspace{-1mm}
     \centering
-    \includegraphics[width=0.993\textwidth]{results_images/ex2_4figures.pdf}
-    \caption{Retrieval performance of DualHash and baselines on CIFAR-10 and NUS-WIDE datasets. (a), (c): AP@topK with 64 bits;  (b), (d): AP@r(=2) with different numbers of bits.}
+    \includegraphics[width=0.95\linewidth]{results_images/ex2_4figures.pdf}
+    \caption{Retrieval performance of DualHash and baselines on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK with 64 bits;  (b), (d): P@r(=2) with different numbers of bits.}
  \label{fig:retrieval_2datasets}
-    \vspace{-4ex}
+    \vspace{-2ex}
 \end{figure}
 \begin{table}[t]
     \centering
-    \caption{The mAP results of DualHash and baselines with different numbers of bits \\ on CIFAR-10 and NUS-WIDE datasets with  ResNet50 backbone.}
+    \caption{The mAP results of DualHash and baselines with different numbers of bits on CIFAR-10 and NUS-WIDE datasets with ResNet50 backbone.}
     \label{Table: performance_comparison_resnet50_small}
     \resizebox{\linewidth}{!}{
     \begin{tabular}{ccccccccc}
@@ -109,11 +109,11 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
     \parbox{\linewidth}{\footnotesize
     \textbf{Bold} values indicate the best results.
     }
-    \vspace{-4ex}
+    \vspace{-1ex}
 \end{table}
-We provide empirical evidence that is consistent with our theoretical results (Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM}) and compare with HashNet, OrthoHash, and MDSHC with 64 bits on both datasets. 
+We provide empirical evidence that is consistent with our theoretical results (Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM}) and compare with HashNet, OrthoHash, and MDSHC with 64 bits on CIFAR-10 and NUS-WIDE. 
 \Cref{fig:training_loss_map_2datasets} shows the training loss and validation mAP curves over epochs.
-As shown in \Cref{fig:training_loss_map_2datasets} (a)-(b), DualHash-StoRM achieves the fastest convergence and lowest loss values on both datasets, requiring only approximately 25 epochs on CIFAR-10. This aligns with our theoretical outcome: the variance reduction mechanism accelerates convergence. Though slower than DualHash-StoRM, DualHash-StoM still outperforms other baselines (approximately 75 epochs on CIFAR-10). 
+As shown in \Cref{fig:training_loss_map_2datasets} (a)-(b), DualHash-StoRM achieves the fastest convergence and lowest loss values on CIFAR-10 and NUS-WIDE, requiring only approximately 25 epochs on CIFAR-10. This aligns with our theoretical outcome: the variance reduction mechanism accelerates convergence. Though slower than DualHash-StoRM, DualHash-StoM still outperforms other baselines (approximately 75 epochs on CIFAR-10). 
 Meanwhile, \Cref{fig:training_loss_map_2datasets} (c)-(d) show that although DualHash-StoRM converges faster during training, DualHash-StoM ultimately exhibits superior retrieval performance compared to other baselines. 
 % \vspace{3pt}
 \subsection{Comparison of Retrieval Performance}
@@ -141,7 +141,7 @@ DualHash-StoM & 0.7402 & 0.7705 & \textbf{0.8662} & \textbf{0.8714} \\
     \parbox{\linewidth}{\footnotesize
     \textbf{Bold} values indicate the best results.
     }
-    \vspace{-5ex}
+    \vspace{-2ex}
 \end{table}
 We report retrieval performance on CIFAR-10 and NUS-WIDE datasets, as shown in Table \ref{Table: baselines mAP}
 % , \ref{Table: performance_comparison_resnet50_small}, \ref{tab:performance_imagenet_resnet50} 
@@ -150,47 +150,45 @@ In terms of mAP, DualHash methods consistently outperform most baselines, includ
 On CIFAR-10, DualHash-StoM achieves 0.8539 mAP with 64 bits, outperforming OrthoHash (0.8355). On the NUS-WIDE dataset, it reaches 0.7448 mAP, significantly superior to MDSHC (0.6493).  
 Although slightly less accurate than the StoM variant, DualHash-StoRM remains comparable to other baselines, providing a trade-off between accuracy and efficiency. 
 
-To further demonstrate the scalability of our approach, we evaluate our method and three baselines using a \textbf{ResNet50 backbone}. As shown in \Cref{Table: performance_comparison_resnet50_small}, this modern architecture brings substantial performance gains in terms of mAP for all methods across both datasets. Our DualHash-StoM, for example, achieves mAP improvements of 10.3\% on CIFAR-10 (0.9416 vs 0.8539) and 9.1\% on NUS-WIDE (0.8016 vs 0.7448) at 64 bits. Nevertheless, our method consistently maintains peak performance at 32 bits or more, outperforming all baseline methods. Moreover, on the more complex ImageNet-100 dataset, our method continues to demonstrate superior performance. As reported in \Cref{tab:performance_imagenet_resnet50}, DualHash-StoM reaches 86.62\% and 87.14\% mAP at 48 and 64 bits, outperforming all baselines. These results confirm that our method maintains robust performance and strong generalization capability as data complexity increases.
+To further demonstrate the scalability of our approach, we evaluate our method and three baselines using a \textbf{ResNet50 backbone}. As shown in \Cref{Table: performance_comparison_resnet50_small}, this modern architecture brings substantial performance gains in terms of mAP for all methods across CIFAR-10 and NUS-WIDE. Our DualHash-StoM, for example, achieves mAP improvements of 10.3\% on CIFAR-10 (0.9416 vs 0.8539) and 7.6\% on NUS-WIDE (0.8016 vs 0.7448) at 64 bits. Nevertheless, our method consistently maintains peak performance at 32 bits or more, outperforming all baseline methods. Moreover, on the more complex ImageNet-100 dataset, our method continues to demonstrate superior performance. As reported in \Cref{tab:performance_imagenet_resnet50}, DualHash-StoM reaches 86.62\% and 87.14\% mAP at 48 and 64 bits, outperforming all baselines. These results confirm that our method maintains robust performance and strong generalization capability as data complexity increases.
 
-For AP@topK (\Cref{fig:retrieval_2datasets} (a),(c)),  DualHash maintains 0.9 precision at lower top-k values on CIFAR-10, significantly outperforming other methods. This indicates that our method is suitable for precision-oriented image retrieval systems.
-For AP@r metric (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently maintains peak performance at 32 bits and above, with 32 bits being optimal across both datasets. These results align with the fact that as bit length increases, the Hamming space becomes sparse and few data points fall within the Hamming ball with radius 2 \cite{norouzi2012fast}.
+For P@topK (\Cref{fig:retrieval_2datasets} (a),(c)),  DualHash maintains 0.9 precision at lower top-k values on CIFAR-10, significantly outperforming other methods. This indicates that our method is suitable for precision-oriented image retrieval systems.
+For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently maintains peak performance at 32 bits and above, with 32 bits being optimal across CIFAR-10 and NUS-WIDE. These results align with the fact that as bit length increases, the Hamming space becomes sparse and few data points fall within the Hamming ball with radius 2 \cite{norouzi2012fast}.
 % \vspace{3pt}
 
 \subsection{Quantization Error Analysis}
 \label{Subsection: Further analysis}
-
-
-\begin{figure*}[!thbp]
+\begin{figure}[t]
 % \vspace{-2ex}
     \centering
-    \includegraphics[width=0.95\textwidth]{results_images/quantization_error_further_analysis.pdf}
+    \includegraphics[width=0.95\linewidth]{results_images/quantization_error_further_analysis.pdf}
     \caption{Quantization error and its impact on retrieval performance across different numbers of bits on  NUS-WIDE.}
     \label{fig:quantization_error}
-\end{figure*}
-\begin{figure*}[thbp]
-    \vspace{-1mm}
+\end{figure}
+\begin{figure}[t]
+    \vspace{-2ex}
     \centering
-    \includegraphics[width=0.95\textwidth]{results_images/hamming_hig_64.pdf}
+    \includegraphics[width=0.95\linewidth]{results_images/hamming_hig_64.pdf}
     \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 64 bits on the NUS-WIDE dataset. The arrow annotation is the separability in Hamming distances, \(\EE [D_{inter}] - \EE [D_{intra}]\). We normalized the frequency so that the sum of all bins equals to 1.}
     \label{fig: His_64_NUSWIDE}
     \vspace{-2ex}
-\end{figure*}
-\begin{figure*}[thbp]
-    \vspace{-1ex}
+\end{figure}
+\begin{figure}[t]
+    \vspace{-2ex}
     \centering
-    \includegraphics[width=0.95\textwidth]{results_images/hamming_hig_16.pdf}
+    \includegraphics[width=0.95\linewidth]{results_images/hamming_hig_16.pdf}
     \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 16 bits on NUS-WIDE.}
     \label{fig: His_16_NUSWIDE}
     \vspace{-2ex}
-\end{figure*}
-\begin{figure*}[!thbp]
+\end{figure}
+\begin{figure}[t]
     % \vspace{-1mm}
     \centering
-    \includegraphics[width=0.95\textwidth]{results_images/sensitivity_2datasets.pdf}
+    \includegraphics[width=0.95\linewidth]{results_images/sensitivity_2datasets.pdf}
     \caption{The mAP results of DualHash-StoM with Different settings of \(\eta\) and \(\lambda\) with 64 \& 16 bits on CIFAR-10 and NUS-WIDE.}
     \label{fig: sensitivity analysis of DualHash}
     \vspace{-2ex}
-\end{figure*}
+\end{figure}
 To elucidate the mechanisms behind the performance of DualHash, following \cite{hoeOneLossAll2021},
 we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig: His_64_NUSWIDE,fig: His_16_NUSWIDE}) across different bit lengths $K$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet \cite{Cao2017HashNetDL} and OrthoHash \cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH \cite{wang2016DTSH} and MDSHC \cite{wang2023deep} (both utilizing $W$-type regularization).
 
@@ -212,13 +210,13 @@ While lower quantization error generally improves separability (\Cref{fig:quanti
 At $K = 64$ (Figures \ref{fig:quantization_error}(d) and (e)), lower quantization error consistently correlates with higher mAP by enhancing separability and preserving both semantic discriminability and visual feature quality. Methods achieving low quantization loss (e.g., DualHash, HashNet, and DTSH) demonstrate superior retrieval accuracy, with DualHash achieving peak mAP performance.
 
 \noindent\textit{Low-bit regime ($K = 16$): Low quantization error may produce low performance.}
-At $K = 16$ (\Cref{fig:quantization_error}(b) and (c)), we observe a contrasting pattern: both extremely low and extremely high quantization error methods yield suboptimal performance. Notably, DTSH, which maintains intermediate quantization error, achieves superior mAP. Methods with very low quantization error (e.g., DualHash and HashNet) exhibit relatively lower mAP, particularly on multi-label datasets (e.g., NUS-WIDE). Specifically, we observe that  DualHash generates hash codes with low intra-class distances and high inter-class separation. This creates relatively clean class separation, but the actual visual relationships between images may get lost. Consequently, DualHash excels on simple datasets like CIFAR-10 but shows relatively lower performance on complex multi-label datasets like NUS-WIDE and ImageNet-100.
+At $K = 16$ (\Cref{fig:quantization_error}(b) and (c)), we observe a contrasting pattern: both extremely low and extremely high quantization error methods yield suboptimal performance. Notably, DTSH, which maintains intermediate quantization error, achieves superior mAP. Methods with very low quantization error (e.g., DualHash and HashNet) exhibit relatively lower mAP, particularly on multi-label datasets (e.g., NUS-WIDE). Specifically, we observe that  DualHash generates hash codes with low intra-class distances and high inter-class separation. This creates relatively clean class separation, but the actual visual relationships between images may get lost. Consequently, DualHash excels on simple datasets like CIFAR-10 but shows relatively lower performance on complex datasets like NUS-WIDE (multi-label) and ImageNet-100 (large-scale single-label).
 
 % \vspace{3pt}
 \subsection{Parameter Sensitivity Analysis}
-To explore the sensitivity of key hyperparameters $\lambda$ and $\gamma$ in 
-DualHash, we conduct a grid search with $\lambda \in \{10^{-5}, 10^{-3}, 
-10^{-2}, 1\}$ and $\gamma \in \{0.3, 3, 30, 100\}$. Unlike many deep hashing 
+To explore the sensitivity of key hyperparameters $\eta$ and $\lambda$ in 
+DualHash, we conduct a grid search with $\eta \in \{10^{-4}, 10^{-3}, 
+10^{-2}, 10^{-1}\}$ and $\lambda \in \{10^{-3}, 10^{-2}, 5\times 10^{-2}, 10^{-1}\}$. Unlike many deep hashing 
 methods that exhibit significant hyperparameter sensitivity, DualHash-StoM 
 demonstrates robust performance across a wide range of hyperparameter 
 combinations (see \Cref{fig: sensitivity analysis of DualHash}). 

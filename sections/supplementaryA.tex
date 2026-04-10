@@ -122,9 +122,9 @@ Following \cite{liuDeepSupervisedHashing}, we adopt three evaluation metrics:
     \]
     where $P(k)$ is precision at rank $k$, $\mathbb{I}_{\text{rel}}(k)$ indicates whether the $k$-th result is relevant, $R_q$ is the total relevant samples, and $N$ is the number of retrieved items. mAP averages AP over all queries. For CIFAR-10, we use all returned neighbors; for NUS-WIDE, we consider top-5000 results.
     
-    \item \textit{Precision at Top K (AP@topK)}: The proportion of true neighbors among top-K retrieved results, averaged over all queries.
+    \item \textit{Precision at Top K (P@topK)}: The proportion of true neighbors among top-K retrieved results, averaged over all queries.
     
-    \item \textit{Precision within Hamming Radius 2 (AP@r)}: Measures retrieval accuracy for items within Hamming distance 2 from the query. This metric is particularly efficient as Hamming radius search has $\mathcal{O}(1)$ time complexity per query.
+    \item \textit{Precision within Hamming Radius 2 (P@r=2)}: Measures retrieval accuracy for items within Hamming distance 2 from the query. This metric is particularly efficient as Hamming radius search has $\mathcal{O}(1)$ time complexity per query.
     
     \item \textit{Precision-recall curves of Hamming ranking}: PR curves illustrate
         precision at various levels of recall, offering insights into the trade-off between precision and recall at different thresholds. These curves are widely
@@ -186,7 +186,7 @@ with a unique solution.
         \toprule 
         \multirow{2}{*}{Methods} & \multicolumn{3}{c}{CIFAR-10} & \multicolumn{3}{c}{NUS-WIDE} \\
         \cmidrule(lr){2-4} \cmidrule(lr){5-7}
-         & mAP@All & AP@r & Time\textsuperscript{*} & mAP@5000 & AP@r & Time\textsuperscript{*} \\
+         & mAP@All & P@r=2 & Time\textsuperscript{*} & mAP@5000 & P@r=2 & Time\textsuperscript{*} \\
         \midrule 
         DSH \cite{liuDeepSupervisedHashing} & 0.8010 & 0.4401 & 7.38 & 0.6634 & 0.4004 & 21.14 \\
         DHN \cite{zhuDeepHashingNetwork2016} & 0.8051 & 0.5272 & \textbf{6.74} & 0.7042 & 0.5432 & \textbf{16.47} \\
@@ -200,9 +200,9 @@ with a unique solution.
     }
 \end{table*}
 Figures \ref{Fig: Comparison of training performance of Different Methods on CIFAR-10} and \ref{Fig: Comparison of training performance of Different Methods on NUS-WIDE} present
-training dynamics across different optimization approaches, comparing training loss, AP@top1000, and AP@r=2 metrics \textbf{with 64 bits} on both datasets. On
+training dynamics across different optimization approaches, comparing training loss, P@top1000, and P@r=2 metrics \textbf{with 64 bits} on CIFAR-10 and NUS-WIDE. On
 CIFAR-10, DualHash-StoM demonstrates superior optimization efficiency across all
-metrics. Our method achieves the fastest convergence in training loss while consistently maintaining the highest AP@r and AP@top1000 values throughout the
+metrics. Our method achieves the fastest convergence in training loss while consistently maintaining the highest P@r=2 and P@top1000 values throughout the
 optimization process. While StoMHash with weakly convex regularization (StoMHash-WCR)
 shows competitive performance, DualHash-StoM achieves both faster convergence
 and consistently higher performance, demonstrating the effectiveness of our
@@ -214,27 +214,27 @@ optimization significantly improves hash code learning and retrieval
 performance in practical applications.
 
 \paragraph{Retrieval performance in hamming space}
-We report mAP, AP@r, and the average time per training epoch on both datasets, all
+We report mAP, P@r=2, and the average time per training epoch on CIFAR-10 and NUS-WIDE, all
 with 64-bit codes, for different methods in
 Table~\ref{tab:performance_comparison_64bits}. The results highlight the superior retrieval
 accuracy of DualHash-StoM compared to the baseline methods.
 
 Specifically, on the CIFAR-10 dataset, DualHash-StoM achieves 9.9\% and 27.2\%
-improvements over StoMHash-WCR in mAP@All and AP@r, respectively. Similarly, on the
+improvements over StoMHash-WCR in mAP@All and P@r=2, respectively. Similarly, on the
 NUS-WIDE dataset, DualHash-StoM outperforms StoMHash-WCR with a 3.1\% improvement
-in mAP@5000 and an 11.8\% improvement in AP@r. Computationally, DualHash-StoM shows comparable efficiency to baselines such as DHN
+in mAP@5000 and an 11.8\% improvement in P@r=2. Computationally, DualHash-StoM shows comparable efficiency to baselines such as DHN
 (e.g., 6.86s vs. 6.74s on CIFAR-10 and 16.83s vs. 16.47s
 on NUS-WIDE). This marginal time increase is justified by the substantial performance gains.
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=0.95\textwidth]{results_images/ex3_testing_2datasets.pdf}
-    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets. (a), (c): AP@topK results;  (b), (d): PR curves.}
+    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK results;  (b), (d): PR curves.}
     \label{fig:ex3_testing_2datasets}
     \vspace{-1ex}
 \end{figure*}
-Furthermore, \Cref{fig:ex3_testing_2datasets} displays AP@topK results and PR curves
-with 64-bit codes on both datasets. DualHash-StoM consistently outperforms all
-comparison methods by large margins in AP@topK. For PR curves, DualHash-StoM
+Furthermore, \Cref{fig:ex3_testing_2datasets} displays P@topK results and PR curves
+with 64-bit codes on CIFAR-10 and NUS-WIDE. DualHash-StoM consistently outperforms all
+comparison methods by large margins in P@topK. For PR curves, DualHash-StoM
 demonstrates superior performance at lower recall levels, making it especially well-suited
 for precision-critical image retrieval systems.
 

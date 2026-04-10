@@ -193,23 +193,23 @@ To elucidate the mechanisms behind the performance of DualHash, following \cite{
 we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig: His_64_NUSWIDE,fig: His_16_NUSWIDE}) across different bit lengths $K$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet \cite{Cao2017HashNetDL} and OrthoHash \cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH \cite{wang2016DTSH} and MDSHC \cite{wang2023deep} (both utilizing $W$-type regularization).
 
 % \vspace{3pt}
-\noindent\textbf{Quantization Error Correlates with Intra- and Inter-class Distances.}
+\noindent\textbf{(1) Quantization Error Correlates with Intra- and Inter-class Distances.}
 We find that methods achieving smaller quantization errors produce hash codes with reduced intra-class distances and enhanced inter-class separability, as shown in \Cref{fig:quantization_error}(a) and \Cref{fig: His_16_NUSWIDE,fig: His_64_NUSWIDE}. In the 64-bit setting (\Cref{fig: His_64_NUSWIDE}), both HashNet and DualHash exhibit similar inter-class distributions (close to Hamming distance $K/2 = 32$). However, DualHash's lower quantization error (0.0906 vs. 0.1390) enables significantly superior separability, i.e., the difference in the mean of intra-class distance (the blue dotted line)
 with the mean of inter-class distance (the orange dotted line). In contrast, MDSHC's high quantization error (0.8023) leads to substantially larger intra-class distances and weaker inter-class separation, yielding a $5\times$ inferior separability ratio (24.19 vs. 4.47). 
 This demonstrates that reducing quantization error enhances code quality primarily by compressing intra-class distributions.
 
 % \vspace{3pt}
-\noindent\textbf{DualHash Achieves Lower Quantization Error via Dual-Space Reformulation.}
+\noindent\textbf{(2) DualHash Achieves Lower Quantization Error via Dual-Space Reformulation.}
 As shown in \Cref{fig:quantization_error}(a), DualHash attains the smallest quantization error across different bit lengths among all evaluated methods. This performance advantage stems from a fundamental methodological innovation: DualHash employs a novel dual-space reformulation of the W-regularization. The convexity property inherent in our dual formulation's conjugate function yields significant optimization advantages compared to directly optimizing the original nonconvex regularization or activation functions. 
 
 % \vspace{3pt}
-\noindent\textbf{Bit-Dependent Performance and the Separability-Semantics Trade-off.}
+\noindent\textbf{(3) Bit-Dependent Performance and the Separability-Semantics Trade-off.}
 While lower quantization error generally improves separability (\Cref{fig:quantization_error}(b) and (d)), its impact on retrieval performance varies significantly across bit settings, revealing a fundamental trade-off between class separability and semantic preservation.
 
-\noindent\textit{High-bit regime ($K = 64$): Lower quantization error helps produce high mAP.}
+\noindent\(\triangleright\) \textit{High-bit regime ($K = 64$): Lower quantization error helps produce high mAP.}
 At $K = 64$ (Figures \ref{fig:quantization_error}(d) and (e)), lower quantization error consistently correlates with higher mAP by enhancing separability and preserving both semantic discriminability and visual feature quality. Methods achieving low quantization loss (e.g., DualHash, HashNet, and DTSH) demonstrate superior retrieval accuracy, with DualHash achieving peak mAP performance.
 
-\noindent\textit{Low-bit regime ($K = 16$): Low quantization error may produce low performance.}
+\noindent\(\triangleright\) \textit{Low-bit regime ($K = 16$): Low quantization error may produce low performance.}
 At $K = 16$ (\Cref{fig:quantization_error}(b) and (c)), we observe a contrasting pattern: both extremely low and extremely high quantization error methods yield suboptimal performance. Notably, DTSH, which maintains intermediate quantization error, achieves superior mAP. Methods with very low quantization error (e.g., DualHash and HashNet) exhibit relatively lower mAP, particularly on multi-label datasets (e.g., NUS-WIDE). Specifically, we observe that  DualHash generates hash codes with low intra-class distances and high inter-class separation. This creates relatively clean class separation, but the actual visual relationships between images may get lost. Consequently, DualHash excels on simple datasets like CIFAR-10 but shows relatively lower performance on complex datasets like NUS-WIDE (multi-label) and ImageNet-100 (large-scale single-label).
 
 % \vspace{3pt}

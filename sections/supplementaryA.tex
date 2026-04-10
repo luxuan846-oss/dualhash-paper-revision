@@ -113,7 +113,7 @@ We compare our method with eight baseline approaches, including one traditional 
 
 
 \paragraph{Evaluation Protocols}
-Following \cite{liuDeepSupervisedHashing}, we adopt three evaluation metrics:
+Following \cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
 
 \begin{enumerate}[label=\textup{(\roman{*})}, leftmargin=2em]
     \item \textit{Mean Average Precision (mAP)}: For a query $\bx_q$, the Average Precision is computed as:
@@ -132,11 +132,20 @@ Following \cite{liuDeepSupervisedHashing}, we adopt three evaluation metrics:
         of different algorithms.
 \end{enumerate}
 
-\section{Additional Experiments Results}
+\section{Additional Experimental Results}
 \subsection{Comparison of Optimization Algorithms with Different W-Type Regularizations}
-\begin{table*}[!t]
+To validate the effectiveness of our primal-dual framework, we compare DualHash-StoM
+against optimization algorithms with different W-type regularizations. \Cref{tab:4_algorithms_for_hash_regularization_and_update}
+summarizes the configurations of different regularization functions and their corresponding optimization approaches. For StoMHash-WCR, we employ the regularization $\lambda \| \bz^{2}- \mathbf{1}\|_1$
+following the iSPALM framework \cite{InertialProximalAlternating}. The proximal
+operator is computed with parameter $\rho > 0$ under the condition
+$\frac{\rho}{\eta}> \frac{1}{2}$, which ensures the subproblem is strongly convex
+with a unique solution.
+% $$\text{prox}_{\rho f}(\bx) = \arg \min_{y}\left( \eta \|\by^{2}- \mathbf{1}\| + \frac{\rho}{2} \|\by - \bx\|^{2}\right).$$
+
+\begin{table}[htbp]
     \centering
-    \caption{Configurations of different W-type regularizations and optimization algorithms \\ for DualHash-StoM and three baselines.}
+    \caption{Configurations of different W-type regularizations and optimization algorithms for DualHash-StoM and three baselines.}
     \label{tab:4_algorithms_for_hash_regularization_and_update}
     \resizebox{0.93\textwidth}{!}{
     \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}lcccc@{}}
@@ -153,33 +162,39 @@ Following \cite{liuDeepSupervisedHashing}, we adopt three evaluation metrics:
     \parbox{0.93\textwidth}{\footnotesize
     \textbf{Notes}: \textbf{Algorithm} describes the optimization strategy: SGDM (stochastic subgradient descent with momentum), SPGD (stochastic proximal gradient descent), PD (primal-dual). \textbf{Complexity} reports oracle complexity; `--' indicates no analysis available.
     }
-\end{table*}
-To validate the effectiveness of our primal-dual framework, we compare DualHash-StoM
-against optimization algorithms with different W-type regularizations. \Cref{tab:4_algorithms_for_hash_regularization_and_update}
-summarizes the configurations of different regularization functions and their corresponding optimization approaches. For StoMHash-WCR, we employ the regularization $\lambda \| \bz^{2}- \mathbf{1}\|_1$
-following the iSPALM framework \cite{InertialProximalAlternating}. The proximal
-operator is computed with parameter $\rho > 0$ under the condition
-$\frac{\rho}{\eta}> \frac{1}{2}$, which ensures the subproblem is strongly convex
-with a unique solution.
-% $$\text{prox}_{\rho f}(\bx) = \arg \min_{y}\left( \eta \|\by^{2}- \mathbf{1}\| + \frac{\rho}{2} \|\by - \bx\|^{2}\right).$$
-\begin{figure*}[htbp]
-    \centering
-    \includegraphics[width=0.8\textwidth]{results_images/ex3_training_cifar10.pdf}
-    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the CIFAR-10 dataset.}
-    \label{Fig: Comparison of training performance of Different Methods on CIFAR-10}
-\end{figure*}
-\begin{figure*}[htbp]
-    \centering
-    \includegraphics[width=0.8\textwidth]{results_images/ex3_training_nuswide.pdf}
-    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the NUS-WIDE dataset.}
-    \label{Fig: Comparison of training performance of Different Methods on NUS-WIDE}
-\end{figure*}
-
+\end{table}
 
 \paragraph{Training performance analysis}
-\begin{table*}[htbp]
+Figures \ref{Fig: Comparison of training performance of Different Methods on CIFAR-10} and \ref{Fig: Comparison of training performance of Different Methods on NUS-WIDE} present
+training dynamics across different optimization approaches, comparing training loss, P@top1000, and P@r=2 metrics \textbf{with 64 bits} on CIFAR-10 and NUS-WIDE. On
+CIFAR-10, DualHash-StoM demonstrates strong optimization efficiency across all
+metrics. Our method achieves fast convergence in training loss while consistently maintaining high P@r=2 and P@top1000 values throughout the
+optimization process. While StoMHash with weakly convex regularization (StoMHash-WCR)
+shows competitive performance, DualHash-StoM achieves faster convergence
+and higher retrieval performance, demonstrating the effectiveness of our
+primal-dual transformation for handling W-type regularizations. On the more challenging NUS-WIDE dataset with complex multi-label scenarios, DualHash-StoM maintains
+competitive retrieval performance despite slightly slower initial convergence.
+The experimental results on diverse datasets indicate that
+utilizing nonconvex nonsmooth regularization with specialized primal-dual
+optimization can improve hash code learning and retrieval
+performance in practical applications.
+
+\begin{figure}[t]
     \centering
-    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits \\ on CIFAR-10 and NUS-WIDE datasets}
+    \includegraphics[width=0.95\textwidth]{results_images/ex3_training_cifar10.pdf}
+    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the CIFAR-10 dataset.}
+    \label{Fig: Comparison of training performance of Different Methods on CIFAR-10}
+\end{figure}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\textwidth]{results_images/ex3_training_nuswide.pdf}
+    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the NUS-WIDE dataset.}
+    \label{Fig: Comparison of training performance of Different Methods on NUS-WIDE}
+\end{figure}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets}
     \label{tab:performance_comparison_64bits}
     \resizebox{0.93\textwidth}{!}{
     \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}lcccccc@{}}
@@ -198,22 +213,9 @@ with a unique solution.
     \parbox{0.93\textwidth}{\footnotesize
     \textsuperscript{*}Training time per epoch (seconds). \textbf{Bold} values indicate the best results.
     }
-\end{table*}
-Figures \ref{Fig: Comparison of training performance of Different Methods on CIFAR-10} and \ref{Fig: Comparison of training performance of Different Methods on NUS-WIDE} present
-training dynamics across different optimization approaches, comparing training loss, P@top1000, and P@r=2 metrics \textbf{with 64 bits} on CIFAR-10 and NUS-WIDE. On
-CIFAR-10, DualHash-StoM demonstrates superior optimization efficiency across all
-metrics. Our method achieves the fastest convergence in training loss while consistently maintaining the highest P@r=2 and P@top1000 values throughout the
-optimization process. While StoMHash with weakly convex regularization (StoMHash-WCR)
-shows competitive performance, DualHash-StoM achieves both faster convergence
-and consistently higher performance, demonstrating the effectiveness of our
-primal-dual transformation for handling W-type regularizations. On the more challenging NUS-WIDE dataset with complex multi-label scenarios, DualHash-StoM maintains
-competitive retrieval performance despite slightly slower initial convergence.
-The experimental results on diverse datasets confirm our core motivation:
-utilizing nonconvex nonsmooth regularization with specialized primal-dual
-optimization significantly improves hash code learning and retrieval
-performance in practical applications.
+\end{table}
 
-\paragraph{Retrieval performance in hamming space}
+\paragraph{Retrieval performance in Hamming space}
 We report mAP, P@r=2, and the average time per training epoch on CIFAR-10 and NUS-WIDE, all
 with 64-bit codes, for different methods in
 Table~\ref{tab:performance_comparison_64bits}. The results highlight the superior retrieval
@@ -225,17 +227,17 @@ NUS-WIDE dataset, DualHash-StoM outperforms StoMHash-WCR with a 3.1\% improvemen
 in mAP@5000 and an 11.8\% improvement in P@r=2. Computationally, DualHash-StoM shows comparable efficiency to baselines such as DHN
 (e.g., 6.86s vs. 6.74s on CIFAR-10 and 16.83s vs. 16.47s
 on NUS-WIDE). This marginal time increase is justified by the substantial performance gains.
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=0.95\textwidth]{results_images/ex3_testing_2datasets.pdf}
-    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK results;  (b), (d): PR curves.}
-    \label{fig:ex3_testing_2datasets}
-    \vspace{-1ex}
-\end{figure*}
 Furthermore, \Cref{fig:ex3_testing_2datasets} displays P@topK results and PR curves
 with 64-bit codes on CIFAR-10 and NUS-WIDE. DualHash-StoM consistently outperforms all
 comparison methods by large margins in P@topK. For PR curves, DualHash-StoM
 demonstrates superior performance at lower recall levels, making it especially well-suited
 for precision-critical image retrieval systems.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{results_images/ex3_testing_2datasets.pdf}
+    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK results;  (b), (d): PR curves.}
+    \label{fig:ex3_testing_2datasets}
+\end{figure}
 
 % \end{document}

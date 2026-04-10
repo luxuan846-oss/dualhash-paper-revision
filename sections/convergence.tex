@@ -1,14 +1,12 @@
 \section{Complexity analysis}
 \label{Section: Convergence analysis}
-
-We now analyze the complexity of the proposed algorithms in terms of 
-the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-approximate stochastic critical point of the Lagrangian function \eqref{Eq: simplified_lagrangian}. Specifically, we seek a point satisfying 
+We now analyze the complexity of the proposed algorithms in terms of the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-approximate stochastic critical point of the Lagrangian function \eqref{Eq: simplified_lagrangian}. Specifically, we seek a point satisfying 
 \begin{equation}\label{equ:esp}
 \mathbb{E} [\text{dist}^2(\bm{0}, \partial \calL (\bx^*, \bm{B}^*, \bm{\Lambda}^* ))] \leq \varepsilon^2
 \end{equation}
 for a given \(\varepsilon > 0\). We assume in this paper the set \(
 \text{crit} \calL := \{(\bx^*, \bm{B}^*, \bm{\Lambda}^* ) \in \RR^{d_{\bx}} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \partial \mathcal{L}(\bx^*, \bm{B}^*, \bm{\Lambda}^*)\}
-\) is nonempty. This focus is standard in non-convex stochastic first-order optimization analysis, as finding a global or even local minimizer for non-convex optimization problems is generally NP-hard. 
+\) is nonempty. This focus is standard in non-convex stochastic first-order optimization analysis, as finding a global or even local minimizer for non-convex optimization problems is generally NP-hard. We limit the maximum number of iterations to a fixed integer, denoted by $T$ with a little abuse of notation.
 
 In the remainder of this paper, we impose the following assumptions.
 \begin{assumption} 
@@ -168,6 +166,7 @@ Let us denote the gradient error in the $k$-th iteration as
     \end{align}
     where \(K_5 = \frac{1 - \alpha_{k}}{\eta_{k}}- 2L_F\) and \(K_6 = \frac{\alpha_{k}}{\eta_{k}}+ 2L_F\beta_k^2\).
 \end{lemma}
+
 To handle the oscillation of \eqref{Eq: simplified_lagrangian}, we introduce the following Lyapunov function and sequence to establish an in-expectation approximate sufficient descent property for \Cref{alg:our_algorithm_sgdm}:
 \begin{align}
     \Psi_m(\mathcal{Q}^{k}) &= \mathcal{L}(\bx^{k}, \bm{B}^{k}, \bLmbd^{k}) 
@@ -215,21 +214,29 @@ is established in \Cref{lem:lyapunov-coef-positivity}.
         \label{Eq: the descent coefficients of potential function in SGDM}\begin{cases}C_{\bB}&= C_{2}- C_{1}= \frac{K_2 - K_3 -K_1}{2}>0, \\ C_{\bx}&= \nu C_{4}>0.\end{cases}
     \end{align}
 \end{lemma}
-We now present the convergence rate of \Cref{alg:our_algorithm_sgdm}, which guides the selection of the batch size $b_k$. Let $T$ denote the total number of iterations, under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, we introduce the following problem-dependent constants, all independent of $T$:
-\[
-L_{\Delta} := \frac{\max\{S_{1}, S_{2}\} + \max\{S_{3}, S_{4}\}}{\min\{C_{\bB}, C_{\bx}\}}, \quad
-C_{\sigma} := \frac{L_{\Delta}}{L_{F}} + 3, \quad
-\Delta_{1} := \Psi_m(\calQ^{1}) - \Psi_m(\mathcal{Q}^{*}),
-\]
-where $S_1, S_2, S_3, S_4$ are defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM} and \(L_{\Delta}\), \(C_{\sigma}\) are the positive constant independent of  \(T\), depending on the parameters \((L_F,  \, \eta, \,\alpha,\, \beta,\, \tau, \, \delta, \, \nu)\).
+
+We now present the convergence rate of \Cref{alg:our_algorithm_sgdm} under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, which guides the selection of the batch size $b_k$. 
+
 \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_sgdm}]
     \label{lemma: convergence rate sgdm} Under the conditions of \Cref{Lemma:
     approximate sufficient descent property in SGDM}, for any $T \geq 1$, there exists
     $R$ uniformly selected from $\{2,\ldots,T+1\}$ such that $(\bx^{R}, \bB
     ^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
     \begin{align}
-        \label{Eq: the convergence rate of sgdm}\mathbb{E}[\mathrm{dist}^{2}(0, \partial \mathcal{L}(\bx^{R}, \bB^{R}, \bLmbd^{R}))] \leq \frac{L_{\Delta}\Delta_{1}}{T}+ C_{\sigma}\frac{\sigma^{2}}{b_{k}}.
-    \end{align}
+        \label{Eq: the convergence rate of sgdm}\mathbb{E}[\mathrm{dist}^{2}(0, \partial \mathcal{L}(\bx^{R}, \bB^{R}, \bLmbd^{R}))] \leq \frac{L_{\Delta}\Delta_{1}}{T}+ C_{\sigma}\frac{\sigma^{2}}{b_{k}},
+    \end{align}where $S_1, S_2, S_3, S_4$ are defined in 
+    \eqref{Eq: the coefficients of stationarity error bound in SGDM},
+    $L_{\Delta} := \frac{\max\{S_{1}, S_{2}\} + 
+    \max\{S_{3}, S_{4}\}}{\min\{C_{\bB}, C_{\bx}\}}$, 
+    $C_{\sigma} := \frac{L_{\Delta}}{L_{F}} + 3$, and $\Delta_{1} := \Psi_m^1 - \Psi_m^{*}$ denotes the initial objective gap with $\Psi_m^{1}= \Psi_m(\calQ^{1})$ and the lower bound $\Psi_m^{*}$. Here $L_{\Delta}$ and 
+    $C_{\sigma}$ are constants independent of $T$.
+%  where 
+% \(
+% L_{\Delta} := \frac{\max\{S_{1}, S_{2}\} + \max\{S_{3}, S_{4}\}}{\min\{C_{\bB}, C_{\bx}\}}, \quad
+% C_{\sigma} := \frac{L_{\Delta}}{L_{F}} + 3, \quad
+% \Delta_{1} := \Psi_m(\calQ^{1}) - \Psi_m(\mathcal{Q}^{*}),
+% \) and $S_1, S_2, S_3, S_4$ are defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}, independent of  \(T\).
+% depending on the parameters \((L_F,  \, \eta, \,\alpha,\, \beta,\, \tau, \, \delta, \, \nu)\).
 \end{lemma}
 From \eqref{Eq: the convergence rate of sgdm}, to achieve the $\mathcal{O}(T^{-1/2})$ 
 convergence rate, we need to set $b_k = \Theta(T)$. Therefore, combining 
@@ -336,10 +343,16 @@ independent of $T$, and $\tilde{\delta}= c_{\delta}\delta^{2}$ with $\delta, c_{
 \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_storm}]
     \label{Lemma: convergence rate of storm} Under \Cref{Ass: main assumptions} and parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}, for any $T \geq 1$, there exists $R$ uniformly selected from $\{2,\ldots,T+1\}$ such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
     \begin{align}
-        \label{Eq: the convergence rate of storm}\EE[\mathrm{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))] \leq \frac{\tilde{L}_{\Delta}\tilde{\Delta}_{1}}{T^{2/3}} + \tilde{C}_{\sigma}\!\left(\frac{\sigma^{2}}{4\rho\eta^{2}b_{1}T} + \frac{32\rho\eta^{2}\sigma^{2}}{b}\cdot\frac{1}{T^{2/3}}\right).
-    \end{align}
+        \label{Eq: the convergence rate of storm}\EE[\mathrm{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))] \leq \frac{\tilde{L}_{\Delta}\tilde{\Delta}_{1}}{T^{2/3}} + \tilde{C}_{\sigma}\!\left(\frac{\sigma^{2}}{4\rho\eta^{2}b_{1}T} + \frac{32\rho\eta^{2}\sigma^{2}}{b}\cdot\frac{1}{T^{2/3}}\right),
+    \end{align}where $\tilde{S}_{4}:=\max\{S_{1},S_{2}\}$ with $S_{1},S_{2}$ 
+defined in \eqref{Eq: the coefficients of stationarity error bound 
+in SGDM}, $\tilde{L}_{\Delta}:=\frac{\tilde{S}_{4}}{C_{\bB}}
+\!\left(1+\frac{8\eta^{2}}{\tilde{L}_{F}}\right)+\frac{2(C_{\delta}
++4)\tilde{L}_{F}}{\eta}+(7+3C_{\delta})$, $\tilde{C}_{\sigma}:=
+6+C_{\delta}+\frac{\tilde{S}_{4}\eta}{2C_{\bB}\tilde{L}_{F}}$, 
+and $\tilde{\Delta}_{1}:= \Psi_r^{1}- \Psi_r^{*}$ denotes the initial objective gap with $\Psi_r^{1}= \Psi_r(\calQ^{1})$ and the lower bound $\Psi_r^{*}$. Here $\tilde{L}_{\Delta}$ and $\tilde{C}_{\sigma}$ are constants independent of $T$.
 \end{lemma}
-From \eqref{Eq: the convergence rate of storm},  to achieve the $\mathcal{O}(T^{-2/3})$ convergence rate, we require
+From \eqref{Eq: the convergence rate of storm},  to acieve the $\mathcal{O}(T^{-2/3})$ convergence rate, we require
 $b_{1}= \Theta(T^{1/3})$ and $b_{k}= \mathcal{O}(1)$ for $k > 1$. With this parameter choice, we proceed to analyze the oracle complexity of \Cref{alg:our_algorithm_storm}.
 % \begin{align*}
 % \tilde{L}_{\Delta} &:= \frac{S_{4}}{C_{\bB}}\!\left(1 + \frac{8\eta^{2}}{\tilde{L}_{F}}\right) + \frac{2(C_{\delta}+4)\tilde{L}_{F}}{\eta} + (7+3C_{\delta}), \quad
@@ -354,8 +367,7 @@ Under \Cref{Ass: main assumptions}(i), (iii) and \Cref{Ass: the mean squared smo
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm VR}
         T = \left\lceil \frac{\left(\tilde{L}_{\Delta} \tilde{\Delta}_1+ \tilde{C}_{\sigma}\left( \frac{\sigma^2}{ 4\rho \eta^2 c_b} + \frac{32\rho\eta^2\sigma^2}{b} \right)\right)^{\frac{3}{2}}}{\varepsilon^3} \right\rceil,
-\end{align}
-where \(\tilde{\Delta}_1 = \Psi_r^1 - \Psi_r^* \) is the initial Lyapunov function value gap and \(\tilde{L}_{\Delta}\), \(\tilde{C}_{\sigma}\) are the positive constant independent of \(T\), depending on the parameters \((L_F, \, \eta, \, \rho, \tau, \, \delta)\). Moreover, the total number of SFO is in order of \(\calO(\varepsilon^{-3})\). 
+\end{align}Moreover, the total number of SFO is in order of \(\calO(\varepsilon^{-3})\). 
 \end{theorem} 
 
 \begin{remark}

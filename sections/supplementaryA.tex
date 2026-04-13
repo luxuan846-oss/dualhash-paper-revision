@@ -17,7 +17,7 @@ This supplementary material provides detailed experimental settings and addition
 
 % In \Cref{Appendix: Experiment details}, we provide the experimental details and additional experiments.
 
-\section{Experiments details}
+\section{Experiment Details}
 \label{Appendix: Experiment details} 
 \subsection{Deep Pairwise Supervised Hashing Formulation}
 \label{Appendix: hashing formulation}
@@ -63,7 +63,7 @@ For an unseen query $\ba_q \notin \bA$, its binary code is predicted as:
 \bb_q = \operatorname{sgn}(\bC(\bx; \ba_q)).
 \]
 
-\subsection{Details of experiment implementation}
+\subsection{Implementation Details}
 \label{Appendix: Details of experiment implementation}
 \begin{table}[thbp]
     \centering
@@ -166,7 +166,7 @@ with a unique solution.
 
 \paragraph{Training performance analysis}
 Figures \ref{Fig: Comparison of training performance of Different Methods on CIFAR-10} and \ref{Fig: Comparison of training performance of Different Methods on NUS-WIDE} present
-training dynamics across different optimization approaches, comparing training loss, P@top1000, and P@r=2 metrics \textbf{with 64 bits} on CIFAR-10 and NUS-WIDE. On
+training dynamics across different optimization approaches, comparing training loss, P@top1000, and P@r=2 metrics \textbf{for 64-bit codes} on CIFAR-10 and NUS-WIDE. On
 CIFAR-10, DualHash-StoM demonstrates strong optimization efficiency across all
 metrics. Our method achieves fast convergence in training loss while consistently maintaining high P@r=2 and P@top1000 values throughout the
 optimization process. While StoMHash with weakly convex regularization (StoMHash-WCR)
@@ -182,19 +182,19 @@ performance in practical applications.
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.95\textwidth]{results_images/ex3_training_cifar10.pdf}
-    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the CIFAR-10 dataset.}
+    \caption{Training performance comparison of DualHash-StoM and three baselines with 64-bit codes on the CIFAR-10 dataset.}
     \label{Fig: Comparison of training performance of Different Methods on CIFAR-10}
 \end{figure}
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.95\textwidth]{results_images/ex3_training_nuswide.pdf}
-    \caption{Training performance comparison of DualHash-StoM and three baselines with 64 bits on the NUS-WIDE dataset.}
+    \caption{Training performance comparison of DualHash-StoM and three baselines with 64-bit codes on the NUS-WIDE dataset.}
     \label{Fig: Comparison of training performance of Different Methods on NUS-WIDE}
 \end{figure}
 
 \begin{table}[htbp]
     \centering
-    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets}
+    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64-bit codes on CIFAR-10 and NUS-WIDE datasets.}
     \label{tab:performance_comparison_64bits}
     \resizebox{0.93\textwidth}{!}{
     \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}lcccccc@{}}
@@ -236,7 +236,7 @@ for precision-critical image retrieval systems.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{results_images/ex3_testing_2datasets.pdf}
-    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK results;  (b), (d): PR curves.}
+    \caption{Retrieval performance comparison of DualHash-StoM and three baselines with 64-bit codes on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK results; (b), (d): PR curves.}
     \label{fig:ex3_testing_2datasets}
 \end{figure}
 

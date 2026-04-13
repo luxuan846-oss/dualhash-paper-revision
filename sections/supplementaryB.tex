@@ -2,7 +2,7 @@ This supplementary material provides useful definitions and propositions, necess
 \section{Preliminaries}
 \label{Appendix: Preliminaries and notations}
 We introduce the following definitions related to subdifferentials.
-\begin{definition}[ubdifferentials \cite{Rockafellar1998VariationalA}]
+\begin{definition}[Subdifferentials \cite{Rockafellar1998VariationalA}]
     \label{definition: subgradient} Let $f : \mathbb{R}^{q}\to (-\infty, +\infty
     ]$ be a proper closed function.
     \begin{enumerate}[label=(\roman{*})]
@@ -196,7 +196,7 @@ We first present a lemma concerning a property of a continuously differentiable 
 % In particular, $\Delta_{\bx}^{k}$ and $\Delta_{\bB}^{k}$ are as defined therein, and we refer to \Cref{Lemma: dual boundedness} and \Cref{Lemma: One-iteration progress of B and Lambda} for the bounds on dual variable dynamics and one-iteration Lagrangian progress on $\bB$ and $\bLmbd$. The gradient error is defined as $\be^{k}= \bG^{k}- \nabla_{\bx}F(\bz^{k}, \bB^{k})$, satisfying $\EE_{\bxi^{[k]}}[\|\be^{k}\|^{2}] \leq \sigma^{2}/b_{k}$ under \Cref{Ass: main assumptions}~(iii).
 \begin{lemma}
     \label{Lemma: auxiliary lemma for f} Let $f(\bx): \mathbb{R}^{q}\rightarrow \mathbb{R}$
-    be a continuously differentiable function with $L$-lipschitz continuous gradient.
+    be a continuously differentiable function with an $L$-Lipschitz continuous gradient.
     Then, for any $\bx,\, \by,\,\bz \in \mathbb{R}^{q}$ and any $\bx^{+}\in \mathbb{R}
     ^{q}$ defined by
     \[
@@ -531,7 +531,7 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
     \begin{align}
         % \label{Eq: the recursive relation of L under VR}
         & \calL (\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k}) \notag                                                                                                        \\
-        \leq \,                                          & \frac{s}{2}\| \be^{k}\|^{2}- (-\frac{1}{s}+ 2\eta_{k}^{-1}- L_{F}- K_{3}) \Delta_{\bx}^{k+1}+ K_{1}\Delta_{\bB}^{k+2}+ K_{4}\Delta_{\bx}^{k+2}- K_{2}\Delta_{\bB}^{k+1}+ K_{3}\Delta_{\bB}^{k}. \notag
+        \leq \,                                          & \frac{s}{2}\| \be^{k}\|^{2}- (-\frac{1}{s}+ 2\eta_{k}^{-1}- L_{F}- K_{3}) \Delta_{\bx}^{k+1}+ K_{1}\Delta_{\bB}^{k+2}+ K_{4}\Delta_{\bx}^{k+2}- K_{2}\Delta_{\bB}^{k+1}+ K_{3}\Delta_{\bB}^{k}, \notag
     \end{align}
     where setting $s = \eta_{k}$ yields
     \begin{align}
@@ -589,7 +589,7 @@ and the batch size $b_k$ to satisfy:
     and parameter conditions \eqref{Eq: the parameters assumptions in storm appendix}, for any $T \geq 1$, the following weighted cumulative error bound
     holds:
     \begin{align}
-        \label{Eq: weighted cumulative error bound}\frac{1}{T}\sum_{k=1}^{T}\rho_{k}\EE_{\bxi^{[k]}}\left[ \| \be^{k}\|^{2}\right]\leq \frac{16 \eta_{1}L_{F}^{2}\tilde{\Delta}_{1}}{T}+ \frac{2\sigma^{2}}{Tb_{1}}+ \frac{1}{T}\sum_{k=2}^{T}\frac{4\rho_{k}^{2}\sigma^{2}}{b}.
+        \label{Eq: weighted cumulative error bound}\frac{1}{T}\sum_{k=1}^{T}\rho_{k}\EE_{\bxi^{[k]}}\left[ \| \be^{k}\|^{2}\right]\leq \frac{16 \eta_{1}L_{F}^{2}\tilde{\Delta}_{1}}{T}+ \frac{2\sigma^{2}}{Tb_{1}}+ \frac{1}{T}\sum_{k=2}^{T}\frac{4\rho_{k}^{2}\sigma^{2}}{b},
     \end{align} where $\tilde{\Delta}_{1}= \Psi_r^{1}- \Psi_r^{*}$, $\Psi_r^{1}= \Psi_r(\calQ^{1})$ and $\Psi_r^{*}$ is the lower bound
 of $\Psi_r$.
 \end{lemma}

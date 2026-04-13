@@ -75,7 +75,7 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
     % \vspace{-1mm}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/ex1_4figures_new.pdf}
-    \caption{Training loss and the mAP results of DualHash and baselines with 64 bits on CIFAR-10 and NUS-WIDE datasets.}
+    \caption{Training loss and the mAP results of DualHash and baselines for 64-bit codes on CIFAR-10 and NUS-WIDE datasets.}
     \label{fig:training_loss_map_2datasets}
     \vspace{-2ex}
 \end{figure}
@@ -83,20 +83,20 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
     % \vspace{-1mm}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/ex2_4figures.pdf}
-    \caption{Retrieval performance of DualHash and baselines on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK with 64 bits;  (b), (d): P@r(=2) with different numbers of bits.}
+    \caption{Retrieval performance of DualHash and baselines on CIFAR-10 and NUS-WIDE datasets. (a), (c): P@topK for 64-bit codes; (b), (d): P@r=2 with different numbers of bits.}
  \label{fig:retrieval_2datasets}
     \vspace{-2ex}
 \end{figure}
 \begin{table}[t]
     \centering
-    \caption{The mAP results of DualHash and baselines with different numbers of bits on CIFAR-10 and NUS-WIDE datasets with ResNet50 backbone.}
+    \caption{The mAP results of DualHash and baselines with different numbers of bits on CIFAR-10 and NUS-WIDE datasets with the ResNet-50 backbone.}
     \label{Table: performance_comparison_resnet50_small}
     \resizebox{\linewidth}{!}{
     \begin{tabular}{ccccccccc}
         \toprule
          & \multicolumn{4}{c}{CIFAR-10 (mAP@All)} & \multicolumn{4}{c}{NUS-WIDE (mAP@5000)} \\
         \cmidrule(lr){2-5} \cmidrule(lr){6-9}
-         Method (ResNet50) & 16 bits & 32 bits & 48 bits & 64 bits & 16 bits & 32 bits & 48 bits & 64 bits \\
+         Method (ResNet-50) & 16 bits & 32 bits & 48 bits & 64 bits & 16 bits & 32 bits & 48 bits & 64 bits \\
         \midrule
         DSH \cite{liuDeepSupervisedHashing} & 0.7403 & 0.8116 & 0.8217 & 0.8239 & 0.5559 & 0.6952 & 0.6981 & 0.7165 \\
         OrthoHash \cite{hoeOneLossAll2021} & \textbf{0.9032} & 0.9182 & 0.9202 & 0.9224 & \textbf{0.7448} & 0.7600 & 0.7569 & 0.7863 \\
@@ -111,7 +111,7 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
     }
     \vspace{-1ex}
 \end{table}
-We provide empirical evidence that is consistent with our theoretical results (Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM}) and compare with HashNet, OrthoHash, and MDSHC with 64 bits on CIFAR-10 and NUS-WIDE. 
+We provide empirical evidence that is consistent with our theoretical results (Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM}) and compare with HashNet, OrthoHash, and MDSHC with 64-bit codes on CIFAR-10 and NUS-WIDE. 
 \Cref{fig:training_loss_map_2datasets} shows the training loss and validation mAP curves over epochs.
 As shown in \Cref{fig:training_loss_map_2datasets} (a)-(b), DualHash-StoRM achieves the fastest convergence and lowest loss values on CIFAR-10 and NUS-WIDE, requiring only approximately 25 epochs on CIFAR-10. This aligns with our theoretical outcome: the variance reduction mechanism accelerates convergence. Though slower than DualHash-StoRM, DualHash-StoM still outperforms other baselines (approximately 75 epochs on CIFAR-10). 
 Meanwhile, \Cref{fig:training_loss_map_2datasets} (c)-(d) show that although DualHash-StoRM converges faster during training, DualHash-StoM ultimately exhibits superior retrieval performance compared to other baselines. 
@@ -121,14 +121,14 @@ Meanwhile, \Cref{fig:training_loss_map_2datasets} (c)-(d) show that although Dua
 \begin{table}[t]
 % \vspace{2ex}
     \centering
-    \caption{The mAP results of DualHash and baselines with different numbers of bits on the ImageNet-100 dataset with ResNet50 backbone.}
+    \caption{The mAP results of DualHash and baselines with different numbers of bits on the ImageNet-100 dataset with the ResNet-50 backbone.}
     \label{tab:performance_imagenet_resnet50}
     \small
     \begin{tabular}{lcccc}
      \toprule
  & \multicolumn{4}{c}{ImageNet-100 (mAP@1000)} \\
 \cmidrule(lr){2-5}
-Method (ResNet50) & 16 bits & 32 bits & 48 bits & 64 bits \\
+Method (ResNet-50) & 16 bits & 32 bits & 48 bits & 64 bits \\
 \midrule
 DSH \cite{liuDeepSupervisedHashing} & 0.7179 & 0.7448 & 0.7335 & 0.7585 \\
 OrthoHash \cite{hoeOneLossAll2021} & 0.8040 & \textbf{0.8292} & 0.8510 & 0.8636 \\
@@ -143,16 +143,16 @@ DualHash-StoM & 0.7402 & 0.7705 & \textbf{0.8662} & \textbf{0.8714} \\
     }
     \vspace{-2ex}
 \end{table}
-We report retrieval performance on CIFAR-10 and NUS-WIDE datasets, as shown in Table \ref{Table: baselines mAP}
+We report retrieval performance on CIFAR-10 and NUS-WIDE datasets, as shown in Tables \ref{Table: baselines mAP}
 % , \ref{Table: performance_comparison_resnet50_small}, \ref{tab:performance_imagenet_resnet50} 
-and \Cref{fig:retrieval_2datasets}. 
+and \ref{fig:retrieval_2datasets}. 
 In terms of mAP, DualHash methods consistently outperform most baselines, including recent advanced methods like OrthoHash and MDSHC.
-On CIFAR-10, DualHash-StoM achieves 0.8539 mAP with 64 bits, outperforming OrthoHash (0.8355). On the NUS-WIDE dataset, it reaches 0.7448 mAP, significantly superior to MDSHC (0.6493).  
+On CIFAR-10, DualHash-StoM achieves 0.8539 mAP with 64-bit codes, outperforming OrthoHash (0.8355). On the NUS-WIDE dataset, it reaches 0.7448 mAP, significantly superior to MDSHC (0.6493).
 Although slightly less accurate than the StoM variant, DualHash-StoRM remains comparable to other baselines, providing a trade-off between accuracy and efficiency. 
 
-To further demonstrate the scalability of our approach, we evaluate our method and three baselines using a \textbf{ResNet50 backbone}. As shown in \Cref{Table: performance_comparison_resnet50_small}, this modern architecture brings substantial performance gains in terms of mAP for all methods across CIFAR-10 and NUS-WIDE. Our DualHash-StoM, for example, achieves mAP improvements of 10.3\% on CIFAR-10 (0.9416 vs 0.8539) and 7.6\% on NUS-WIDE (0.8016 vs 0.7448) at 64 bits. Nevertheless, our method consistently maintains peak performance at 32 bits or more, outperforming all baseline methods. Moreover, on the more complex ImageNet-100 dataset, our method continues to demonstrate superior performance. As reported in \Cref{tab:performance_imagenet_resnet50}, DualHash-StoM reaches 86.62\% and 87.14\% mAP at 48 and 64 bits, outperforming all baselines. These results confirm that our method maintains robust performance and strong generalization capability as data complexity increases.
+To further demonstrate the scalability of our approach, we evaluate our method and three baselines using a \textbf{ResNet-50 backbone}. As shown in \Cref{Table: performance_comparison_resnet50_small}, this modern architecture brings substantial performance gains in terms of mAP for all methods across CIFAR-10 and NUS-WIDE. Our DualHash-StoM, for example, achieves mAP improvements of 10.3\% on CIFAR-10 (0.9416 vs 0.8539) and 7.6\% on NUS-WIDE (0.8016 vs 0.7448) at 64 bits. Nevertheless, our method consistently maintains peak performance at 32 bits or more, outperforming all baseline methods. Moreover, on the more complex ImageNet-100 dataset, our method continues to demonstrate superior performance. As reported in \Cref{tab:performance_imagenet_resnet50}, DualHash-StoM reaches 86.62\% and 87.14\% mAP at 48 and 64 bits, outperforming all baselines. These results confirm that our method maintains robust performance and strong generalization capability as data complexity increases.
 
-For P@topK (\Cref{fig:retrieval_2datasets} (a),(c)),  DualHash maintains 0.9 precision at lower top-k values on CIFAR-10, significantly outperforming other methods. This indicates that our method is suitable for precision-oriented image retrieval systems.
+For P@topK (\Cref{fig:retrieval_2datasets} (a),(c)), DualHash maintains 0.9 precision at lower top-k values on CIFAR-10, significantly outperforming other methods. This indicates that our method is suitable for precision-oriented image retrieval systems.
 For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently maintains peak performance at 32 bits and above, with 32 bits being optimal across CIFAR-10 and NUS-WIDE. These results align with the fact that as bit length increases, the Hamming space becomes sparse and few data points fall within the Hamming ball with radius 2 \cite{norouzi2012fast}.
 % \vspace{3pt}
 
@@ -169,32 +169,32 @@ For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently m
     % \vspace{-2ex}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/hamming_hig_64.pdf}
-    \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 64 bits on the NUS-WIDE dataset. The arrow annotation is the separability in Hamming distances, \(\EE [D_{inter}] - \EE [D_{intra}]\). We normalized the frequency so that the sum of all bins equals to 1.}
-    \label{fig: His_64_NUSWIDE}
+    \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines for 64-bit codes on the NUS-WIDE dataset. The arrow annotation is the separability in Hamming distances, \(\EE [D_{inter}] - \EE [D_{intra}]\). We normalized the frequency so that the sum over all bins equals 1.}
+    \label{fig:His_64_NUSWIDE}
     \vspace{-2ex}
 \end{figure}
 \begin{figure}[thbp]
     % \vspace{-2ex}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/hamming_hig_16.pdf}
-    \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 16 bits on NUS-WIDE.}
-    \label{fig: His_16_NUSWIDE}
+    \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 16-bit codes on NUS-WIDE.}
+    \label{fig:His_16_NUSWIDE}
     \vspace{-2ex}
 \end{figure}
 \begin{figure}[thbp]
     % \vspace{-1mm}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/sensitivity_2datasets.pdf}
-    \caption{The mAP results of DualHash-StoM with Different settings of \(\eta\) and \(\lambda\) with 64 \& 16 bits on CIFAR-10 and NUS-WIDE.}
-    \label{fig: sensitivity analysis of DualHash}
+    \caption{The mAP results of DualHash-StoM with different settings of \(\eta\) and \(\lambda\) for 64-bit and 16-bit codes on CIFAR-10 and NUS-WIDE.}
+    \label{fig:sensitivity_analysis_DualHash}
     \vspace{-2ex}
 \end{figure}
 To elucidate the mechanisms behind the performance of DualHash, following \cite{hoeOneLossAll2021},
-we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig: His_64_NUSWIDE,fig: His_16_NUSWIDE}) across different bit lengths $K$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet \cite{Cao2017HashNetDL} and OrthoHash \cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH \cite{wang2016DTSH} and MDSHC \cite{wang2023deep} (both utilizing $W$-type regularization).
+we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig:His_64_NUSWIDE,fig:His_16_NUSWIDE}) across different bit lengths $K$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet \cite{Cao2017HashNetDL} and OrthoHash \cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH \cite{wang2016DTSH} and MDSHC \cite{wang2023deep} (both utilizing $W$-type regularization).
 
 % \vspace{3pt}
 \noindent\textbf{(1) Quantization Error Correlates with Intra- and Inter-class Distances.}
-We find that methods achieving smaller quantization errors produce hash codes with reduced intra-class distances and enhanced inter-class separability, as shown in \Cref{fig:quantization_error}(a) and \Cref{fig: His_16_NUSWIDE,fig: His_64_NUSWIDE}. In the 64-bit setting (\Cref{fig: His_64_NUSWIDE}), both HashNet and DualHash exhibit similar inter-class distributions (close to Hamming distance $K/2 = 32$). However, DualHash's lower quantization error (0.0906 vs. 0.1390) enables significantly superior separability, i.e., the difference in the mean of intra-class distance (the blue dotted line)
+We find that methods achieving smaller quantization errors produce hash codes with reduced intra-class distances and enhanced inter-class separability, as shown in \Cref{fig:quantization_error}(a) and \Cref{fig:His_16_NUSWIDE,fig:His_64_NUSWIDE}. In the 64-bit setting (\Cref{fig:His_64_NUSWIDE}), both HashNet and DualHash exhibit similar inter-class distributions (close to Hamming distance $K/2 = 32$). However, DualHash's lower quantization error (0.0906 vs. 0.1390) enables significantly superior separability, i.e., the difference in the mean of intra-class distance (the blue dotted line)
 with the mean of inter-class distance (the orange dotted line). In contrast, MDSHC's high quantization error (0.8023) leads to substantially larger intra-class distances and weaker inter-class separation, yielding a $5\times$ inferior separability ratio (24.19 vs. 4.47). 
 This demonstrates that reducing quantization error enhances code quality primarily by compressing intra-class distributions.
 
@@ -219,7 +219,7 @@ DualHash, we conduct a grid search with $\eta \in \{10^{-4}, 10^{-3},
 10^{-2}, 10^{-1}\}$ and $\lambda \in \{10^{-3}, 10^{-2}, 5\times 10^{-2}, 10^{-1}\}$. Unlike many deep hashing 
 methods that exhibit significant hyperparameter sensitivity, DualHash-StoM 
 demonstrates robust performance across a wide range of hyperparameter 
-combinations (see \Cref{fig: sensitivity analysis of DualHash}). 
+combinations (see \Cref{fig:sensitivity_analysis_DualHash}). 
 Specifically, 64-bit codes achieve excellent stability with mAP variations 
 below 3\% on CIFAR-10 and 8\% on NUS-WIDE. While 16-bit codes show greater 
 sensitivity (up to 18\% on CIFAR-10), this behavior is consistent with the 

@@ -1,0 +1,17 @@
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+/DualHash_SIIMS_WebSlides.html
+/dualhash_slides.pdf
+
+# Keep PDF figures required by the slide source.
+!figures/*.pdf
+!figures/**/*.pdf

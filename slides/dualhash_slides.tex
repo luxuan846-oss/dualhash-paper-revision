@@ -261,10 +261,9 @@ with Theoretical Guarantee for Deep Hashing}
   \item[$\triangleright$] \textbf{Continuous relaxation:} replace
   $\operatorname{sgn}(\bC_i(\bx))$ by the continuous output
   $\bD_i(\bx)=\tanh(\bC_i(\bx))$ during training.
-  \item[$\triangleright$] \textbf{W-type regularization:} use \(
-    h(\bz)=\lambda\bigl\||\bz|-\One\bigr\|_1,\,\, \lambda>0.
-  \) to drive the
-  continuous outputs toward $\{-1,+1\}^d$.
+  \item[$\triangleright$] \textbf{W-type regularization:} use
+  \(h(\bz)=\lambda\bigl\||\bz|-\One\bigr\|_1\), with \(\lambda>0\),
+  to drive the continuous outputs toward $\{-1,+1\}^d$.
 \end{itemize}
 \end{block}
 
@@ -440,7 +439,7 @@ with Theoretical Guarantee for Deep Hashing}
   }
     \begin{itemize}
     \setlength{\itemsep}{0pt}
-    \item[] {\footnotesize Variants in convex problem: Stochastic PDHG \blue{(Chambolle et al. 18)}; Nonlinear PDHG \blue{(Clason et al. 19; Gao--Zhang 23; Shumaylov et al. 24)}};
+    \item[\blue{$\bullet$}] {\footnotesize Variants in convex problem: Stochastic PDHG \blue{(Chambolle et al. 18)}; Nonlinear PDHG \blue{(Clason et al. 19; Gao--Zhang 23; Shumaylov et al. 24)}};
   \end{itemize}
 
   \item[\blue{$\blacktriangleright$}] {{\textbf{Proximal updates in PDHG}}}

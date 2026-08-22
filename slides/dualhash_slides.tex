@@ -251,30 +251,26 @@ with Theoretical Guarantee for Deep Hashing}
 \end{frame}
 
 
-\begin{frame}[t]{From Discrete Model to Continuous Optimization}
+\begin{frame}[t]{Solution: From Discrete Model to Continuous Optimization}
 \small
-\vspace{0.1cm}
+\vspace{0.04cm}
 
-\begin{block}{Continuous Relaxation Solution}
-% \small
+\begin{block}{Continuous Solution}
 \begin{itemize}
+  \setlength{\itemsep}{0.04cm}
   \item[$\triangleright$] \textbf{Continuous relaxation:} replace
-  $\operatorname{sgn}(\cdot)$ by $\tanh (\cdot)$,obtain the continuous outputs
-  $\bD_i(\bx) = \tanh (\bC_i(\bx))$.
-  \item[$\triangleright$] \textbf{W-type regularization:} using   \(
-    h(\bz)=\lambda\bigl\||\bz|-\One\bigr\|_1,\qquad \lambda>0
+  $\operatorname{sgn}(\bC_i(\bx))$ by the continuous output
+  $\bD_i(\bx)=\tanh(\bC_i(\bx))$ during training.
+  \item[$\triangleright$] \textbf{W-type regularization:} use \(
+    h(\bz)=\lambda\bigl\||\bz|-\One\bigr\|_1,\,\, \lambda>0.
   \) to drive the
-  continuous outputs  $\bD_i$ toward $\{-1,+1\}^d$.
+  continuous outputs toward $\{-1,+1\}^d$.
 \end{itemize}
 \end{block}
 
-\vspace{0.04cm}
-\begin{columns}[T,onlytextwidth]
-
-
-  \begin{column}{0.54\textwidth}
-  \centering
-  \begin{tikzpicture}[x=0.72cm,y=0.78cm,>=Stealth,line cap=round,line join=round]
+\vspace{0.06cm}
+\begin{center}
+  \begin{tikzpicture}[x=0.82cm,y=0.86cm,>=Stealth,line cap=round,line join=round]
         \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$b$};
         \draw[-{Stealth},thin] (0,-0.7) -- (0,2.9);
         \draw[line width=1.0pt] (-2.6,1.9) -- (-1,0) -- (0,2.1) -- (1,0) -- (2.6,1.9);
@@ -286,15 +282,14 @@ with Theoretical Guarantee for Deep Hashing}
         \node at (1,-0.42) {$+1$};
         \node[blue,below] at (0.9,-0.56) {$0.9$};
         \node[blue,below] at (2.5,-0.42) {$2.5$};
-        \node at (0,-1.08) {W-type regularizer $h(b)$};
+        \node at (0,-1.08) {$h(b)$};
   \end{tikzpicture}
-  \end{column}
-\end{columns}
+\end{center}
 \end{frame}
 
 \begin{frame}{From Discrete Model to Continuous Optimization}
 % \small
-\vspace{-0.4cm}
+\vspace{-0.6cm}
 
 % \vspace{-0.12cm}
 \begin{align*}
@@ -314,8 +309,8 @@ with Theoretical Guarantee for Deep Hashing}
 \end{center}
 \vspace{-0.14cm}
 \begin{align}
-\min_{\bx\in\RR^{d_{\bx}}}\quad
-\frac{1}{n}\sum_{i=1}^n f_i(\bx)
+\min_{\bx\in\RR^{d_{\bx}}}\quad \{f(\bx)=
+\frac{1}{n}\sum_{i=1}^n f_i(\bx)\}
 +\sum_{i=1}^n h\!\left(\blue{\bD_i(\bx)}\right).
 \tag{P0}
 \end{align}
@@ -345,10 +340,11 @@ with Theoretical Guarantee for Deep Hashing}
 
 \vspace{0.2cm}
 \begin{itemize}
-% \setlength{\itemsep}{0.08cm}
-  \item \red{Unlike conventional parameter regularization, hashing
-  regularization acts on network outputs and induces the nonsmooth
-  composite structure $f(\bx)+h(\bD_i(\bx))$.}
+  \setlength{\itemsep}{0.08cm}
+  \item Unlike parameter regularization (e.g., $\ell_1$), hashing
+  regularization acts on network outputs and necessitates the nonsmooth
+  composite structure $h(\bD_i(\bx))$.
+  \item \red{New challenges emerge in optimization.}
 \end{itemize}
 
 \end{frame}
@@ -359,7 +355,7 @@ with Theoretical Guarantee for Deep Hashing}
 \vspace{-0.2cm}
 
 \begin{center}
-{\scriptsize
+{\footnotesize
 \begin{tabular}{ccccc}
 \toprule
 \textbf{Type}\textsuperscript{*}
@@ -372,7 +368,7 @@ with Theoretical Guarantee for Deep Hashing}
 & DDSH~\blue{[JCL18]} & $f(\bb)+\|\bu-\bb\|_2^2$ & BQP & \multirow{9}{*}{\red{---}} \\
 & DSDH~\blue{[LSHT17]} & \multirow{3}{*}{$f(\bu)+\|\bu-\bb\|_2^2$} & $\operatorname{sgn}$ update & \\
 & DPSH~\blue{[LWK16]} & & DCC & \\
-& DSARH~\blue{[ZZZ+26]} & & DCC + PGD-AT & \\
+& DSARH~\blue{[ZZZ+26]} & & DCC & \\
 \cmidrule(lr){1-4}
 \multirow{5}{*}{Continuous}
 & DSH~\blue{[LWSC16]} & $f(\bu)+\bigl\|\,|\bu|-\One\,\bigr\|_1$ & SGDM & \\
@@ -394,73 +390,70 @@ with Theoretical Guarantee for Deep Hashing}
 
 \begin{frame}[t]{Related Work: Nonsmooth Composite Optimization}
 \small
-\vspace{0.02cm}
+\vspace{-0.4cm}
+\[\min\limits_{\bx} f(\bx)+h(\bD(\bx)), \] where
+\[
+\bD \text{ nonconvex}, \quad h \text{  nonconvex and nonsmooth}.
+\]
 
-\(\min_{\bx} f(\bx)+h(\bD(\bx))\), \quad
-\(\bD\) nonconvex, \quad \(h\) nonconvex/nonsmooth.
+\par\vspace{0.1cm}
 
-\par\vspace{0.06cm}
 {\red{\textbf{Challenges}}}
-\vspace{-0.12cm}
+\vspace{-0.08cm}
 \begin{itemize}
   \setlength{\itemsep}{0.012cm}
-  \item[\blue{$\blacktriangleright$}] {\blue{\textbf{Stochastic proximal methods}}}
+  \item[\blue{$\blacktriangleright$}] {{\textbf{Stochastic proximal methods}}}
   {\footnotesize \blue{(Liu et al. 16; Cao et al. 17; Jiang et al. 18; Bai et al. 19)}}\\[-0.07cm]
   \begin{itemize}
     \setlength{\itemsep}{0pt}
-    \item[\blue{$\bullet$}] {\scriptsize\blue{\(\prox_{h\circ \bD}\) generally unavailable.}}
+    \item[\blue{$\bullet$}] {\footnotesize {\(\prox_{h\circ \bD}\) generally unavailable.}}
   \end{itemize}
 
-  \item[\blue{$\blacktriangleright$}] {\blue{\textbf{Nonlinear composite methods}}}
+  \item[\blue{$\blacktriangleright$}] {{\textbf{Nonlinear composite methods}}}
   {\footnotesize \blue{(Davis--Drusvyatskiy 19; Yao et al. 24; Zhang et al. 25)}}\\[-0.07cm]
   \begin{itemize}
     \setlength{\itemsep}{0pt}
-    \item[\blue{$\bullet$}] {\scriptsize\blue{Weak convexity is typically required; nonconvex \(h\) is difficult.}}
+    \item[\blue{$\bullet$}] {\scriptsize Weak convexity is typically required; nonconvex \(h\) is difficult.}
   \end{itemize}
 
-  \item[\blue{$\blacktriangleright$}] {\blue{\textbf{ADMM / primal--dual splitting}}}
+  \item[\blue{$\blacktriangleright$}] {{\textbf{ADMM / primal--dual splitting}}}
   {\footnotesize \blue{(Jiang et al. 19; Bolte et al. 18; Zhu et al. 24; Chen et al. 25)}}\\[-0.07cm]
   \begin{itemize}
     \setlength{\itemsep}{0pt}
-    \item[\blue{$\bullet$}] {\scriptsize\blue{Nonlinear \(\bD_i(\bx)\), nonconvex \(h\); multiplier boundedness may be hard.}}
+    \item[\blue{$\bullet$}] {\footnotesize {Nonlinear \(\bD_i(\bx)\), nonconvex \(h\); multiplier boundedness may be hard.}}
   \end{itemize}
 \end{itemize}
 
-\vspace{-0.08cm}
-{\red{\textbf{Possible solutions}}}
+\vspace{0.2cm}
+{\blue{\textbf{Possible solutions}}}
 \vspace{-0.08cm}
 \begin{itemize}
   \setlength{\itemsep}{0.005cm}
-  \item[\blue{$\blacktriangleright$}] {\blue{\textbf{Primal--Dual Hybrid Gradient (PDHG)}}}
-  {\footnotesize \blue{(Chambolle--Pock 11)}}\\[-0.07cm]
-  {\scriptsize\blue{Composite optimization:}}
-  \vspace{-0.10cm}
-  {\scriptsize
+  \item[\blue{$\blacktriangleright$}] {{\textbf{Primal-Dual Hybrid Gradient (PDHG)}}}
+  {\footnotesize {(Chambolle--Pock 11)}}\\[-0.07cm]
+  {
   \[
-  \blue{\min_{\bx}\; f(\bx)+h(\bA\bx)
+  {\min_{\bx}\; f(\bx)+h(\bA\bx)
   \quad\overset{h\ \mathrm{convex}}{\Longleftrightarrow}\quad
   \min_{\bx}\max_{\by}\; f(\bx)+\langle\bA\bx,\by\rangle-h^*(\by).}
   \]
   }
+    \begin{itemize}
+    \setlength{\itemsep}{0pt}
+    \item[] {\footnotesize Variants in convex problem: Stochastic PDHG \blue{(Chambolle et al. 18)}; Nonlinear PDHG \blue{(Clason et al. 19; Gao--Zhang 23; Shumaylov et al. 24)}};
+  \end{itemize}
 
-  {\footnotesize \blue{Representative studies:} image restoration [ZCZ09];
-  PDHG convergence for imaging models [HYY14]; generalized saddle-point PDHG [HMY17];
-  nonlinear PDHGM [GZ23].}
-
-  \vspace{-0.08cm}
-  \item[\blue{$\blacktriangleright$}] {\blue{\textbf{PDHG} (convex $f$, $h$):}}
-  {\scriptsize
+  \item[\blue{$\blacktriangleright$}] {{\textbf{Proximal updates in PDHG}}}
+  {\footnotesize
   \[
-  \blue{\bx^{k+1}=\prox_{\sigma f}\!\bigl(\bx^k-\sigma\bA^\top\by^k\bigr),}
+  {\bx^{k+1}=\prox_{\sigma f}\!\bigl(\bx^k-\sigma\bA^\top\by^k\bigr),}
   \]
   \[
-  \blue{\by^{k+1}=\prox_{\tau h^*}\!\bigl(\by^k+\tau\bA(\bx^{k+1}+\theta(\bx^{k+1}-\bx^k))\bigr),\quad 0<\theta\leq 1.}
+  {\by^{k+1}=\prox_{\tau h^*}\!\bigl(\by^k+\tau\bA(\bx^{k+1}+\theta(\bx^{k+1}-\bx^k))\bigr),\quad 0<\theta\leq 1.}
   \]
   }
-  % 这个里保留迭代格式和 我们凸问题的转换；
 
 \end{itemize}
-\endgroup
 \end{frame}
 
 % \begin{frame}{Primal-Dual Hybrid Gradient (PDHG)}

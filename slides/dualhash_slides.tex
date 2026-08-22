@@ -175,7 +175,7 @@ with Theoretical Guarantee for Deep Hashing}
 % ========== Page 1: What ==========
 \begin{frame}[t]{Deep Hashing: From Images to Binary Codes}
 \small
-\vspace{0.05cm}
+\vspace{0.1cm}
 
 \begin{columns}[T,onlytextwidth]
   \column{0.48\textwidth}
@@ -211,7 +211,7 @@ with Theoretical Guarantee for Deep Hashing}
 
 \begin{frame}[t]{Mathematical Formulation in Deep Hashing}
 \small
-\vspace{0.06cm}
+\vspace{0.1cm}
 
 \[
 \min_{\bx\in\RR^{d_{\bx}}}\
@@ -256,7 +256,7 @@ sgn(100)-sgn(0.1)/100-0.1 = 0
 \begin{frame}[t]{Solution: From Discrete Model to Continuous Optimization}
 \small
 
-\vspace{0.2cm}
+\vspace{0.1cm}
 
 \begin{columns}[T,onlytextwidth]
   \begin{column}{0.60\textwidth}
@@ -293,7 +293,7 @@ sgn(100)-sgn(0.1)/100-0.1 = 0
 \end{frame}
 
 \begin{frame}{}
-\vspace{0.08cm}
+\vspace{0.1cm}
 % 加一个pass 
 \[
 \min_{\bx\in\RR^{d_{\bx}}}\
@@ -323,7 +323,7 @@ Our goal: Optimization the  W-type regularized problem efficiently?
     
 \end{frame}
 \begin{frame}[t]{The Nonsmooth Composite in Deep Hashing}
-\vspace{-0.2cm}
+\vspace{0.1cm}
 
 \begin{center}
   \includegraphics[width=0.97\textwidth,height=0.60\textheight,keepaspectratio]{papers_img/comparision_D2H_final.pdf}
@@ -399,7 +399,7 @@ composite $h(\bD_i(\bx))$ needs to be handled explicitly.
 & DTSH~\blue{[WSK16]} & & $\bigl||\bu|-\One\bigr|_2^2$ & & \\
 \cmidrule(lr){2-5}
 & HashNet~\blue{[CLWY17]} & $ \ell_s(\bu)$ & --- & SGDM & \\
-& OrthoHash~\blue{[HNZCSX21]} & $ \ell_s(\bu)$ & --- & Adam & \\
+& OrthoHash~\blue{[HNZ+21]} & $ \ell_s(\bu)$ & --- & Adam & \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -414,10 +414,7 @@ composite $h(\bD_i(\bx))$ needs to be handled explicitly.
 
 \begin{frame}[t]{Related Work: Nonsmooth Composite Optimization}
 \small
-\vspace{-0.3cm}
-
-
-\vspace{-0.05cm}
+\vspace{0.1cm}
 
 {\footnotesize
 \[
@@ -489,42 +486,6 @@ composite $h(\bD_i(\bx))$ needs to be handled explicitly.
 \end{frame}
 
 
-\begin{frame}{Primal-Dual Reformulation of Deep Hashing}
-% \small
-\vspace{0.2cm}
-\begin{itemize}
-\item[\blue{$\blacktriangleright$}] \textbf{Primal Problem (variable splitting).}
-Introduce $\bb_i=\bD_i(\bx)$ and $\bB=[\bb_1,\ldots,\bb_n]^\top\in\RR^{n\times d}$, and apply the quadratic penalty method:
-{
-\small
-\begin{align}
-\label{eq:primal}
-\min_{\bx\in\RR^{d_{\bx}},\,\bB\in\RR^{n\times d}}\;
-J(\bx,\bB)
-=
-\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)}
-+
-\underbrace{\frac{\gamma}{2n}\sum_{i=1}^n\|\bD_i(\bx)-\bb_i\|^2}_{P(\bx,\bB)}
-+
-\underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
-\end{align}
-% each $\bb_i$ denotes the $i$-th row of $\bB$, and
-% $\gamma>0$ decouples $h(\bB)$ from $\bD(\bx)$.
-}
-where $F(\bx,\bB):=f(\bx)+P(\bx,\bB)$.
-\vspace{0.3cm}
-
-\item[\blue{$\blacktriangleright$}] \textbf{Dual Problem (Fenchel conjugate).}
-Recalling the definition of the conjugate function
-$h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
-
-\begin{align}
-\max_{\bLmbd}\min_{\bx,\,\bB,\,\bY}\;&F(\bx,\bB)+h(\bY)+\langle\bLmbd,\bB-\bY\rangle \notag\\
-% &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
-&= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle - h^*(\bLmbd), \tag{D}\label{eq:dual}
-\end{align}
-\end{itemize}
-\end{frame}
 
 \begin{frame}{Core Question}
 \begin{block}{Question}
@@ -539,7 +500,7 @@ $h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 
 \begin{frame}[t]{From Composite Primal Term to Separable Dual Form}
 % \small
-\vspace{0.3cm}
+\vspace{0.1cm}
 % \begin{columns}[T,totalwidth=0.72\textwidth]
 %   \column{0.49\linewidth}
 %   \centering
@@ -668,56 +629,55 @@ h_{ij}^*(\Lambda_{ij})
 
 \end{frame}
 
-
-\begin{frame}{Primal-Dual Hybrid Gradient (PDHG)}
-\vspace{0.2cm}
-
-\textbf{PDHG} {\footnotesize [Chambolle and Pock, 2011]} for convex composite optimization:
-\[
-\min_{\bx}\; f(\bx)+h(\bA\bx)
-\quad\overset{h\ \mathrm{convex}}{\Longleftrightarrow}\quad
-\min_{\bx}\max_{\by}\; f(\bx)+\langle\bA\bx,\by\rangle-h^*(\by).
-\]
-
-\vspace{0.15cm}
+\begin{frame}{Primal-Dual Reformulation of Deep Hashing}
+% \small
+\vspace{0.1cm}
 \begin{itemize}
+\item[\blue{$\blacktriangleright$}] \textbf{Primal Problem (variable splitting).}
+Introduce $\bb_i=\bD_i(\bx)$ and $\bB=[\bb_1,\ldots,\bb_n]^\top\in\RR^{n\times d}$, and apply the quadratic penalty method:
+{
+\small
+\begin{align}
+\label{eq:primal}
+\min_{\bx\in\RR^{d_{\bx}},\,\bB\in\RR^{n\times d}}\;
+J(\bx,\bB)
+=
+\overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)}
++
+\underbrace{\frac{\gamma}{2n}\sum_{i=1}^n\|\bD_i(\bx)-\bb_i\|^2}_{P(\bx,\bB)}}^{F(\bx,\bB)=\frac{1}{n}\sum_{i=1}^n F_i(\bx,\bb_i)}
++
+\underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
+\end{align}
+% each $\bb_i$ denotes the $i$-th row of $\bB$, and
+% $\gamma>0$ decouples $h(\bB)$ from $\bD(\bx)$.
+}
+where $F_i(\bx,\bb_i):=f_i(\bx)+\frac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2$.
+\vspace{0.3cm}
 
-% \item[\blue{$\blacktriangleright$}] For convex $h$, $h^*$ is convex and $\prox_{h^*}$ is often \blue{closed-form}.
-
-\vspace{0.2cm}
-\item[\blue{$\blacktriangleright$}] \textbf{PDHG} (convex $f$, $h$):
-\[
-\bx^{k+1}=\prox_{\sigma f}\!\bigl(\bx^k-\sigma\bA^\top\by^k\bigr),
-\]
-\[
-\by^{k+1}=\prox_{\tau h^*}\!\bigl(\by^k+\tau\bA(\bx^{k+1}+\theta(\bx^{k+1}-\bx^k))\bigr), 0 < \theta \leq 1.
-\]
-With $\theta=1$ and $\sigma\tau\|\bA\|^2<1$, the ergodic primal-dual gap is $O(1/k)$.
-
-% \item[\blue{$\blacktriangleright$}] \textbf{PPDG} {\footnotesize [Guo, 2026]}
-% (fully nonconvex):
-\[
-\bx^{k+1}=\bx^k-\sigma\bigl(\nabla f(\bx^k)+\bA^\top\by^k\bigr),\quad
-\by^{k+1}=\prox_{h^*}^{\bM}\!\bigl(\by^k+\bM^{-1}\bA(2\bx^{k+1}-\bx^k)\bigr),
-\]
-converges to a critical point with $\bM=\sigma\bA\bA^\top$.
-% \item[\blue{$\blacktriangleright$}] \red{Gap:} No \red{non-asymptotic stochastic oracle complexity}
-% for an $\epsilon$-stationary point in the fully nonconvex setting.
-\end{itemize}
-\end{frame}
-
-
-\section{DualHash: A Stochastic Primal-Dual Algorithm}
-
-\begin{frame}{DualHash: Three-Block Update Framework}
-\vspace{0.15cm}
+\item[\blue{$\blacktriangleright$}] \textbf{Dual Problem (Fenchel conjugate).}
+Recalling the definition of the conjugate function
+$h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 
 \begin{align}
 \max_{\bLmbd}\min_{\bx,\,\bB,\,\bY}\;&F(\bx,\bB)+h(\bY)+\langle\bLmbd,\bB-\bY\rangle \notag\\
 % &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
-&= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle - h^*(\bLmbd), \tag{D}
-% \label{eq:dual}
+&= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle - h^*(\bLmbd), \tag{D}\label{eq:dual}
 \end{align}
+\end{itemize}
+\end{frame}
+
+\section{DualHash: A Stochastic Primal-Dual Algorithm}
+
+\begin{frame}{DualHash: Three-Block Alternating Update Framework}
+\vspace{0.1cm}
+\small
+
+\begin{gather}
+% &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
+\max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle-h^*(\bLmbd), \tag{D}\\[-0.25em]
+\text{where } F(\bx,\bB)=\tfrac{1}{n}\sum_{i=1}^n F_i(\bx,\bb_i),\quad
+F_i(\bx,\bb_i)=f_i(\bx)+\tfrac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2. \notag
+\end{gather}
 
 \nii\textbf{Idea:} Employ an alternating update scheme for $(\bx,\bB,\bLmbd)$.
 
@@ -729,95 +689,69 @@ converges to a critical point with $\bM=\sigma\bA\bA^\top$.
 \]
 where $\widetilde\nabla_{\bx} F$ uses \blue{inertial acceleration} or \blue{variance reduction}.
 
-% condition number = 1;
-\vspace{0.15cm}
-\item[\blue{$\triangleright$}] 
-%min \| \bB - (\bB^k - 1/tau \nabla_B F)\|^2
-% \textbf{$\bB$-update (gradient descent on $\calL$):}
+\vspace{0.05cm}
+\item[\blue{$\triangleright$}] \textbf{$\bB$-update (proximal minimization):}
 \[
-\bB^{k+1} = \bB^k - \tau\bigl(\nabla_{\bB} F(\bx^{k+1},\bB^k) + \bLmbd^k\bigr).
+\begin{aligned}
+\bB^{k+1}
+= \arg\min_{\bB}\Bigl\{
+F(\bx^{k+1},\bB)+\langle\bLmbd^k,\bB\rangle +\frac{1}{2\tau}\|\bB-\bB^k\|^2
+\Bigr\}.
+\end{aligned}
 \]
 
-\vspace{0.15cm}
+\vspace{0.05cm}
 \item[\blue{$\triangleright$}] \textbf{$\bLmbd$-update (proximal ascent with extrapolation):}
 \[
-\bLmbd^{k+1} = \prox_{\tau^{-1} h^*}\!\bigl(\bLmbd^k + \tau^{-1}(2\bB^{k+1}-\bB^k)\bigr).
+\bLmbd^{k+1} = \prox_{\blue{\tau^{-1}} h^*}\!\bigl(\bLmbd^k + \blue{\tau^{-1}}(2\bB^{k+1}-\bB^k)\bigr).
 \]
 \end{itemize}
 
 \vspace{0.1cm}
-\begin{block}{Key ingredients}
-The $\bx$-update admits two variants: \textbf{DualHash-StoM} (inertial) and \textbf{DualHash-StoRM} (recursive momentum).
-\end{block}
+% \begin{block}{Key ingredients}
+% The $\bx$-update admits two variants: \textbf{DualHash-StoM} (inertial) and \textbf{DualHash-StoRM} (recursive momentum).
+% \end{block}
 \end{frame}
 
 
-\begin{frame}{DualHash-StoM}
+\begin{frame}{Two Instances of the $\bx$-Update}
 \vspace{0.1cm}
-% \small
 
-\nii\textbf{Momentum estimator} at the extrapolated point $\bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1})$:
+% \nii Both instances follow the generic $\bx$-update with a stochastic gradient \blue{estimator}:
 \[
-\bG^k = \nabla_{\bx} F(\bz^k,\bB^k;\calJ_k),
-\qquad
-\bx^{k+1} = \by^k - \eta_k \bG^k,
-\quad \by^k=\bx^k+\alpha_k(\bx^k-\bx^{k-1}).
+\bx^{k+1} = \bx^k - \eta_k\, \blue{\widetilde\nabla_{\bx} F(\bx^k,\bB^k)},
 \]
 
-\vspace{-0.1cm}
-\begin{algorithmic}[1]
-\REQUIRE $\bx^1=\bz^1=\by^1\in\RR^{d_{\bx}}$, $\bB^1,\bLmbd^1\in\RR^{n\times d}$; parameters $\{\eta_k\}$, $\tau$, $b_k$, $\{\alpha_k,\beta_k\in(0,1)\}$.
-\FOR{$k=1,2,\ldots$}
-  \STATE Sample mini-batch $\calJ_k\subseteq\{1,\dots,n\}$, $|\calJ_k|=b_k$.
-  \STATE $\bG^k=\nabla_{\bx} F(\bz^k,\bB^k;\calJ_k)$, \;\; $\bx^{k+1}=\by^k-\eta_k\bG^k$.
-  \STATE $\bB^{k+1}=\bB^k-\tau(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k)$.
-  \STATE $\bLmbd^{k+1}=\prox_{\tau^{-1}h^*}(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k))$.
-\ENDFOR
-\ENSURE $(\bx^R,\bB^R,\bLmbd^R)$, $R\sim\mathrm{Unif}\{2,\dots,T+1\}$.
-\end{algorithmic}
-
-% \vspace{0.1cm}
-% \begin{remark}
-% Nesterov acceleration: $\alpha_k=\beta_k\neq 0$; heavy-ball: $\beta_k=0$; vanilla SGD: $\alpha_k=\beta_k=0$.
-% \end{remark}
-\end{frame}
-
-
-\begin{frame}{DualHash-StoRM}
-\vspace{0.1cm}
-% \small
-
-\nii\textbf{Recursive momentum (StoRM) estimator:}\footnote{A. Cutkosky and F. Orabona. Momentum-based variance reduction in non-convex SGD. NeurIPS, 2019: 15236--15245.}
+\begin{itemize}
+\item[\blue{$\triangleright$}] \textbf{Instance 1 (DualHash-StoM): inertial momentum,}
+estimator at the extrapolated point $\bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1})$, step from $\by^k=\bx^k+\alpha_k(\bx^k-\bx^{k-1})$:
 \[
-\bD^k =
+\blue{\bG^k} = \nabla_{\bx} F(\bz^k,\bB^k;\calJ_k),
+\] where $\nabla_{\bx}F(\cdot;\calJ_k):=\frac{1}{|\calJ_k|}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\cdot,\bb_i)$ is the mini-batch gradient.
+
+\item[\blue{$\triangleright$}] \textbf{Instance 2 (DualHash-StoRM): recursive momentum}\footnote{A. Cutkosky and F. Orabona. Momentum-based variance reduction in non-convex SGD. NeurIPS, 2019: 15236--15245.}
+{\small
+\[
+\blue{\bD^k} =
 \begin{cases}
 \nabla_{\bx} F(\bx^1,\bB^1;\calJ_1), & k=1,\\
 \nabla_{\bx} F(\bx^k,\bB^k;\calJ_k) + (1-\rho_{k-1})\bigl(\bD^{k-1}-\nabla_{\bx} F(\bx^{k-1},\bB^{k-1};\calJ_k)\bigr), & k>1.
 \end{cases}
 \]
+}
+\end{itemize}
 
-\vspace{-0.1cm}
-\begin{algorithmic}[1]
-\REQUIRE $\bx^1\in\RR^{d_{\bx}}$, $\bB^1,\bLmbd^1\in\RR^{n\times d}$; parameters $\{\eta_k\}$, $\tau$, $b_k$, $\{\rho_k\in(0,1)\}$.
-\FOR{$k=1,2,\ldots$}
-  \STATE Sample mini-batch $\calJ_k$; compute $\bD^k$.
-  \STATE $\bx^{k+1}=\bx^k-\eta_k\bD^k$.
-  % \STATE $\bB^{k+1}=\bB^k-\tau(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k)$.
-  % \STATE $\bLmbd^{k+1}=\prox_{\tau^{-1}h^*}(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k))$.
-\ENDFOR
-\ENSURE $(\bx^R,\bB^R,\bLmbd^R)$, $R\sim\mathrm{Unif}\{2,\dots,T+1\}$.
-\end{algorithmic}
-
+\vspace{0.1cm}
 \begin{block}{Remark}
-Variance reduction \blue{without} full-gradient or large-batch computation.
+Variance reduction \blue{without} full-gradient or large-batch computation \blue{at every iteration}.
 \end{block}
 \end{frame}
 
 \section{Complexity Results}
 
 \begin{frame}[t]{Main Assumptions}
-% \small
-\vspace{0.2cm}
+\small
+\vspace{0.1cm}
 \begin{equation}
   \quad
 \max_{\bLmbd}\min_{\bx,\bB}\;
@@ -828,7 +762,6 @@ F(\bx,\bB)
 -h^*(\bLmbd), \tag{D}
 \end{equation}
 
-
 \vspace{0.2cm}
 \nii\textbf{AS.1}
 \begin{itemize}
@@ -838,28 +771,35 @@ F(\bx,\bB)
 \end{itemize}
 
 \vspace{0.2cm}
-\textbf{AS.2 (Mean-squared smoothness).}
+\textbf{AS.2 (Mean-squared smoothness).}\footnote{Y. Xu and Y. Xu. \textit{Momentum-based variance-reduced proximal stochastic gradient method for composite nonconvex stochastic optimization}. \textit{Journal of Optimization Theory and Applications}, 196(1):266--297, 2023.}
 \[
 \EE_i\!\left[\|\nabla_{\bx}F_i(\bx,\bb_i)-\nabla_{\bx}F_i(\bx',\bb_i')\|^2\right]\le L_F^2\!\left[\|\bx-\bx'\|^2+\|\bB-\bB'\|^2\right],
 \]
 Here, $\bb_i$ and $\bb_i'$ denote the $i$-th rows of $\bB$ and $\bB'$, respectively.
 
-\vspace{0.2cm}
-\begin{remark}
-$L_F$ remains $\calO(1)$, as the penalty formulation cancels the potential $\calO(\sqrt{n})$ scaling.
-\end{remark}
+\vspace{0.08cm}
+\begin{block}{Lemma 1}
+\footnotesize
+Under AS.1(i), the sequence $\{(\bx^k,\bB^k,\bLmbd^k)\}_{k\in\mathbb{N}}$ generated by
+DualHash is bounded.
+\end{block}
 \end{frame}
 
 \begin{frame}[t]{Convergence Criterion: Stochastic $\varepsilon$-Critical Point}
 % \small
-\vspace{0.2cm}
+\vspace{0.1cm}
 
+We analyze the complexity in terms of the number of
+\blue{stochastic first-order oracle (SFO)} calls required to find an
+\blue{$\varepsilon$- stochastic critical point}
+of the Lagrangian function $\calL$.
+
+\vspace{0.1cm}
 \begin{itemize}
-  \item A primal--dual triple $(\bar{\bx},\bar{\bB},\bar{\bLmbd})$ is a
-  critical point of Problem $(P)$ if
-  $\bm{0}\in\partial\calL(\bar{\bx},\bar{\bB},\bar{\bLmbd})$.
-  \item A random output $(\bx^R,\bB^R,\bLmbd^R)$ is called a stochastic
-  $\varepsilon$-critical point of Problem $(P)$ if
+  \item \textbf{Critical point.} A primal--dual triple $(\bar{\bx},\bar{\bB},\bar{\bLmbd})$
+  with $\bm{0}\in\partial\calL(\bar{\bx},\bar{\bB},\bar{\bLmbd})$.
+  \item \textbf{Specifically, we seek a random output}
+  $(\bx^R,\bB^R,\bLmbd^R)$ \textbf{satisfying}
 % \vspace{-0.10cm}
 
 \begin{equation}\label{equ:esp}
@@ -891,14 +831,11 @@ $L_F$ remains $\calO(1)$, as the penalty formulation cancels the potential $\cal
 % \end{aligned}
 % \]
 
-\item Our goal is to establish the stochastic first oracle (SFO) complexity of finding 
-stochastic $\varepsilon$-critical points.
-
 \end{itemize}
 
 
 \vspace{0.04cm}
-\begin{block}{Lemma 5.2 [LWC26]\textsuperscript{1}}
+\begin{block}{Lemma 2}
 Under Assumption (i), if
 $(\bx^*,\bB^*,\bLmbd^*)$ is an optimal solution of Problem $(P)$
 and its dual $(D)$, then
@@ -963,15 +900,16 @@ $\bm{0}\in \partial\calL(\bx^*,\bB^*,\bLmbd^*).$
 % \end{columns}
 % \end{frame}
 
-
 \begin{frame}{Oracle Complexity of DualHash-StoM}
-\vspace{0.2cm}
+\vspace{0.1cm}
 \small
 
 \nii\textbf{Lyapunov function:}
+
 \[
 \Psi_m(\calQ^k)=\calL(\bx^k,\bB^k,\bLmbd^k)-C_1\Delta_{\bB}^{k+1}+C_2\Delta_{\bB}^k-C_3\Delta_{\bx}^{k+1}+C_4\Delta_{\bx}^k.
 \]
+
 \[
 \calQ^k:=\bigl\{\bx^k,\bB^k,\bLmbd^k,\bB^{k+1},\bB^{k-1},\bx^{k+1},\bx^{k-1}\bigr\},
 \qquad \{\calQ^k\}_{k\in\mathbb{N}}.
@@ -979,21 +917,20 @@ $\bm{0}\in \partial\calL(\bx^*,\bB^*,\bLmbd^*).$
 
 \nii\textbf{Parameter setting:}
 \begin{equation}
-  \eta_k=\frac{\eta}{L_F},\quad \alpha_k=\alpha,\quad \beta_k=\beta,\quad \tau\le\frac{\sqrt{\tilde\delta}}{L_F},\quad b_k=b=c_b T. \tag{S.1}
+  \eta_k=\frac{\eta}{L_F},\quad \alpha_k=\alpha,\quad \beta_k=\beta,\quad \tau\le\frac{\sqrt{\tilde\delta}}{L_F},\quad b_k=b=c_b T, \quad \forall k \geq 1. \tag{S.1}
 \end{equation}
 \vspace{0.2cm}
 \begin{block}{Theorem 1 (DualHash-StoM)}
-Under AS.1 and condition (S.1), there exists $R\sim\mathrm{Unif}\{2,\dots,T+1\}$ such that $(\bx^R,\bB^R,\bLmbd^R)$ satisfies \eqref{equ:esp} with
+Under AS.1 and condition (S.1), there exists $R\sim\mathrm{Unif}\{2,\dots,T+1\}$ such that $(\bx^R,\bB^R,\bLmbd^R)$ is a stochastic $\varepsilon$-critical point, provided that
 \[
 T=\left\lceil\frac{L_\Delta\Delta_1+C_\sigma\sigma^2/c_b}{\varepsilon^2}\right\rceil.
-\]
-The total number of SFO calls is \blue{$\calO(\varepsilon^{-4})$}.
+\] Consequently, the total number of SFO calls is \blue{$\calO(\varepsilon^{-4})$}.
 \end{block}
 \end{frame}
 
 
 \begin{frame}{Oracle Complexity of DualHash-StoRM}
-\vspace{0.2cm}
+\vspace{0.1cm}
 \small
 
 \nii\textbf{Lyapunov function:}
@@ -1003,32 +940,31 @@ The total number of SFO calls is \blue{$\calO(\varepsilon^{-4})$}.
 
 \nii\textbf{Parameter setting:}
 \begin{equation}
-  \eta_k=\frac{\eta}{\tilde L_F T^{1/3}},\quad \rho_k=\frac{8\rho\eta^2}{T^{2/3}},\quad \tau\le\frac{\sqrt{\tilde\delta}}{L_F},\quad b_1=c_b T^{1/3}, \quad b_k = \calO(1).  \tag{S.2}
+  \eta_k=\frac{\eta}{\tilde L_F T^{1/3}},\quad \rho_k=\frac{8\rho\eta^2}{T^{2/3}},\quad \tau\le\frac{\sqrt{\tilde\delta}}{L_F},\quad b_1=c_b T^{1/3}, \quad b_k = \calO(1), \quad \forall k \geq 2.  \tag{S.2}
 \end{equation}
 
 \vspace{0.2cm}
 \begin{block}{Theorem 2 (DualHash-StoRM)}
-Under AS.1(i), (iii), AS.2 and condition (S.2), there exists $R\sim\mathrm{Unif}\{2,\dots,T+1\}$ such that $(\bx^R,\bB^R,\bLmbd^R)$ satisfies \eqref{equ:esp} with
+Under AS.1(i), (iii), AS.2 and condition (S.2), there exists $R\sim\mathrm{Unif}\{2,\dots,T+1\}$ such that $(\bx^R,\bB^R,\bLmbd^R)$ is a stochastic $\varepsilon$-critical point, provided that
 \[
 T=\left\lceil\frac{\bigl(\tilde L_\Delta\tilde\Delta_1+\tilde C_\sigma(\frac{\sigma^2}{4\rho\eta^2 c_b}+\frac{32\rho\eta^2\sigma^2}{b})\bigr)^{3/2}}{\varepsilon^3}\right\rceil.
-\]
-The total number of SFO calls is \blue{$\calO(\varepsilon^{-3})$}.
+\] Consequently, the total number of SFO calls is \blue{$\calO(\varepsilon^{-3})$}.
 \end{block}
 \end{frame}
 
 
 \begin{frame}{Complexity Results}
-\vspace{0.3cm}
+\vspace{0.1cm}
 
 \begin{center}
 \begin{tabular}{lccl}
 \toprule
 \textbf{Algorithm} & \textbf{Assumptions} & \textbf{Complexity} & \textbf{Remark} \\
 \midrule
-SPGD (one-block)\footnotemark[1] & AS.1 & $\calO(\varepsilon^{-4})$ & standard baseline \\
-VR-SPGD (one-block)\footnotemark[2] & AS.1, AS.2 & $\Omega (\varepsilon^{-3})$ & lower bound \\
+Mini-batch SGD \footnotemark[1] & AS.1 & $\calO(\varepsilon^{-4})$ & standard baseline \\
+SGD-VR \footnotemark[2] & AS.1, AS.2 & $\Omega (\varepsilon^{-3})$ & lower bound \\
 \midrule
-DualHash-StoM & AS.1 & \blue{$\calO(\varepsilon^{-4})$} & multi-block primal-dual \\
+DualHash-StoM & AS.1 & {$\calO(\varepsilon^{-4})$} & primal-dual \\
 DualHash-StoRM & AS.1, AS.2 & \blue{$\calO(\varepsilon^{-3})$} & matches lower bound \\
 \bottomrule
 \end{tabular}
@@ -1039,7 +975,7 @@ DualHash-StoRM & AS.1, AS.2 & \blue{$\calO(\varepsilon^{-3})$} & matches lower b
 
 \vspace{0.4cm}
 \begin{center}
-\blue{\textbf{Key point.}} Despite tackling a multi-block primal-dual problem, DualHash \blue{preserves the nearly optimal $\varepsilon$-dependence} without degradation.
+\blue{\textbf{Key point.}} Notably, despite tackling a multi-block problem, DualHash preserves this efficiency \blue{without degrading the dependence on $\varepsilon$}.
 \end{center}
 \end{frame}
 
@@ -1047,25 +983,30 @@ DualHash-StoRM & AS.1, AS.2 & \blue{$\calO(\varepsilon^{-3})$} & matches lower b
 \section{Numerical Experiments}
 
 \begin{frame}{Experimental Setup}
-% \small
+\small
+\vspace{0.1cm}
 
-We evaluate on \textbf{CIFAR-10}, \textbf{NUS-WIDE}, and \textbf{ImageNet-100}, covering single-label, multi-label, and large-scale image retrieval settings.
+We evaluate on \textbf{CIFAR-10}, \textbf{NUS-WIDE}, and \textbf{ImageNet-100} datasets, covering single-label, multi-label, and large-scale image retrieval settings.
 
 \begin{itemize}
-\item[\blue{$\blacktriangleright$}] \textbf{Problem.} For \(s^h_{ij}=\tfrac12\langle\bu_i,\bu_j\rangle\) and \(\bu_i=\tanh(\bC(\bx;\ba_i))\), the pairwise objective is
+\item[\blue{$\blacktriangleright$}] {\footnotesize\textbf{The W-regularized deep hashing problem.}}
 \begin{align*}
 \min_{\bx,\bB}\quad
-&-\frac{1}{|\mathcal{S}|}\sum_{s^o_{ij}\in\mathcal{S}}
-\log\!\left(1+\exp\!\left(-\alpha s^o_{ij}s^h_{ij}\right)\right)\\[-1mm]
-&+\frac{\gamma}{2n}\sum_{i=1}^n\|\bb_i-\bu_i\|_2^2
- +\sum_{i=1}^n\lambda\|\,|\bb_i|-\bm{1}\,\|_1.
+-\frac{1}{|\mathcal{S}|}\sum_{s^o_{ij}\in\mathcal{S}}
+\log\!\left(1+e^{-\alpha s^o_{ij}s^h_{ij}}\right)+\frac{\mu}{2}\|\bx\|_2^2+\frac{\gamma}{2n}\sum_{i=1}^n\|\bb_i-\bu_i\|_2^2
++\sum_{i=1}^n\lambda\|\,|\bb_i|-\bm{1}\,\|_1,
 \end{align*}
+
+where \(s^h_{ij}=\tfrac12\langle\bu_i,\bu_j\rangle\) denotes the
+pairwise similarity, \(\bu_i=\tanh(\bC(\bx;\ba_i))\) is the continuous network output,
+and \(\bb_i\) is an auxiliary code approximating the binary code; \(\mu>0\) ensures coercivity.
+
 \item[\blue{$\blacktriangleright$}] \textbf{Baselines.} We compare with three groups of methods:
-(i) \textbf{SDH} as the discrete hashing baseline;
-(ii) \textbf{W-type regularization methods}: DHN~\blue{[ZLWC16]}, DSH~\blue{[LWSC16]}, DTSH~\blue{[WSK16]}, and MDSHC~\blue{[WPLLYL23]};
-(iii) \textbf{quantization-error-oriented methods}: HashNet~\blue{[CLWY17]}, DSDH~\blue{[LSHT17]}, and OrthoHash~\blue{[HNZCSX21]}.
-\item[\blue{$\blacktriangleright$}] \textbf{Backbones.} AlexNet and ResNet-50, with ELU activation.
-\item \textbf{Metrics.} mAP, P@topK, P@r=2, and quantization error.
+(i) \textbf{SDH}~\blue{[SSLS15]} as the discrete hashing baseline;
+(ii) \textbf{W-type regularization methods}: DHN~\blue{[ZLWC16]}, DSH~\blue{[LWSC16]}, DTSH~\blue{[WSK16]}, and MDSHC~\blue{[WPL+23]};
+(iii) \textbf{quantization-error-oriented methods}: HashNet~\blue{[CLWY17]}, DSDH~\blue{[LSHT17]}, and OrthoHash~\blue{[HNZ+21]}.
+\item[\blue{$\blacktriangleright$}] \textbf{Backbones.} AlexNet and ResNet-50, with ELU (smooth) activation\footnote{The gradient of ELU is 1-Lipschitz continuous.}.
+\item \textbf{Main Metrics.} mAP and quantization error.
 \end{itemize}
 \end{frame}
 
@@ -1084,8 +1025,7 @@ We evaluate on \textbf{CIFAR-10}, \textbf{NUS-WIDE}, and \textbf{ImageNet-100}, 
 
 
 \begin{frame}{mAP Results: AlexNet}
-\vspace{0.15cm}
-% map \right 1, better
+\vspace{0.1cm}
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
 \resizebox{0.96\textwidth}{!}{%
@@ -1096,72 +1036,47 @@ We evaluate on \textbf{CIFAR-10}, \textbf{NUS-WIDE}, and \textbf{ImageNet-100}, 
 & 32 bits & 48 bits & 64 bits & 32 bits & 48 bits & 64 bits \\
 \midrule
 DSH~\blue{[LWSC16]} & 0.7530 & 0.7817 & 0.8010 & 0.6629 & 0.6617 & 0.6634 \\
-OrthoHash~\blue{[HNZCSX21]} & 0.8059 & 0.8387 & 0.8355 & 0.6912 & 0.7083 & 0.7176 \\
-MDSHC~\blue{[WPLLYL23]} & 0.8238 & 0.8350 & 0.8262 & 0.6452 & 0.6081 & 0.6493 \\
+OrthoHash~\blue{[HNZ+21]} & 0.8059 & 0.8387 & 0.8355 & 0.6912 & 0.7083 & 0.7176 \\
+MDSHC~\blue{[WPL+23]} & 0.8238 & 0.8350 & 0.8262 & 0.6452 & 0.6081 & 0.6493 \\
 \cmidrule(lr){1-7}
 \textbf{DualHash-StoM} & \textbf{0.8481} & \textbf{0.8534} & \textbf{0.8539} & \textbf{0.7002} & \textbf{0.7248} & \textbf{0.7448} \\
 \bottomrule
 \end{tabular}}
+\par\vspace{0.14cm}
+{\scriptsize\itshape Note: Higher mAP indicates better retrieval performance.\par}
 \end{center}
-\vspace{0.25cm}
+\vspace{0.02cm}
 \begin{itemize}
 \item DualHash-StoM achieves the \blue{best mAP} across all selected code lengths on both datasets.
+\item At 64 bits, it improves mAP by \blue{1.84} percentage points over OrthoHash on CIFAR-10 and by \blue{9.55} points over MDSHC on NUS-WIDE.
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}{mAP Results: ResNet-50}
-\vspace{0.15cm}
+\vspace{0.1cm}
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
 \resizebox{0.96\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
-\multirow{2}{*}{\textbf{Method}} & \multicolumn{3}{c}{\textbf{CIFAR-10}} & \multicolumn{3}{c}{\textbf{NUS-WIDE}} \\
-\cmidrule(lr){2-4} \cmidrule(lr){5-7}
-& 32 bits & 48 bits & 64 bits & 32 bits & 48 bits & 64 bits \\
+\multirow{2}{*}{\textbf{Method}} & \multicolumn{2}{c}{\textbf{CIFAR-10}} & \multicolumn{2}{c}{\textbf{NUS-WIDE}} & \multicolumn{2}{c}{\textbf{ImageNet-100}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+& 48 bits & 64 bits & 48 bits & 64 bits & 48 bits & 64 bits \\
 \midrule
-DSH~\blue{[LWSC16]} & 0.8116 & 0.8217 & 0.8239 & 0.6952 & 0.6981 & 0.7165 \\
-OrthoHash~\blue{[HNZCSX21]} & 0.9182 & 0.9202 & 0.9224 & 0.7600 & 0.7569 & 0.7863 \\
-MDSHC~\blue{[WPLLYL23]} & 0.9007 & 0.9063 & 0.9227 & 0.7002 & 0.7248 & 0.7758 \\
+DSH~\blue{[LWSC16]} & 0.8217 & 0.8239 & 0.6981 & 0.7165 & 0.7335 & 0.7585 \\
+OrthoHash~\blue{[HNZ+21]} & 0.9202 & 0.9224 & 0.7569 & 0.7863 & 0.8510 & 0.8636 \\
+MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
 \cmidrule(lr){1-7}
-\textbf{DualHash-StoM} & \textbf{0.9202} & \textbf{0.9392} & \textbf{0.9416} & \textbf{0.7783} & \textbf{0.7721} & \textbf{0.8016} \\
+\textbf{DualHash-StoM} & \textbf{0.9392} & \textbf{0.9416} & \textbf{0.7721} & \textbf{0.8016} & \textbf{0.8662} & \textbf{0.8714} \\
 \bottomrule
 \end{tabular}}
 \end{center}
 \vspace{0.25cm}
 \begin{itemize}
-\item ResNet-50 strengthens the retrieval performance gap, with DualHash-StoM remaining better.
-% (number)
+\item DualHash-StoM exceeds the second-best method by \blue{0.57--1.90} percentage points across the six settings, averaging \blue{1.40} points.
 \end{itemize}
 \end{frame}
-
-
-% \begin{frame}{mAP Results: ImageNet-100}
-% \vspace{0.15cm}
-% \begin{center}
-% \renewcommand{\arraystretch}{1.35}
-% \resizebox{0.72\textwidth}{!}{%
-% \begin{tabular}{lcc}
-% \toprule
-% \multirow{2}{*}{\textbf{Method}} & \multicolumn{2}{c}{\textbf{ImageNet-100 (ResNet-50)}} \\
-% \cmidrule(lr){2-3}
-% & 48 bits & 64 bits \\
-% \midrule
-% DSH~\blue{[LWSC16]} & 0.7335 & 0.7585 \\
-% OrthoHash~\blue{[HNZCSX21]} & 0.8510 & 0.8636 \\
-% MDSHC~\blue{[WPLLYL23]} & 0.8561 & 0.8657 \\
-% \cmidrule(lr){1-3}
-% \textbf{DualHash-StoM} & \textbf{0.8662} & \textbf{0.8714} \\
-% \bottomrule
-% \end{tabular}}
-% \end{center}
-% \vspace{0.35cm}
-% \begin{itemize}
-% \item DualHash-StoM achieves the \blue{best mAP} at both 48 and 64 bits on ImageNet-100.
-% \item The gain over the strongest baseline MDSHC is \blue{1.01} and \blue{0.57} percentage points, respectively.
-% \end{itemize}
-% \end{frame}
 
 
 % \begin{frame}{Retrieval Performance: CIFAR-10}
@@ -1180,41 +1095,39 @@ MDSHC~\blue{[WPLLYL23]} & 0.9007 & 0.9063 & 0.9227 & 0.7002 & 0.7248 & 0.7758 \\
 % \end{frame}
 
 
-\begin{frame}{Retrieval Performance: NUS-WIDE}
-\vspace{0.05cm}
+% \begin{frame}{Retrieval Performance: NUS-WIDE}
+% \vspace{0.05cm}
+% \begin{center}
+% % Shared legend extracted from Figure 6.2.
+% \includegraphics[width=0.76\textwidth,trim=200 264 200 0,clip]{results_images/ex2_4figures.pdf}
+% \\[-0.02cm]
+% \includegraphics[width=0.98\textwidth,trim=523 4 0 53,clip]{results_images/ex2_4figures.pdf}
+% \end{center}
+% \vspace{-0.06cm}
+% \begin{itemize}
+% \item \blue{P@topK:} DualHash-StoM preserves the best precision across the top-ranked results.
+% \item \blue{P@r=2:} DualHash-StoM remains competitive across 32--64-bit codes on the multi-label dataset.
+% \end{itemize}
+% \end{frame}
+
+
+\begin{frame}{Quantization Error}
+\vspace{-0.40cm}
 \begin{center}
-% Shared legend extracted from Figure 6.2.
-\includegraphics[width=0.76\textwidth,trim=200 264 200 0,clip]{results_images/ex2_4figures.pdf}
-\\[-0.02cm]
-\includegraphics[width=0.98\textwidth,trim=523 4 0 53,clip]{results_images/ex2_4figures.pdf}
+  \includegraphics[width=0.95\textwidth,height=0.67\textheight,keepaspectratio,
+    trim=0 160 1000 90,clip]{results_images/quantization_error_further_analysis.pdf}
+  % \vspace{0.03cm}
+  \par\vspace{-0.02cm}
+  {\scriptsize \textit{Note: Lower is better for quantization error.}}
 \end{center}
-\vspace{-0.06cm}
+
+\vspace{-0.05cm}
+{\small
 \begin{itemize}
-\item \blue{P@topK:} DualHash-StoM preserves the best precision across the top-ranked results.
-\item \blue{P@r=2:} DualHash-StoM remains competitive across 32--64-bit codes on the multi-label dataset.
+\item DualHash achieves \blue{consistently low quantization errors} across different bit lengths compared with the evaluated methods.
+\item This stems from the \blue{dual-space reformulation}: convexity of $h^*$ yields optimization advantages over the nonconvex primal.
 \end{itemize}
-\end{frame}
-
-
-\begin{frame}{Quantization Error Analysis}
-\vspace{0.15cm}
-\begin{columns}[T,onlytextwidth]
-  \column{0.54\textwidth}
-  \centering
-  \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio,
-    trim=0 0 1000 0,clip]{results_images/quantization_error_further_analysis.pdf}
-  \\
-  \vspace{0.05cm}
-  {\scriptsize Figure 6.3(a): Quantization error across bit lengths.}
-% 大图
-  \column{0.42\textwidth}
-  \vspace{0.25cm}
-  \begin{itemize}
-  \item DualHash attains the \blue{smallest quantization error} across different bit lengths among all evaluated methods.
-  \vspace{0.28cm}
-  \item This stems from the \blue{dual-space reformulation}: convexity of $h^*$ yields optimization advantages over the nonconvex primal.
-  \end{itemize}
-\end{columns}
+}
 \end{frame}
 
 
@@ -1233,34 +1146,17 @@ MDSHC~\blue{[WPLLYL23]} & 0.9007 & 0.9063 & 0.9227 & 0.7002 & 0.7248 & 0.7758 \\
 % \end{itemize}
 % \end{frame}
 
-
 \section{Summary}
-% \begin{frame}{Contributions}
-% \vspace{0.3cm}
-
-% \begin{itemize}
-% \item[\blue{$\triangleright$}] \textbf{Novel primal-dual hashing algorithms.}
-% We reformulate deep hashing with W-type regularization as a finite-sum multi-block optimization, decoupling the composite term $h(\bD(\bx))$ via Fenchel duality, yielding closed-form dual updates. Two instances: \textbf{DualHash-StoM} (momentum) and \textbf{DualHash-StoRM} (variance reduction).
-
-% \vspace{0.25cm}
-% \item[\blue{$\triangleright$}] \textbf{Comparable complexity guarantee.}
-% $\calO(\varepsilon^{-4})$ for DualHash-StoM and $\calO(\varepsilon^{-3})$ for DualHash-StoRM under mean-squared smoothness, matching the best-known lower bound.
-
-% \vspace{0.25cm}
-% \item[\blue{$\triangleright$}] \textbf{Superior empirical performance.}
-% Consistently lower quantization errors and higher retrieval accuracy on three datasets.
-% \end{itemize}
-% \end{frame}
 
 \begin{frame}{Summary}
-\vspace{0.2cm}
+\vspace{0.1cm}
 
 \begin{itemize}
 \item[\blue{$\bullet$}] \textbf{DualHash:} a stochastic primal-dual algorithm for deep hashing via Fenchel duality.
 \begin{itemize}
 \item Handles \blue{nonsmooth W-type regularization} with nonlinear composition.
 \item Closed-form dual proximal update bypasses the intractable $\prox_{h\circ\bD}$.
-\item Oracle complexity:
+\item Oracle complexity Results:
 \[
 \text{DualHash-StoM:}\ \calO(\varepsilon^{-4}),\qquad
 \text{DualHash-StoRM:}\ \calO(\varepsilon^{-3}).
@@ -1268,13 +1164,13 @@ MDSHC~\blue{[WPLLYL23]} & 0.9007 & 0.9063 & 0.9227 & 0.7002 & 0.7248 & 0.7758 \\
 \end{itemize}
 \end{itemize}
 
-\vspace{0.2cm}
-\begin{block}{Future work}
-\begin{itemize}
-% \item Extend the decoupling-dual-structure principle to quantization-aware training of low-bit neural networks.
-\item Characterize the gap between stationary points of (P) and the original composite problem as penalty parameter $\gamma\to\infty$.
-\end{itemize}
-\end{block}
+% \vspace{0.2cm}
+% \begin{block}{Future work}
+% \begin{itemize}
+% % \item Extend the decoupling-dual-structure principle to quantization-aware training of low-bit neural networks.
+% \item Characterize the gap between stationary points of (P) and the original composite problem as penalty parameter $\gamma\to\infty$.
+% \end{itemize}
+% \end{block}
 
 \vfill
 {
@@ -1327,29 +1223,29 @@ MDSHC~\blue{[WPLLYL23]} & 0.9007 & 0.9063 & 0.9227 & 0.7002 & 0.7248 & 0.7758 \\
 \end{frame}
 
 
-\begin{frame}[t]{References}
-\begin{itemize}
-\item[\textbf{[1]}] Chambolle A., Pock T. A first-order primal-dual algorithm for convex problems with applications to imaging. Journal of Mathematical Imaging and Vision, 2011, 40(1): 120--145.
-\item[\textbf{[2]}] Bai Y. et al. ProxQuant: Quantized neural networks via proximal operators. ICLR, 2019.
-\item[\textbf{[3]}] Davis D., Drusvyatskiy D. Stochastic model-based minimization of weakly convex functions. SIAM J. Optim., 2019, 29(1): 207--239.
-\item[\textbf{[4]}] Bolte J. et al. Nonconvex Lagrangian-based optimization: Monitoring schemes and global convergence. Math. Oper. Res., 2018, 43(4): 1210--1232.
-\item[\textbf{[5]}] Zhu D. et al. A first-order primal-dual method for nonconvex constrained optimization based on the augmented Lagrangian. Math. Oper. Res., 2024, 49(1): 125--150.
-\item[\textbf{[6]}] Chen X. et al. Convergence of three-block ADMM for weakly convex optimization problems. SIAM J. Imaging Sci., 2025, 18(1): 449--493.
-\item[\textbf{[7]}] Yao Y. et al. A note on complexity for two classes of structured non-smooth non-convex compositional optimization. arXiv:2411.14342, 2024.
-\end{itemize}
-\end{frame}
+% \begin{frame}[t]{References}
+% \begin{itemize}
+% \item[\textbf{[1]}] Chambolle A., Pock T. A first-order primal-dual algorithm for convex problems with applications to imaging. Journal of Mathematical Imaging and Vision, 2011, 40(1): 120--145.
+% \item[\textbf{[2]}] Bai Y. et al. ProxQuant: Quantized neural networks via proximal operators. ICLR, 2019.
+% \item[\textbf{[3]}] Davis D., Drusvyatskiy D. Stochastic model-based minimization of weakly convex functions. SIAM J. Optim., 2019, 29(1): 207--239.
+% \item[\textbf{[4]}] Bolte J. et al. Nonconvex Lagrangian-based optimization: Monitoring schemes and global convergence. Math. Oper. Res., 2018, 43(4): 1210--1232.
+% \item[\textbf{[5]}] Zhu D. et al. A first-order primal-dual method for nonconvex constrained optimization based on the augmented Lagrangian. Math. Oper. Res., 2024, 49(1): 125--150.
+% \item[\textbf{[6]}] Chen X. et al. Convergence of three-block ADMM for weakly convex optimization problems. SIAM J. Imaging Sci., 2025, 18(1): 449--493.
+% \item[\textbf{[7]}] Yao Y. et al. A note on complexity for two classes of structured non-smooth non-convex compositional optimization. arXiv:2411.14342, 2024.
+% \end{itemize}
+% \end{frame}
 
-\begin{frame}[t]{References}
-\begin{itemize}
-\item[\textbf{[8]}] Zhang H. et al. Complexity and convergence analysis of a single-loop SDCAM for Lipschitz composite optimization and beyond. arXiv:2512.24059, 2025.
-\item[\textbf{[9]}] Shen F. et al. Supervised discrete hashing. CVPR, 2015: 37--45.
-\item[\textbf{[10]}] Zhu H. et al. Deep hashing network for efficient similarity retrieval. AAAI, 2016: 2415--2421.
-\item[\textbf{[11]}] Wang L. et al. Deep hashing with minimal-distance-separated hash centers. CVPR, 2023: 23455--23464.
-\item[\textbf{[12]}] Guo J. Preconditioned primal--dual gradient methods for nonconvex composite and finite-sum optimization. AIMS Mathematics, 2026, 11(1): 2188--2226.
-\item[\textbf{[13]}] Hertrich J., Steidl G. Inertial stochastic PALM and applications in machine learning. Sampling Theory, Signal Processing, and Data Analysis, 2022, 20(1): Article 4.
-\item[\textbf{[14]}] Jiang B., Lin T., Ma S., Zhang S. Structured nonconvex and nonsmooth optimization: Algorithms and iteration complexity analysis. Computational Optimization and Applications, 2019, 72(1): 115--157.
-\end{itemize}
-\end{frame}
+% \begin{frame}[t]{References}
+% \begin{itemize}
+% \item[\textbf{[8]}] Zhang H. et al. Complexity and convergence analysis of a single-loop SDCAM for Lipschitz composite optimization and beyond. arXiv:2512.24059, 2025.
+% \item[\textbf{[9]}] Shen F. et al. Supervised discrete hashing. CVPR, 2015: 37--45.
+% \item[\textbf{[10]}] Zhu H. et al. Deep hashing network for efficient similarity retrieval. AAAI, 2016: 2415--2421.
+% \item[\textbf{[11]}] Wang L. et al. Deep hashing with minimal-distance-separated hash centers. CVPR, 2023: 23455--23464.
+% \item[\textbf{[12]}] Guo J. Preconditioned primal--dual gradient methods for nonconvex composite and finite-sum optimization. AIMS Mathematics, 2026, 11(1): 2188--2226.
+% \item[\textbf{[13]}] Hertrich J., Steidl G. Inertial stochastic PALM and applications in machine learning. Sampling Theory, Signal Processing, and Data Analysis, 2022, 20(1): Article 4.
+% \item[\textbf{[14]}] Jiang B., Lin T., Ma S., Zhang S. Structured nonconvex and nonsmooth optimization: Algorithms and iteration complexity analysis. Computational Optimization and Applications, 2019, 72(1): 115--157.
+% \end{itemize}
+% \end{frame}
 
 
 \end{document}

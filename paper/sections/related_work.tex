@@ -10,13 +10,14 @@
 \textbf{Type} & \textbf{Method} & \textbf{Model} 
   & \textbf{Quantization Loss} & \textbf{Optimization} & \textbf{Complexity} \\
 \midrule
-    \multirow{3}{*}{\centering Discrete} 
-    & DDSH \cite{liDeepSupervisedHashing} & $\min L_s(\bb) + Q(\bu, \bb)$ & \centering $\|\cdot\|^2$ & BQP & \multirow{12}{*}{\centering ---} \\
+    \multirow{4}{*}{\centering Discrete} 
+    & DDSH \cite{liDeepSupervisedHashing} & $\min L_s(\bb) + Q(\bu, \bb)$ & \centering $\|\cdot\|^2$ & BQP & \multirow{14}{*}{\centering ---} \\
     \cmidrule(lr){2-5}
-    & DSDH \cite{li2017deep}& \multirow{2}{*}{\centering $\min L_s(\bu) + Q(\bu, \bb)$} & \multirow{2}{*}{\centering $\|\cdot\|^2$} & $sgn$ update &  \\ 
+    & DSDH \cite{li2017deep}& \multirow{3}{*}{\centering $\min L_s(\bu) + Q(\bu, \bb)$} & \multirow{3}{*}{\centering $\|\cdot\|^2$} & $sgn$ update &  \\ 
     & DPSH \cite{liFeatureLearningBased2016} & &  & DCC &  \\ 
+    & DSARH \cite{zhang2026dsarh} & & & DCC + PGD-based AT &  \\
     \cmidrule(lr){1-5}
-    \multirow{9}{*}{\centering Continuous}
+    \multirow{10}{*}{\centering Continuous}
     & DCH \cite{caoDeepCauchyHashing2018} &\multirow{4}{*}{\centering $\min L_s(\bu) + h(\bu)$} & $\log \left( 1 + \frac{\text{dist}_{\text{h}}(|\bu|, \mathbf{1})}{\gamma} \right)$ & \multirow{4}{*}{\centering SGDM} &  \\
     & DNNH \cite{laiSimultaneousFeatureLearning2015} & & $\mathcal{I}_{[-1,1]^d}(\bu)$ & &  \\
     & DSH \cite{liuDeepSupervisedHashing} & & $\| | \bu| - \mathbf{1}\|_1$ &  &  \\ 
@@ -38,10 +39,10 @@
     % \vspace{-5pt}
     \parbox{\linewidth}{\scriptsize
     \textbf{Notes}: 
-    % The \textbf{Type} column indicates whether the method uses discrete or continuous optimization for quantization.
+    The \textbf{Type} column indicates whether binary codes are explicitly updated; DSARH is grouped with Discrete because its unified-hashing branch uses DCC updates.
     The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{Quantization Loss} column specifies the loss (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)) for quantization error, with `-' indicating no explicit loss. 
     % The \textbf{Optimization} column describes the training strategy, with discrete methods focusing on binary code updates. 
-    DCC stands for Discrete Cyclic Coordinate, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `-' indicating no such analysis.
+    DCC stands for Discrete Cyclic Coordinate, PGD-based AT for projected-gradient adversarial training, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `-' indicating no such analysis.
     }
      \vspace{-2ex}
 \end{table}

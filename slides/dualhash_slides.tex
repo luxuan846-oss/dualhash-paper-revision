@@ -165,9 +165,9 @@ with Theoretical Guarantee for Deep Hashing}
 \frame{\titlepage}
 
 
-\begin{frame}{Outline}
-\tableofcontents
-\end{frame}
+% \begin{frame}{Outline}
+% \tableofcontents
+% \end{frame}
 
 
 \section{Background and Modeling}
@@ -177,33 +177,33 @@ with Theoretical Guarantee for Deep Hashing}
 \small
 \vspace{0.1cm}
 
-\begin{columns}[T,onlytextwidth]
-  \column{0.48\textwidth}
-  {\color{beamerblue}\textbf{Learning to Hash}}
-  \vspace{0.06cm}
+% \begin{columns}[T,onlytextwidth]
+%   \column{0.48\textwidth}
+%   {\color{beamerblue}\textbf{Learning to Hash}}
+%   \vspace{0.06cm}
 
-\begin{center}
-\includegraphics[width=0.9\textwidth,height=0.4\textheight,keepaspectratio]{figures/rc1/d2h.png}
-\end{center}
-\begin{itemize}
-  % \setlength{\itemsep}{0.16cm}
-  \item \textbf{Challenge: Scalable Retrieval} \\
-        Large-scale image retrieval demands fast similarity search
-        over millions of items.
-  \item \textbf{Hashing: Compact Binary Codes} \\
-        Encoding images as $\pm 1$ binary codes enables efficient
-        Hamming-distance comparison with up to $512\times$ storage compression.
-  \item \textbf{Deep Hashing: Learned Semantics} \\
-        Neural networks learn hash projections that preserve
-        semantic neighborhood structures.
-\end{itemize}
-  \column{0.49\textwidth}
-  \centering
-  \vspace{0.5cm}
-  \includegraphics[width=1\linewidth,height=4cm,keepaspectratio]{figures/rc1/l2h.png}
-\end{columns}
+% \begin{center}
+% \includegraphics[width=0.9\textwidth,height=0.4\textheight,keepaspectratio]{figures/rc1/d2h.png}
+% \end{center}
+% \begin{itemize}
+%   % \setlength{\itemsep}{0.16cm}
+%   \item \textbf{Challenge: Scalable Retrieval} \\
+%         Large-scale image retrieval demands fast similarity search
+%         over millions of items.
+%   \item \textbf{Hashing: Compact Binary Codes} \\
+%         Encoding images as $\pm 1$ binary codes enables efficient
+%         Hamming-distance comparison with up to $512\times$ storage compression.
+%   \item \textbf{Deep Hashing: Learned Semantics} \\
+%         Neural networks learn hash projections that preserve
+%         semantic neighborhood structures.
+% \end{itemize}
+%   \column{0.49\textwidth}
+%   \centering
+%   \vspace{0.5cm}
+%   \includegraphics[width=1\linewidth,height=4cm,keepaspectratio]{figures/rc1/l2h.png}
+% \end{columns}
 
-\vspace{-0.06cm}
+% \vspace{-0.06cm}
 
 \end{frame}
 
@@ -235,11 +235,11 @@ with Theoretical Guarantee for Deep Hashing}
 % \setlength{\itemsep}{0.08cm}
 \item[$\triangleright$] \red{Zero gradient of $\operatorname{sgn}$:}
 \[
-\frac{\operatorname{sgn}(10)-\operatorname{sgn}(0.1)}{10-0.1}=0
+\frac{\operatorname{sgn}(2.5)-\operatorname{sgn}(0.1)}{2.5-0.1}=0
 \]
 \item[$\triangleright$] \red{Loss of magnitude information of the output:}
 \[
-|0.90-1|\ll|10-1|
+|0.90-1|\ll|2.5-1|
 \]
 \end{itemize}
 \end{block}
@@ -251,16 +251,15 @@ with Theoretical Guarantee for Deep Hashing}
 \end{frame}
 
 
-\begin{frame}[t]{Solution: From Discrete Model to Continuous Optimization}
+\begin{frame}[t]{From Discrete Model to Continuous Optimization}
 \small
 \vspace{0.04cm}
 
 \begin{block}{Continuous Solution}
 \begin{itemize}
   \setlength{\itemsep}{0.04cm}
-  \item[$\triangleright$] \textbf{Continuous relaxation:} replace
-  $\operatorname{sgn}(\bC_i(\bx))$ by the continuous output
-  $\bD_i(\bx)=\tanh(\bC_i(\bx))$ during training.
+  \item[$\triangleright$] \textbf{Continuous relaxation:} 
+  $\operatorname{sgn}(\bC_i(\bx)) \Longrightarrow  \bD_i(\bx)=\tanh(\bC_i(\bx))$ during training.
   \item[$\triangleright$] \textbf{W-type regularization:} use
   \(h(\bz)=\lambda\bigl\||\bz|-\One\bigr\|_1\), with \(\lambda>0\),
   to drive the continuous outputs toward $\{-1,+1\}^d$.
@@ -318,7 +317,7 @@ with Theoretical Guarantee for Deep Hashing}
 \begin{itemize}
   \setlength{\itemsep}{0.01cm}
   \item Finite-sum optimization: $n$ can be large.
-  \item $f_i(\bx)=\ell_{s,i}(\bx)+\frac{\mu}{2}\|\bx\|^2$ and
+  \item the loss function $f_i(\bx)$ and
         $\bD_i(\bx)$ are continuously differentiable.
   \item $h$ is a proper l.s.c. nonconvex regularizer.
 \end{itemize}
@@ -412,7 +411,7 @@ with Theoretical Guarantee for Deep Hashing}
   {\footnotesize \blue{(Davis--Drusvyatskiy 19; Yao et al. 24; Zhang et al. 25)}}\\[-0.07cm]
   \begin{itemize}
     \setlength{\itemsep}{0pt}
-    \item[\blue{$\bullet$}] {\scriptsize Weak convexity is typically required; nonconvex \(h\) is difficult.}
+    \item[\blue{$\bullet$}] {\footnotesize Weak convexity is typically required; nonconvex \(h\) is difficult.}
   \end{itemize}
 
   \item[\blue{$\blacktriangleright$}] {{\textbf{ADMM / primal--dual splitting}}}
@@ -599,7 +598,7 @@ h_{ij}^*(\Lambda_{ij})
 \vspace{0.1cm}
 \begin{itemize}
 \item[\blue{$\blacktriangleright$}] \textbf{Primal Problem (variable splitting).}
-Introduce $\bb_i=\bD_i(\bx)$ and $\bB=[\bb_1,\ldots,\bb_n]^\top\in\RR^{n\times d}$, and apply \blue{the quadratic penalty method} to Problem~(P0):
+Introduce $\bb_i=\bD_i(\bx)$ and $\bB=[\bb_1,\ldots,\bb_n]^\top\in\RR^{n\times d}$, and apply \blue{the quadratic penalty} to (P0):
 \begin{align}
 \label{eq:primal}
 \min_{\bx\in\RR^{d_{\bx}},\,\bB\in\RR^{n\times d}}\;
@@ -619,9 +618,9 @@ Recalling the definition of the conjugate function
 $h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 
 \begin{align}
-\max_{\bLmbd}\min_{\bx,\,\bB,\,\bY}\;&F(\bx,\bB)+h(\bY)+\langle\bLmbd,\bB-\bY\rangle \notag\\
+&\max_{\bLmbd}\min_{\bx,\,\bB,\,\bY}\;F(\bx,\bB)+h(\bY)+\langle\bLmbd,\bB-\bY\rangle \notag\\
 % &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
-&= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle - h^*(\bLmbd), \tag{\blue{D}}\label{eq:dual}
+=& \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle - h^*(\bLmbd), \tag{\blue{D}}\label{eq:dual}
 \end{align}
 \end{itemize}
 \end{frame}
@@ -635,8 +634,7 @@ $h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 \begin{gather}
 % &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
 \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle-h^*(\bLmbd), \tag{D}\\[-0.25em]
-\text{where } F(\bx,\bB)=\tfrac{1}{n}\sum_{i=1}^n F_i(\bx,\bb_i),\quad
-F_i(\bx,\bb_i)=f_i(\bx)+\tfrac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2. \notag
+\text{where } F(\bx,\bB)=\tfrac{1}{n}\sum_{i=1}^n f_i(\bx)+\tfrac{\gamma}{2}\|\bD(\bx)-\bB\|^2. \notag
 \end{gather}
 
 \nii\textbf{Idea:} Employ an alternating update scheme for $(\bx,\bB,\bLmbd)$.
@@ -869,17 +867,14 @@ $\bm{0}\in \partial\calL(\bx^*,\bB^*,\bLmbd^*).$
 \[
 \Psi_m(\calQ^k)=\calL(\bx^k,\bB^k,\bLmbd^k)-C_1\Delta_{\bB}^{k+1}+C_2\Delta_{\bB}^k-C_3\Delta_{\bx}^{k+1}+C_4\Delta_{\bx}^k,
 \]
-where $\Delta_{\bx}^{k}:=\tfrac{1}{2}\|\bx^{k}-\bx^{k-1}\|^2$
+where $\calQ^k:=\bigl\{\bx^k,\bB^k,\bLmbd^k,\bB^{k+1},\bB^{k-1},\bx^{k+1},\bx^{k-1}\bigr\},$ $\Delta_{\bx}^{k}:=\tfrac{1}{2}\|\bx^{k}-\bx^{k-1}\|^2$
 and $\Delta_{\bB}^{k}:=\tfrac{1}{2}\|\bB^{k}-\bB^{k-1}\|^2$.
 
-\[
-\calQ^k:=\bigl\{\bx^k,\bB^k,\bLmbd^k,\bB^{k+1},\bB^{k-1},\bx^{k+1},\bx^{k-1}\bigr\},
-\qquad \{\calQ^k\}_{k\in\mathbb{N}}.
-\]
+ \bigskip
 
 \nii\textbf{Parameter setting:}
 \begin{equation}
-  \eta_k=\frac{\eta}{L_F},\quad \alpha_k=\alpha,\quad \beta_k=\beta,\quad \tau\le\frac{\sqrt{\tilde\delta}}{L_F},\quad b_k=b=c_b T, \quad \forall k \geq 1. \tag{S.1}
+  \eta_k=\frac{\eta}{L_F},\quad \alpha_k=\alpha,\quad \beta_k=\beta,\quad \tau\le\frac{\sqrt{\tilde\delta}}{L_F},\quad b_k=b=c_b \red{T,} \quad \forall k \geq 1. \tag{S.1}
 \end{equation}
 \vspace{0.2cm}
 \begin{block}{Theorem 1 (DualHash-StoM)}
@@ -951,16 +946,15 @@ DualHash-StoRM & AS.1, AS.2 & \blue{$\calO(\varepsilon^{-3})$} & matches lower b
 We evaluate on \textbf{CIFAR-10}, \textbf{NUS-WIDE}, and \textbf{ImageNet-100} datasets, covering single-label, multi-label, and large-scale image retrieval settings.
 
 \begin{itemize}
-\item[\blue{$\blacktriangleright$}] {\footnotesize\textbf{The W-regularized deep hashing problem.}}
+\item[\blue{$\blacktriangleright$}] {\textbf{The W-regularized deep hashing problem.}}
+{\footnotesize
 \begin{align*}
 \min_{\bx,\bB}\quad
 -\frac{1}{|\mathcal{S}|}\sum_{s^o_{ij}\in\mathcal{S}}
 \left\{ 
 \log\!\left(1+e^{-\tilde\alpha s^o_{ij}s^h_{ij}}\right)+\frac{\mu}{2}\|\bx\|_2^2 \right \} +\frac{\gamma}{2n}\sum_{i=1}^n\|\bb_i-\bu_i\|_2^2
 +\sum_{i=1}^n\lambda\|\,|\bb_i|-\bm{1}\,\|_1,
-\end{align*}
-
-where \(s^h_{ij}=\tfrac12\langle\bu_i,\bu_j\rangle\) denotes the
+\end{align*}} where \(s^h_{ij}=\tfrac12\langle\bu_i,\bu_j\rangle\) denotes the
 pairwise similarity, \(\bu_i=\tanh(\bC(\bx;\ba_i))\) is the continuous network output,
 and \(\bb_i\) is an auxiliary code approximating the binary code; \(\mu>0\) ensures coercivity.
 
@@ -1109,7 +1103,7 @@ MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
 % \end{itemize}
 % \end{frame}
 
-\section{Summary}
+%\section{Summary}
 
 \begin{frame}{Summary}
 \vspace{0.1cm}
@@ -1135,9 +1129,8 @@ MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
 % \end{itemize}
 % \end{block}
 
-\vfill
-{
-\noindent\textsuperscript{1} Luxuan Li, Xiao Wang, and Chunfeng Cui. \emph{DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing}. arXiv preprint \href{https://arxiv.org/abs/2510.18218}{arXiv:2510.18218}.}
+ 
+
 \end{frame}
 
 
@@ -1176,14 +1169,25 @@ MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
   \vspace{0.04cm}
   {\normalsize Sun Yat-Sen University}\par
 \end{columns}
-\end{frame}
 
-\begin{frame}
+\bigskip 
+
+
 \centering
 \vfill
 {\Huge\blue{Thank You!}}\\[0.45cm]
 \vfill
+
+{
+\noindent\textsuperscript{1} Luxuan Li, Xiao Wang, and Chunfeng Cui. \emph{DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing}. arXiv preprint \href{https://arxiv.org/abs/2510.18218}{arXiv:2510.18218}.}
 \end{frame}
+
+% \begin{frame}
+% \centering
+% \vfill
+% {\Huge\blue{Thank You!}}\\[0.45cm]
+% \vfill
+% \end{frame}
 
 
 % \begin{frame}[t]{References}

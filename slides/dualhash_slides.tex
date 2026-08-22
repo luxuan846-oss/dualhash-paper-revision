@@ -172,38 +172,98 @@ with Theoretical Guarantee for Deep Hashing}
 
 \section{Background and Modeling}
 
-% ========== Page 1: What ==========
-\begin{frame}[t]{Deep Hashing: From Images to Binary Codes}
+\begin{frame}[t]{Fast Retrieval at Million-Image Scale}
+% \small
+\vspace{-0.1cm}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.05cm}
+
+  \item \textbf{\red{Challenge}: large-scale image retrieval.}
+
+  \begin{itemize}
+    \setlength{\itemsep}{0.1cm}
+
+    \item[\blue{$\bullet$}] \textbf{Storage cost:}
+      float features are expensive to store and transmit at scale.
+
+\item[\blue{$\bullet$}] \textbf{Query efficiency:}
+      searching millions of vectors is computationally expensive.
+  \end{itemize}
+
+  \item \textbf{\blue{Benefits} of binary codes.}
+
+  \begin{itemize}
+    \setlength{\itemsep}{0.1cm}
+
+    \item[\blue{$\bullet$}] \textbf{Storage efficiency:}
+      up to $512\times$ smaller than the original float vector.
+
+
+    \item[\blue{$\bullet$}] \textbf{Query speed:}
+      XOR and bit-count operations enable millisecond-level search.
+  \end{itemize}
+\end{itemize}
+
+\vspace{0.2cm}
+\begin{center}
+  \includegraphics[
+    width=0.85\textwidth,
+    height=0.50\textheight,
+    keepaspectratio
+  ]{figures/rc1/l2h.png}\\[-0.01cm]
+  {\footnotesize Semantic neighbors share nearby binary codes.}
+\end{center}
+\end{frame}
+
+
+\begin{frame}[t]{Deep Learning to Hashing}
 \small
-\vspace{0.1cm}
+\vspace{0.02cm}
 
-% \begin{columns}[T,onlytextwidth]
-%   \column{0.48\textwidth}
-%   {\color{beamerblue}\textbf{Learning to Hash}}
-%   \vspace{0.06cm}
+\begin{columns}[T,onlytextwidth]
 
-% \begin{center}
-% \includegraphics[width=0.9\textwidth,height=0.4\textheight,keepaspectratio]{figures/rc1/d2h.png}
-% \end{center}
-% \begin{itemize}
-%   % \setlength{\itemsep}{0.16cm}
-%   \item \textbf{Challenge: Scalable Retrieval} \\
-%         Large-scale image retrieval demands fast similarity search
-%         over millions of items.
-%   \item \textbf{Hashing: Compact Binary Codes} \\
-%         Encoding images as $\pm 1$ binary codes enables efficient
-%         Hamming-distance comparison with up to $512\times$ storage compression.
-%   \item \textbf{Deep Hashing: Learned Semantics} \\
-%         Neural networks learn hash projections that preserve
-%         semantic neighborhood structures.
-% \end{itemize}
-%   \column{0.49\textwidth}
-%   \centering
-%   \vspace{0.5cm}
-%   \includegraphics[width=1\linewidth,height=4cm,keepaspectratio]{figures/rc1/l2h.png}
-% \end{columns}
+  \column{0.56\textwidth}
+  \begin{itemize}
+    \setlength{\itemsep}{0.10cm}
 
-% \vspace{-0.06cm}
+    \item \textbf{Learning to hash.}
+
+          Map high-dimensional data to compact binary codes
+          preserving semantic neighborhoods.
+
+    \item \textbf{Deep hashing.}
+
+          Jointly learn feature extraction and hash-code
+          generation end-to-end.
+
+    \item \textbf{Applications.}
+
+          Visual search, e-commerce, and security retrieval.
+  \end{itemize}
+
+  \vspace{0.2cm}
+  \column{0.40\textwidth}
+  \centering
+\vspace{0.2cm}
+  \includegraphics[
+    width=\linewidth,
+    height=0.5\textheight,
+    keepaspectratio
+  ]{figures/rc1/google_visual_search.png}\\[-0.01cm]
+  % {\scriptsize Visual search returns appearance-similar images.}
+
+\end{columns}
+
+\vspace{0.08cm}
+
+\begin{center}
+  \includegraphics[
+    width=0.94\textwidth,
+    height=0.38\textheight,
+    keepaspectratio
+  ]{figures/rc1/d2h.png}\\[-0.01cm]
+\end{center}
 
 \end{frame}
 
@@ -235,11 +295,11 @@ with Theoretical Guarantee for Deep Hashing}
 % \setlength{\itemsep}{0.08cm}
 \item[$\triangleright$] \red{Zero gradient of $\operatorname{sgn}$:}
 \[
-\frac{\operatorname{sgn}(2.5)-\operatorname{sgn}(0.1)}{2.5-0.1}=0
+\frac{\operatorname{sgn}(2.5)-\operatorname{sgn}(0.1)}{2.5-0.1}=0.
 \]
 \item[$\triangleright$] \red{Loss of magnitude information of the output:}
 \[
-|0.90-1|\ll|2.5-1|
+|0.9-1|\ll|2.5-1|.
 \]
 \end{itemize}
 \end{block}
@@ -259,7 +319,7 @@ with Theoretical Guarantee for Deep Hashing}
 \begin{itemize}
   \setlength{\itemsep}{0.04cm}
   \item[$\triangleright$] \textbf{Continuous relaxation:} 
-  $\operatorname{sgn}(\bC_i(\bx)) \Longrightarrow  \bD_i(\bx)=\tanh(\bC_i(\bx))$ during training.
+  $\operatorname{sgn}(\bC_i(\bx)) \Longrightarrow \bD_i(\bx)=\tanh(\bC_i(\bx))$ during training.
   \item[$\triangleright$] \textbf{W-type regularization:} use
   \(h(\bz)=\lambda\bigl\||\bz|-\One\bigr\|_1\), with \(\lambda>0\),
   to drive the continuous outputs toward $\{-1,+1\}^d$.
@@ -310,14 +370,14 @@ with Theoretical Guarantee for Deep Hashing}
 \min_{\bx\in\RR^{d_{\bx}}}\quad \{f(\bx)=
 \frac{1}{n}\sum_{i=1}^n f_i(\bx)\}
 +\sum_{i=1}^n h\!\left(\blue{\bD_i(\bx)}\right).
-\tag{P0}
+\tag{\blue{P0}}
 \end{align}
 
 \vspace{-0.18cm}
 \begin{itemize}
   \setlength{\itemsep}{0.01cm}
   \item Finite-sum optimization: $n$ can be large.
-  \item the loss function $f_i(\bx)$ and
+  \item The loss function $f_i(\bx)$ and
         $\bD_i(\bx)$ are continuously differentiable.
   \item $h$ is a proper l.s.c. nonconvex regularizer.
 \end{itemize}
@@ -358,7 +418,7 @@ with Theoretical Guarantee for Deep Hashing}
 \toprule
 \textbf{Type}\textsuperscript{*}
 & \textbf{Method}
-& \makecell{\textbf{Model}\textsuperscript{\(\dagger\)}\\ $\bu=\bD(\bx)$}
+& \makecell{\textbf{Model}\\ $\bu=\bD(\bx)$}
 & \textbf{Optimization}\textsuperscript{\(\S\)}
 & \textbf{Complexity}\textsuperscript{\(\P\)} \\
 \midrule
@@ -381,7 +441,7 @@ with Theoretical Guarantee for Deep Hashing}
 
 \vspace{0.08cm}
 \textsuperscript{*}Discrete methods explicitly update binary codes \(\bb\in\{-1,+1\}^d\);
-\textsuperscript{\(\S\)}SGDM: SGD with momentum; DCC: discrete cyclic coordinate descent.
+\textsuperscript{\(\S\)}SGDM: SGD with momentum; DCC: discrete cyclic coordinate descent; BQP: binary quadratic programming.
 \textsuperscript{\(\P\)}---: no reported non-asymptotic complexity guarantee.
 \vfill
 \end{frame}
@@ -391,7 +451,7 @@ with Theoretical Guarantee for Deep Hashing}
 \vspace{-0.4cm}
 \[\min\limits_{\bx} f(\bx)+h(\bD(\bx)), \] where
 \[
-\bD \text{ nonconvex}, \quad h \text{  nonconvex and nonsmooth}.
+\bD \text{ nonconvex}, \quad h \text{ nonconvex and nonsmooth}.
 \]
 
 \par\vspace{0.1cm}
@@ -414,7 +474,7 @@ with Theoretical Guarantee for Deep Hashing}
     \item[\blue{$\bullet$}] {\footnotesize Weak convexity is typically required; nonconvex \(h\) is difficult.}
   \end{itemize}
 
-  \item[\blue{$\blacktriangleright$}] {{\textbf{ADMM / primal--dual splitting}}}
+  \item[\blue{$\blacktriangleright$}] {{\textbf{ADMM / primal-dual splitting}}}
   {\footnotesize \blue{(Jiang et al. 19; Bolte et al. 18; Zhu et al. 24; Chen et al. 25)}}\\[-0.07cm]
   \begin{itemize}
     \setlength{\itemsep}{0pt}
@@ -438,7 +498,7 @@ with Theoretical Guarantee for Deep Hashing}
   }
     \begin{itemize}
     \setlength{\itemsep}{0pt}
-    \item[\blue{$\bullet$}] {\footnotesize Variants in convex problem: Stochastic PDHG \blue{(Chambolle et al. 18)}; Nonlinear PDHG \blue{(Clason et al. 19; Gao--Zhang 23; Shumaylov et al. 24)}};
+    \item[\blue{$\bullet$}] {\footnotesize Variants for convex problems: Stochastic PDHG \blue{(Chambolle et al. 18)}; Nonlinear PDHG \blue{(Clason et al. 19; Gao--Zhang 23; Shumaylov et al. 24)}};
   \end{itemize}
 
   \item[\blue{$\blacktriangleright$}] {{\textbf{Proximal updates in PDHG}}}
@@ -556,7 +616,7 @@ with Theoretical Guarantee for Deep Hashing}
 \end{center}
 \vspace{-0.2cm}
 \begin{center}
-\small Figure 1: A W-type function, its conjugate, and the proximal mapping of $h^*$.
+\footnotesize Figure 1: A W-type function, its conjugate, and the proximal mapping of $h^*$.
 \end{center}
 
 \vspace{0.5cm}
@@ -564,7 +624,7 @@ with Theoretical Guarantee for Deep Hashing}
 \begin{itemize}
 \setlength{\itemsep}{0.04cm}
 % $h\circ\bD$ nonseparable in $\bx$
-\item \textbf{$h$ nonconvex }
+\item \textbf{$h$ nonconvex}
 \(\Longrightarrow\)
 \textbf{$h^*$ \blue{convex \& separable}, $\prox_{s h^*}$ \blue{closed-form}}
 \vspace{0.24cm}
@@ -575,7 +635,7 @@ h_{ij}^*(\Lambda_{ij})
 =
 \begin{cases}
 |\Lambda_{ij}|, & |\Lambda_{ij}|\le \lambda,\\
-+\infty, & |\Lambda_{ij}|>\lambda .
++\infty, & |\Lambda_{ij}|>\lambda.
 \end{cases}
 \]
 
@@ -633,8 +693,8 @@ $h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 
 \begin{gather}
 % &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
-\max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle-h^*(\bLmbd), \tag{D}\\[-0.25em]
-\text{where } F(\bx,\bB)=\tfrac{1}{n}\sum_{i=1}^n f_i(\bx)+\tfrac{\gamma}{2}\|\bD(\bx)-\bB\|^2. \notag
+\max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle-h^*(\bLmbd), \tag{\blue{D}}\\[-0.25em]
+\text{where } F(\bx,\bB)=\tfrac{1}{n}\sum_{i=1}^n f_i(\bx)+\tfrac{\gamma}{2n}\|\bD(\bx)-\bB\|^2. \notag
 \end{gather}
 
 \nii\textbf{Idea:} Employ an alternating update scheme for $(\bx,\bB,\bLmbd)$.
@@ -648,14 +708,10 @@ $h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 where $\widetilde\nabla_{\bx} F$ uses \blue{inertial acceleration} or \blue{variance reduction}.
 
 \vspace{0.05cm}
-\item[\blue{$\triangleright$}] \textbf{$\bB$-update (proximal minimization):}
+\item[\blue{$\triangleright$}] \textbf{$\bB$-update (gradient descent on $\calL$):}
 \[
-\begin{aligned}
 \bB^{k+1}
-= \arg\min_{\bB}\Bigl\{
-F(\bx^{k+1},\bB)+\langle\bLmbd^k,\bB\rangle +\frac{1}{2\tau}\|\bB-\bB^k\|^2
-\Bigr\}.
-\end{aligned}
+= \bB^k - \tau\bigl(\nabla_{\bB} F(\bx^{k+1},\bB^k) + \bLmbd^k\bigr).
 \]
 
 \vspace{0.05cm}
@@ -677,7 +733,7 @@ F(\bx^{k+1},\bB)+\langle\bLmbd^k,\bB\rangle +\frac{1}{2\tau}\|\bB-\bB^k\|^2
 
 % \nii Both instances follow the generic $\bx$-update with a stochastic gradient \blue{estimator}:
 \[
-\bx^{k+1} = \bx^k - \eta_k\, \blue{\widetilde\nabla_{\bx} F(\bx^k,\bB^k)},
+\bx^{k+1} = \bx^k - \eta_k\, \blue{\widetilde\nabla_{\bx} F(\bx^k,\bB^k)}.
 \]
 
 \begin{itemize}
@@ -687,7 +743,7 @@ estimator at the extrapolated point $\bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1})$, step
 \blue{\bG^k} = \nabla_{\bx} F(\bz^k,\bB^k;\calJ_k),
 \] where $\nabla_{\bx}F(\cdot;\calJ_k):=\frac{1}{|\calJ_k|}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\cdot,\bb_i)$ is the mini-batch gradient.
 
-\item[\blue{$\triangleright$}] \textbf{Instance 2 (DualHash-StoRM): recursive momentum}\footnote{A. Cutkosky and F. Orabona. Momentum-based variance reduction in non-convex SGD. NeurIPS, 2019: 15236--15245.}
+\item[\blue{$\triangleright$}] \textbf{Instance 2 (DualHash-StoRM): recursive momentum}\footnote{Cutkosky A., Orabona F. Momentum-based variance reduction in non-convex SGD. NeurIPS, 2019: 15236--15245.}
 {\small
 \[
 \blue{\bD^k} =
@@ -711,13 +767,12 @@ Variance reduction \blue{without} full-gradient or large-batch computation \blue
 \small
 \vspace{0.1cm}
 \begin{equation}
-  \quad
-\max_{\bLmbd}\min_{\bx,\bB}\;
+  \max_{\bLmbd}\min_{\bx,\bB}\;
 \calL(\bx,\bB,\bLmbd)
 :=
 F(\bx,\bB)
 +\langle\bB,\bLmbd\rangle
--h^*(\bLmbd), \tag{D}
+-h^*(\bLmbd), \tag{\blue{D}}
 \end{equation}
 
 \vspace{0.2cm}
@@ -725,11 +780,11 @@ F(\bx,\bB)
 \begin{itemize}
 \item[(i)] The objective of Problem (P) is lower bounded by $J^*$.
 \item[(ii)] $F(\bx,\bB)$ is $L_F=\calO(1)$-smooth w.r.t.\ $(\bx,\bB)$.
-\item[(iii)] For $i\sim\mathrm{Uniform}\{1,\dots,n\}$: $\EE_i[\nabla_{\bx}F_i(\bx,\bb_i)]=\nabla_{\bx}F(\bx,\bB)$ and $\EE_i[\|\nabla_{\bx}F_i-\nabla_{\bx}F\|^2]\le\sigma^2$.
+\item[(iii)] For $i\sim\mathrm{Unif}\{1,\dots,n\}$: $\EE_i[\nabla_{\bx}F_i(\bx,\bb_i)]=\nabla_{\bx}F(\bx,\bB)$ and $\EE_i[\|\nabla_{\bx}F_i-\nabla_{\bx}F\|^2]\le\sigma^2$.
 \end{itemize}
 
 \vspace{0.2cm}
-\textbf{AS.2 (Mean-squared smoothness).}\footnote{Y. Xu and Y. Xu. \textit{Momentum-based variance-reduced proximal stochastic gradient method for composite nonconvex stochastic optimization}. \textit{Journal of Optimization Theory and Applications}, 196(1):266--297, 2023.}
+\textbf{AS.2 (Mean-squared smoothness).}\footnote{Xu Y., Xu Y. Momentum-based variance-reduced proximal stochastic gradient method for composite nonconvex stochastic optimization. Journal of Optimization Theory and Applications, 2023, 196(1): 266--297.}
 \[
 \EE_i\!\left[\|\nabla_{\bx}F_i(\bx,\bb_i)-\nabla_{\bx}F_i(\bx',\bb_i')\|^2\right]\le L_F^2\!\left[\|\bx-\bx'\|^2+\|\bB-\bB'\|^2\right],
 \]
@@ -754,7 +809,7 @@ of the Lagrangian function $\calL$.
 
 \vspace{0.1cm}
 \begin{itemize}
-  \item \textbf{Critical point.} A primal--dual triple $(\bar{\bx},\bar{\bB},\bar{\bLmbd})$
+  \item \textbf{Critical point.} A primal-dual triple $(\bar{\bx},\bar{\bB},\bar{\bLmbd})$
   with $\bm{0}\in\partial\calL(\bar{\bx},\bar{\bB},\bar{\bLmbd})$.
   \item \textbf{Specifically, we seek a random output}
   $(\bx^R,\bB^R,\bLmbd^R)$ \textbf{satisfying}
@@ -794,7 +849,7 @@ of the Lagrangian function $\calL$.
 
 \vspace{0.04cm}
 \begin{block}{Lemma 2}
-Under Assumption (i), if
+Under AS.1(i), if
 $(\bx^*,\bB^*,\bLmbd^*)$ is an optimal solution of Problem $(P)$
 and its dual $(D)$, then
 $\bm{0}\in \partial\calL(\bx^*,\bB^*,\bLmbd^*).$
@@ -919,9 +974,9 @@ T=\left\lceil\frac{\bigl(\tilde L_\Delta\tilde\Delta_1+\tilde C_\sigma(\frac{\si
 \textbf{Algorithm} & \textbf{Assumptions} & \textbf{Complexity} & \textbf{Remark} \\
 \midrule
 Mini-batch SGD \footnotemark[1] & AS.1 & $\calO(\varepsilon^{-4})$ & standard baseline \\
-SGD-VR \footnotemark[2] & AS.1, AS.2 & $\Omega (\varepsilon^{-3})$ & lower bound \\
+SGD-VR \footnotemark[2] & AS.1, AS.2 & $\Omega(\varepsilon^{-3})$ & lower bound \\
 \midrule
-DualHash-StoM & AS.1 & {$\calO(\varepsilon^{-4})$} & primal-dual \\
+DualHash-StoM & AS.1 & $\calO(\varepsilon^{-4})$ & primal-dual \\
 DualHash-StoRM & AS.1, AS.2 & \blue{$\calO(\varepsilon^{-3})$} & matches lower bound \\
 \bottomrule
 \end{tabular}
@@ -946,13 +1001,13 @@ DualHash-StoRM & AS.1, AS.2 & \blue{$\calO(\varepsilon^{-3})$} & matches lower b
 We evaluate on \textbf{CIFAR-10}, \textbf{NUS-WIDE}, and \textbf{ImageNet-100} datasets, covering single-label, multi-label, and large-scale image retrieval settings.
 
 \begin{itemize}
-\item[\blue{$\blacktriangleright$}] {\textbf{The W-regularized deep hashing problem.}}
+\item[\blue{$\blacktriangleright$}] \textbf{The W-regularized deep hashing problem.}
 {\footnotesize
 \begin{align*}
 \min_{\bx,\bB}\quad
 -\frac{1}{|\mathcal{S}|}\sum_{s^o_{ij}\in\mathcal{S}}
 \left\{ 
-\log\!\left(1+e^{-\tilde\alpha s^o_{ij}s^h_{ij}}\right)+\frac{\mu}{2}\|\bx\|_2^2 \right \} +\frac{\gamma}{2n}\sum_{i=1}^n\|\bb_i-\bu_i\|_2^2
+\log\!\left(1+e^{-\tilde\alpha s^o_{ij}s^h_{ij}}\right)+\frac{\mu}{2}\|\bx\|_2^2 \right\} +\frac{\gamma}{2n}\sum_{i=1}^n\|\bb_i-\bu_i\|_2^2
 +\sum_{i=1}^n\lambda\|\,|\bb_i|-\bm{1}\,\|_1,
 \end{align*}} where \(s^h_{ij}=\tfrac12\langle\bu_i,\bu_j\rangle\) denotes the
 pairwise similarity, \(\bu_i=\tanh(\bC(\bx;\ba_i))\) is the continuous network output,
@@ -963,7 +1018,7 @@ and \(\bb_i\) is an auxiliary code approximating the binary code; \(\mu>0\) ensu
 (ii) \textbf{W-type regularization methods}: DHN~\blue{[ZLWC16]}, DSH~\blue{[LWSC16]}, DTSH~\blue{[WSK16]}, and MDSHC~\blue{[WPL+23]};
 (iii) \textbf{quantization-error-oriented methods}: HashNet~\blue{[CLWY17]}, DSDH~\blue{[LSHT17]}, and OrthoHash~\blue{[HNZ+21]}.
 \item[\blue{$\blacktriangleright$}] \textbf{Backbones.} AlexNet and ResNet-50, with ELU (smooth) activation\footnote{The gradient of ELU is 1-Lipschitz continuous.}.
-\item \textbf{Main Metrics.} mAP and quantization error.
+\item[\blue{$\blacktriangleright$}] \textbf{Main Metrics.} mAP and quantization error.
 \end{itemize}
 \end{frame}
 
@@ -1000,12 +1055,12 @@ MDSHC~\blue{[WPL+23]} & 0.8238 & 0.8350 & 0.8262 & 0.6452 & 0.6081 & 0.6493 \\
 \bottomrule
 \end{tabular}}
 \par\vspace{0.14cm}
-{\scriptsize\itshape Note: Higher mAP indicates better retrieval performance.\par}
+{\footnotesize Note: Higher mAP indicates better retrieval performance.\par}
 \end{center}
 \vspace{0.02cm}
 \begin{itemize}
 \item DualHash-StoM achieves the \blue{best mAP} across all selected code lengths on both datasets.
-\item At 64 bits, it improves mAP by \blue{1.84} percentage points over OrthoHash on CIFAR-10 and by \blue{9.55} points over MDSHC on NUS-WIDE.
+\item At 64 bits, it improves mAP by \blue{1.84} percentage points over OrthoHash on CIFAR-10 and by \blue{9.55} percentage points over MDSHC on NUS-WIDE.
 \end{itemize}
 \end{frame}
 
@@ -1075,7 +1130,7 @@ MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
     trim=0 160 1000 90,clip]{results_images/quantization_error_further_analysis.pdf}
   % \vspace{0.03cm}
   \par\vspace{-0.02cm}
-  {\scriptsize \textit{Note: Lower is better for quantization error.}}
+  {\footnotesize Note: Lower is better for quantization error.}
 \end{center}
 
 \vspace{-0.05cm}
@@ -1113,7 +1168,7 @@ MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
 \begin{itemize}
 \item Handles \blue{nonsmooth W-type regularization} with nonlinear composition.
 \item Closed-form dual proximal update bypasses the intractable $\prox_{h\circ\bD}$.
-\item Oracle complexity Results:
+\item Oracle complexity results:
 \[
 \text{DualHash-StoM:}\ \calO(\varepsilon^{-4}),\qquad
 \text{DualHash-StoRM:}\ \calO(\varepsilon^{-3}).
@@ -1149,7 +1204,7 @@ MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
   \vspace{0.28cm}
   {\large Luxuan Li}\par
   \vspace{0.08cm}
-  {\normalsize Third-year Ph.D. Student}\par
+  {\normalsize Third-year Ph.D. student}\par
   \vspace{0.04cm}
   {\normalsize School of Mathematical Sciences}\par
   \vspace{0.04cm}

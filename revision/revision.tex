@@ -1,0 +1,336 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.5in]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{cite}
+\renewcommand{\citepunct}{,}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\rigorousstationarity}{at least a rigorous stationarity relationship}
+
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\title{Appeal Letter}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\noindent Dear Editor-in-Chief,
+
+We are writing to respectfully ask for your reconsideration of the decision on our manuscript \textbf{[sumbmission ID]}, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing.''
+
+The central contribution of this work is to address the
+fundamental quantization difficulty in deep hashing through
+Fenchel duality, accompanied by rigorous oracle complexity
+bounds, where prior deep hashing methods did not provide such theoretical guarantee. Experiments on multiple
+datasets confirm the practical advantages of our framework.
+
+We were informed of the rejection decision, along with the reviewers' comments. We have carefully considered all of the comments, and while we appreciate both the reviewers' and the Associate Editor's time and effort, we respectfully disagree with several of the points raised. We believe that some of the concerns underlying the rejection decision are based on a misunderstanding of the formulation and theoretical results presented in the manuscript. Below, we explain, point by point, the specific issues with which we disagree and provide supporting arguments.
+
+% ============================================================
+\section*{Reviewer 2, Comment 1: Stationarity Relationship}
+
+\noindent\textbullet\quad\textbf{Reviewer comment.} \emph{%
+The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is \blue{strong duality, zero duality gap, or \rigorousstationarity between the transformed primal--dual problem and the original objective.}}
+
+\vspace{0.5em}
+
+\noindent\textbf{Our response.} 
+
+We thank the reviewer for the opportunity to clarify this first-order stationarity relationship.
+
+\textbf{(1) We establish that dual stationarity implies primal stationarity, and conversely, under the condition $|\widetilde{B}_{ij}|\ge 1$ for all $i,j$ in our W-regularized problem.}
+
+Following the notation of our manuscript, the primal problem is
+\[
+\tag{P}
+\min_{x,B} J(x,B) := F(x,B)+r(B),
+\]
+where $D_i$ is the output of the neural network and $F(x,B)=f(x)+\frac{\gamma}{2n}\sum_{i=1}^n \|D_i(x)-b_i\|^2$, and
+\[
+r(B)
+=
+\mu\sum_{i=1}^n\sum_{j=1}^d
+\bigl||B_{ij}|-1\bigr|
+\]
+is the W-type regularizer. The corresponding Lagrangian is
+\[
+\mathcal{L}(x,B,\lambda)
+:=
+F(x,B)+\langle \lambda,B\rangle-r^*(\lambda),
+\]
+and the dual problem is
+\[
+\tag{D}
+\max_{\lambda}\;\min_{x,B}\;
+\mathcal{L}(x,B,\lambda).
+\]
+
+We establish the following relationship between formulation~(D) and Problem~(P).
+
+\begin{proposition}[Stationarity transfer]
+Suppose $(\tilde{x},\tilde{B},\tilde{\lambda})$ satisfies the first-order stationarity conditions of~(D):
+\[
+\tag{D-stat}\label{eq:pd-stationarity}
+\begin{cases}
+\nabla_x F(\tilde{x},\tilde{B})=0,\\[4pt]
+\nabla_B F(\tilde{x},\tilde{B})+\tilde{\lambda}=0,\\[4pt]
+\tilde{B}\in\partial r^*(\tilde{\lambda}).
+\end{cases}
+\]
+Then the following statements are equivalent:
+\begin{enumerate}
+\item $(\tilde{x},\tilde{B})$ is a first-order stationary point of Problem~(P), i.e.,
+\[
+\tag{P-stat}\label{eq:original-stationarity}
+\begin{cases}
+\nabla_x F(\tilde{x},\tilde{B})=0,\\[4pt]
+0\in\nabla_B F(\tilde{x},\tilde{B})+\partial r(\tilde{B});
+\end{cases}
+\]
+\item the contact condition holds:
+\[
+r(\tilde{B})=r^{**}(\tilde{B})
+\quad\Longleftrightarrow\quad
+|\tilde{B}_{ij}|\ge 1
+\quad\Longleftrightarrow\quad
+|D_{ij}(\tilde{x})|\ge 1,
+\qquad\text{for all } i,j.
+\]
+\end{enumerate}
+\end{proposition}
+
+
+
+\vspace{0.3em}
+
+\textbf{(2) We show that the contact condition
+$|B_{ij}^*|\ge 1$ is necessary for our nonconvex regularized problem: without it, stationarity
+transfer fails and a positive duality gap arises.}
+
+\vspace{0.3em}
+
+\begin{example}
+Consider the one-dimensional problem
+\[
+\min_{b\in\mathbb{R}}
+\left\{
+\frac{1}{2}b^2
++\bigl||b|-1\bigr|
+\right\}.
+\]
+The primal optimum is attained at $b^*=\pm 1$ with
+$p^*=\tfrac{1}{2}$. The corresponding dual optimum is
+\[
+d^*
+=
+\sup_{|\lambda|\le 1}
+\left\{
+-\tfrac{1}{2}\lambda^2-|\lambda|
+\right\}
+=0,
+\]
+attained at $\lambda^*=0$. Thus $p^*-d^*=\tfrac{1}{2}>0$,
+and strong duality fails.
+
+Moreover, the triple $(b^*,\lambda^*)=(0,0)$ satisfies
+the transformed first-order system:
+\[
+F'(0)+\lambda^*=0,
+\qquad
+b^*=0\in\partial r^*(0)=[-1,1].
+\]
+But $0\notin\partial r(0)=\{-1,1\}$, so stationarity
+for the original objective fails at this point. The
+contact condition also fails: $|b^*|=0<1$.
+\end{example}
+
+\noindent This confirms that the equivalence established in~(1)
+is sharp. The contact condition is the precise boundary
+between success and failure of stationarity transfer for
+the W-type regularizer.
+
+\textbf{(3) While strong duality
+cannot be guaranteed under the present assumptions, the established approach in nonconvex primal--dual optimization is to characterize stationarity relationships, which is what our Proposition
+provides.}
+
+\vspace{0.3em}
+
+While the counterexample in~(2) rules out both zero
+duality gap and unconditional stationarity transfer for
+the W-type regularizer in nonconvex problem. this is consistent with the broader
+nonconvex optimization literature, where primal--dual
+methods do not assume strong duality but instead
+establish explicit stationarity relationships between
+the formulations involved~\cite{Bolte2018,li2015global}. 
+
+% Bolte, Sabach, and Teboulle~\cite{Bolte2018} analyze nonconvex
+% Lagrangian-based optimization and prove, in their
+% Proposition~3.1, a chain connecting Lyapunov
+% criticality, augmented-Lagrangian criticality, and
+% original composite stationarity under explicit
+% assumptions. Li and Pong~\cite{li2015global} establish
+% original-problem stationarity of ADMM cluster points
+% for nonconvex composite problems under their stated
+% conditions. In both cases, the authors \emph{prove}
+% the stationarity relationship rather than assume
+% strong duality.
+
+% Our Proposition follows the same paradigm. It
+% establishes the stationarity transfer under the contact
+% condition and shows that this condition is both
+% necessary and sufficient for the W-type regularizer.
+% The result is a complete characterization, not a
+% partial substitute for strong duality.
+\section*{Reviewer 2's Comments}
+
+\noindent Reviewer~2 recommended \textbf{major revision} and provided detailed, constructive feedback. The review explicitly acknowledges that the experimental section is comprehensive and well-detailed. The majority of the comments concern:
+\begin{itemize}[leftmargin=2em]
+    \item Presentation and notation improvements (closeness vs.\ lower semicontinuity, notation consistency, equation numbering).
+    \item Additional proof details (intermediate steps, clearer justifications for specific inequalities, conditional expectation formalism).
+    \item Minor mathematical corrections (coefficient expressions in specific lemmas, summation formulas).
+\end{itemize} 
+
+
+In brief, we have provided clarifications for the
+primary theoretical concerns raised in the decision
+letter. We also note that Reviewer~2 recommended
+major revision, not rejection. We respectfully ask
+the Editor-in-Chief to reconsider the decision and
+grant us the opportunity to revise. 
+
+
+\vspace{1.5em}
+
+\noindent Sincerely,\\
+Authors of the submission []
+
+\bibliographystyle{siamplain}
+\bibliography{revision_refs}
+
+\clearpage
+\appendix
+\section*{Appendix: Proof of Proposition~1}
+
+\begin{proof}
+Recalling the definition of the W-type regularizer and its biconjugate, we have
+
+$$
+r(B)=\mu\sum_{i,j}\bigl||B_{ij}|-1\bigr|,
+\qquad
+r^{**}(B)=\mu\sum_{i,j}(|B_{ij}|-1)_+,
+$$ implies
+$$
+r(\tilde{B})=r^{**}(\tilde{B})
+\quad\Longleftrightarrow\quad
+|\tilde{B}_{ij}|\ge1
+\quad\text{for all }i,j.
+$$
+
+It remains to relate the contact condition to stationarity. Since
+
+$$
+\tilde{B}\in\partial r^*(\tilde{\lambda})
+$$
+
+and \(r^*=(r^{**})^*\), Fenchel conjugacy gives
+
+$$
+\tilde{B}\in\partial r^*(\tilde{\lambda})
+\quad\Longleftrightarrow\quad
+\tilde{\lambda}\in\partial r^{**}(\tilde{B}).
+$$
+
+On the other hand, the second condition of
+\eqref{eq:pd-stationarity} gives
+
+$$
+\tilde{\lambda}=-\nabla_BF(\tilde{x},\tilde{B}).
+$$
+
+Hence, \((\tilde{x},\tilde{B})\) satisfies
+\eqref{eq:original-stationarity} if and only if
+$$
+\tilde{\lambda}\in\partial r(\tilde{B}).
+$$
+
+For the W-type regularizer, under
+\(\tilde{B}\in\partial r^*(\tilde{\lambda})\), a direct componentwise comparison of
+\(\partial r\) and \(\partial r^{**}\) gives
+
+$$
+\tilde{\lambda}\in\partial r(\tilde{B})
+\quad\Longleftrightarrow\quad
+|\tilde{B}_{ij}|\ge1
+\quad\text{for all }i,j.
+$$
+
+Therefore, we obtain
+
+$$
+(\tilde{x},\tilde{B})\text{ is stationary for }(P)
+\quad\Longleftrightarrow\quad
+|\tilde{B}_{ij}|\ge1
+\quad\forall\,i,j.
+$$
+
+Finally, recalling from \eqref{eq:pd-stationarity} that
+
+$$
+\tilde{\lambda}
+=
+\frac{\gamma}{n}\bigl(D(\tilde{x})-\tilde{B}\bigr),
+$$
+
+we obtain
+
+$$
+0\in
+\frac{\gamma}{n}\bigl(\tilde{B}-D(\tilde{x})\bigr)
++\partial r^{**}(\tilde{B}).
+$$
+
+Thus, for every \(i,j\), \(\tilde{B}_{ij}\) is the unique minimizer of
+
+$$
+\min_{b\in\mathbb R}
+\left\{
+\frac{\gamma}{2n}
+\bigl(b-D_{ij}(\tilde{x})\bigr)^2
++\mu(|b|-1)_+
+\right\}.
+$$
+
+If \(|D_{ij}(\tilde{x})|<1\), the unique minimizer is
+\(\tilde{B}_{ij}=D_{ij}(\tilde{x})\). If \(D_{ij}(\tilde{x})\ge1\), the minimizer cannot
+lie below \(1\); similarly, if \(D_{ij}(\tilde{x})\le-1\), it cannot lie
+above \(-1\). Hence, the following holds
+$$
+|\tilde{B}_{ij}|\ge1
+\quad\Longleftrightarrow\quad
+|D_{ij}(\tilde{x})|\ge1,
+$$ which  combining the above equivalences yields
+$$
+(\tilde{x},\tilde{B})\text{ is stationary for }(P)
+\quad\Longleftrightarrow\quad
+r(\tilde{B})=r^{**}(\tilde{B})
+\quad\Longleftrightarrow\quad
+|\tilde{B}_{ij}|\ge1
+\quad\Longleftrightarrow\quad
+|D_{ij}(\tilde{x})|\ge1, \text{ for all } i,j.
+$$
+\end{proof}
+\end{document}

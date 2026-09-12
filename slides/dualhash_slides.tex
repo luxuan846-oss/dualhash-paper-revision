@@ -232,7 +232,7 @@ with Theoretical Guarantee for Deep Hashing}
           Map high-dimensional data to compact binary codes
           preserving semantic neighborhoods.
 
-    \item \textbf{Deep hashing.}
+    \item \red{\textbf{Deep hashing.}}
 
           Jointly learn feature extraction and hash-code
           generation end-to-end.
@@ -669,7 +669,7 @@ F(\bx,\bB) + h(\bB), \tag{\blue{P}}
 % each $\bb_i$ denotes the $i$-th row of $\bB$, and
 % $\gamma>0$ decouples $h(\bB)$ from $\bD(\bx)$.
 where $F(\bx,\bB)=\frac{1}{n}\sum_{i=1}^n F_i(\bx,\bb_i)$
-with $F_i(\bx,\bb_i):=f_i(\bx)+\frac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2$,
+with $F_i(\bx,\bb_i):=f_i(\bx)+\blue{\frac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2,}$ 
 and $h(\bB):=\sum_{i=1}^n h(\bb_i)$.
 \vspace{0.3cm}
 
@@ -678,7 +678,7 @@ Recalling the definition of the conjugate function
 $h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 
 \begin{align}
-&\max_{\bLmbd}\min_{\bx,\,\bB,\,\bY}\;F(\bx,\bB)+h(\bY)+\langle\bLmbd,\bB-\bY\rangle \notag\\
+&\max_{\bLmbd}\min_{\bx,\,\bB,\,\blue{\bY}}\;F(\bx,\bB)+h(\blue{\bY})+\langle\bLmbd,\bB-\blue{\bY}\rangle \notag\\
 % &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
 =& \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle - h^*(\bLmbd), \tag{\blue{D}}\label{eq:dual}
 \end{align}
@@ -688,14 +688,17 @@ $h^*(\bLmbd)=\sup_{\bY}\{\langle\bLmbd,\bY\rangle-h(\bY)\}$, we obtain:
 \section{DualHash: A Stochastic Primal-Dual Algorithm}
 
 \begin{frame}{DualHash: Three-Block Alternating Update Framework}
-\vspace{0.1cm}
+%\vspace{0.1cm}
 \small
 
 \begin{gather}
 % &= \max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle + \min_{\bY}\{h(\bY)-\langle\bLmbd,\bY\rangle\} \notag\\
-\max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle-h^*(\bLmbd), \tag{\blue{D}}\\[-0.25em]
-\text{where } F(\bx,\bB)=\tfrac{1}{n}\sum_{i=1}^n f_i(\bx)+\tfrac{\gamma}{2n}\|\bD(\bx)-\bB\|^2. \notag
+\max_{\bLmbd}\min_{\bx,\,\bB}\;F(\bx,\bB)+\langle\bLmbd,\bB\rangle-h^*(\bLmbd), \tag{\blue{D}}
+% \\[-0.25em]
+% \text{where } . \notag
 \end{gather}
+where $F(\bx,\bB)=\tfrac{1}{n}\sum_{i=1}^n f_i(\bx)+\tfrac{\gamma}{2n}\|\bD(\bx)-\bB\|^2$.
+
 
 \nii\textbf{Idea:} Employ an alternating update scheme for $(\bx,\bB,\bLmbd)$.
 
@@ -784,7 +787,7 @@ F(\bx,\bB)
 \end{itemize}
 
 \vspace{0.2cm}
-\textbf{AS.2 (Mean-squared smoothness).}\footnote{Xu Y., Xu Y. Momentum-based variance-reduced proximal stochastic gradient method for composite nonconvex stochastic optimization. Journal of Optimization Theory and Applications, 2023, 196(1): 266--297.}
+\textbf{AS.2 (Mean-squared smoothness).}\footnote{Xu Yangyang, Xu Yibo, Momentum-based variance-reduced proximal stochastic gradient method for composite nonconvex stochastic optimization. Journal of Optimization Theory and Applications, 2023, 196(1): 266--297.}
 \[
 \EE_i\!\left[\|\nabla_{\bx}F_i(\bx,\bb_i)-\nabla_{\bx}F_i(\bx',\bb_i')\|^2\right]\le L_F^2\!\left[\|\bx-\bx'\|^2+\|\bB-\bB'\|^2\right],
 \]
@@ -1055,11 +1058,11 @@ MDSHC~\blue{[WPL+23]} & 0.8238 & 0.8350 & 0.8262 & 0.6452 & 0.6081 & 0.6493 \\
 \bottomrule
 \end{tabular}}
 \par\vspace{0.14cm}
-{\footnotesize Note: Higher mAP indicates better retrieval performance.\par}
+{\footnotesize Note: mAP$\in[0,1]$. Higher mAP indicates better retrieval performance. \par}
 \end{center}
 \vspace{0.02cm}
 \begin{itemize}
-\item DualHash-StoM achieves the \blue{best mAP} across all selected code lengths on both datasets.
+%\item DualHash-StoM achieves the \blue{best mAP} across all selected code lengths on both datasets.
 \item At 64 bits, it improves mAP by \blue{1.84} percentage points over OrthoHash on CIFAR-10 and by \blue{9.55} percentage points over MDSHC on NUS-WIDE.
 \end{itemize}
 \end{frame}
@@ -1174,15 +1177,17 @@ MDSHC~\blue{[WPL+23]} & 0.9063 & 0.9227 & 0.7248 & 0.7758 & 0.8561 & 0.8657 \\
 \text{DualHash-StoRM:}\ \calO(\varepsilon^{-3}).
 \]
 \end{itemize}
+\item  {Future work}
+\begin{itemize}
+ \item Extend the decoupling-dual-structure principle to quantization-aware training of low-bit neural networks.
+\item Characterize the gap between stationary points of (P) and the original composite problem as penalty parameter $\gamma\to\infty$.
 \end{itemize}
 
-% \vspace{0.2cm}
-% \begin{block}{Future work}
-% \begin{itemize}
-% % \item Extend the decoupling-dual-structure principle to quantization-aware training of low-bit neural networks.
-% \item Characterize the gap between stationary points of (P) and the original composite problem as penalty parameter $\gamma\to\infty$.
-% \end{itemize}
-% \end{block}
+\end{itemize}
+
+ 
+
+ 
 
  
 

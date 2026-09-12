@@ -10,6 +10,7 @@
 \usepackage{amsthm}
 
 \newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
 \newcommand{\rigorousstationarity}{at least a rigorous stationarity relationship}
 
 
@@ -30,12 +31,12 @@
 \maketitle
 \noindent Dear Editor-in-Chief,
 
-We are writing to respectfully ask for your reconsideration of the decision on our manuscript \textbf{[sumbmission ID]}, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing.''
+We are writing to respectfully ask for your reconsideration of the decision on our manuscript \textbf{[submission ID]}, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing.''
 
 The central contribution of this work is to address the
 fundamental quantization difficulty in deep hashing through
 Fenchel duality, accompanied by rigorous oracle complexity
-bounds, where prior deep hashing methods did not provide such theoretical guarantee. Experiments on multiple
+upper bounds, where prior deep hashing methods did not provide such theoretical guarantee. Experiments on multiple
 datasets confirm the practical advantages of our framework.
 
 We were informed of the rejection decision, along with the reviewers' comments. We have carefully considered all of the comments, and while we appreciate both the reviewers' and the Associate Editor's time and effort, we respectfully disagree with several of the points raised. We believe that some of the concerns underlying the rejection decision are based on a misunderstanding of the formulation and theoretical results presented in the manuscript. Below, we explain, point by point, the specific issues with which we disagree and provide supporting arguments.
@@ -48,7 +49,7 @@ The key question is whether this transformed problem provides meaningful guarant
 
 \vspace{0.5em}
 
-\noindent\textbf{Our response.} 
+\noindent\textbullet\quad\textbf{\red{Our response.} }
 
 We thank the reviewer for the opportunity to clarify this first-order stationarity relationship.
 
@@ -171,7 +172,7 @@ provides.}
 
 While the counterexample in~(2) rules out both zero
 duality gap and unconditional stationarity transfer for
-the W-type regularizer in nonconvex problem. this is consistent with the broader
+the W-type regularizer in a nonconvex problem. This is consistent with the broader
 nonconvex optimization literature, where primal--dual
 methods do not assume strong duality but instead
 establish explicit stationarity relationships between
@@ -195,28 +196,69 @@ the formulations involved~\cite{Bolte2018,li2015global}.
 % necessary and sufficient for the W-type regularizer.
 % The result is a complete characterization, not a
 % partial substitute for strong duality.
-\section*{Reviewer 2's Comments}
+\section*{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
-\noindent Reviewer~2 recommended \textbf{major revision} and provided detailed, constructive feedback. The review explicitly acknowledges that the experimental section is comprehensive and well-detailed. The majority of the comments concern:
-\begin{itemize}[leftmargin=2em]
-    \item Presentation and notation improvements (closeness vs.\ lower semicontinuity, notation consistency, equation numbering).
-    \item Additional proof details (intermediate steps, clearer justifications for specific inequalities, conditional expectation formalism).
-    \item Minor mathematical corrections (coefficient expressions in specific lemmas, summation formulas).
-\end{itemize} 
+\noindent\textbullet\quad\textbf{Reviewer comment.} \emph{%
+The detailed review of the convergence and complexity analysis identifies several substantive issues, including insufficient assumptions, incomplete boundedness and descent arguments, an underdeveloped stochastic framework, and errors in conditional expectations and estimates. Some of these issues affect the main complexity results, so the current theoretical guarantees are not fully established as written.}
+ 
+\noindent\textbullet\quad\textbf{\red{Our response.}}
 
+We thank Reviewer~3 for the careful examination of our theoretical analysis. Below, we clarify several major concerns and explain how we will address the remaining issues.
+
+\vspace{0.5em}
+
+\noindent\textbf{(1) Clarification of the assumptions
+already stated in the manuscript.}
+
+The nonemptiness of the stationary-point set was stated in the original manuscript on p.~[10]:
+For this specific assumption, we respectfully clarify that it was not omitted. We will make its role more
+explicit in the revision.
+
+\vspace{0.5em}
+
+\noindent\textbf{(2) Explicit justification of the
+boundedness of the objective and descent arguments.}
+
+Although our analysis already establishes the boundedness properties of the constructed Lyapunov function, we agree that the relevant conditions should be stated more explicitly. Under the \red{additional condition used in our analysis}, the objective function is also bounded. We will clarify these assumptions and their roles in the revised manuscript. 
+
+The boundedness condition is crucial for ensuring reliable
+convergence of the iterative sequence in stochastic con-
+strained optimization. The inherent randomness of the
+process makes it difficult to guarantee that all iterates re-
+main within a specific level set. The necessity of
+Assumption~5.1(i) is well established in
+\cite{BeraCurtRobiZhou21,na2021inequality,NaAnitKola22,
+wang2025complexity,sun2023algorithms}.
+
+\vspace{0.5em}
+
+\noindent\textbf{(3) Corrections to conditional expectations
+and estimates, with their implications for the main results.}
+
+% We will define the probability space and filtration,
+% specify the conditioning sigma-algebra in each relevant
+% calculation, and use consistent conditional-expectation
+% notation throughout Section~5 and Appendices~C and~D.
+% We will also specify which statements hold almost surely.
+
+\red{[To be completed: present the corrected inequalities
+and trace their consequences through the affected
+lemmas and Theorems~5.2 and~5.3. State precisely whether
+the corrections affect constants, parameter conditions,
+assumptions, or complexity orders.]}
+
+\section*{}
 
 In brief, we have provided clarifications for the
 primary theoretical concerns raised in the decision
-letter. We also note that Reviewer~2 recommended
-major revision, not rejection. We respectfully ask
-the Editor-in-Chief to reconsider the decision and
-grant us the opportunity to revise. 
-
+letter. We also note that Reviewer~3 recommended
+major revision. We respectfully ask
+the Editor-in-Chief to reconsider the decision. 
 
 \vspace{1.5em}
 
 \noindent Sincerely,\\
-Authors of the submission []
+Authors of \textbf{Submission [ID]}. 
 
 \bibliographystyle{siamplain}
 \bibliography{revision_refs}

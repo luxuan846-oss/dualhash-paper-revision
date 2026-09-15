@@ -51,151 +51,70 @@ The key question is whether this transformed problem provides meaningful guarant
 
 \noindent\textbullet\quad\textbf{\red{Our response.} }
 
-We thank the reviewer for the opportunity to clarify this first-order stationarity relationship.
-
-\textbf{(1) We establish that dual stationarity implies primal stationarity, and conversely, under the condition $|\widetilde{B}_{ij}|\ge 1$ for all $i,j$ in our W-regularized problem.}
-
-Following the notation of our manuscript, the primal problem is
+We thank the reviewer for raising this point. The stationarity relationship requested by the reviewer is already built into our manuscript: it is encoded in the \emph{second optimality condition of (5.2) in Lemma~5.2}, namely the Fenchel--Young equality
 \[
-\tag{P}
-\min_{x,B} J(x,B) := F(x,B)+r(B),
+h(B^*)+h^*(\Lambda^*)=\langle \Lambda^*,B^*\rangle ,
 \]
-where $D_i$ is the output of the neural network and $F(x,B)=f(x)+\frac{\gamma}{2n}\sum_{i=1}^n \|D_i(x)-b_i\|^2$, and
-\[
-r(B)
-=
-\mu\sum_{i=1}^n\sum_{j=1}^d
-\bigl||B_{ij}|-1\bigr|
-\]
-is the W-type regularizer. The corresponding Lagrangian is
-\[
-\mathcal{L}(x,B,\lambda)
-:=
-F(x,B)+\langle \lambda,B\rangle-r^*(\lambda),
-\]
-and the dual problem is
-\[
-\tag{D}
-\max_{\lambda}\;\min_{x,B}\;
-\mathcal{L}(x,B,\lambda).
-\]
+which Lemma~5.2 derives from the primal--dual optimality characterization in~\cite[Theorem~2.158]{bonnans2013perturbation} (reference~[6] of the manuscript). Below we make explicit what this condition implies for the original objective. The argument uses only Lemma~5.2, the closed form of $h^*$ given on p.~8 of the manuscript, and textbook facts of convex analysis~\cite[Theorem~23.5]{rockafellar1970convex}, \cite[Theorem~10.1]{rockafellar1998variational}; we did not spell it out in the original submission because it follows from these standard results in a few lines. We will add it to the revision as a corollary of Lemma~5.2.
 
-We establish the following relationship between formulation~(D) and Problem~(P).
+\vspace{0.3em}
+\textbf{(1) Under the Fenchel--Young equality of Lemma~5.2, every critical point of the Lagrangian (4.2) is a stationary point of Problem~(P); this equality is equivalent to the pointwise contact condition $|\widetilde{B}_{ij}|\ge 1$.}
 
-\begin{proposition}[Stationarity transfer]
-Suppose $(\tilde{x},\tilde{B},\tilde{\lambda})$ satisfies the first-order stationarity conditions of~(D):
+We keep the notation of the manuscript. Problem~(P) is $\min_{x,B} J(x,B)=F(x,B)+h(B)$ with the W-type regularizer $h(B)=\lambda\sum_{i,j}\bigl||B_{ij}|-1\bigr|$, and the Lagrangian is $\mathcal{L}(x,B,\Lambda)=F(x,B)+\langle B,\Lambda\rangle-h^*(\Lambda)$, see (4.2). Conjugating the closed form of $h^*$ on p.~8 once more gives the biconjugate
+\[
+h^{**}(B)=\lambda\sum_{i,j}\bigl(|B_{ij}|-1\bigr)_+ ,
+\]
+which coincides with $h$ exactly on $\{|B_{ij}|\ge 1\ \forall i,j\}$.
+
+\begin{proposition}[Stationarity transfer, corollary of Lemma~5.2]\label{prop:transfer}
+Let $(\tilde{x},\widetilde{B},\widetilde{\Lambda})\in\operatorname{crit}\mathcal{L}$, i.e.,
 \[
 \tag{D-stat}\label{eq:pd-stationarity}
-\begin{cases}
-\nabla_x F(\tilde{x},\tilde{B})=0,\\[4pt]
-\nabla_B F(\tilde{x},\tilde{B})+\tilde{\lambda}=0,\\[4pt]
-\tilde{B}\in\partial r^*(\tilde{\lambda}).
-\end{cases}
+\nabla_x F(\tilde{x},\widetilde{B})=0,\qquad
+\nabla_B F(\tilde{x},\widetilde{B})+\widetilde{\Lambda}=0,\qquad
+\widetilde{B}\in\partial h^*(\widetilde{\Lambda}).
 \]
 Then the following statements are equivalent:
-\begin{enumerate}
-\item $(\tilde{x},\tilde{B})$ is a first-order stationary point of Problem~(P), i.e.,
+\begin{enumerate}[label=(\alph*)]
+\item $(\tilde{x},\widetilde{B})$ is a first-order stationary point of Problem~(P):
 \[
 \tag{P-stat}\label{eq:original-stationarity}
-\begin{cases}
-\nabla_x F(\tilde{x},\tilde{B})=0,\\[4pt]
-0\in\nabla_B F(\tilde{x},\tilde{B})+\partial r(\tilde{B});
-\end{cases}
+\nabla_x F(\tilde{x},\widetilde{B})=0,\qquad
+0\in\nabla_B F(\tilde{x},\widetilde{B})+\partial h(\widetilde{B});
 \]
-\item the contact condition holds:
-\[
-r(\tilde{B})=r^{**}(\tilde{B})
-\quad\Longleftrightarrow\quad
-|\tilde{B}_{ij}|\ge 1
-\quad\Longleftrightarrow\quad
-|D_{ij}(\tilde{x})|\ge 1,
-\qquad\text{for all } i,j.
-\]
+\item the Fenchel--Young equality in (5.2) holds at $(\widetilde{B},\widetilde{\Lambda})$: $h(\widetilde{B})+h^*(\widetilde{\Lambda})=\langle\widetilde{\Lambda},\widetilde{B}\rangle$;
+\item the contact condition holds at $\widetilde{B}$: $h(\widetilde{B})=h^{**}(\widetilde{B})$, equivalently $|\widetilde{B}_{ij}|\ge 1$ for all $i,j$.
 \end{enumerate}
 \end{proposition}
 
-
-
-\vspace{0.3em}
-
-\textbf{(2) We show that the contact condition
-$|B_{ij}^*|\ge 1$ is necessary for our nonconvex regularized problem: without it, stationarity
-transfer fails and a positive duality gap arises.}
+The contact condition is required \emph{only at the point $\widetilde{B}$}, not on the whole space. A global identity $h=h^{**}$ would force $h$ to be convex, which the W-type regularizer is not; the reformulation is useful precisely because $h$ is nonconvex while $h^*$ is convex. The proof is given in the Appendix.
 
 \vspace{0.3em}
+\textbf{(2) The condition in Proposition~\ref{prop:transfer} cannot be dropped: without it, stationarity transfer fails and a positive duality gap arises.}
 
 \begin{example}
 Consider the one-dimensional problem
 \[
-\min_{b\in\mathbb{R}}
-\left\{
-\frac{1}{2}b^2
-+\bigl||b|-1\bigr|
-\right\}.
+\min_{b\in\mathbb{R}}\Bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\Bigr\},
 \]
-The primal optimum is attained at $b^*=\pm 1$ with
-$p^*=\tfrac{1}{2}$. The corresponding dual optimum is
+i.e., $F(b)=\tfrac12 b^2$ and $h(b)=||b|-1|$ with $\lambda=1$. The primal optimum is attained at $b^*=\pm1$ with $p^*=\tfrac12$. Since $\min_b\{\tfrac12 b^2+\Lambda b\}=-\tfrac12\Lambda^2$ and $h^*(\Lambda)=|\Lambda|$ on $[-1,1]$, the dual optimal value is
 \[
-d^*
-=
-\sup_{|\lambda|\le 1}
-\left\{
--\tfrac{1}{2}\lambda^2-|\lambda|
-\right\}
-=0,
+d^*=\sup_{|\Lambda|\le1}\Bigl\{-\tfrac12\Lambda^2-|\Lambda|\Bigr\}=0,
 \]
-attained at $\lambda^*=0$. Thus $p^*-d^*=\tfrac{1}{2}>0$,
-and strong duality fails.
+attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$ and strong duality fails.
 
-Moreover, the triple $(b^*,\lambda^*)=(0,0)$ satisfies
-the transformed first-order system:
-\[
-F'(0)+\lambda^*=0,
-\qquad
-b^*=0\in\partial r^*(0)=[-1,1].
-\]
-But $0\notin\partial r(0)=\{-1,1\}$, so stationarity
-for the original objective fails at this point. The
-contact condition also fails: $|b^*|=0<1$.
+Moreover, the pair $(\bar b,\bar\Lambda)=(0,0)$ satisfies \eqref{eq:pd-stationarity}:
+$F'(0)+\bar\Lambda=0$ and $\bar b=0\in\partial h^*(0)=[-1,1]$.
+However, $0\notin\partial h(0)=\{-1,1\}$, so $\bar b$ is not stationary for the original objective. Consistently with Proposition~\ref{prop:transfer}, both the Fenchel--Young equality ($h(0)+h^*(0)=1\neq0$) and the contact condition ($|\bar b|=0<1$) fail at this point.
 \end{example}
 
-\noindent This confirms that the equivalence established in~(1)
-is sharp. The contact condition is the precise boundary
-between success and failure of stationarity transfer for
-the W-type regularizer.
-
-\textbf{(3) While strong duality
-cannot be guaranteed under the present assumptions, the established approach in nonconvex primal--dual optimization is to characterize stationarity relationships, which is what our Proposition
-provides.}
+\noindent Hence the equivalence in Proposition~\ref{prop:transfer} is sharp: the contact condition marks exactly where stationarity transfer holds for the W-type regularizer.
 
 \vspace{0.3em}
+\textbf{(3) Strong duality cannot be expected here; the appropriate guarantee is a stationarity relationship, which Lemma~5.2 and Proposition~\ref{prop:transfer} provide.}
 
-While the counterexample in~(2) rules out both zero
-duality gap and unconditional stationarity transfer for
-the W-type regularizer in a nonconvex problem. This is consistent with the broader
-nonconvex optimization literature, where primal--dual
-methods do not assume strong duality but instead
-establish explicit stationarity relationships between
-the formulations involved~\cite{Bolte2018,li2015global}. 
+The counterexample in~(2) rules out both zero duality gap and unconditional stationarity transfer for the W-type regularizer. This is consistent with the nonconvex primal--dual literature, where Lagrangian-based methods are analyzed without assuming strong duality and the relationship between the formulations is established at the level of stationarity~\cite{Bolte2018,li2015global}. Our analysis follows the same line: Theorems~5.2 and~5.3 bound the SFO complexity of reaching $\varepsilon$-critical points of $\mathcal{L}$, and Proposition~\ref{prop:transfer} states precisely when such points are stationary for Problem~(P).
 
-% Bolte, Sabach, and Teboulle~\cite{Bolte2018} analyze nonconvex
-% Lagrangian-based optimization and prove, in their
-% Proposition~3.1, a chain connecting Lyapunov
-% criticality, augmented-Lagrangian criticality, and
-% original composite stationarity under explicit
-% assumptions. Li and Pong~\cite{li2015global} establish
-% original-problem stationarity of ADMM cluster points
-% for nonconvex composite problems under their stated
-% conditions. In both cases, the authors \emph{prove}
-% the stationarity relationship rather than assume
-% strong duality.
-
-% Our Proposition follows the same paradigm. It
-% establishes the stationarity transfer under the contact
-% condition and shows that this condition is both
-% necessary and sufficient for the W-type regularizer.
-% The result is a complete characterization, not a
-% partial substitute for strong duality.
 \section*{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
 \noindent\textbullet\quad\textbf{Reviewer comment.} \emph{%
@@ -265,114 +184,30 @@ Authors of \textbf{Submission [ID]}.
 
 \clearpage
 \appendix
-\section*{Appendix: Proof of Proposition~1}
+\section*{Appendix: Proof of Proposition~\ref{prop:transfer}}
 
 \begin{proof}
-Recalling the definition of the W-type regularizer and its biconjugate, we have
+\emph{Step 0: a consequence of \eqref{eq:pd-stationarity}.}
+Since $h^{**}$ is proper, closed and convex, and $(h^{**})^*=h^*$, the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
+\[
+\widetilde{B}\in\partial h^*(\widetilde{\Lambda})
+\iff
+\widetilde{\Lambda}\in\partial h^{**}(\widetilde{B})
+\iff
+h^{**}(\widetilde{B})+h^*(\widetilde{\Lambda})=\langle\widetilde{\Lambda},\widetilde{B}\rangle .
+\tag{A.1}
+\]
+In addition, \eqref{eq:pd-stationarity} gives $\widetilde{\Lambda}=-\nabla_B F(\tilde{x},\widetilde{B})$, so \eqref{eq:original-stationarity} holds if and only if $\widetilde{\Lambda}\in\partial h(\widetilde{B})$.
 
-$$
-r(B)=\mu\sum_{i,j}\bigl||B_{ij}|-1\bigr|,
-\qquad
-r^{**}(B)=\mu\sum_{i,j}(|B_{ij}|-1)_+,
-$$ implies
-$$
-r(\tilde{B})=r^{**}(\tilde{B})
-\quad\Longleftrightarrow\quad
-|\tilde{B}_{ij}|\ge1
-\quad\text{for all }i,j.
-$$
+\emph{(b)$\iff$(c).} By (A.1), the Fenchel--Young equality for $h$ holds at $(\widetilde{B},\widetilde{\Lambda})$ if and only if $h(\widetilde{B})=h^{**}(\widetilde{B})$. Comparing $h$ with $h^{**}(B)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ componentwise, this is equivalent to $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 
-It remains to relate the contact condition to stationarity. Since
+\emph{(b)$\Rightarrow$(a).} The equality $h(\widetilde{B})+h^*(\widetilde{\Lambda})=\langle\widetilde{\Lambda},\widetilde{B}\rangle$ together with the definition of $h^*$ means that $\widetilde{B}$ globally minimizes $h(\cdot)-\langle\widetilde{\Lambda},\cdot\rangle$. By Fermat's rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2 of the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})\subseteq\partial h(\widetilde{B})$, which is \eqref{eq:original-stationarity}.
 
-$$
-\tilde{B}\in\partial r^*(\tilde{\lambda})
-$$
-
-and \(r^*=(r^{**})^*\), Fenchel conjugacy gives
-
-$$
-\tilde{B}\in\partial r^*(\tilde{\lambda})
-\quad\Longleftrightarrow\quad
-\tilde{\lambda}\in\partial r^{**}(\tilde{B}).
-$$
-
-On the other hand, the second condition of
-\eqref{eq:pd-stationarity} gives
-
-$$
-\tilde{\lambda}=-\nabla_BF(\tilde{x},\tilde{B}).
-$$
-
-Hence, \((\tilde{x},\tilde{B})\) satisfies
-\eqref{eq:original-stationarity} if and only if
-$$
-\tilde{\lambda}\in\partial r(\tilde{B}).
-$$
-
-For the W-type regularizer, under
-\(\tilde{B}\in\partial r^*(\tilde{\lambda})\), a direct componentwise comparison of
-\(\partial r\) and \(\partial r^{**}\) gives
-
-$$
-\tilde{\lambda}\in\partial r(\tilde{B})
-\quad\Longleftrightarrow\quad
-|\tilde{B}_{ij}|\ge1
-\quad\text{for all }i,j.
-$$
-
-Therefore, we obtain
-
-$$
-(\tilde{x},\tilde{B})\text{ is stationary for }(P)
-\quad\Longleftrightarrow\quad
-|\tilde{B}_{ij}|\ge1
-\quad\forall\,i,j.
-$$
-
-Finally, recalling from \eqref{eq:pd-stationarity} that
-
-$$
-\tilde{\lambda}
-=
-\frac{\gamma}{n}\bigl(D(\tilde{x})-\tilde{B}\bigr),
-$$
-
-we obtain
-
-$$
-0\in
-\frac{\gamma}{n}\bigl(\tilde{B}-D(\tilde{x})\bigr)
-+\partial r^{**}(\tilde{B}).
-$$
-
-Thus, for every \(i,j\), \(\tilde{B}_{ij}\) is the unique minimizer of
-
-$$
-\min_{b\in\mathbb R}
-\left\{
-\frac{\gamma}{2n}
-\bigl(b-D_{ij}(\tilde{x})\bigr)^2
-+\mu(|b|-1)_+
-\right\}.
-$$
-
-If \(|D_{ij}(\tilde{x})|<1\), the unique minimizer is
-\(\tilde{B}_{ij}=D_{ij}(\tilde{x})\). If \(D_{ij}(\tilde{x})\ge1\), the minimizer cannot
-lie below \(1\); similarly, if \(D_{ij}(\tilde{x})\le-1\), it cannot lie
-above \(-1\). Hence, the following holds
-$$
-|\tilde{B}_{ij}|\ge1
-\quad\Longleftrightarrow\quad
-|D_{ij}(\tilde{x})|\ge1,
-$$ which  combining the above equivalences yields
-$$
-(\tilde{x},\tilde{B})\text{ is stationary for }(P)
-\quad\Longleftrightarrow\quad
-r(\tilde{B})=r^{**}(\tilde{B})
-\quad\Longleftrightarrow\quad
-|\tilde{B}_{ij}|\ge1
-\quad\Longleftrightarrow\quad
-|D_{ij}(\tilde{x})|\ge1, \text{ for all } i,j.
-$$
+\emph{(a)$\Rightarrow$(c).} By Step~0, (a) means $\widetilde{\Lambda}\in\partial h(\widetilde{B})\cap\partial h^{**}(\widetilde{B})$. Both functions are separable, so it suffices to examine a scalar component $b=\widetilde{B}_{ij}$. If $|b|<1$, then $\partial h^{**}(b)=\{0\}$, whereas $\partial h(b)=\{-\lambda\,\mathrm{sgn}(b)\}$ for $b\neq0$ and $\partial h(0)=\{-\lambda,\lambda\}$; in all cases $0\notin\partial h(b)$, so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 \end{proof}
+
+% Bibliography entries to add to revision_refs.bib:
+% bonnans2013perturbation : J. F. Bonnans and A. Shapiro, Perturbation Analysis of Optimization Problems, Springer, 2000; reprint 2013 (ref. [6] of the manuscript)
+% rockafellar1970convex   : R. T. Rockafellar, Convex Analysis, Princeton University Press, 1970
+% rockafellar1998variational : R. T. Rockafellar and R. J.-B. Wets, Variational Analysis, Springer, 1998 (ref. [47] of the manuscript)
 \end{document}

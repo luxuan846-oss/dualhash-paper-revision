@@ -31,20 +31,20 @@
 \maketitle
 \noindent Dear Editor-in-Chief,
 
-We are writing to respectfully ask for your reconsideration of the decision on our manuscript \textbf{[Submission ID]}, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing.''
+We respectfully ask for reconsideration of the decision on our manuscript [Submission ID], "DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing."
 
-The central contribution of this work is to address the
-fundamental quantization difficulty in deep hashing through
-Fenchel duality, accompanied by rigorous oracle complexity
-upper bounds, where prior deep hashing methods \textbf{did not provide such theoretical guarantees}. Experiments on multiple datasets confirm the practical advantages of our framework.
+Our manuscript addresses a fundamental optimization challenge in deep hashing: quantization. We transform the nonconvex
+W-regularized ($\|\,|z|-\mathbf{1}\|_1$) problem into a convex dual formulation with closed-form proximal updates via
+Fenchel duality, and establish rigorous complexity guarantees complemented by extensive experiments that, as
+both reviewers acknowledged, demonstrate the approach's practical potential. Specifically, deep hashing maps images to short binary codes (e.g., 64 bits) for large-scale retrieval, reducing storage by orders of magnitude and enabling sub-millisecond search via Hamming distance. The W-type regularizer is widely used in practice to enforce binarization, but its nonconvexity and nonsmoothness have left convergence and complexity analysis \textbf{largely unexplored} for W-regularized hashing methods, despite their strong empirical performance [].
 
-We received the rejection decision and the reviewers' comments. We carefully considered all comments. While we appreciate the reviewers' and the Associate Editor's time and effort, we respectfully disagree with several points raised. We believe some of the concerns underlying the rejection decision stem from a misunderstanding of the formulation and theoretical results presented in the manuscript.  \blue{We also believe the revised analysis is directly relevant to SIIMS's
-interest in nonconvex regularization for imaging: for the W-type penalty
-used in image retrieval, it gives a necessary-and-sufficient condition
-under which stationarity of the convex-conjugate primal--dual formulation
-carries over to the original model~(P), which, to the best of our
-knowledge, has not been established before.}
+However, we received the rejection decision and the reviewers' comments. We carefully considered all comments. While we appreciate the reviewers' and the Associate Editor's time and effort, we respectfully disagree with several points raised. We believe some concerns underlying the rejection decision stem from a misunderstanding of the manuscript's formulation and theoretical results. We believe some of the concerns underlying the rejection decision stem from a misunderstanding of the manuscript's formulation and theoretical results. Below, we clarify the reviewers' major concerns and present the revisions we made in response.
 
+More importantly,  we have also obtained a result that we believe is directly relevant to SIIMS's scope: while it is well understood that using the conjugate function of the nonconvex function introduces a convex relaxation (M\"{o}llenhoff et al., SIIMS 2015), whether this relaxation preserves stationarity of the original model depends on the specific penalty. For the W-type regularizer $\|\,|z|-\mathbf{1}\|_1$, we establish
+an explicit, verifiable necessary-and-sufficient condition for this transfer (see \red{[Section x]}for details), a model-specific characterization that, to the best of our knowledge, has not appeared in existing primal--dual analyses. 
+
+
+\section{Some clarifications about several comments}
 % ============================================================
 \section*{Reviewer 2, Comment 1: Stationarity Relationship}
 

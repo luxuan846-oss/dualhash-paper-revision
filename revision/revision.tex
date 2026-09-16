@@ -31,22 +31,15 @@
 \maketitle
 \noindent Dear Editor-in-Chief,
 
-We respectfully ask for reconsideration of the decision on our manuscript [Submission ID], "DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing."
+We respectfully ask for reconsideration of the decision on our manuscript \#M187198, "DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing."
 
-Our manuscript addresses a fundamental optimization challenge in deep hashing: quantization. We transform the nonconvex
-W-regularized ($\|\,|z|-\mathbf{1}\|_1$) problem into a convex dual formulation with closed-form proximal updates via
-Fenchel duality, and establish rigorous complexity guarantees complemented by extensive experiments that, as
-both reviewers acknowledged, demonstrate the approach's practical potential. Specifically, deep hashing maps images to short binary codes (e.g., 64 bits) for large-scale retrieval, reducing storage by orders of magnitude and enabling sub-millisecond search via Hamming distance. The W-type regularizer is widely used in practice to enforce binarization, but its nonconvexity and nonsmoothness have left convergence and complexity analysis \textbf{largely unexplored} for W-regularized hashing methods, despite their strong empirical performance [].
+Deep hashing maps images to short binary codes (e.g., 64 bits) for large-scale retrieval, reducing storage by orders of magnitude and enabling sub-millisecond search via Hamming distance. The W-type regularizer $\|\,|z|-\mathbf{1}\|_1$ is the principal penalty used in practice to enforce binarization, yet its nonconvexity and nonsmoothness have left convergence and complexity analysis largely unexplored for W-regularized hashing methods~\cite{liu2016dsh,zhu2016dhn,wang2023mds,chen2025shc}. Our manuscript addresses this gap: we reformulate the problem via Fenchel duality into a convex dual with closed-form proximal updates, and establish the first complexity guarantees for this setting, complemented by extensive experiments whose practical value both reviewers acknowledged.
 
-However, we received the rejection decision and the reviewers' comments. We carefully considered all comments. While we appreciate the reviewers' and the Associate Editor's time and effort, we respectfully disagree with several points raised. We believe some concerns underlying the rejection decision stem from a misunderstanding of the manuscript's formulation and theoretical results. We believe some of the concerns underlying the rejection decision stem from a misunderstanding of the manuscript's formulation and theoretical results. Below, we clarify the reviewers' major concerns and present the revisions we made in response.
+However, we have received the rejection decision along with the reviewers' insightful comments. After carefully considering all feedback, and while we sincerely appreciate the time and effort of the reviewers and the Associate Editor, we respectfully disagree with several of the points raised. We believe some of the concerns underlying the rejection decision stem from a misunderstanding of the manuscript's formulation and theoretical results. Below, we clarify the reviewers' major concerns and present the revisions we made in response.
 
-More importantly,  we have also obtained a result that we believe is directly relevant to SIIMS's scope: while it is well understood that using the conjugate function of the nonconvex function introduces a convex relaxation (M\"{o}llenhoff et al., SIIMS 2015), whether this relaxation preserves stationarity of the original model depends on the specific penalty. For the W-type regularizer $\|\,|z|-\mathbf{1}\|_1$, we establish
-an explicit, verifiable necessary-and-sufficient condition for this transfer (see \red{[Section x]}for details), a model-specific characterization that, to the best of our knowledge, has not appeared in existing primal--dual analyses. 
+More importantly, we have also obtained a result that we believe is directly relevant to SIIMS's scope: while it is well understood that using the conjugate function of the nonconvex function introduces a convex relaxation~\cite{mollenhoff2015primal}, whether this relaxation preserves stationarity of the original model depends on the specific penalty. For the W-type regularizer $\|\,|z|-\mathbf{1}\|_1$, we establish an explicit, verifiable necessary-and-sufficient condition for this transfer (see Proposition~\ref{prop:transfer} below for details), \red{a model-specific characterization that, to the best of our knowledge, has not appeared in existing primal--dual analyses.}
 
-
-\section{Some clarifications about several comments}
-% ============================================================
-\section*{Reviewer 2, Comment 1: Stationarity Relationship}
+\section{Reviewer 2, Comment 1: Stationarity Relationship}
 
 \noindent\textbullet\quad\textbf{Reviewer comment.} \emph{%
 The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is \blue{strong duality, zero duality gap, or \rigorousstationarity between the transformed primal--dual problem and the original objective.}}
@@ -61,16 +54,18 @@ manuscript: Problem~(P) reads
 F(x,B)=f(x)+\frac{\gamma}{2n}\sum_{i=1}^n\|D_i(x)-b_i\|^2,\qquad
 h(B)=\lambda\sum_{i,j}\bigl||B_{ij}|-1\bigr|.
 \]
-Problem~(D) is the dual associated with the splitting $Y=B$, i.e., with the Lagrangian
+
+The dual problem~(D) is obtained by introducing the splitting $Y=B$
+and eliminating $Y$ via the Fenchel conjugate~$h^*$:
 \[
-\widehat{\mathcal{L}}(x,B,Y,\Lambda)=F(x,B)+h(Y)+\langle\Lambda,B-Y\rangle ,
+\max_{\Lambda}\min_{x,B}\
+\mathcal{L}(x,B,\Lambda),\qquad
+\mathcal{L}(x,B,\Lambda)
+:=F(x,B)+\langle B,\Lambda\rangle-h^*(\Lambda).
+\tag{D}
 \]
-and eliminating $Y$ yields the reduced function with the Fenchel function $h^*$
-\[
-\mathcal{L}(x,B,\Lambda)=F(x,B)+\langle B,\Lambda\rangle-h^*(\Lambda).
-\tag{4.2}
-\]
-Our complexity results (Theorems~5.2 and~5.3) target
+
+Our complexity results (Theorems~5.2 and~5.3) target the critical set
 \[
 \operatorname{crit}\mathcal{L}
 :=\bigl\{(x,B,\Lambda):\
@@ -79,45 +74,38 @@ Our complexity results (Theorems~5.2 and~5.3) target
 \nabla_BF+\Lambda=0,\quad
 B\in\partial h^*(\Lambda),
 \]
-in the approximate sense: they bound the stochastic first-order oracle calls
-needed to find a point satisfying
-\[
-\mathbb{E}\bigl[\operatorname{dist}^2\bigl(0,\,
-\partial\mathcal{L}(x^k,B^k,\Lambda^k)\bigr)\bigr]
-\le\varepsilon^2.
-\tag{5.1}
-\]
-In the original manuscript, we have established that every zero-gap
-primal--dual optimal pair lies in $\operatorname{crit}\mathcal{L}$ in \textbf{ Lemma~5.2 }; see (1).
+bounding the stochastic first-order oracle calls needed to
+approximately reach it.
+
+In the original manuscript, we have established that \textbf{every zero-gap
+primal--dual optimal pair} lies in $\operatorname{crit}\mathcal{L}$ in \textbf{ Lemma~5.2 }; see (1).
 We then show that a zero duality gap \textbf{may fail for the W-type regularized
 problem} with a simple counterexample; see (2). And we add a necessary-and-sufficient condition under which a point in $\operatorname{crit}\mathcal{L}$ is stationary for Problem~(P) in (3).
 
 \vspace{0.3em}
-\noindent\textbf{(1) Strong duality: every zero-gap primal--dual pair lies in
-$\operatorname{crit}\mathcal{L}$.}
+\noindent\textbf{(1) Zero-gap primal--dual pairs are covered
+by the original manuscript.}
 
-Lemma~5.2 of the original manuscript treats the case in which strong duality
-holds between (P) and (D). Its proof rests on the optimality system~(5.2).
-The first equation states that $(x^*,B^*)$ minimizes
-$\mathcal{L}(\cdot,\cdot,\Lambda^*)$; the second,
-$h(B^*)+h^*(\Lambda^*)=\langle\Lambda^*,B^*\rangle$, is precisely the
-zero-duality-gap condition. The first equation gives the first two conditions
-in $\operatorname{crit}\mathcal{L}$. The second gives
-$B^*\in\partial h^*(\Lambda^*)$, since for every $\Lambda$,
+Lemma~5.2 of the submitted manuscript establishes: if
+$(x^*,B^*,\Lambda^*)$ satisfies the optimality system
 \[
-h^*(\Lambda)\ \ge\ \langle\Lambda,B^*\rangle-h(B^*)
-\ =\ h^*(\Lambda^*)+\langle B^*,\Lambda-\Lambda^*\rangle .
+(x^*,B^*)\in\arg\min_{x,B}\mathcal{L}(x,B,\Lambda^*),\qquad
+h(B^*)+h^*(\Lambda^*)=\langle\Lambda^*,B^*\rangle,
+\tag{5.2}
 \]
-Hence every saddle point of $\widehat{\mathcal{L}}$, i.e., every pair of
-optimal solutions of (P) and (D) with zero duality gap, belongs to
-$\operatorname{crit}\mathcal{L}$. Consequently, whenever such pairs exist,
-the target set of our complexity analysis contains all of them.
-
+then $(x^*,B^*,\Lambda^*)\in\operatorname{crit}\mathcal{L}$.
+That is, whenever a zero-gap primal--dual optimal pair exists,
+it belongs to the target set of our complexity analysis.
 
 
 \vspace{0.3em}
-\noindent\textbf{(2) A zero duality gap can fail already in the simplest
-instance of Problem~(P).}
+\noindent\textbf{(2) A zero duality gap can fail already in
+the simplest instance of Problem~(P).}
+
+While Lemma~5.2 covers the zero-gap case, such a gap is not
+guaranteed when $h$ is nonconvex. The following example shows
+that it can fail even when $F$ is strongly convex.
+
 \begin{example}\label{ex:gap}
 Consider the one-dimensional instance
 $\min_{b\in\mathbb{R}}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}$,
@@ -129,22 +117,32 @@ $h^*(\Lambda)=|\Lambda|$ on $[-1,1]$,
 d^*=\sup_{|\Lambda|\le1}\Bigl\{-\tfrac12\Lambda^2-|\Lambda|\Bigr\}=0,
 \]
 attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$: strong duality
-between (P) and (D) fails, and no zero-gap primal--dual pair exists.
+between Problem~(P) and Problem~(D) fails, and no zero-gap primal--dual pair exists.
 \end{example}
 
-Example~\ref{ex:gap} shows that a zero duality gap cannot be expected for
-this class of problems, even when $F$ is strongly convex: the gap stems from
-the W-type regularizer itself. For such problems, first-order stationarity is
-the natural target, as is standard for nonconvex primal--dual and splitting
-methods such as ADMM and
-PDHG~\cite{mollenhoff2015primal,li2015global,clason2019acceleration}.
+In the nonconvex setting, saddle points of the Lagrangian may
+not exist, and first-order stationarity is the standard
+convergence target in nonconvex primal--dual and splitting
+methods. Representative results include ADMM for nonconvex
+composite
+problems~\cite{li2015global,hong2016convergence}, nonconvex
+and nonsmooth ADMM for imaging
+applications~\cite{yang2017admm,zhu2024inexact}, and
+primal--dual methods for nonconvex problems with nonlinear
+operators~\cite{clason2019acceleration}. In each case, the
+convergence guarantee targets a stationary or KKT point, not
+a saddle point or a globally optimal zero-gap pair.
+
+Nevertheless, the reviewer's question highlights an important
+point: what does stationarity of the reformulated
+problem~\textup{(D)} imply for the original
+problem~\textup{(P)}? We appreciate this question, which
+prompted us to establish the following explicit
+characterization (proved in the Appendix).
 
 \vspace{0.3em}
-\noindent\textbf{(3) When a critical point of $\mathcal{L}$ is stationary
-for Problem~(P).}
-
-The revision adds the following result, where $\partial h$ denotes the
-limiting subdifferential used throughout the manuscript.
+\noindent\textbf{(3) New Proposition: stationarity transfer from
+$\operatorname{crit}\mathcal{L}$ to Problem~(P).}
 
 \begin{proposition}[Stationarity transfer]\label{prop:transfer}
 Let $(\tilde x,\widetilde B,\widetilde\Lambda)\in\operatorname{crit}\mathcal{L}$, i.e.,
@@ -164,23 +162,34 @@ Then the following statements are equivalent:
 $(\widetilde B,\widetilde\Lambda)$:
 $h(\widetilde B)+h^*(\widetilde\Lambda)=\langle\widetilde\Lambda,\widetilde B\rangle$;
 \item $|\widetilde B_{ij}|\ge1$ for all $i,j$;
-\item $|D_{ij}(\tilde x)|\ge1$ for all $i,j$.
 \end{enumerate}
 \end{proposition}
 
-Condition~(b) is exactly the second equation of~(5.2) used in Lemma~5.2,
-now required only at the limit point rather than together with global
-optimality; Proposition~\ref{prop:transfer} is thus the local counterpart
-of Lemma~5.2. The condition is imposed only at the stationary point, not
-along the iterates, and it can be checked a posteriori from the network
-outputs. In the form~(d), it states that all output entries lie outside
-$(-1,1)$, which is precisely the binarization that the W-type regularizer
-is designed to promote. The condition cannot be dropped: in
-Example~\ref{ex:gap}, $(b,\Lambda)=(0,0)\in\operatorname{crit}\mathcal{L}$
-violates~(c), and $b=0$ is not stationary for Problem~(P). The proof is
-given in the Appendix.
+% Condition~(b) is the Fenchel--Young equality, the same
+% equation used in Lemma~5.2 to treat the zero-gap case. The difference is that Proposition~\ref{prop:transfer}
+% requires it only at the limit point, not along the entire
+% iterate sequence.
+% Condition~(c) can be checked a posteriori from the network
+% outputs, which is precisely the binarization that the W-type
+% regularizer is designed to promote.
 
-\section*{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
+That $h(B)=h^{**}(B)$ suffices for stationarity transfer is a
+general fact from convex analysis, and the convex-relaxation
+effect of conjugating a nonconvex penalty has been
+recognized~\cite{mollenhoff2015primal}. However, an explicit
+characterization of when this condition holds for a specific
+penalty---and whether it is also necessary---has not been
+provided: M\"{o}llenhoff et al.\ address the relaxation by
+retaining the primal nonconvex term rather than
+characterizing when it is exact;
+Guo~\cite{guo2026preconditioned} targets a reduced system
+involving $\partial h^*$ but does not give a penalty-specific
+criterion. Proposition~\ref{prop:transfer} fills this gap for
+the W-type regularizer, providing the verifiable threshold
+$|\widetilde{B}_{ij}|\ge1$ as a necessary and sufficient
+condition.
+
+\section{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
 \noindent\textbullet\quad\textbf{Reviewer comment.} \emph{%
 The detailed review of the convergence and complexity analysis identifies several substantive issues, including insufficient assumptions, incomplete boundedness and descent arguments, an underdeveloped stochastic framework, and errors in conditional expectations and estimates. Some of these issues affect the main complexity results, so the current theoretical guarantees are not fully established as written.}
@@ -233,13 +242,21 @@ assumptions, or complexity orders.]}
 
 \section*{}
 
-We respectfully ask
-the Editor-in-Chief to reconsider the decision. 
+In closing, we note that the primary theoretical concern
+raised in the decision, the stationarity relationship, was
+partially addressed in the original manuscript (Lemma~5.2)
+and is now fully resolved by
+Proposition~\ref{prop:transfer}. We further note that
+Reviewer~2 explicitly recommended major revision and
+acknowledged that the proofs are ``generally carried out
+correctly.'' The rejection decision did not afford us the
+opportunity to provide these clarifications. We respectfully
+ask the Editor-in-Chief to reconsider.
 
 \vspace{1.5em}
 
 \noindent Sincerely,\\
-Authors of \textbf{Submission [ID]}. 
+Authors of \textbf{Submission \#M187198}.
 
 \bibliographystyle{siamplain}
 \bibliography{revision_refs}
@@ -249,7 +266,7 @@ Authors of \textbf{Submission [ID]}.
 \section*{Appendix: Proof of Proposition~\ref{prop:transfer}}
 
 \begin{proof}
-\emph{Step 0: a consequence of \eqref{eq:pd-stationarity}.}
+\emph{Step 0: a consequence of \eqref{eq:crit}.}
 Since $h^{**}$ is proper, closed and convex, and $(h^{**})^*=h^*$, the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
 \[
 \widetilde{B}\in\partial h^*(\widetilde{\Lambda})
@@ -259,11 +276,11 @@ Since $h^{**}$ is proper, closed and convex, and $(h^{**})^*=h^*$, the subgradie
 h^{**}(\widetilde{B})+h^*(\widetilde{\Lambda})=\langle\widetilde{\Lambda},\widetilde{B}\rangle .
 \tag{A.1}
 \]
-In addition, \eqref{eq:pd-stationarity} gives $\widetilde{\Lambda}=-\nabla_B F(\tilde{x},\widetilde{B})$, so \eqref{eq:original-stationarity} holds if and only if $\widetilde{\Lambda}\in\partial h(\widetilde{B})$.
+In addition, \eqref{eq:crit} gives $\widetilde{\Lambda}=-\nabla_B F(\tilde{x},\widetilde{B})$, so \eqref{eq:pstat} holds if and only if $\widetilde{\Lambda}\in\partial h(\widetilde{B})$.
 
 \emph{(b)$\iff$(c).} By (A.1), the Fenchel--Young equality for $h$ holds at $(\widetilde{B},\widetilde{\Lambda})$ if and only if $h(\widetilde{B})=h^{**}(\widetilde{B})$. Comparing $h$ with $h^{**}(B)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ componentwise, this is equivalent to $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 
-\emph{(b)$\Rightarrow$(a).} The equality $h(\widetilde{B})+h^*(\widetilde{\Lambda})=\langle\widetilde{\Lambda},\widetilde{B}\rangle$ together with the definition of $h^*$ means that $\widetilde{B}$ globally minimizes $h(\cdot)-\langle\widetilde{\Lambda},\cdot\rangle$. By Fermat's rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2 of the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})\subseteq\partial h(\widetilde{B})$, which is \eqref{eq:original-stationarity}.
+\emph{(b)$\Rightarrow$(a).} The equality $h(\widetilde{B})+h^*(\widetilde{\Lambda})=\langle\widetilde{\Lambda},\widetilde{B}\rangle$ together with the definition of $h^*$ means that $\widetilde{B}$ globally minimizes $h(\cdot)-\langle\widetilde{\Lambda},\cdot\rangle$. By Fermat's rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2 of the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})\subseteq\partial h(\widetilde{B})$, which is \eqref{eq:pstat}.
 
 \emph{(a)$\Rightarrow$(c).} By Step~0, (a) means $\widetilde{\Lambda}\in\partial h(\widetilde{B})\cap\partial h^{**}(\widetilde{B})$. Both functions are separable, so it suffices to examine a scalar component $b=\widetilde{B}_{ij}$. If $|b|<1$, then $\partial h^{**}(b)=\{0\}$, whereas $\partial h(b)=\{-\lambda\,\mathrm{sgn}(b)\}$ for $b\neq0$ and $\partial h(0)=\{-\lambda,\lambda\}$; in all cases $0\notin\partial h(b)$, so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 \end{proof}

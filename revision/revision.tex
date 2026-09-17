@@ -31,30 +31,26 @@
 \maketitle
 \noindent Dear Editor-in-Chief,
 
-We respectfully ask for reconsideration of the decision on our manuscript \#M187198, "DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing."
+We respectfully ask for reconsideration of the decision on our manuscript \#M187198, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing.'' While we sincerely appreciate the reviewers' and the Associate Editor's time and effort, we believe we can fully address all comments through minor or major revisions. 
 
-Deep hashing maps images to short binary codes (e.g., 64 bits) for large-scale retrieval, reducing storage by orders of magnitude and enabling sub-millisecond search via Hamming distance. The W-type regularizer $\|\,|z|-\mathbf{1}\|_1$ is the principal penalty used in practice to enforce binarization, yet its nonconvexity and nonsmoothness have left convergence and complexity analysis largely unexplored for W-regularized hashing methods~\cite{liu2016dsh,zhu2016dhn,wang2023mds,chen2025shc}. Our manuscript addresses this gap: we reformulate the problem via Fenchel duality into a convex dual with closed-form proximal updates, and establish the first complexity guarantees for this setting, complemented by extensive experiments whose practical value both reviewers acknowledged.
+Some of the concerns underlying the rejection decision may stem from a misunderstanding of the manuscript's formulation and theoretical results, partly due to our not presenting them clearly enough. Below, we clarify the reviewers' major concerns and present the revisions we made in response.
 
-However, we have received the rejection decision along with the reviewers' insightful comments. After carefully considering all feedback, and while we sincerely appreciate the time and effort of the reviewers and the Associate Editor, we respectfully disagree with several of the points raised. We believe some of the concerns underlying the rejection decision stem from a misunderstanding of the manuscript's formulation and theoretical results. Below, we clarify the reviewers' major concerns and present the revisions we made in response.
-
-More importantly, we have also obtained a result that we believe is directly relevant to SIIMS's scope: while it is well understood that using the conjugate function of the nonconvex function introduces a convex relaxation~\cite{mollenhoff2015primal}, whether this relaxation preserves stationarity of the original model depends on the specific penalty. For the W-type regularizer $\|\,|z|-\mathbf{1}\|_1$, we establish an explicit, verifiable necessary-and-sufficient condition for this transfer (see Proposition~\ref{prop:transfer} below for details), \red{a model-specific characterization that, to the best of our knowledge, has not appeared in existing primal--dual analyses.}
 
 \section{Reviewer 2, Comment 1: Stationarity Relationship}
 
 \noindent\textbullet\quad\textbf{Reviewer comment.} \emph{%
-The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is \blue{strong duality, zero duality gap, or \rigorousstationarity between the transformed primal--dual problem and the original objective.}}
+The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is  strong duality, zero duality gap, or at least a rigorous stationarity between the transformed primal--dual problem and the original objective.}
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{\red{Our response.} }
-We thank the reviewer for this question. We keep the notation of the
-manuscript: Problem~(P) reads
+We thank the reviewer for this comment. 
+Before proceeding, we recall the notation of the 
+manuscript. Problem~(P) reads 
 \[
 \tag{P}
-\min_{x,B}\ J(x,B)=F(x,B)+h(B),\qquad
-F(x,B)=f(x)+\frac{\gamma}{2n}\sum_{i=1}^n\|D_i(x)-b_i\|^2,\qquad
-h(B)=\lambda\sum_{i,j}\bigl||B_{ij}|-1\bigr|.
+\min_{x,B}\ J(x,B)=F(x,B)+h(B),
 \]
-
+where $h(B)=\lambda\sum_{i,j}\bigl||B_{ij}|-1\bigr|$ is the nonconvex nonsmooth W-regularizer. 
 The dual problem~(D) is obtained by introducing the splitting $Y=B$
 and eliminating $Y$ via the Fenchel conjugate~$h^*$:
 \[
@@ -64,51 +60,25 @@ and eliminating $Y$ via the Fenchel conjugate~$h^*$:
 :=F(x,B)+\langle B,\Lambda\rangle-h^*(\Lambda).
 \tag{D}
 \]
-
-Our complexity results (Theorems~5.2 and~5.3) target the critical set
+We also define the critical set
 \[
 \operatorname{crit}\mathcal{L}
 :=\bigl\{(x,B,\Lambda):\
-0\in\partial\mathcal{L}(x,B,\Lambda)\bigr\},\quad\text{i.e.,}\quad
-\nabla_xF=0,\quad
-\nabla_BF+\Lambda=0,\quad
-B\in\partial h^*(\Lambda),
+0\in\partial\mathcal{L}(x,B,\Lambda)\bigr\}.
+% ,\quad\text{i.e.,}\quad
+% \nabla_xF=0,\quad
+% \nabla_BF+\Lambda=0,\quad
+% B\in\partial h^*(\Lambda).
 \]
-bounding the stochastic first-order oracle calls needed to
-approximately reach it.
 
-In the original manuscript, we have established that \textbf{every zero-gap
-primal--dual optimal pair} lies in $\operatorname{crit}\mathcal{L}$ in \textbf{ Lemma~5.2 }; see (1).
-We then show that a zero duality gap \textbf{may fail for the W-type regularized
-problem} with a simple counterexample; see (2). And we add a necessary-and-sufficient condition under which a point in $\operatorname{crit}\mathcal{L}$ is stationary for Problem~(P) in (3).
+In the submitted manuscript, Lemma~5.2 establishes a stationarity condition linking the transformed primal--dual problem and the original objective. Namely, when a zero-gap primal--dual optimal pair $(x^*,B^*,\Lambda^*)$ exists,
+$(x^*,B^*,\Lambda^*)\in\operatorname{crit}\mathcal{L}$.  This motivates our complexity analysis for computing $\mathbb{E}[\operatorname{dist}(0,\,\partial\mathcal{L}(x^*,B^*,\Lambda^*))^2]\le\epsilon$, which is the main body of our theoretical analysis.
 
-\vspace{0.3em}
-\noindent\textbf{(1) Zero-gap primal--dual pairs are covered
-by the original manuscript.}
-
-Lemma~5.2 of the submitted manuscript establishes: if
-$(x^*,B^*,\Lambda^*)$ satisfies the optimality system
-\[
-(x^*,B^*)\in\arg\min_{x,B}\mathcal{L}(x,B,\Lambda^*),\qquad
-h(B^*)+h^*(\Lambda^*)=\langle\Lambda^*,B^*\rangle,
-\tag{5.2}
-\]
-then $(x^*,B^*,\Lambda^*)\in\operatorname{crit}\mathcal{L}$.
-That is, whenever a zero-gap primal--dual optimal pair exists,
-it belongs to the target set of our complexity analysis.
-
-
-\vspace{0.3em}
-\noindent\textbf{(2) A zero duality gap can fail already in
-the simplest instance of Problem~(P).}
-
-While Lemma~5.2 covers the zero-gap case, such a gap is not
-guaranteed when $h$ is nonconvex. The following example shows
-that it can fail even when $F$ is strongly convex.
+Indeed, we agree that discussing whether a zero-gap primal--dual optimal pair exists is important, as the zero duality gap can fail due to the nonconvex nature of the W-regularizer $h$ in Problem (P). We then illustrate this with a concrete instance.
 
 \begin{example}\label{ex:gap}
 Consider the one-dimensional instance
-$\min_{b\in\mathbb{R}}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}$,
+$p^* = \min_{b\in\mathbb{R}}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}$,
 i.e., $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal optimum is attained at
 $b^*=\pm1$ with $p^*=\tfrac12$. Since
 $\min_b\{\tfrac12 b^2+\Lambda b\}=-\tfrac12\Lambda^2$ and
@@ -120,29 +90,12 @@ attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$: strong duality
 between Problem~(P) and Problem~(D) fails, and no zero-gap primal--dual pair exists.
 \end{example}
 
-In the nonconvex setting, saddle points of the Lagrangian may
-not exist, and first-order stationarity is the standard
-convergence target in nonconvex primal--dual and splitting
-methods. Representative results include ADMM for nonconvex
-composite
-problems~\cite{li2015global,hong2016convergence}, nonconvex
-and nonsmooth ADMM for imaging
-applications~\cite{yang2017admm,zhu2024inexact}, and
-primal--dual methods for nonconvex problems with nonlinear
-operators~\cite{clason2019acceleration}. In each case, the
-convergence guarantee targets a stationary or KKT point, not
-a saddle point or a globally optimal zero-gap pair.
-
 Nevertheless, the reviewer's question highlights an important
 point: what does stationarity of the reformulated
 problem~\textup{(D)} imply for the original
 problem~\textup{(P)}? We appreciate this question, which
 prompted us to establish the following explicit
 characterization (proved in the Appendix).
-
-\vspace{0.3em}
-\noindent\textbf{(3) New Proposition: stationarity transfer from
-$\operatorname{crit}\mathcal{L}$ to Problem~(P).}
 
 \begin{proposition}[Stationarity transfer]\label{prop:transfer}
 Let $(\tilde x,\widetilde B,\widetilde\Lambda)\in\operatorname{crit}\mathcal{L}$, i.e.,
@@ -153,41 +106,25 @@ Let $(\tilde x,\widetilde B,\widetilde\Lambda)\in\operatorname{crit}\mathcal{L}$
 \end{equation}
 Then the following statements are equivalent:
 \begin{enumerate}[label=(\alph*)]
-\item $(\tilde x,\widetilde B)$ is a stationary point of Problem~(P):
+\item $(\tilde x,\widetilde B)$ is a stationary point of Problem~(P), i.e.,
 \begin{equation}\label{eq:pstat}
 \nabla_xF(\tilde x,\widetilde B)=0,\qquad
 0\in\nabla_BF(\tilde x,\widetilde B)+\partial h(\widetilde B);
 \end{equation}
-\item the Fenchel--Young equality in~(5.2) holds at
+\item the Fenchel--Young equality in~Lemma (5.2) holds at
 $(\widetilde B,\widetilde\Lambda)$:
 $h(\widetilde B)+h^*(\widetilde\Lambda)=\langle\widetilde\Lambda,\widetilde B\rangle$;
 \item $|\widetilde B_{ij}|\ge1$ for all $i,j$;
 \end{enumerate}
 \end{proposition}
 
-% Condition~(b) is the Fenchel--Young equality, the same
-% equation used in Lemma~5.2 to treat the zero-gap case. The difference is that Proposition~\ref{prop:transfer}
-% requires it only at the limit point, not along the entire
-% iterate sequence.
-% Condition~(c) can be checked a posteriori from the network
-% outputs, which is precisely the binarization that the W-type
-% regularizer is designed to promote.
+Here are some important points from the Proposition. 
 
-That $h(B)=h^{**}(B)$ suffices for stationarity transfer is a
-general fact from convex analysis, and the convex-relaxation
-effect of conjugating a nonconvex penalty has been
-recognized~\cite{mollenhoff2015primal}. However, an explicit
-characterization of when this condition holds for a specific
-penalty---and whether it is also necessary---has not been
-provided: M\"{o}llenhoff et al.\ address the relaxation by
-retaining the primal nonconvex term rather than
-characterizing when it is exact;
-Guo~\cite{guo2026preconditioned} targets a reduced system
-involving $\partial h^*$ but does not give a penalty-specific
-criterion. Proposition~\ref{prop:transfer} fills this gap for
-the W-type regularizer, providing the verifiable threshold
-$|\widetilde{B}_{ij}|\ge1$ as a necessary and sufficient
-condition.
+(a) Under the conditions of Proposition~1, every critical point of~$\mathcal{L}$ is a first-order stationary point of Problem~(P). Targeting first-order stationarity is standard in nonconvex (nonsmooth) optimization, such as ADMM for nonconvex nonsmooth problems \cite{yang2017admm,zhu2024inexact,li2015global,hong2016convergence} and primal--dual methods with nonlinear operators~\cite{clason2019acceleration}.
+
+(b) While the zero duality gap may fail, this is well recognized in nonconvex optimization: saddle points of the Lagrangian need not exist, as Example~\ref{ex:gap} concretely demonstrates. Moreover, our numerical experiments confirm that the primal--dual formulation is practically advantageous, yielding lower quantization errors and higher retrieval precision, which suggests that optimizing through the dual space is more effective than directly attacking the nonconvex W-regularizer in Problem (P). 
+
+(c) The necessary and sufficient condition in Proposition~\ref{prop:transfer} is based on $h(B)=h^{**}(B)$, a fact from convex analysis. The convex-relaxation effect of conjugating a nonconvex penalty has been recognized~\cite{mollenhoff2015primal,guo2026preconditioned}. However, no one has explicitly characterized when this condition holds for a specific penalty, or whether it is also necessary, and provided a corresponding characterization. 
 
 \section{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
@@ -241,6 +178,9 @@ the corrections affect constants, parameter conditions,
 assumptions, or complexity orders.]}
 
 \section*{}
+
+% Deep hashing maps images to short binary codes (e.g., 64 bits) for large-scale retrieval, reducing storage by orders of magnitude and enabling sub-millisecond search via Hamming distance. The W-type regularizer $\|\,|z|-\mathbf{1}\|_1$ is the principal penalty used in practice to enforce binarization, yet its nonconvexity and nonsmoothness have left convergence and complexity analysis largely unexplored for W-regularized hashing methods~\cite{liu2016dsh,zhu2016dhn,wang2023mds,chen2025shc}. Our manuscript addresses this gap: we reformulate the problem via Fenchel duality into a convex dual with closed-form proximal updates, and establish the first complexity guarantees for this setting, complemented by extensive experiments whose practical value both reviewers acknowledged.
+% However, we have received the rejection decision along with the reviewers' insightful comments. After carefully considering all feedback, and while we sincerely appreciate the time and effort of the reviewers and the Associate Editor, we respectfully disagree with several of the points raised.  
 
 In closing, we note that the primary theoretical concern
 raised in the decision, the stationarity relationship, was

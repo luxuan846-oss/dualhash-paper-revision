@@ -33,14 +33,7 @@
 
 We respectfully ask for reconsideration of the decision on our manuscript
 \#M187198, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical
-Guarantee for Deep Hashing.'' We sincerely appreciate the reviewers' and the
-Associate Editor's time and effort, and we believe we can address all of the
-comments in a revised manuscript.
-
-Some of the concerns underlying the rejection decision may stem from a
-misunderstanding of the manuscript's formulation and theoretical results,
-partly due to our not presenting them clearly enough. Below, we clarify the
-reviewers' major concerns and outline the revisions we propose in response.
+Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort devoted by the reviewers and the Associate Editor to evaluating our work. However, we believe that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission.These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
 
 
 \section{Reviewer 2, Comments: Stationarity Relationship}
@@ -49,8 +42,12 @@ reviewers' major concerns and outline the revisions we propose in response.
 The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is  strong duality, zero duality gap, or at least a rigorous stationarity relationship between the transformed primal--dual problem and the original objective.}
 
 \vspace{0.5em}
-\noindent\textbullet\quad\textbf{\red{Our response.} }
-We thank the reviewer for this comment. Before proceeding, we recall the
+\noindent\textbullet\quad\textbf{{Our response.} }
+We thank the reviewer for this comment. In the submitted manuscript, Lemma~5.2 already establishes a stationarity condition linking the transformed primal--dual problem and the original objective. 
+Namely, when a zero-gap primal--dual optimal pair $(x^*,B^*,\Lambda^*)$
+exists, $(x^*,B^*,\Lambda^*)\in\operatorname{crit}\mathcal{L}$. 
+
+Before proceeding, we recall the
 notation used in the manuscript. Problem~(P) reads
 \[
 \tag{P}
@@ -68,7 +65,7 @@ and eliminating $Y$ via the Fenchel conjugate~$h^*$:
 \tag{D}
 \]
 We also define the critical set
-\[
+\(
 \operatorname{crit}\mathcal{L}
 :=\bigl\{(x,B,\Lambda):\
 0\in\partial\mathcal{L}(x,B,\Lambda)\bigr\}.
@@ -76,18 +73,14 @@ We also define the critical set
 % \nabla_xF=0,\quad
 % \nabla_BF+\Lambda=0,\quad
 % B\in\partial h^*(\Lambda).
-\]
+\)
 
-In the submitted manuscript, Lemma~5.2 establishes a stationarity condition
-linking the transformed primal--dual problem and the original objective.
-Namely, when a zero-gap primal--dual optimal pair $(x^*,B^*,\Lambda^*)$
-exists, $(x^*,B^*,\Lambda^*)\in\operatorname{crit}\mathcal{L}$. This
-motivates our complexity analysis for finding a point
-$(\hat x,\widehat B,\widehat\Lambda)$ satisfying
+Lemma 5.2 motivates our complexity analysis for finding a point
+$(\hat x,\widehat B,\widehat\Lambda)$ satisfying 
 \[
 \mathbb{E}[\operatorname{dist}(0,\,\partial\mathcal{L}(\hat x,\widehat B,\widehat\Lambda))^2]\le\epsilon.
 \]
-
+This constructs the may body of our theoretical results in the submitted manuscript. 
 Indeed, we agree that discussing whether a zero-gap primal--dual optimal pair
 exists is important, as strong duality may fail due to the nonconvex nature of
 the W-regularizer $h$ in Problem (P). We then illustrate this point with a
@@ -107,13 +100,11 @@ attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$: strong duality
 between Problem~(P) and Problem~(D) fails, and no zero-gap primal--dual pair exists.
 \end{example}
 
-Nevertheless, the reviewer's question highlights an important point: what
-does stationarity of the reformulated problem~\textup{(D)} imply for the
+Nevertheless, the reviewer's question highlights an important point: what does $\operatorname{crit}\mathcal{L}$ imply for the 
 original problem~\textup{(P)}? We appreciate this question, which prompted
-us to establish the following explicit characterization (proved in the
-Appendix).
+us to establish the following explicit characterization. The proof is straightforward and closely follows the arguments used in the proof of Lemma 5.2 in the submitted manuscript.
 
-\begin{proposition}[Stationarity transfer]\label{prop:transfer}
+\begin{proposition}\label{prop:transfer}
 Let $(\tilde x,\widetilde B,\widetilde\Lambda)\in\operatorname{crit}\mathcal{L}$,
 i.e.,
 \begin{equation}\label{eq:crit}
@@ -134,38 +125,66 @@ $h(\widetilde B)+h^*(\widetilde\Lambda)=\langle\widetilde\Lambda,\widetilde B\ra
 \item $|\widetilde B_{ij}|\ge1$ for all $i,j$.
 \end{enumerate}
 \end{proposition}
+\begin{proof} 
+Since $h^{**}$ is proper, closed and convex, and $(h^{**})^*=h^*$, the
+subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
+\[
+\widetilde{B}\in\partial h^*(\widetilde{\Lambda})
+\iff
+\widetilde{\Lambda}\in\partial h^{**}(\widetilde{B})
+\iff
+h^{**}(\widetilde{B})+h^*(\widetilde{\Lambda})
+=\langle\widetilde{\Lambda},\widetilde{B}\rangle.
+\tag{3}
+\]
+In addition, \eqref{eq:crit} gives
+$\widetilde{\Lambda}=-\nabla_B F(\tilde{x},\widetilde{B})$, so
+\eqref{eq:pstat} holds if and only if
+$\widetilde{\Lambda}\in\partial h(\widetilde{B})$.
 
-We highlight three implications of Proposition~\ref{prop:transfer}. 
+\emph{(b)$\iff$(c).} By (3), the Fenchel--Young equality for $h$ holds at
+$(\widetilde{B},\widetilde{\Lambda})$ if and only if
+$h(\widetilde{B})=h^{**}(\widetilde{B})$. Comparing $h$ with
+$h^{**}(B)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ componentwise, this is equivalent
+to $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 
-\smallskip
-\noindent\textbf{(i).} Proposition~\ref{prop:transfer} shows that a critical
-point $(\tilde x,\widetilde B,\widetilde\Lambda)$ of $\mathcal{L}$ yields a
-first-order stationary point $(\tilde x,\widetilde B)$ of Problem~(P) if and
-only if $|\widetilde B_{ij}|\ge1$ for all $i,j$. First-order stationarity is a
-standard target in nonconvex and nonsmooth optimization, as in ADMM for
-nonconvex nonsmooth problems
-\cite{yang2017admm,zhu2024inexact,li2015global,hong2016convergence} and
-primal--dual methods with nonlinear operators~\cite{clason2019acceleration}.
+\emph{(b)$\Rightarrow$(a).} The equality
+$h(\widetilde{B})+h^*(\widetilde{\Lambda})
+=\langle\widetilde{\Lambda},\widetilde{B}\rangle$ together with the
+definition of $h^*$ means that $\widetilde{B}$ globally minimizes
+$h(\cdot)-\langle\widetilde{\Lambda},\cdot\rangle$. By Fermat's
+rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2 of
+the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})
+\subseteq\partial h(\widetilde{B})$, which is \eqref{eq:pstat}.
 
-\smallskip
-\noindent\textbf{(ii).} The failure of strong duality is well recognized in
-nonconvex optimization: saddle points of the Lagrangian need not exist, as
-Example~\ref{ex:gap} concretely demonstrates. Moreover, our numerical
-experiments indicate that the primal--dual formulation is practically
+\emph{(a)$\Rightarrow$(c).}  (a) means
+$\widetilde{\Lambda}\in\partial h(\widetilde{B})
+\cap\partial h^{**}(\widetilde{B})$. Both functions are separable, so it
+suffices to examine a scalar component $b=\widetilde{B}_{ij}$. If $|b|<1$,
+then $\partial h^{**}(b)=\{0\}$, whereas
+$\partial h(b)=\{-\lambda\,\mathrm{sgn}(b)\}$ for $b\neq0$ and
+$\partial h(0)=\{-\lambda,\lambda\}$; in all cases $0\notin\partial h(b)$,
+so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
+\end{proof}
+
+
+We highlight that  Proposition~\ref{prop:transfer}, though quite simple,   may answer the reviewer's question: it shows that a critical point $(\tilde x,\widetilde B,\widetilde\Lambda)$ of $\mathcal{L}$ yields a first-order stationary point $(\tilde x,\widetilde B)$ of Problem~(P) if and
+only if $|\widetilde B_{ij}|\ge1$ for all $i,j$.    Moreover, our numerical experiments indicate that the primal--dual formulation is practically
 advantageous, yielding lower quantization errors and higher retrieval
-precision, which suggests that optimizing in the dual space is more effective
-than directly optimizing the nonconvex W-regularizer in Problem (P).
+precision, which suggests that optimizing in the dual space is more effective than directly optimizing the nonconvex W-regularizer in Problem (P).
 
-\smallskip
-\noindent\textbf{(iii).} At a critical point of $\mathcal{L}$, the equality
-$h(\widetilde B)=h^{**}(\widetilde B)$ is equivalent to the Fenchel--Young
-equality in Proposition~\ref{prop:transfer}(b), as follows from standard
-conjugate-subgradient relations~\cite[Theorem~23.5]{rockafellar1970convex}.
-The convex-relaxation effect of taking the Fenchel conjugate of a nonconvex
-regularizer has been recognized~\cite{mollenhoff2015primal,guo2026preconditioned};
-however, to our knowledge, an explicit necessary-and-sufficient criterion for
-stationarity transfer under the W-type regularizer has not been established in
-prior work.
+In summary, we appreciate the reviewer’s comment. However, we believe that the submitted manuscript has already partially addressed this question, although the inclusion of an additional example and proposition would further clarify the issue. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity  and numerical performance of DualHash remain unaffected. 
+
+% \smallskip
+% \noindent\textbf{(iii).} At a critical point of $\mathcal{L}$, the equality
+% $h(\widetilde B)=h^{**}(\widetilde B)$ is equivalent to the Fenchel--Young
+% equality in Proposition~\ref{prop:transfer}(b), as follows from standard
+% conjugate-subgradient relations~\cite[Theorem~23.5]{rockafellar1970convex}.
+% The convex-relaxation effect of taking the Fenchel conjugate of a nonconvex
+% regularizer has been recognized~\cite{mollenhoff2015primal,guo2026preconditioned};
+% however, to our knowledge, an explicit necessary-and-sufficient criterion for
+% stationarity transfer under the W-type regularizer has not been established in
+% prior work.
 
 \section{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
@@ -177,10 +196,10 @@ Some of these affect the main complexity results, so the
 theoretical guarantees are not fully established as written.
 I return the article to the authors for \textbf{major revisions}.}
 
-\vspace{0.5em}
-We thank Reviewer~3 for the thorough examination of the manuscript. Below, we
-clarify the major concerns regarding ``insufficient assumptions and incomplete
-boundedness'' and explain how the remaining comments are addressed.
+% \vspace{0.5em}
+% We thank Reviewer~3 for the thorough examination of the manuscript. Below, we
+% clarify the major concerns regarding ``insufficient assumptions and incomplete
+% boundedness'' and explain how the remaining comments are addressed.
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{Comment 1.} \emph{%
@@ -192,8 +211,7 @@ also that having boundedness of all level-sets is equivalent to
 coercivity. Finally, the coercivity of $J$ is not assumed in
 your Assumption~5.1.}
 
-\noindent\textbullet\quad\textbf{\red{Our response.}}
-
+\noindent\textbullet\quad\textbf{{Our response.}}
 In the submitted manuscript, the coercivity of $J$ need not be assumed
 separately: as stated on page~7, it follows from the model
 structure~(3.1). Since $f_i(x)=\ell_{s,i}(x)+\frac{\mu}{2}\|x\|^2$
@@ -355,52 +373,49 @@ Authors of \textbf{Submission \#M187198}.
 \bibliographystyle{siamplain}
 \bibliography{revision_refs}
 
-\clearpage
-\appendix
-\section*{Appendix: Proof of Proposition~\ref{prop:transfer}}
+ 
 
-\begin{proof}
-\emph{Step 0: a consequence of \eqref{eq:crit}.}
-Since $h^{**}$ is proper, closed and convex, and $(h^{**})^*=h^*$, the
-subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
-\[
-\widetilde{B}\in\partial h^*(\widetilde{\Lambda})
-\iff
-\widetilde{\Lambda}\in\partial h^{**}(\widetilde{B})
-\iff
-h^{**}(\widetilde{B})+h^*(\widetilde{\Lambda})
-=\langle\widetilde{\Lambda},\widetilde{B}\rangle.
-\tag{A.1}
-\]
-In addition, \eqref{eq:crit} gives
-$\widetilde{\Lambda}=-\nabla_B F(\tilde{x},\widetilde{B})$, so
-\eqref{eq:pstat} holds if and only if
-$\widetilde{\Lambda}\in\partial h(\widetilde{B})$.
+% \begin{proof} 
+% Since $h^{**}$ is proper, closed and convex, and $(h^{**})^*=h^*$, the
+% subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
+% \[
+% \widetilde{B}\in\partial h^*(\widetilde{\Lambda})
+% \iff
+% \widetilde{\Lambda}\in\partial h^{**}(\widetilde{B})
+% \iff
+% h^{**}(\widetilde{B})+h^*(\widetilde{\Lambda})
+% =\langle\widetilde{\Lambda},\widetilde{B}\rangle.
+% \tag{A.1}
+% \]
+% In addition, \eqref{eq:crit} gives
+% $\widetilde{\Lambda}=-\nabla_B F(\tilde{x},\widetilde{B})$, so
+% \eqref{eq:pstat} holds if and only if
+% $\widetilde{\Lambda}\in\partial h(\widetilde{B})$.
 
-\emph{(b)$\iff$(c).} By (A.1), the Fenchel--Young equality for $h$ holds at
-$(\widetilde{B},\widetilde{\Lambda})$ if and only if
-$h(\widetilde{B})=h^{**}(\widetilde{B})$. Comparing $h$ with
-$h^{**}(B)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ componentwise, this is equivalent
-to $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
+% \emph{(b)$\iff$(c).} By (A.1), the Fenchel--Young equality for $h$ holds at
+% $(\widetilde{B},\widetilde{\Lambda})$ if and only if
+% $h(\widetilde{B})=h^{**}(\widetilde{B})$. Comparing $h$ with
+% $h^{**}(B)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ componentwise, this is equivalent
+% to $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 
-\emph{(b)$\Rightarrow$(a).} The equality
-$h(\widetilde{B})+h^*(\widetilde{\Lambda})
-=\langle\widetilde{\Lambda},\widetilde{B}\rangle$ together with the
-definition of $h^*$ means that $\widetilde{B}$ globally minimizes
-$h(\cdot)-\langle\widetilde{\Lambda},\cdot\rangle$. By Fermat's
-rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2 of
-the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})
-\subseteq\partial h(\widetilde{B})$, which is \eqref{eq:pstat}.
+% \emph{(b)$\Rightarrow$(a).} The equality
+% $h(\widetilde{B})+h^*(\widetilde{\Lambda})
+% =\langle\widetilde{\Lambda},\widetilde{B}\rangle$ together with the
+% definition of $h^*$ means that $\widetilde{B}$ globally minimizes
+% $h(\cdot)-\langle\widetilde{\Lambda},\cdot\rangle$. By Fermat's
+% rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2 of
+% the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})
+% \subseteq\partial h(\widetilde{B})$, which is \eqref{eq:pstat}.
 
-\emph{(a)$\Rightarrow$(c).} By Step~0, (a) means
-$\widetilde{\Lambda}\in\partial h(\widetilde{B})
-\cap\partial h^{**}(\widetilde{B})$. Both functions are separable, so it
-suffices to examine a scalar component $b=\widetilde{B}_{ij}$. If $|b|<1$,
-then $\partial h^{**}(b)=\{0\}$, whereas
-$\partial h(b)=\{-\lambda\,\mathrm{sgn}(b)\}$ for $b\neq0$ and
-$\partial h(0)=\{-\lambda,\lambda\}$; in all cases $0\notin\partial h(b)$,
-so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
-\end{proof}
+% \emph{(a)$\Rightarrow$(c).} By Step~0, (a) means
+% $\widetilde{\Lambda}\in\partial h(\widetilde{B})
+% \cap\partial h^{**}(\widetilde{B})$. Both functions are separable, so it
+% suffices to examine a scalar component $b=\widetilde{B}_{ij}$. If $|b|<1$,
+% then $\partial h^{**}(b)=\{0\}$, whereas
+% $\partial h(b)=\{-\lambda\,\mathrm{sgn}(b)\}$ for $b\neq0$ and
+% $\partial h(0)=\{-\lambda,\lambda\}$; in all cases $0\notin\partial h(b)$,
+% so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
+% \end{proof}
 
 % Bibliography entries to add to revision_refs.bib:
 % bonnans2013perturbation : J. F. Bonnans and A. Shapiro, Perturbation Analysis of Optimization Problems, Springer, 2000; reprint 2013 (ref. [6] of the manuscript)

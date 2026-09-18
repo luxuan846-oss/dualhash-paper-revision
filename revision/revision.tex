@@ -33,13 +33,12 @@
 
 We respectfully ask for reconsideration of the decision on our manuscript
 \#M187198, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical
-Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort devoted by the reviewers and the Associate Editor to evaluating our work. However, we believe that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission.These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
-
+Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort devoted by the reviewers and the Associate Editor to evaluating our work. However, we believe that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission. These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
 
 \section{Reviewer 2, Comments: Stationarity Relationship}
 
 \noindent\textbf{Main comment.} \emph{%
-The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is  strong duality, zero duality gap, or at least a rigorous stationarity relationship between the transformed primal--dual problem and the original objective.}
+The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is strong duality, zero duality gap, or at least a rigorous stationarity relationship between the transformed primal--dual problem and the original objective.}
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{{Our response.} }
@@ -80,7 +79,7 @@ $(\hat x,\widehat B,\widehat\Lambda)$ satisfying
 \[
 \mathbb{E}[\operatorname{dist}(0,\,\partial\mathcal{L}(\hat x,\widehat B,\widehat\Lambda))^2]\le\epsilon.
 \]
-This constructs the may body of our theoretical results in the submitted manuscript. 
+This constitutes the main body of our theoretical results in the submitted manuscript. 
 Indeed, we agree that discussing whether a zero-gap primal--dual optimal pair
 exists is important, as strong duality may fail due to the nonconvex nature of
 the W-regularizer $h$ in Problem (P). We then illustrate this point with a
@@ -167,24 +166,13 @@ $\partial h(0)=\{-\lambda,\lambda\}$; in all cases $0\notin\partial h(b)$,
 so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 \end{proof}
 
-
 We highlight that  Proposition~\ref{prop:transfer}, though quite simple,   may answer the reviewer's question: it shows that a critical point $(\tilde x,\widetilde B,\widetilde\Lambda)$ of $\mathcal{L}$ yields a first-order stationary point $(\tilde x,\widetilde B)$ of Problem~(P) if and
 only if $|\widetilde B_{ij}|\ge1$ for all $i,j$.    Moreover, our numerical experiments indicate that the primal--dual formulation is practically
 advantageous, yielding lower quantization errors and higher retrieval
 precision, which suggests that optimizing in the dual space is more effective than directly optimizing the nonconvex W-regularizer in Problem (P).
 
-In summary, we appreciate the reviewer’s comment. However, we believe that the submitted manuscript has already partially addressed this question, although the inclusion of an additional example and proposition would further clarify the issue. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity  and numerical performance of DualHash remain unaffected. 
+In summary, we appreciate the reviewer’s comment. However, we believe that the submitted manuscript has already partially addressed this question, although the inclusion of an additional example and proposition would further clarify the issue. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity and numerical performance of DualHash remain unaffected. 
 
-% \smallskip
-% \noindent\textbf{(iii).} At a critical point of $\mathcal{L}$, the equality
-% $h(\widetilde B)=h^{**}(\widetilde B)$ is equivalent to the Fenchel--Young
-% equality in Proposition~\ref{prop:transfer}(b), as follows from standard
-% conjugate-subgradient relations~\cite[Theorem~23.5]{rockafellar1970convex}.
-% The convex-relaxation effect of taking the Fenchel conjugate of a nonconvex
-% regularizer has been recognized~\cite{mollenhoff2015primal,guo2026preconditioned};
-% however, to our knowledge, an explicit necessary-and-sufficient criterion for
-% stationarity transfer under the W-type regularizer has not been established in
-% prior work.
 
 \section{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
@@ -196,82 +184,117 @@ Some of these affect the main complexity results, so the
 theoretical guarantees are not fully established as written.
 I return the article to the authors for \textbf{major revisions}.}
 
-% \vspace{0.5em}
-% We thank Reviewer~3 for the thorough examination of the manuscript. Below, we
-% clarify the major concerns regarding ``insufficient assumptions and incomplete
-% boundedness'' and explain how the remaining comments are addressed.
-
 \vspace{0.5em}
-\noindent\textbullet\quad\textbf{Comment 1.} \emph{%
-(Lemma 5.1/proof) Having $J$ coercive and lower-bounded is
-generally not enough to directly obtain the boundedness of
-$(x^k, B^k)$. You classically also need to prove that sequence
-$\{J(x^k, B^k)\}$ converges (or at least its boundedness). Note
-also that having boundedness of all level-sets is equivalent to
-coercivity. Finally, the coercivity of $J$ is not assumed in
-your Assumption~5.1.}
+\noindent\textbullet\quad\textbf{Comment 1.}
+
+\begin{enumerate}[label=(\arabic*),leftmargin=*,labelsep=0.5em,topsep=0.25em,itemsep=0.25em]
+\item \textbf{Boundedness.} \emph{(Lemma 5.1/proof) Having $J$ coercive and lower-bounded is generally not
+enough to directly obtain the boundedness of $(x^k,B^k)$. You classically also need
+to prove that sequence $\{J(x^k,B^k)\}$ converges (or at least its boundedness). Note
+also that having boundedness of all level-sets is equivalent to coercivity. Finally,
+the coercivity of $J$ is not assumed in your Assumption~5.1.}
+
+\item \textbf{Lower-boundedness.} \emph{(Lemmas 5.7, 5.10, D.2) The lower-boundedness of
+$\{\Psi_m(\mathcal{Q}^k)\}$ and $\{\Psi_r(\mathcal{Q}^k)\}$ needs to be
+justified to invoke $\Psi_m^*$ and $\Psi_r^*$, which doesn't seem
+straightforward. Similarly, the non-increasing property of
+$\{\mathbb{E}[\Psi_r(\mathcal{Q}^k)]\}$ in Lemma~D.2 requires
+justification.}
+\end{enumerate}
 
 \noindent\textbullet\quad\textbf{{Our response.}}
-In the submitted manuscript, the coercivity of $J$ need not be assumed
-separately: as stated on page~7, it follows from the model
-structure~(3.1). Since $f_i(x)=\ell_{s,i}(x)+\frac{\mu}{2}\|x\|^2$
-with $\mu>0$ and the W-type regularizer satisfies
+
+\noindent\textbf{(i) Coercivity of $J$.}
+As stated on page~7 of the submitted manuscript, the model
+structure~(3.1) on that page,
+\[
+\min_{x,B}\;
+J(x,B)=F(x,B)+h(B),\quad
+F(x,B)=\frac{1}{n}{\textstyle\sum_{i=1}^{n}}f_i(x)
++\frac{\gamma}{2n}{\textstyle\sum_{i=1}^{n}}\|\mathcal{D}_i(x)-b_i\|^2,
+\]
+where $f_i(x)=\ell_{s,i}(x)+\frac{\mu}{2}\|x\|^2$ with $\mu>0$ and
+$\bar\ell_s(x):=\frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}(x)$ denotes the smooth
+pairwise loss, already entails the coercivity of~$J$ under the following
+refined assumption, which replaces the lower-boundedness of~$J$ in
+Assumption~5.1(i) on page~10:
+\[
+\underline{\ell}\;:=\;\inf_{x}\,\bar\ell_s(x)\;>\;-\infty.
+\]
+Indeed, since the W-type regularizer satisfies
 $h(B)\ge\lambda\|B\|_1-\lambda nd$, we have
 \[
-J(x,B)\ge\underline{\ell}
-+\tfrac{\mu}{2}\|x\|^2+\lambda\|B\|_1-\lambda nd
-\longrightarrow+\infty
+J(x,B)\;\ge\;\underline{\ell}
++\frac{\mu}{2}\|x\|^2+\lambda\|B\|_1-\lambda nd
+\;\longrightarrow\;+\infty
 \quad\text{as }\|(x,B)\|\to\infty,
 \]
-where $\underline{\ell}:=\inf_x\bar\ell_s(x)>-\infty$.
-In the revision, we will replace the lower-boundedness
-assumption on~$J$ in Assumption~5.1(i) with an assumption
-on~$\bar\ell_s$, and state the coercivity of~$J$ as an
-explicit consequence.
-
-We agree, however, that the proof of Lemma~5.1 does not
-suffice to establish the boundedness of
-$\{(x^k,B^k)\}$, for the following reasons.
+so the coercivity and lower-boundedness of~$J$ need not be
+assumed separately. We will refine the assumptions accordingly in the revision.
 
 \smallskip
-\noindent\textbf{(i).} Although $J$ is coercive, neither $J$
-nor the Lagrangian~$\mathcal{L}$ decreases monotonically
-along the iterates, so one cannot guarantee
-$J(x^k,B^k)\le J(x^0,B^0)$. This motivates us to construct Lyapunov functions
-carefully to obtain an approximate descent property of the proposed algorithm;
-taking $\Phi_k=\Psi_m(Q^k)$ for DualHash-StoM as an example, the approximate
-descent inequality~(5.15) yields
+\noindent\textbf{(ii) Lower-boundedness of the Lyapunov functions.}
+We now provide a complete justification of the lower-boundedness of the two
+Lyapunov functions of the submitted manuscript, namely
+$\Psi_m(\mathcal{Q}^k)$ defined in~(5.12) on page~13 (DualHash-StoM) and
+$\Psi_r(\mathcal{Q}^k)$ defined in~(5.21) on page~15 (DualHash-StoRM); the
+associated lower bounds $\Psi_m^*$ and $\Psi_r^*$ are invoked in Lemma~5.7
+(p.~14) and Lemma~5.10 (p.~16), respectively.
+
+\begin{proposition}[Lower-boundedness of the Lyapunov functions]
+\label{prop:lyapunov-lower-bound}
+% Under the revised Assumption~5.1 and Assumption~B.1, including the
+% uniform output bound $\sup_x\|\mathcal{D}(x)\|_F\le C_D<\infty$, and
+% the step-size conditions \emph{(P1)--(P3)} and
+% \emph{(P1$'$)--(P3$'$)} in Appendix~2:
+Under the revised Assumption~5.1 (p.~10), Assumption~B.1 (p.~30), and
+step-size conditions compatible with those in Theorem~5.2 (p.~14) and
+Theorem~5.3 (p.~16),
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item for DualHash-StoM, it holds for every $k\ge 1$ that
 \[
-\mathbb{E}[\Phi_k]
-\le\Phi_1+\frac{\sigma^2}{c_bL_F}.
+\mathbb{E}[\Psi_m(\mathcal{Q}^k)]
+\;\ge\;
+\underline{\ell}
++\frac{\mu}{4}\,\mathbb{E}\|x^k\|^2
++\frac{3\gamma}{16n}\,\mathbb{E}\|B^k
+  -\mathcal{D}(x^k)\|_F^2
+-c_1
+\;\ge\;
+\Psi_m^*>-\infty.
 \]
-
-\smallskip
-\noindent\textbf{(ii).} The above Lyapunov bound does not directly provide an
-upper bound on $J_k:=J(x^k,B^k)$. The definition of\,$\Phi_k$ and the
-Fenchel--Young inequality yield
+\item for DualHash-StoRM, let $e^k:=D^k-\nabla_xF(x^k,B^k)$ denote the
+estimation error of the StoRM estimator, and let $\eta_T$ and $\rho_T$ be the
+step size and the momentum parameter of the schedule in Theorem~5.3 (p.~16).
+Then the
+combined potential
+$W_k:=\mathbb{E}[\Psi_r(\mathcal{Q}^k)]
++\frac{\eta_T}{\rho_T}\,\mathbb{E}\|e^k\|^2$
+satisfies
 \[
-J_k\le\Phi_k+C_1\Delta_B^{k+1}
-+C_3\Delta_x^{k+1}+\mathcal{G}_k,
-\qquad
-\mathcal{G}_k:=h(B^k)+h^*(\Lambda^k)
--\langle B^k,\Lambda^k\rangle\ge0,
+W_k\;\ge\;\Psi_r^*>-\infty,
+\qquad k\ge 1.
 \]
-where the residual terms all require the very boundedness we seek to establish.
-Unlike augmented Lagrangian methods~\cite{wang2019global}, whose quadratic
-penalty absorbs the primal--dual coupling, our Fenchel dual formulation carries
-no such term, leaving $\mathcal{G}_k$ uncontrolled.
+\end{enumerate}
+The constants $c_1$, $\Psi_m^*$, and $\Psi_r^*$ are independent
+of~$T$. 
+\end{proposition}
 
 \smallskip
-\noindent\textbf{(iii).} In view of the above, we will replace the current
-Lemma~5.1 with an explicit assumption that the iterate sequence
-$\{(x^k,B^k,\Lambda^k)\}$ lies in a deterministic compact set almost surely.
-Such boundedness assumptions are standard in nonconvex and stochastic
-optimization~\cite{bolte2014proximal,pock2016inertial,BeraCurtRobiZhou21,
-na2021inequality,NaAnitKola22,wang2025complexity,sun2023algorithms}: the
-inherent randomness of the process prevents the iterates from being confined to
-a level set by a descent argument.
-
+\noindent\textbf{(iii) Boundedness of the iterates is not required.}
+We note that if the iterates were bounded, as asserted in Lemma~5.1 on
+page~11 of the submitted manuscript, the lower-boundedness of
+$\Psi_m(\mathcal{Q}^k)$ and $\Psi_r(\mathcal{Q}^k)$ would follow
+immediately, since a continuous function is bounded on a compact set;
+this was indeed our original motivation for Lemma~5.1.
+We thank the reviewer for the insightful comment, which led us
+to simplify the proof structure and strengthen the results.
+% After careful reconsideration, we find that the
+% iterate-boundedness assumption in Lemma~5.1 is in fact not
+% necessary for the complexity analysis: Proposition~2 establishes
+% the required lower bounds under only the refined Assumption~5.1,
+% without any boundedness assumption on the iterates or the
+% objective-function values.
 
 % \vspace{0.5em}
 % \noindent\textbullet\quad\textbf{Comment 2 (Descent argument).} \emph{%
@@ -300,53 +323,65 @@ a level set by a descent argument.
 
 \smallskip
 \noindent\emph{%
-(Appendix D) [\ldots] The end of the proof as well as those of Lemma~5.10,
-Theorem~5.3 are based on the potential new~(D.4) inequality. To be reworked
-accordingly.}
+The reviewer pointed out several issues on proofs, including
+an incorrect summation formula in Lemma~5.7 that
+propagates into Theorem~5.2; insufficient justification
+that $C_B>0$ ensures $C_2>0$ (Lemma~C.2);
+misuse of conditional vs.\ full expectations in
+Appendices~C and~D; and the need to rework the proofs
+of Lemma~5.10 and Theorem~5.3 based on the corrected
+inequality~(D.4).}
 
 \noindent\textbullet\quad\textbf{\red{Our response.}}
-We thank the reviewer for identifying these errors; The corrections are confined to constants and conditional-expectation formalism and do not affect the established complexity orders, as
-detailed below.
+We thank the reviewer for identifying these errors; the corrections are
+confined to constants and conditional-expectation formalism and do not affect
+the established complexity orders, as detailed below.
 
 \smallskip
-\noindent\textbf{(i).} The corrected coefficient and strict step-size
-condition in Lemma~C.2 read
+\noindent\textbf{(i) Coefficient and step-size condition (Lemma~C.2, p.~32).}
+The corrected coefficient and strict step-size condition read
 \[
 \frac{2C_B}{L_F}=\blue{\frac1t}-\frac{13}{2}t-2>0
 \quad\text{when}\quad
-0<\tau\blue{<}\frac{\sqrt{30}-2}{13L_F};
+0<\tau\blue{<}\frac{\sqrt{30}-2}{13L_F},
+\qquad t:=\tau L_F.
 \]
-The corrected averaged estimate retains the same form as Theorem~5.2, with
+The corrected averaged estimate retains the same form as Theorem~5.2 (p.~14),
+with
 updated constants $L_\Delta$ and $C_\sigma$; for $b_k=c_bT$, the
-$\mathcal O(\varepsilon^{-4})$ SFO complexity order is preserved.
+$\mathcal{O}(\varepsilon^{-4})$ SFO complexity order is preserved.
 
-\noindent\textbf{(ii) Conditional expectations and batch index (Appendix~C).}
-The conditional expectations in~(C.7) are replaced by full
-expectations~$\mathbb{E}[\,\cdot\,]$; In~(4.8), the corrected StoRM estimator
-reads
+\smallskip
+\noindent\textbf{(ii) Conditional expectations and batch index.}
+The conditional expectations in~(C.7) are replaced by full expectations~$\mathbb{E}[\,\cdot\,]$. In addition, the corrected StoRM estimator in~(4.8)reads
 \[
 D^k=\begin{cases}
-\nabla_x F(x^1,B^1;\mathcal J_1), & k=1,\\[4pt]
+\nabla_x F(x^1,B^1;\mathcal{J}_1), & k=1,\\[4pt]
 (1-\rho_{k-1})\bigl(D^{k-1}
-  -\nabla_x F(x^{k-1},B^{k-1};\blue{\mathcal J_k})\bigr)
-  +\nabla_x F(x^k,B^k;\mathcal J_k), & k>1.
+  -\nabla_x F(x^{k-1},B^{k-1};\blue{\mathcal{J}_k})\bigr)
+  +\nabla_x F(x^k,B^k;\mathcal{J}_k), & k>1.
 \end{cases}
 \]
 
 \smallskip
-\noindent\textbf{(iii) Variance-reduction recursion (Lemma~D.1).} The
-corrected Lemma~D.1 retains the missing $\blue{\Delta_B^{k+1}}$ term in the
-variance-reduction recursion. With an explicit initialization
-$\blue{B^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal D(x^1))}$,
-$\blue{\Lambda^1=m(\mathcal D(x^1)-B^1)}$ and carefully refined parameter
-conditions, we still obtain
+\noindent\textbf{(iii) Variance-reduction recursion.} The
+corrected Lemma~D.1 (p.~36) restores the $\blue{\Delta_B^{k+1}}$ term omitted
+in the variance-reduction recursion. With $m:=\gamma/n$, the explicit
+initialization
 \[
-\frac1T\sum_{k=1}^{T}\mathbb E\operatorname{dist}^2
-\bigl(0,\partial\mathcal L(x^k,B^k,\Lambda^k)\bigr)
-\leq\frac{C}{T^{2/3}},
+\blue{B^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(x^1))},
+\qquad
+\blue{\Lambda^1=m(\mathcal{D}(x^1)-B^1)},
 \]
-where $C$ is independent of~$T$. The $\mathcal O(\varepsilon^{-3})$ SFO
-complexity in Theorem~5.3 is therefore preserved. The revised proof will state
+and carefully refined parameter conditions, we still obtain
+\[
+\frac1T\sum_{k=1}^{T}\mathbb{E}\operatorname{dist}^2
+\bigl(0,\partial\mathcal{L}(x^k,B^k,\Lambda^k)\bigr)
+\le\frac{C}{T^{2/3}},
+\]
+where $C$ is independent of~$T$. The $\mathcal{O}(\varepsilon^{-3})$ SFO
+complexity in Theorem~5.3 (p.~16) is therefore preserved. The revised proof
+will state
 the initialization and parameter conditions explicitly.
 
 \section*{}

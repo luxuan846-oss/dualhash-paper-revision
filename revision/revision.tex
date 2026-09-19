@@ -33,7 +33,7 @@
 
 We respectfully ask for reconsideration of the decision on our manuscript
 \#M187198, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical
-Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort the reviewers and the Associate Editor devoted to evaluating our work. However, we believe that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission. These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
+Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort the reviewers and the Associate Editor devoted to evaluating our work. However, we find that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission. These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
 
 \section{Reviewer 1, Comments: Stationarity Relationship}
 
@@ -42,7 +42,7 @@ The key question is whether this transformed problem provides meaningful guarant
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{{Our response.} }
-We thank the reviewer for this comment. In the submitted manuscript, Lemma~5.2 already establishes a stationarity condition linking the transformed primal--dual problem and the original objective. 
+We thank the reviewer for this constructive comment. In the submitted manuscript, Lemma~5.2 already establishes a stationarity condition linking the transformed primal--dual problem and the original objective. 
 Namely, when a zero-gap primal--dual optimal pair $(x^*,B^*,\Lambda^*)$
 exists, $(x^*,B^*,\Lambda^*)\in\operatorname{crit}\mathcal{L}$. 
 
@@ -214,7 +214,7 @@ justification.}
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{Our response.}
-We thank the reviewer for the comment. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(x, B)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it just requires lower bounds on the potentials used in the analysis. This was the original motivation for introducing Lemma~5.1.
+We thank the reviewer for the important comment. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(x, B)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it just requires lower bounds on the potentials used in the analysis. This was the original motivation for introducing Lemma~5.1.
 
 Regarding coercivity, we already stated in the submitted manuscript
 (p.~7) that the objective $J$ in~(3.1),
@@ -388,8 +388,9 @@ revised manuscript.
 % where $C$ is independent of~$T$. The $\mathcal{O}(\varepsilon^{-3})$ SFO
 % complexity in Theorem~5.3 (p.~16) is therefore preserved.
 
+\bigskip
 
-\section*{}
+%\section*{}
 In closing, deep hashing maps images to short binary codes (e.g., 64 bits) for large-scale retrieval, reducing storage by several orders of magnitude and enabling
 sub-millisecond search via Hamming distance. The W-type regularizer
 $\|\,|z|-\mathbf{1}\|_1$ is the principal regularizer used in practice to enforce

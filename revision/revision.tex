@@ -24,19 +24,29 @@
   urlcolor=blue
 }
 
-\title{Appeal Letter}
+\title{Appeal for Reconsideration of Manuscript}
 \author{}
 \date{}
 \begin{document}
 \maketitle
+
+\vspace{0.5em}
+\noindent\textbf{Article title:} ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing''
+
+\vspace{0.5em}
+\noindent\textbf{Manuscript ID:} M187198
+
+\vspace{0.5em}
 \noindent Dear Editor-in-Chief,
 
 We respectfully ask for reconsideration of the decision on our manuscript
 \#M187198, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical
 Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort the reviewers and the Associate Editor devoted to evaluating our work. However, we find that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission. These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
 
-\section{Reviewer 1, Comments: Stationarity Relationship}
 
+\section{Reviewer 1: Comments on the Stationarity Relationship}
+
+\vspace{0.5em}
 \noindent\textbf{Main comment.} \emph{%
 The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is strong duality, zero duality gap, or at least a rigorous stationarity relationship between the transformed primal--dual problem and the original objective.}
 
@@ -77,7 +87,7 @@ We also define the critical set.
 Lemma 5.2 motivates our complexity analysis for finding a point
 $(\hat x,\widehat B,\widehat\Lambda)$ satisfying 
 \[
-\mathbb{E}[\operatorname{dist}(0,\,\partial\mathcal{L}(\hat x,\widehat B,\widehat\Lambda))^2]\le\epsilon.
+\mathbb{E}[\operatorname{dist}(0,\,\partial\mathcal{L}(\hat x,\widehat B,\widehat\Lambda))^2]\le\varepsilon^2.
 \]
 This constitutes the main body of our theoretical results in the submitted manuscript. 
 Indeed, we agree that discussing whether a zero-gap primal--dual optimal pair
@@ -143,9 +153,9 @@ $\widetilde{\Lambda}\in\partial h(\widetilde{B})$.
 
 \emph{(b)$\iff$(c).} By (3), the Fenchel--Young equality for $h$ holds at
 $(\widetilde{B},\widetilde{\Lambda})$ if and only if
-$h(\widetilde{B})=h^{**}(\widetilde{B})$. Comparing $h$ with
-$h^{**}(B)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ componentwise, this is equivalent
-to $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
+$h(\widetilde{B})=h^{**}(\widetilde{B})$. Since the functions are separable,
+comparing $h$ with $h^{**}(B)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ componentwise
+shows that this is equivalent to $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 
 \emph{(b)$\Rightarrow$(a).} The equality
 $h(\widetilde{B})+h^*(\widetilde{\Lambda})
@@ -174,8 +184,9 @@ precision, which suggests that optimizing in the dual space is more effective th
 In summary, we appreciate the reviewer’s comment. However, we believe the submitted manuscript has already partially addressed this question. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity and numerical performance of DualHash remain unaffected. 
 
 
-\section{Reviewer 2, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
+\section{Reviewer 2: Comments on Assumptions and Corrections to the Theoretical Analysis}
 
+\vspace{0.5em}
 \noindent\textbf{Main comment.} \emph{%
 The convergence and complexity analysis has several issues, including
 insufficient assumptions, incomplete boundedness and
@@ -186,7 +197,8 @@ I return the article to the authors for \textbf{major revisions}.}
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{Comment 1.}
-\emph{\textbf{Coercivity and lower-boundedness.}
+
+\noindent\emph{\textbf{Coercivity and lower-boundedness.}
 (Lemma~5.1 and Lemmas~5.7, 5.10, D.2)
 The boundedness argument is incomplete: the coercivity and
 lower-boundedness of $J$ alone do not imply the boundedness of
@@ -315,7 +327,6 @@ theoretical contributions of the submitted manuscript.
 \noindent\textbullet\quad\textbf{Comments 2 and 3
 (Descent argument; conditional expectations and estimates).}
 
-\smallskip
 \noindent\emph{%
 The reviewer pointed out several issues with the proofs, including
 an incorrect summation formula in Lemma~5.7 that
@@ -329,16 +340,15 @@ inequality~(D.4).}
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{Our response.}
 We thank the reviewer for the careful review. We will correct
-the expectation and variance estimates and refine the
+the estimates for the expectations and variances and refine the
 initialization and parameter conditions accordingly.
 These corrections include replacing the conditional expectations
-in~(C.7) with full expectations, using the same batch in both
+in~(C.7) with full expectations, using the same batch for both
 sampled gradients in~(4.8), and restoring the omitted term in
 the variance-reduction recursion.
 Nevertheless, these adjustments preserve the
 $\mathcal{O}(\varepsilon^{-3})$ SFO complexity stated in
-Theorem~5.3. We will incorporate these corrections into the
-revised manuscript.
+Theorem~5.3. We will incorporate these corrections into the revised manuscript.
 
 % We thank the reviewer for identifying these errors; the corrections are
 % confined to constants and conditional-expectation formalism and do not affect the established complexity orders, as detailed below.

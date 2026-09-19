@@ -171,14 +171,14 @@ only if $|\widetilde B_{ij}|\ge1$ for all $i,j$. Moreover, our numerical experim
 advantageous, yielding lower quantization errors and higher retrieval
 precision, which suggests that optimizing in the dual space is more effective than directly optimizing the nonconvex W-regularizer in Problem (P).
 
-In summary, we appreciate the reviewer’s comment. However, we believe the submitted manuscript has already partially addressed this question, although adding an additional example and proposition would further clarify the issue. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity and numerical performance of DualHash remain unaffected. 
+In summary, we appreciate the reviewer’s comment. However, we believe the submitted manuscript has already partially addressed this question. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity and numerical performance of DualHash remain unaffected. 
 
 
 \section{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
 \noindent\textbf{Main comment.} \emph{%
-The convergence and complexity analysis has several issues, including 
-including insufficient assumptions, incomplete boundedness and
+The convergence and complexity analysis has several issues, including
+insufficient assumptions, incomplete boundedness and
 descent arguments, and some errors in conditional expectations.
 Some of these affect the main complexity results, so the
 theoretical guarantees are not fully established as written.
@@ -214,7 +214,7 @@ justification.}
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{Our response.}
-We thank the reviewer for the comment. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(x, B)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it just requires lower bounds on the potentials used in the analysis, which was the original motivation for introducing Lemma~5.1.
+We thank the reviewer for the comment. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(x, B)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it just requires lower bounds on the potentials used in the analysis. This was the original motivation for introducing Lemma~5.1.
 
 Regarding coercivity, we already stated in the submitted manuscript
 (p.~7) that the objective $J$ in~(3.1),
@@ -227,7 +227,7 @@ J(x,B)=
 \]
 is coercive. However, to ensure this property through the model
 structure, we will impose the lower-boundedness assumption on
-the average loss rather than directly on the objective that has been assumed:
+the average loss rather than directly on the objective:
 \[
 \underline{\ell}:=\inf_x\bar{\ell}_s(x)>-\infty.
 \]
@@ -239,7 +239,7 @@ by the loss and to justify the coercivity already stated in
 the manuscript.
 
 Under the refined Assumption~5.1(i) and the
-proper parameter conditions, the estimates in our analysis
+appropriate parameter conditions, the estimates in our analysis
 yield the required lower bounds on the potentials. We will make
 these estimates explicit in the revision. Nevertheless, these
 adjustments preserve the stated complexity orders and the main
@@ -338,7 +338,7 @@ the variance-reduction recursion.
 Nevertheless, these adjustments preserve the
 $\mathcal{O}(\varepsilon^{-3})$ SFO complexity stated in
 Theorem~5.3. We will incorporate these corrections into the
-revised manuscript to make the analysis clearer and more rigorous.
+revised manuscript.
 
 % We thank the reviewer for identifying these errors; the corrections are
 % confined to constants and conditional-expectation formalism and do not affect the established complexity orders, as detailed below.

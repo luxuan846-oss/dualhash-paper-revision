@@ -33,7 +33,7 @@
 
 We respectfully ask for reconsideration of the decision on our manuscript
 \#M187198, ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical
-Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort devoted by the reviewers and the Associate Editor to evaluating our work. However, we believe that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission. These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
+Guarantee for Deep Hashing.'' We sincerely appreciate the time and effort the reviewers and the Associate Editor devoted to evaluating our work. However, we believe that some of the concerns underlying the rejection decision may have arisen from misunderstandings of the manuscript’s formulation and theoretical results, partly because certain aspects were not presented with sufficient clarity in the original submission. These concerns do not affect the core contributions of our work and can be fully addressed through appropriate clarifications and revisions. Below, we respond to the reviewers’ major concerns and outline the corresponding revisions we propose to make. 
 
 \section{Reviewer 2, Comments: Stationarity Relationship}
 
@@ -63,7 +63,7 @@ and eliminating $Y$ via the Fenchel conjugate~$h^*$:
 :=F(x,B)+\langle B,\Lambda\rangle-h^*(\Lambda).
 \tag{D}
 \]
-We also define the critical set
+We also define the critical set.
 \(
 \operatorname{crit}\mathcal{L}
 :=\bigl\{(x,B,\Lambda):\
@@ -101,7 +101,7 @@ between Problem~(P) and Problem~(D) fails, and no zero-gap primal--dual pair exi
 
 Nevertheless, the reviewer's question highlights an important point: what does $\operatorname{crit}\mathcal{L}$ imply for the 
 original problem~\textup{(P)}? We appreciate this question, which prompted
-us to establish the following explicit characterization. The proof is straightforward and closely follows the arguments used in the proof of Lemma 5.2 in the submitted manuscript.
+us to establish the following explicit characterization. The proof is straightforward and closely follows the argument in Lemma~5.2 of the submitted manuscript.
 
 \begin{proposition}\label{prop:transfer}
 Let $(\tilde x,\widetilde B,\widetilde\Lambda)\in\operatorname{crit}\mathcal{L}$,
@@ -166,18 +166,18 @@ $\partial h(0)=\{-\lambda,\lambda\}$; in all cases $0\notin\partial h(b)$,
 so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 \end{proof}
 
-We highlight that  Proposition~\ref{prop:transfer}, though quite simple,   may answer the reviewer's question: it shows that a critical point $(\tilde x,\widetilde B,\widetilde\Lambda)$ of $\mathcal{L}$ yields a first-order stationary point $(\tilde x,\widetilde B)$ of Problem~(P) if and
-only if $|\widetilde B_{ij}|\ge1$ for all $i,j$.    Moreover, our numerical experiments indicate that the primal--dual formulation is practically
+We highlight that Proposition~\ref{prop:transfer}, though quite simple, may answer the reviewer's question: it shows that a critical point $(\tilde x,\widetilde B,\widetilde\Lambda)$ of $\mathcal{L}$ yields a first-order stationary point $(\tilde x,\widetilde B)$ of Problem~(P) if and
+only if $|\widetilde B_{ij}|\ge1$ for all $i,j$. Moreover, our numerical experiments indicate that the primal--dual formulation is practically
 advantageous, yielding lower quantization errors and higher retrieval
 precision, which suggests that optimizing in the dual space is more effective than directly optimizing the nonconvex W-regularizer in Problem (P).
 
-In summary, we appreciate the reviewer’s comment. However, we believe that the submitted manuscript has already partially addressed this question, although the inclusion of an additional example and proposition would further clarify the issue. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity and numerical performance of DualHash remain unaffected. 
+In summary, we appreciate the reviewer’s comment. However, we believe the submitted manuscript has already partially addressed this question, although adding an additional example and proposition would further clarify the issue. We are therefore prepared to add Example 1 and Proposition 1 to the revised manuscript. Nevertheless, our main theoretical contributions regarding computational complexity and numerical performance of DualHash remain unaffected. 
 
 
 \section{Reviewer 3, Comments: Clarification of Assumptions and Corrections to the Theoretical Analysis}
 
 \noindent\textbf{Main comment.} \emph{%
-The convergence and complexity analysis has several issues,
+The convergence and complexity analysis has several issues, including 
 including insufficient assumptions, incomplete boundedness and
 descent arguments, and some errors in conditional expectations.
 Some of these affect the main complexity results, so the
@@ -186,136 +186,130 @@ I return the article to the authors for \textbf{major revisions}.}
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{Comment 1.}
-
-\begin{enumerate}[label=(\arabic*),leftmargin=*,labelsep=0.5em,topsep=0.25em,itemsep=0.25em]
-\item \textbf{Boundedness.} \emph{(Lemma 5.1/proof) Having $J$ coercive and lower-bounded is generally not
-enough to directly obtain the boundedness of $(x^k,B^k)$. You classically also need
-to prove that sequence $\{J(x^k,B^k)\}$ converges (or at least its boundedness). Note
-also that having boundedness of all level-sets is equivalent to coercivity. Finally,
-the coercivity of $J$ is not assumed in your Assumption~5.1.}
-
-\item \textbf{Lower-boundedness.} \emph{(Lemmas 5.7, 5.10, D.2) The lower-boundedness of
-$\{\Psi_m(\mathcal{Q}^k)\}$ and $\{\Psi_r(\mathcal{Q}^k)\}$ needs to be
-justified to invoke $\Psi_m^*$ and $\Psi_r^*$, which doesn't seem
-straightforward. Similarly, the non-increasing property of
-$\{\mathbb{E}[\Psi_r(\mathcal{Q}^k)]\}$ in Lemma~D.2 requires
+\emph{\textbf{Coercivity and lower-boundedness.}
+(Lemma~5.1 and Lemmas~5.7, 5.10, D.2)
+The boundedness argument is incomplete: the coercivity and
+lower-boundedness of $J$ alone do not imply the boundedness of
+$\{(x^k,B^k)\}$ without controlling
+$\{J(x^k,B^k)\}$, and coercivity is not included in
+Assumption~5.1. In addition, the lower bounds required to define
+$\Psi_m^*$ and $\Psi_r^*$, as well as the non-increasing estimate for
+$\{\mathbb{E}[\Psi_r(\mathcal{Q}^k)]\}$ in Lemma~D.2, require
 justification.}
-\end{enumerate}
 
-\noindent\textbullet\quad\textbf{{Our response.}}
+% \begin{enumerate}[label=(\arabic*),leftmargin=*,labelsep=0.5em,topsep=0.25em,itemsep=0.25em]
+% \item \textbf{Boundedness.} \emph{(Lemma 5.1/proof) Having $J$ coercive and lower-bounded is generally not
+% enough to directly obtain the boundedness of $(x^k, B^k)$. You classically also need
+% to prove that the sequence $\{J(x^k, B^k)\}$ converges (or at least its boundedness). Note
+% also that having boundedness of all level-sets is equivalent to coercivity. Finally,
+% the coercivity of $J$ is not assumed in your Assumption~5.1.}
 
-\noindent\textbf{(i) Coercivity of $J$.}
-As stated on page~7 of the submitted manuscript, the model
-structure~(3.1) on that page,
+% \item \textbf{Lower-boundedness.} \emph{(Lemmas 5.7, 5.10, D.2) The lower-boundedness of
+% $\{\Psi_m(\mathcal{Q}^k)\}$ and $\{\Psi_r(\mathcal{Q}^k)\}$ needs to be
+% justified to invoke $\Psi_m^*$ and $\Psi_r^*$, which doesn't seem
+% straightforward. Similarly, the non-increasing property of
+% $\{\mathbb{E}[\Psi_r(\mathcal{Q}^k)]\}$ in Lemma~D.2 requires
+% justification.}
+% \end{enumerate}
+
+\vspace{0.5em}
+\noindent\textbullet\quad\textbf{Our response.}
+We thank the reviewer for the comment. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(x, B)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it just requires lower bounds on the potentials used in the analysis, which was the original motivation for introducing Lemma~5.1.
+
+Regarding coercivity, we already stated in the submitted manuscript
+(p.~7) that the objective $J$ in~(3.1),
 \[
-\min_{x,B}\;
-J(x,B)=F(x,B)+h(B),\quad
-F(x,B)=\frac{1}{n}{\textstyle\sum_{i=1}^{n}}f_i(x)
-+\frac{\gamma}{2n}{\textstyle\sum_{i=1}^{n}}\|\mathcal{D}_i(x)-b_i\|^2,
+J(x,B)=
+\underbrace{\frac1n\sum_{i=1}^n\ell_{s,i}(x)}_{=:\,\bar{\ell}_s(x)}
++\frac{\mu}{2}\|x\|^2
++\frac{\gamma}{2n}\sum_{i=1}^n\|\mathcal D_i(x)-b_i\|^2
++h(B),
 \]
-where $f_i(x)=\ell_{s,i}(x)+\frac{\mu}{2}\|x\|^2$ with $\mu>0$ and
-$\bar\ell_s(x):=\frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}(x)$ denotes the smooth
-pairwise loss, already entails the coercivity of~$J$ under the following
-refined assumption, which replaces the lower-boundedness of~$J$ in
-Assumption~5.1(i) on page~10:
+is coercive. However, to ensure this property through the model
+structure, we will impose the lower-boundedness assumption on
+the average loss rather than directly on the objective that has been assumed:
 \[
-\underline{\ell}\;:=\;\inf_{x}\,\bar\ell_s(x)\;>\;-\infty.
+\underline{\ell}:=\inf_x\bar{\ell}_s(x)>-\infty.
 \]
-Indeed, since the W-type regularizer satisfies
-$h(B)\ge\lambda\|B\|_1-\lambda nd$, we have
-\[
-J(x,B)\;\ge\;\underline{\ell}
-+\frac{\mu}{2}\|x\|^2+\lambda\|B\|_1-\lambda nd
-\;\longrightarrow\;+\infty
-\quad\text{as }\|(x,B)\|\to\infty,
-\]
-so the coercivity and lower-boundedness of~$J$ need not be
-assumed separately. We will refine the assumptions accordingly in the revision.
+Together with the model structure, this condition ensures both
+coercivity and lower-boundedness of $J$. We will therefore refine
+Assumption~5.1(i) accordingly. This refinement is intended to
+rule out cancellation of the growth of the regularization terms
+by the loss and to justify the coercivity already stated in
+the manuscript.
 
-\smallskip
-\noindent\textbf{(ii) Lower-boundedness of the Lyapunov functions.}
-We now provide a complete justification of the lower-boundedness of the two
-Lyapunov functions of the submitted manuscript, namely
-$\Psi_m(\mathcal{Q}^k)$ defined in~(5.12) on page~13 (DualHash-StoM) and
-$\Psi_r(\mathcal{Q}^k)$ defined in~(5.21) on page~15 (DualHash-StoRM); the
-associated lower bounds $\Psi_m^*$ and $\Psi_r^*$ are invoked in Lemma~5.7
-(p.~14) and Lemma~5.10 (p.~16), respectively.
+Under the refined Assumption~5.1(i) and the
+proper parameter conditions, the estimates in our analysis
+yield the required lower bounds on the potentials. We will make
+these estimates explicit in the revision. Nevertheless, these
+adjustments preserve the stated complexity orders and the main
+theoretical contributions of the submitted manuscript.
+% \noindent\textbf{(i) Coercivity of $J$.}
 
-\begin{proposition}[Lower-boundedness of the Lyapunov functions]
-\label{prop:lyapunov-lower-bound}
-% Under the revised Assumption~5.1 and Assumption~B.1, including the
-% uniform output bound $\sup_x\|\mathcal{D}(x)\|_F\le C_D<\infty$, and
-% the step-size conditions \emph{(P1)--(P3)} and
-% \emph{(P1$'$)--(P3$'$)} in Appendix~2:
-Under the revised Assumption~5.1 (p.~10), Assumption~B.1 (p.~30), and
-step-size conditions compatible with those in Theorem~5.2 (p.~14) and
-Theorem~5.3 (p.~16),
-\begin{enumerate}[label=\textup{(\roman*)},nosep]
-\item for DualHash-StoM, it holds for every $k\ge 1$ that
-\[
-\mathbb{E}[\Psi_m(\mathcal{Q}^k)]
-\;\ge\;
-\underline{\ell}
-+\frac{\mu}{4}\,\mathbb{E}\|x^k\|^2
-+\frac{3\gamma}{16n}\,\mathbb{E}\|B^k
-  -\mathcal{D}(x^k)\|_F^2
--c_1
-\;\ge\;
-\Psi_m^*>-\infty.
-\]
-\item for DualHash-StoRM, let $e^k:=D^k-\nabla_xF(x^k,B^k)$ denote the
-estimation error of the StoRM estimator, and let $\eta_T$ and $\rho_T$ be the
-step size and the momentum parameter of the schedule in Theorem~5.3 (p.~16).
-Then the
-combined potential
-$W_k:=\mathbb{E}[\Psi_r(\mathcal{Q}^k)]
-+\frac{\eta_T}{\rho_T}\,\mathbb{E}\|e^k\|^2$
-satisfies
-\[
-W_k\;\ge\;\Psi_r^*>-\infty,
-\qquad k\ge 1.
-\]
-\end{enumerate}
-The constants $c_1$, $\Psi_m^*$, and $\Psi_r^*$ are independent
-of~$T$. 
-\end{proposition}
-
-\smallskip
-\noindent\textbf{(iii) Boundedness of the iterates is not required.}
-We note that if the iterates were bounded, as asserted in Lemma~5.1 on
-page~11 of the submitted manuscript, the lower-boundedness of
-$\Psi_m(\mathcal{Q}^k)$ and $\Psi_r(\mathcal{Q}^k)$ would follow
-immediately, since a continuous function is bounded on a compact set;
-this was indeed our original motivation for Lemma~5.1.
-We thank the reviewer for the insightful comment, which led us
-to simplify the proof structure and strengthen the results.
-% After careful reconsideration, we find that the
-% iterate-boundedness assumption in Lemma~5.1 is in fact not
-% necessary for the complexity analysis: Proposition~2 establishes
-% the required lower bounds under only the refined Assumption~5.1,
-% without any boundedness assumption on the iterates or the
-% objective-function values.
-
-% \vspace{0.5em}
-% \noindent\textbullet\quad\textbf{Comment 2 (Descent argument).} \emph{%
-% (Lemma 5.4/proof) I don't really understand how you reach inequality (5.9). Provide far
-% more details (intermediate inequalities, mention descent lemma whenever it is used, how
-% you deal with the conjugate quantities...)).}
-
-% \smallskip
-% \noindent\emph{%
-% (Lemma C.2/proof) [\ldots] Finally, could you provide additionnal details to justify
-% why $C_B>0$ ensures $C_2>0$?}
-
-% \smallskip
-% \noindent\emph{%
-% (Lemma 5.7/proof) [\ldots] When you sum over $k=1,\ldots,T$, term
-% $(3+L_\Delta)\frac{\sigma^2}{b_k}$ is incorrect and should be
+% As stated in the submitted manuscript (p.~7), the model
+% structure~(3.1),
 % \[
-% \frac{(3+L_\Delta)\sigma^2}{L_FT}\sum_{k=1}^{T}\frac1{b_k}.
+% \min_{x,B}\;
+% J(x,B)=F(x,B)+h(B),\quad
+% F(x,B)=\frac{1}{n}{\textstyle\sum_{i=1}^{n}}f_i(x)
+% +\frac{\gamma}{2n}{\textstyle\sum_{i=1}^{n}}\|\mathcal{D}_i(x)-b_i\|^2,
 % \]
-% [\ldots]
-% (Theorem 5.2/proof) The previous mistake propagates into the proof of Theorem 5.2.}
+% where $f_i(x)=\ell_{s,i}(x)+\frac{\mu}{2}\|x\|^2$ with $\mu>0$ and
+% $\bar\ell_s(x):=\frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}(x)$, already entails the coercivity of~$J$ under the following
+% refined assumption, which replaces the lower-boundedness of~$J$ in
+% Assumption~5.1(i) (p.~10):
+% \[
+% \underline{\ell}\;:=\;\inf_{x}\,\bar\ell_s(x)\;>\;-\infty.
+% \]
+% Indeed, since the W-type regularizer satisfies
+% $h(B)\ge\lambda\|B\|_1-\lambda nd$, we have
+% \[
+% J(x,B)\;\ge\;\underline{\ell}
+% +\frac{\mu}{2}\|x\|^2+\lambda\|B\|_1-\lambda nd
+% \;\longrightarrow\;+\infty
+% \quad\text{as }\|(x,B)\|\to\infty,
+% \]
+% so the coercivity and lower-boundedness of~$J$ need not be
+% assumed separately.
+
+% \smallskip
+% \noindent\textbf{(ii) Lower-boundedness of the Lyapunov functions.}
+% We now provide a complete justification of the lower-boundedness of the Lyapunov functions $\Psi_m(\mathcal{Q}^k)$ in~(5.12) and $\Psi_r(\mathcal{Q}^k)$ in~(5.21) under the revised assumptions, as follows.
+
+% \begin{proposition}
+% \label{prop:lyapunov-lower-bound}
+% Under the revised Assumption~5.1 (p.~10) and
+% step-size conditions compatible with those in Theorem~5.2 (p.~14) and
+% Theorem~5.3 (p.~16),
+% \begin{enumerate}[label=\textup{(\roman*)},nosep]
+% \item for DualHash-StoM, the following lower bound holds for every $k\ge 1$:
+% \[
+% \mathbb{E}[\Psi_m(\mathcal{Q}^k)]
+% \;\ge\;
+% \underline{\ell}
+% +\frac{\mu}{4}\,\mathbb{E}\|x^k\|^2
+% +\frac{3\gamma}{16n}\,\mathbb{E}\|B^k
+%   -\mathcal{D}(x^k)\|_F^2
+% -c_1
+% \;\ge\;
+% \Psi_m^*>-\infty.
+% \]
+% \item for DualHash-StoRM, let $e^k:=D^k-\nabla_xF(x^k,B^k)$ denote the
+% estimation error of the StoRM estimator, and let $\eta_T$ and $\rho_T$ be the
+% step size and the momentum parameter of the schedule in Theorem~5.3 (p.~16).
+% Then the
+% combined potential
+% $W_k:=\mathbb{E}[\Psi_r(\mathcal{Q}^k)]
+% +\frac{\eta_T}{\rho_T}\,\mathbb{E}\|e^k\|^2$
+% satisfies
+% \[
+% W_k\;\ge\;\Psi_r^*>-\infty,
+% \qquad k\ge 1.
+% \]
+% \end{enumerate}
+% The constants $c_1$, $\Psi_m^*$, and $\Psi_r^*$ are independent
+% of~$T$. 
+% \end{proposition}
 
 \vspace{0.5em}
 \noindent\textbullet\quad\textbf{Comments 2 and 3
@@ -323,7 +317,7 @@ to simplify the proof structure and strengthen the results.
 
 \smallskip
 \noindent\emph{%
-The reviewer pointed out several issues on proofs, including
+The reviewer pointed out several issues with the proofs, including
 an incorrect summation formula in Lemma~5.7 that
 propagates into Theorem~5.2; insufficient justification
 that $C_B>0$ ensures $C_2>0$ (Lemma~C.2);
@@ -332,68 +326,76 @@ Appendices~C and~D; and the need to rework the proofs
 of Lemma~5.10 and Theorem~5.3 based on the corrected
 inequality~(D.4).}
 
-\noindent\textbullet\quad\textbf{\red{Our response.}}
-We thank the reviewer for identifying these errors; the corrections are
-confined to constants and conditional-expectation formalism and do not affect
-the established complexity orders, as detailed below.
+\vspace{0.5em}
+\noindent\textbullet\quad\textbf{Our response.}
+We thank the reviewer for the careful review. We will correct
+the expectation and variance estimates and refine the
+initialization and parameter conditions accordingly.
+These corrections include replacing the conditional expectations
+in~(C.7) with full expectations, using the same batch in both
+sampled gradients in~(4.8), and restoring the omitted term in
+the variance-reduction recursion.
+Nevertheless, these adjustments preserve the
+$\mathcal{O}(\varepsilon^{-3})$ SFO complexity stated in
+Theorem~5.3. We will incorporate these corrections into the
+revised manuscript to make the analysis clearer and more rigorous.
 
-\smallskip
-\noindent\textbf{(i) Coefficient and step-size condition (Lemma~C.2, p.~32).}
-The corrected coefficient and strict step-size condition read
-\[
-\frac{2C_B}{L_F}=\blue{\frac1t}-\frac{13}{2}t-2>0
-\quad\text{when}\quad
-0<\tau\blue{<}\frac{\sqrt{30}-2}{13L_F},
-\qquad t:=\tau L_F.
-\]
-The corrected averaged estimate retains the same form as Theorem~5.2 (p.~14),
-with
-updated constants $L_\Delta$ and $C_\sigma$; for $b_k=c_bT$, the
-$\mathcal{O}(\varepsilon^{-4})$ SFO complexity order is preserved.
+% We thank the reviewer for identifying these errors; the corrections are
+% confined to constants and conditional-expectation formalism and do not affect the established complexity orders, as detailed below.
 
-\smallskip
-\noindent\textbf{(ii) Conditional expectations and batch index.}
-The conditional expectations in~(C.7) are replaced by full expectations~$\mathbb{E}[\,\cdot\,]$. In addition, the corrected StoRM estimator in~(4.8)reads
-\[
-D^k=\begin{cases}
-\nabla_x F(x^1,B^1;\mathcal{J}_1), & k=1,\\[4pt]
-(1-\rho_{k-1})\bigl(D^{k-1}
-  -\nabla_x F(x^{k-1},B^{k-1};\blue{\mathcal{J}_k})\bigr)
-  +\nabla_x F(x^k,B^k;\mathcal{J}_k), & k>1.
-\end{cases}
-\]
+% \smallskip
+% \noindent\textbf{(i) Coefficient and step-size condition (Lemma~C.2, p.~32).}
+% The corrected coefficient and strict step-size condition read
+% \[
+% \frac{2C_B}{L_F}=\blue{\frac1t}-\frac{13}{2}t-2>0
+% \quad\text{when}\quad
+% 0<\tau\blue{<}\frac{\sqrt{30}-2}{13L_F},
+% \qquad t:=\tau L_F.
+% \]
+% The corrected averaged estimate retains the same form as the estimate stated in Theorem~5.2 (p.~14),
+% with
+% updated constants $L_\Delta$ and $C_\sigma$; for $b_k=c_bT$, the
+% $\mathcal{O}(\varepsilon^{-4})$ SFO complexity order is still preserved.
 
-\smallskip
-\noindent\textbf{(iii) Variance-reduction recursion.} The
-corrected Lemma~D.1 (p.~36) restores the $\blue{\Delta_B^{k+1}}$ term omitted
-in the variance-reduction recursion. With $m:=\gamma/n$, the explicit
-initialization
-\[
-\blue{B^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(x^1))},
-\qquad
-\blue{\Lambda^1=m(\mathcal{D}(x^1)-B^1)},
-\]
-and carefully refined parameter conditions, we still obtain
-\[
-\frac1T\sum_{k=1}^{T}\mathbb{E}\operatorname{dist}^2
-\bigl(0,\partial\mathcal{L}(x^k,B^k,\Lambda^k)\bigr)
-\le\frac{C}{T^{2/3}},
-\]
-where $C$ is independent of~$T$. The $\mathcal{O}(\varepsilon^{-3})$ SFO
-complexity in Theorem~5.3 (p.~16) is therefore preserved. The revised proof
-will state
-the initialization and parameter conditions explicitly.
+% \smallskip
+% \noindent\textbf{(ii) Conditional expectations and batch index.}
+% The conditional expectations in~(C.7) are replaced by full expectations~$\mathbb{E}[\,\cdot\,]$. In addition, the corrected StoRM estimator in~(4.8) reads
+% \[
+% D^k=\begin{cases}
+% \nabla_x F(x^1,B^1;\mathcal{J}_1), & k=1,\\[4pt]
+% (1-\rho_{k-1})\bigl(D^{k-1}
+%   -\nabla_x F(x^{k-1},B^{k-1};\blue{\mathcal{J}_k})\bigr)
+%   +\nabla_x F(x^k,B^k;\mathcal{J}_k), & k>1.
+% \end{cases}
+% \]
+
+% \smallskip
+% \noindent\textbf{(iii) Variance-reduction recursion.} The
+% corrected Lemma~D.1 (p.~36) restores the $\blue{\Delta_B^{k+1}}$ term omitted
+% in the variance-reduction recursion. With $m:=\gamma/n$, the explicit
+% initialization
+% \[
+% \blue{B^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(x^1))},
+% \qquad
+% \blue{\Lambda^1=m(\mathcal{D}(x^1)-B^1)},
+% \]
+% and carefully refined parameter conditions, we still obtain
+% \[
+% \frac1T\sum_{k=1}^{T}\mathbb{E}\operatorname{dist}^2
+% \bigl(0,\partial\mathcal{L}(x^k,B^k,\Lambda^k)\bigr)
+% \le\frac{C}{T^{2/3}},
+% \]
+% where $C$ is independent of~$T$. The $\mathcal{O}(\varepsilon^{-3})$ SFO
+% complexity in Theorem~5.3 (p.~16) is therefore preserved.
+
 
 \section*{}
-
-In closing, deep hashing maps images to short binary codes (e.g., 64 bits) for
-large-scale retrieval, reducing storage by orders of magnitude and enabling
+In closing, deep hashing maps images to short binary codes (e.g., 64 bits) for large-scale retrieval, reducing storage by several orders of magnitude and enabling
 sub-millisecond search via Hamming distance. The W-type regularizer
-$\|\,|z|-\mathbf{1}\|_1$ is the principal function used in practice to enforce
+$\|\,|z|-\mathbf{1}\|_1$ is the principal regularizer used in practice to enforce
 binarization, yet its nonconvexity and nonsmoothness have left convergence and
-complexity analysis largely unexplored for W-regularized hashing methods~
-\cite{liu2016dsh,zhu2016dhn,wang2023mds,chen2025shc}. Our manuscript addresses
-this gap: we reformulate the problem via Fenchel duality into a convex dual with
+complexity analysis largely unexplored for W-regularized hashing methods \cite{liu2016dsh,zhu2016dhn,wang2023mds,chen2025shc}. Our manuscript addresses
+this gap: we reformulate the problem via Fenchel duality as a convex-dual formulation with
 closed-form proximal updates, and establish the first complexity guarantees for
 this setting, complemented by extensive experiments whose practical value both
 reviewers acknowledged.
@@ -408,9 +410,10 @@ Authors of \textbf{Submission \#M187198}.
 \bibliographystyle{siamplain}
 \bibliography{revision_refs}
 
- 
+% \section*{Appendix 1: Proof of Proposition~\ref{prop:transfer}}
 
-% \begin{proof} 
+% \begin{proof}
+% \emph{Step 0: a consequence of \eqref{eq:crit}.}
 % Since $h^{**}$ is proper, closed and convex, and $(h^{**})^*=h^*$, the
 % subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
 % \[
@@ -438,8 +441,8 @@ Authors of \textbf{Submission \#M187198}.
 % =\langle\widetilde{\Lambda},\widetilde{B}\rangle$ together with the
 % definition of $h^*$ means that $\widetilde{B}$ globally minimizes
 % $h(\cdot)-\langle\widetilde{\Lambda},\cdot\rangle$. By Fermat's
-% rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2 of
-% the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})
+% rule~\cite[Theorem~10.1]{rockafellar1998variational} and Proposition~A.2
+% (p.~29) of the manuscript, $\widetilde{\Lambda}\in\widehat{\partial}h(\widetilde{B})
 % \subseteq\partial h(\widetilde{B})$, which is \eqref{eq:pstat}.
 
 % \emph{(a)$\Rightarrow$(c).} By Step~0, (a) means
@@ -452,12 +455,212 @@ Authors of \textbf{Submission \#M187198}.
 % so the intersection is empty. Hence $|\widetilde{B}_{ij}|\ge1$ for all $i,j$.
 % \end{proof}
 
-% Bibliography entries to add to revision_refs.bib:
-% bonnans2013perturbation : J. F. Bonnans and A. Shapiro, Perturbation Analysis of Optimization Problems, Springer, 2000; reprint 2013 (ref. [6] of the manuscript)
-% rockafellar1970convex   : R. T. Rockafellar, Convex Analysis, Princeton University Press, 1970
-% rockafellar1998variational : R. T. Rockafellar and R. J.-B. Wets, Variational Analysis, Springer, 1998 (ref. [47] of the manuscript)
-
 % \clearpage
+% \section*{Appendix 2: Proof of Proposition~\ref{prop:lyapunov-lower-bound}}
+
+% Let $m:=\gamma/n$, $M:=\lambda\sqrt{nd}$, and
+% $C_D:=\sup_x\|\mathcal{D}(x)\|_F$. The uniform output condition in the
+% revised Assumption~B.1 (p.~30) gives $C_D<\infty$; for the hashing architecture
+% with a final $\tanh$ activation, one may take $C_D\le\sqrt{nd}$. On
+% $\operatorname{dom}h^*=[-\lambda,\lambda]^{n\times d}$, we have
+% \[
+% \|\Lambda\|_F\le M,
+% \qquad
+% 0\le h^*(\Lambda)\le\lambda nd.
+% \]
+
+% \subsection*{2.1 DualHash-StoM}
+
+% \begin{proof}[Proof of Proposition~\ref{prop:lyapunov-lower-bound}(i)]
+% Write
+% \[
+% r_k:=B^k-\mathcal{D}(x^k),
+% \qquad
+% p_k:=x^k-x^{k-1},
+% \qquad
+% u_k:=x^{k+1}-x^k.
+% \]
+% Recall the Lyapunov function~(5.12) on page~13 of the submitted manuscript,
+% \[
+% \Psi_m(\mathcal{Q}^k)=\mathcal{L}(x^k,B^k,\Lambda^k)
+% -C_1\Delta_B^{k+1}+C_2\Delta_B^k
+% -C_3\Delta_x^{k+1}+C_4\Delta_x^k.
+% \]
+
+% \emph{Step 1: a lower bound for the Lagrangian.}
+% Since $\|B^k\|_F\le\|r_k\|_F+C_D$, Young's inequality gives
+% \[
+% \langle B^k,\Lambda^k\rangle-h^*(\Lambda^k)
+% \ge-\frac m8\|r_k\|_F^2-c_0,
+% \qquad
+% c_0:=\frac{2M^2}{m}+MC_D+\lambda nd.
+% \]
+% Moreover,
+% \[
+% F(x^k,B^k)\ge\underline\ell+\frac\mu2\|x^k\|^2
+% +\frac m2\|r_k\|_F^2.
+% \]
+% Hence
+% \begin{equation}\label{eq:prop2-L-lower}
+% \mathcal{L}(x^k,B^k,\Lambda^k)
+% \ge\underline\ell+\frac\mu2\|x^k\|^2
+% +\frac{3m}{8}\|r_k\|_F^2-c_0.
+% \end{equation}
+
+% \emph{Step 2: the forward $B$-increment.}
+% The $B$-update and the Lipschitz continuity of $\mathcal{D}$ give
+% \[
+% \begin{aligned}
+% \Delta_B^{k+1}
+% &=\frac{\tau^2}{2}
+% \|m(B^k-\mathcal{D}(x^{k+1}))+\Lambda^k\|_F^2\\
+% &\le\frac{3\tau^2}{2}
+% \left(m^2\|r_k\|_F^2+m^2L_D^2\|u_k\|^2+\lambda^2nd\right).
+% \end{aligned}
+% \]
+% Define
+% \[
+% A_B:=\frac{3C_1\tau^2m^2}{2},
+% \qquad
+% H_m:=\frac{3C_1\tau^2m^2L_D^2}{2}+\frac{C_3}{2}.
+% \]
+% Then
+% \begin{equation}\label{eq:prop2-B-increment}
+% -C_1\Delta_B^{k+1}-C_3\Delta_x^{k+1}
+% \ge-A_B\|r_k\|_F^2-H_m\|u_k\|^2
+% -\frac{3C_1\tau^2\lambda^2nd}{2}.
+% \end{equation}
+
+% \emph{Step 3: the stochastic momentum increment.}
+% Let
+% $z^k=x^k+\beta p_k$ and
+% $e^k=G^k-\nabla_xF(z^k,B^k)$. The $x$-update gives
+% \[
+% u_k=\alpha p_k-\eta_k\bigl(\nabla_xF(z^k,B^k)+e^k\bigr).
+% \]
+% By global $L_F$-smoothness and $F\ge\underline\ell$,
+% \[
+% \|\nabla F(x^k,B^k)\|^2
+% \le2L_F\bigl(F(x^k,B^k)-\underline\ell\bigr),
+% \]
+% and therefore
+% \[
+% \begin{aligned}
+% \mathbb{E}\|u_k\|^2
+% \le{}&12\eta_k^2L_F\,
+% \mathbb{E}\bigl[F(x^k,B^k)-\underline\ell\bigr]\\
+% &+\bigl(3\alpha^2+6\eta_k^2L_F^2\beta^2\bigr)
+% \mathbb{E}\|p_k\|^2
+% +3\eta_k^2\frac{\sigma^2}{b_k}.
+% \end{aligned}
+% \]
+% Put
+% \[
+% \Theta_k:=12H_m\eta_k^2L_F,
+% \qquad
+% Q_k:=3\alpha^2+6\eta_k^2L_F^2\beta^2.
+% \]
+% We impose the following explicit absorption conditions:
+% \begin{align}
+% \Theta_k&\le\frac12, \tag{P1}\label{eq:prop2-P1}\\
+% \frac m2(1-\Theta_k)-\frac m8-A_B&\ge\frac{3m}{16},
+% \tag{P2}\label{eq:prop2-P2}\\
+% C_4&\ge2H_mQ_k. \tag{P3}\label{eq:prop2-P3}
+% \end{align}
+% They are compatible with the stated parameter restrictions after the fixed
+% constants are chosen sufficiently small.
+
+% Combining \eqref{eq:prop2-L-lower}, \eqref{eq:prop2-B-increment}, and
+% the preceding estimate yields
+% \[
+% \begin{aligned}
+% \mathbb{E}\Psi_m(\mathcal{Q}^k)
+% \ge{}&\underline\ell+\frac\mu4\mathbb{E}\|x^k\|^2
+% +\frac{3m}{16}\mathbb{E}\|r_k\|_F^2
+% +C_2\mathbb{E}\Delta_B^k+\frac{C_4}{2}\mathbb{E}\Delta_x^k\\
+% &-c_0-\frac{3C_1\tau^2\lambda^2nd}{2}
+% -3H_m\eta_k^2\frac{\sigma^2}{b_k}.
+% \end{aligned}
+% \]
+% Since $b_k\ge1$, the final term is bounded below by a constant independent
+% of $T$. Dropping the nonnegative terms proves
+% \(\mathbb{E}\Psi_m(\mathcal{Q}^k)\ge\Psi_m^*>-\infty\), where
+% \(\Psi_m^*\) is independent of $T$.
+% \end{proof}
+
+% \subsection*{2.2 DualHash-StoRM}
+
+% \begin{proof}[Proof of Proposition~\ref{prop:lyapunov-lower-bound}(ii)]
+% Recall the Lyapunov function~(5.21) on page~15 of the submitted manuscript,
+% \[
+% \Psi_r(\mathcal{Q}^k)=\mathcal{L}(x^k,B^k,\Lambda^k)
+% -C_1\Delta_B^{k+1}+C_2\Delta_B^k-C_3\Delta_x^{k+1}
+% \]
+% and define
+% \[
+% W_k:=\mathbb{E}[\Psi_r(\mathcal{Q}^k)]
+% +\frac{\eta_T}{\rho_T}\mathbb{E}\|e^k\|^2,
+% \qquad
+% e^k:=D^k-\nabla_xF(x^k,B^k).
+% \]
+% The bounds \eqref{eq:prop2-L-lower} and the forward $B$-increment estimate
+% remain valid. Since $u_k=-\eta_kD^k$,
+% \[
+% \mathbb{E}\|u_k\|^2
+% \le2\eta_k^2\left(
+% \mathbb{E}\|\nabla_xF(x^k,B^k)\|^2+\mathbb{E}\|e^k\|^2\right).
+% \]
+% Set
+% \[
+% \Gamma_k:=\eta_k^2\bigl(3C_1\tau^2m^2L_D^2+C_3\bigr).
+% \]
+% Using the same notation $A_B=3C_1\tau^2m^2/2$ as above, we obtain
+% \[
+% \begin{aligned}
+% W_k\ge{}&\mathbb{E}\bigl[F(x^k,B^k)\bigr]
+% -\left(\frac m8+A_B\right)\mathbb{E}\|r_k\|_F^2-c_0
+% -\frac{3C_1\tau^2\lambda^2nd}{2}\\
+% &-\Gamma_k\mathbb{E}\|\nabla_xF(x^k,B^k)\|^2
+% +\left(\frac{\eta_T}{\rho_T}-\Gamma_k\right)\mathbb{E}\|e^k\|^2
+% +C_2\mathbb{E}\Delta_B^k.
+% \end{aligned}
+% \]
+% The following conditions are sufficient:
+% \begin{align}
+% \Gamma_k&\le\frac{\eta_T}{\rho_T},
+% \tag{P1$'$}\label{eq:prop2-P1storm}\\
+% 2L_F\Gamma_k&\le\frac12,
+% \tag{P2$'$}\label{eq:prop2-P2storm}\\
+% \frac m2(1-2L_F\Gamma_k)-\frac m8-A_B&\ge\frac{3m}{16}.
+% \tag{P3$'$}\label{eq:prop2-P3storm}
+% \end{align}
+% Indeed, the global smoothness bound
+% \[
+% \|\nabla_xF(x^k,B^k)\|^2
+% \le2L_F\bigl(F(x^k,B^k)-\underline\ell\bigr)
+% \]
+% allows the gradient-square term to be absorbed by the positive terms in
+% \eqref{eq:prop2-L-lower}, while \emph{(P1$'$)} absorbs the error-square
+% term into the tracking term in $W_k$. Under the parameter schedule of
+% Theorem~5.3, $\eta_k=O(T^{-1/3})$ and
+% $\eta_T/\rho_T=O(T^{1/3})$; hence these conditions are compatible with
+% the stated schedule after the fixed constants are chosen sufficiently small.
+
+% It follows that
+% \[
+% W_k\ge\underline\ell+\frac\mu4\mathbb{E}\|x^k\|^2
+% +\frac{3m}{16}\mathbb{E}\|B^k-\mathcal{D}(x^k)\|_F^2
+% +C_2\mathbb{E}\Delta_B^k-c_1',
+% \]
+% where
+% \[
+% c_1':=c_0+\frac{3C_1\tau^2\lambda^2nd}{2}
+% \]
+% is independent of $T$. Dropping the nonnegative terms proves
+% \(W_k\ge\Psi_r^*:=\underline\ell-c_1'>-\infty\).
+% \end{proof}
+
+% % \clearpage
 % \section*{Appendix B: Detailed Descent Argument and Corrections}
 % \noindent\emph{Internal working notes for the manuscript revision; not part
 % of the response to the reviewer.}
@@ -596,29 +799,29 @@ Authors of \textbf{Submission \#M187198}.
 % \section*{Appendix C: Stochastic Estimates and a Sufficient Rate-Preserving Repair}
 % \noindent\emph{Internal working notes for the manuscript revision. The batch
 % index in (4.8) has been confirmed by the authors: both gradient evaluations
-% use the current batch. The rate below concerns an explicit revised parameter
+% use the current batch. The rate below concerns an explicitly revised parameter
 % schedule; it does not establish the submitted fixed-$\tau$ theorem as written.}
 
 % \smallskip
 % \noindent\textbf{C.1. Information and expectation conventions.}
-% Let $\mathcal F_k$ contain the initialization and all batches through
+% Let $\mathcal{F}_k$ contain the initialization and all batches through
 % iteration $k$. The iterate $(x^k,B^k,\Lambda^k)$ is
-% $\mathcal F_{k-1}$-measurable, and the next batch is sampled independently
+% $\mathcal{F}_{k-1}$-measurable, and the next batch is sampled independently
 % of this history. Within each batch, use independent uniform samples with
 % replacement. Assume all expectations below are finite. For StoM,
 % \[
-% \mathbb E[e^k\mid\mathcal F_{k-1}]=0,
+% \mathbb{E}[e^k\mid\mathcal{F}_{k-1}]=0,
 % \qquad
-% \mathbb E[\|e^k\|^2\mid\mathcal F_{k-1}]\leq\sigma^2/b_k.
+% \mathbb{E}[\|e^k\|^2\mid\mathcal{F}_{k-1}]\leq\sigma^2/b_k.
 % \]
-% The Lyapunov variable $\Psi_m(\mathcal Q^k)$ contains next-iterate terms,
-% so it must not be treated as $\mathcal F_{k-1}$-measurable. Take full
+% The Lyapunov variable $\Psi_m(\mathcal{Q}^k)$ contains next-iterate terms,
+% so it must not be treated as $\mathcal{F}_{k-1}$-measurable. Take full
 % expectations of its pathwise descent estimate to obtain the corrected (C.7):
 % \[
 % \begin{aligned}
-% \mathbb E\Psi_m(\mathcal Q^{k+1})-\mathbb E\Psi_m(\mathcal Q^k)
-% \leq{}&-C_B\mathbb E[\Delta_B^{k+1}+\Delta_B^k]\\
-% &-C_x\mathbb E[\Delta_x^{k+1}+\Delta_x^k]
+% \mathbb{E}\Psi_m(\mathcal{Q}^{k+1})-\mathbb{E}\Psi_m(\mathcal{Q}^k)
+% \leq{}&-C_B\mathbb{E}[\Delta_B^{k+1}+\Delta_B^k]\\
+% &-C_x\mathbb{E}[\Delta_x^{k+1}+\Delta_x^k]
 % +\frac{\sigma^2}{b_kL_F}.
 % \end{aligned}
 % \]
@@ -629,24 +832,24 @@ Authors of \textbf{Submission \#M187198}.
 % \smallskip
 % \noindent\textbf{C.2. Same-batch StoRM recursion and the missing block.}
 % Write $z^k=(x^k,B^k)$, $g(z)=\nabla_xF(x,B)$ and
-% $g(z;\mathcal J)=|\mathcal J|^{-1}\sum_{i\in\mathcal J}
+% $g(z;\mathcal{J})=|\mathcal{J}|^{-1}\sum_{i\in\mathcal{J}}
 % \nabla_xF_i(x,b_i)$. The intended update is
 % \[
-% D^{k+1}=g(z^{k+1};\mathcal J_{k+1})
-% +(1-\rho_k)\bigl[D^k-g(z^k;\mathcal J_{k+1})\bigr].
+% D^{k+1}=g(z^{k+1};\mathcal{J}_{k+1})
+% +(1-\rho_k)\bigl[D^k-g(z^k;\mathcal{J}_{k+1})\bigr].
 % \]
-% Here $z^{k+1},z^k,D^k$ are $\mathcal F_k$-measurable. Define
-% $\epsilon(z;\mathcal J)=g(z;\mathcal J)-g(z)$. Then
+% Here $z^{k+1},z^k,D^k$ are $\mathcal{F}_k$-measurable. Define
+% $\epsilon(z;\mathcal{J})=g(z;\mathcal{J})-g(z)$. Then
 % \[
-% e^{k+1}=(1-\rho_k)e^k+\rho_k\epsilon(z^{k+1};\mathcal J_{k+1})
-% +(1-\rho_k)\bigl[\epsilon(z^{k+1};\mathcal J_{k+1})
-% -\epsilon(z^k;\mathcal J_{k+1})\bigr].
+% e^{k+1}=(1-\rho_k)e^k+\rho_k\epsilon(z^{k+1};\mathcal{J}_{k+1})
+% +(1-\rho_k)\bigl[\epsilon(z^{k+1};\mathcal{J}_{k+1})
+% -\epsilon(z^k;\mathcal{J}_{k+1})\bigr].
 % \]
 % The last two terms have conditional mean zero. Independence within the
 % batch, the variance bound and joint mean-square smoothness imply
 % \[
 % \begin{aligned}
-% \mathbb E[\|e^{k+1}\|^2\mid\mathcal F_k]
+% \mathbb{E}[\|e^{k+1}\|^2\mid\mathcal{F}_k]
 % \leq{}&(1-\rho_k)^2\|e^k\|^2+\frac{2\rho_k^2\sigma^2}{b_{k+1}}\\
 % &+\frac{4(1-\rho_k)^2L_F^2}{b_{k+1}}
 % \bigl(\Delta_x^{k+1}+\Delta_B^{k+1}\bigr).
@@ -672,15 +875,15 @@ Authors of \textbf{Submission \#M187198}.
 % \[
 % q_{k+1}\leq(1-\rho_k)q_k
 % +\frac{2\rho_k^2\sigma^2}{b_{k+1}}
-% +4L_F^2\mathbb E\Delta_x^{k+1},
-% \qquad q_k:=\mathbb E\|e^k\|^2.
+% +4L_F^2\mathbb{E}\Delta_x^{k+1},
+% \qquad q_k:=\mathbb{E}\|e^k\|^2.
 % \]
 % Adding this inequality with weight $a_0=(8\eta_1L_F^2)^{-1}$ to
-% $\mathbb E(\Psi_{k+1}-\Psi_k)\leq
-% -(2\eta_1)^{-1}\mathbb E\Delta_x^{k+1}+\eta_kq_k/2$ gives
+% $\mathbb{E}(\Psi_{k+1}-\Psi_k)\leq
+% -(2\eta_1)^{-1}\mathbb{E}\Delta_x^{k+1}+\eta_kq_k/2$ gives
 % \[
-% (\mathbb E\Psi_{k+1}+a_0q_{k+1})
-% -(\mathbb E\Psi_k+a_0q_k)
+% (\mathbb{E}\Psi_{k+1}+a_0q_{k+1})
+% -(\mathbb{E}\Psi_k+a_0q_k)
 % \leq-\frac{\rho_k}{16\eta_1L_F^2}q_k
 % +\frac{\rho_k^2\sigma^2}{4\eta_1L_F^2b_{k+1}},
 % \]
@@ -718,7 +921,7 @@ Authors of \textbf{Submission \#M187198}.
 % \Psi_{k+1}-\Psi_k
 % \leq-C_B(\Delta_B^{k+1}+\Delta_B^k)
 % -C_x\Delta_x^{k+1}+\frac\eta2\|e^k\|^2,
-% \quad \Psi_k:=\Psi_r(\mathcal Q^k).
+% \quad \Psi_k:=\Psi_r(\mathcal{Q}^k).
 % \tag{C.3}
 % \]
 % The term $-(C_4-K_6)\Delta_x^k$ in the submitted (D.2) must be deleted:
@@ -728,33 +931,33 @@ Authors of \textbf{Submission \#M187198}.
 % Since $(1-\rho)^2\leq1-\rho$ and $(1-\rho)^2\leq1$, (C.1) implies
 % \[
 % q_{k+1}-q_k\leq-\rho q_k+\frac{2\rho^2\sigma^2}{b}
-% +\frac{4L_F^2}{b}\mathbb E[\Delta_x^{k+1}+\Delta_B^{k+1}].
+% +\frac{4L_F^2}{b}\mathbb{E}[\Delta_x^{k+1}+\Delta_B^{k+1}].
 % \]
-% Define $V_k=\mathbb E\Psi_k+(\eta/\rho)q_k$. Add the last inequality
+% Define $V_k=\mathbb{E}\Psi_k+(\eta/\rho)q_k$. Add the last inequality
 % with weight $\eta/\rho$ to the full expectation of (C.3). Using
 % $4\eta L_F^2/(b\rho)=1/(4\eta)$ gives
 % \[
 % \begin{aligned}
-% V_{k+1}-V_k\leq{}&-\frac{C_B}{2}\mathbb E\Delta_B^{k+1}
-% -C_B\mathbb E\Delta_B^k
-% -\frac1{4\eta}\mathbb E\Delta_x^{k+1}\\
+% V_{k+1}-V_k\leq{}&-\frac{C_B}{2}\mathbb{E}\Delta_B^{k+1}
+% -C_B\mathbb{E}\Delta_B^k
+% -\frac1{4\eta}\mathbb{E}\Delta_x^{k+1}\\
 % &-\frac\eta2q_k+\frac{2\eta\rho\sigma^2}{b}.
 % \end{aligned}
 % \tag{C.4}
 % \]
 % This argument uses only nonnegative weights and does not require
-% $\mathbb E\Psi_k$ to be nonincreasing.
+% $\mathbb{E}\Psi_k$ to be nonincreasing.
 
 % \smallskip
 % \noindent\textbf{C.5. Stationarity and oracle complexity.}
 % The blockwise stationarity calculation gives
 % \[
 % \begin{aligned}
-% r_k&:=\mathbb E\operatorname{dist}^2
-% (0,\partial\mathcal L(x^k,B^k,\Lambda^k))\\
-% &\leq S_1\mathbb E\Delta_B^{k+1}
-% +S_2\mathbb E\Delta_B^k
-% +S_3\mathbb E\Delta_x^{k+1}+2q_k,
+% r_k&:=\mathbb{E}\operatorname{dist}^2
+% (0,\partial\mathcal{L}(x^k,B^k,\Lambda^k))\\
+% &\leq S_1\mathbb{E}\Delta_B^{k+1}
+% +S_2\mathbb{E}\Delta_B^k
+% +S_3\mathbb{E}\Delta_x^{k+1}+2q_k,
 % \end{aligned}
 % \]
 % with
@@ -774,10 +977,10 @@ Authors of \textbf{Submission \#M187198}.
 % \]
 % By (C.4),
 % $r_k\leq M_T[V_k-V_{k+1}+2\eta\rho\sigma^2/b]$.
-% Assume a finite lower bound $\mathbb E\Psi_k\geq\Psi_{*,T}$ and a
+% Assume a finite lower bound $\mathbb{E}\Psi_k\geq\Psi_{*,T}$ and a
 % uniform expected initial gap
 % \[
-% 0\leq\Delta_T:=\mathbb E\Psi_1-\Psi_{*,T}\leq\overline\Delta<\infty
+% 0\leq\Delta_T:=\mathbb{E}\Psi_1-\Psi_{*,T}\leq\overline\Delta<\infty
 % \quad\text{for all }T.
 % \tag{C.5}
 % \]
@@ -791,7 +994,7 @@ Authors of \textbf{Submission \#M187198}.
 % \]
 % Here $M_T=O(T^{1/3})$: the four entries of the maximum are respectively
 % $O(T^{1/3})$, $O(T^{-1/3})$, $O(T^{1/3})$, and $O(T^{1/3})$.
-% Substituting (C.2) and (C.5) in (C.6) gives
+% Substituting (C.2) and (C.5) into (C.6) gives
 % \[
 % \frac1T\sum_{k=1}^{T}r_k=O(T^{-2/3}).
 % \]
@@ -829,7 +1032,7 @@ Authors of \textbf{Submission \#M187198}.
 % $\|\nabla_BF(x^{k+1},B^k)+\Lambda^k\|\leq M_B$.
 % The $B$-update gives $\Delta_B^{k+1}\leq\tau^2M_B^2/2$.
 % For the W-regularizer, $h^*$ is finite and continuous on its compact box
-% domain, so $\mathcal L$ has finite bounds $L_{\min},L_{\max}$ on this set.
+% domain, so $\mathcal{L}$ has finite bounds $L_{\min},L_{\max}$ on this set.
 % Since $C_1=1/(2\tau)$, $C_3=\tau L_F^2/2$, and
 % $C_2=1/(2\tau)-L_F+11\tau L_F^2/4$, one obtains
 % \[
@@ -860,8 +1063,8 @@ Authors of \textbf{Submission \#M187198}.
 % \noindent\textbf{D.1. Model structure and initialization.}
 % Use the quadratic coupling in Problem~(P), and put
 % \[
-% m:=\frac\gamma n>0,\qquad U^k:=\mathcal D(x^k),\qquad
-% \nabla_BF(x,B)=m(B-\mathcal D(x)).
+% m:=\frac\gamma n>0,\qquad U^k:=\mathcal{D}(x^k),\qquad
+% \nabla_BF(x,B)=m(B-\mathcal{D}(x)).
 % \]
 % The smoothness bound satisfies $m\leq L_F$. Fix $\delta=1/6$ and
 % \[
@@ -976,11 +1179,11 @@ Authors of \textbf{Submission \#M187198}.
 % Also,
 % $\|\beta_{k+1}\|_F^2\leq
 % 3(\|\beta_k\|_F^2+\|w_k\|_F^2)+3r^2\|u_k\|_F^2$.
-% Combining with (D.4) and the Lipschitz property of $\mathcal D$ gives
+% Combining with (D.4) and the Lipschitz property of $\mathcal{D}$ gives
 % \[
 % \Delta_B^{k+1}
 % \leq\frac{12}{r}(H_k-H_{k+1})+G\Delta_x^{k+1},
-% \qquad G:=1753L_{\mathcal D}^2.
+% \qquad G:=1753L_{\mathcal{D}}^2.
 % \tag{D.5}
 % \]
 % The numerical constants are sufficient, not optimized. The difference
@@ -990,14 +1193,14 @@ Authors of \textbf{Submission \#M187198}.
 % \smallskip
 % \noindent\textbf{D.4. Combining the stochastic and tracking estimates.}
 % Take constant $\eta_k=\eta_T$ and $\rho_k=\rho_T$ within each run. Write
-% $q_k=\mathbb E\|e^k\|^2$, $\Psi_k=\Psi_r(\mathcal Q^k)$, and
+% $q_k=\mathbb{E}\|e^k\|^2$, $\Psi_k=\Psi_r(\mathcal{Q}^k)$, and
 % $d_0=48L_F^2/(br)$. The corrected same-batch recursion (C.1) and (D.5)
 % imply
 % \[
 % \begin{aligned}
 % &(q_{k+1}+d_0\mathbb EH_{k+1})-(q_k+d_0\mathbb EH_k)\\
 % &\qquad\leq-\rho_Tq_k+\frac{2\rho_T^2\sigma^2}{b}
-% +\frac{4L_F^2(1+G)}{b}\mathbb E\Delta_x^{k+1}.
+% +\frac{4L_F^2(1+G)}{b}\mathbb{E}\Delta_x^{k+1}.
 % \end{aligned}
 % \]
 % Retain the original powers in the parameter schedule:
@@ -1017,14 +1220,14 @@ Authors of \textbf{Submission \#M187198}.
 % $4\eta_TL_F^2(1+G)/(b\rho_T)\leq1/(4\eta_T)$.
 % With
 % \[
-% W_k=\mathbb E\Psi_k+\frac{\eta_T}{\rho_T}
+% W_k=\mathbb{E}\Psi_k+\frac{\eta_T}{\rho_T}
 % (q_k+d_0\mathbb EH_k),
 % \]
 % adding the last error estimate to (C.3) gives
 % \[
 % \begin{aligned}
-% W_{k+1}-W_k\leq{}&-C_B\mathbb E[\Delta_B^{k+1}+\Delta_B^k]
-% -\frac1{4\eta_T}\mathbb E\Delta_x^{k+1}\\
+% W_{k+1}-W_k\leq{}&-C_B\mathbb{E}[\Delta_B^{k+1}+\Delta_B^k]
+% -\frac1{4\eta_T}\mathbb{E}\Delta_x^{k+1}\\
 % &-\frac{\eta_T}{2}q_k+\frac{2\eta_T\rho_T\sigma^2}{b}.
 % \end{aligned}
 % \tag{D.8}
@@ -1042,12 +1245,12 @@ Authors of \textbf{Submission \#M187198}.
 % \]
 % The block-stationary initialization (D.2) gives $H_1=0$. Under finite
 % moments, choose a finite lower bound
-% $\mathbb E\Psi_k\geq\Psi_{*,T}$ and assume the uniform initial gap
-% $0\leq\Delta_T:=\mathbb E\Psi_1-\Psi_{*,T}\leq\overline\Delta$.
+% $\mathbb{E}\Psi_k\geq\Psi_{*,T}$ and assume the uniform initial gap
+% $0\leq\Delta_T:=\mathbb{E}\Psi_1-\Psi_{*,T}\leq\overline\Delta$.
 % Telescoping (D.8) gives
 % \[
-% \frac1T\sum_{k=1}^{T}\mathbb E\operatorname{dist}^2
-% (0,\partial\mathcal L(x^k,B^k,\Lambda^k))
+% \frac1T\sum_{k=1}^{T}\mathbb{E}\operatorname{dist}^2
+% (0,\partial\mathcal{L}(x^k,B^k,\Lambda^k))
 % \leq\frac{N_T}{T}
 % \left(\Delta_T+\frac{\eta_T\sigma^2}{\rho_Tb_1}\right)
 % +\frac{2N_T\eta_T\rho_T\sigma^2}{b}
@@ -1055,9 +1258,9 @@ Authors of \textbf{Submission \#M187198}.
 % \tag{D.9}
 % \]
 % The SFO complexity order is $O(\varepsilon^{-3})$, with aligned averaging
-% and output indices. Constants may depend on $\tau,m,L_{\mathcal D}$ and
+% and output indices. Constants may depend on $\tau,m, L_{\mathcal{D}}$ and
 % other fixed problem parameters, including $n$, but not on $T$.
-% Computing $U^1=\mathcal D(x^1)$ and the entrywise initialization incurs a
+% Computing $U^1=\mathcal{D}(x^1)$ and the entrywise initialization incurs a
 % one-time deterministic cost, which should be stated separately from
 % stochastic gradient calls.
 

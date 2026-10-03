@@ -1,6 +1,6 @@
 \section{Preliminary}
-The extended real-valued function $f: \mathbb{R}^{q}\rightarrow (-\infty, +\infty]$ is called \textit{proper} if its domain $\text{dom}(f) := \{\bx \in \RR^q\mid f(\bx) < +\infty\}$ is nonempty and $\inf\limits_{\bx \in \mathbb{R}^q}f > -\infty$; it is called \textit{closed} if its epigraph $\text{epi}(f) := \left\{ (\bx, t) \in \mathbb{R}^{q+1}\mid f(\bx) \leq t \right\}$ is closed.
-For a proper, closed, and convex function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
+The extended real-valued function $f: \mathbb{R}^{q}\rightarrow (-\infty, +\infty]$ is called \textit{proper} if its domain $\text{dom}(f) := \{\bx \in \RR^q\mid f(\bx) < +\infty\}$ is nonempty and $\inf\limits_{\bx \in \mathbb{R}^q}f > -\infty$; \blue{it is called \textit{lower semicontinuous} if its epigraph $\text{epi}(f) := \left\{ (\bx, t) \in \mathbb{R}^{q+1}\mid f(\bx) \leq t \right\}$ is closed.}
+For a proper, \blue{lower semicontinuous}, and convex function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
 \begin{align}
     % \label{Def: the definition of proximal operator}
     \operatorname{prox}_{\tau f}(\by) := \argmin\limits_{\bx \in \operatorname{dom}(f)}\left\{ f(\bx) + \frac{1}{2\tau}\|\bx - \by\|^{2}\right\}, \notag
@@ -10,7 +10,7 @@ properties.
 \begin{proposition}\label{prop:rockafellar}
 \textnormal{\cite{Rockafellar1998VariationalA}}
     Let $f : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper and
-    closed. Then, the following holds.
+    \blue{lower semicontinuous}. Then, the following holds.
     \begin{enumerate}[label=(\roman*)]
         \item The set $\operatorname{prox}_{\tau f}(\bx)$ is nonempty and compact
             for any $\bx \in \mathbb{R}^{q}$ and $\tau > 0$.
@@ -21,22 +21,20 @@ properties.
     \end{enumerate}
 \end{proposition}
 
-We use the StoRM (stochastic recursive momentum) variance-reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}. In stochastic optimization problems where $F(\bx) = \mathbb{E}_{\xi}[F(\bx;\xi)]$ with $\xi \in \Xi$, 
-standard momentum methods use
+\blue{We use the StoRM (stochastic recursive momentum) variance-reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}. In the following generic stochastic notation, let $\phi(\bx) = \mathbb{E}_{\xi}[\phi(\bx;\xi)]$ with $\xi \in \Xi$; this notation is distinct from the finite-sum function $F(\bx,\bB)$ defined later for the split hashing model.} Standard momentum methods use
 \begin{align*}
-    \bd^{k} = \rho_{k}\nabla F(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bd^{k-1}, \text{ where } \rho_{k}\in [0, 1],
+    \blue{\bg^{k} = \rho_{k}\nabla \phi(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bg^{k-1}, \text{ where } \rho_{k}\in [0, 1],}
 \end{align*}
-yielding a biased estimate of $\nabla F(\bx^{k})$.
-StoRM adds the correction term $(1 - \rho_{k-1}) (\nabla F(\bx^{k}, \xi^{k}) - \nabla F(\bx^{k-1}, \xi^{k}))$, resulting in:
-\begin{align*}
-     \bd^{k}=\left\{\begin{array}{ll}\nabla F\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla F\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_{k-1}\right)\left( \bd^{k-1} - \nabla F\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right. 
-    %  & \bx^{k+1}=\bx^{k}-\eta_{k}\bd^{k}.
-\end{align*}
-This estimator exploits the smoothness of $F(\cdot, \xi)$, leading to efficient variance reduction. When $\rho_{k} = 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in this paper.
+\blue{yielding a biased estimate of $\nabla \phi(\bx^{k})$.}
+\blue{StoRM adds the correction term $(1 - \rho_{k-1}) (\nabla \phi(\bx^{k}, \xi^{k}) - \nabla \phi(\bx^{k-1}, \xi^{k}))$, resulting in:}
+\begin{align}
+     \label{Eq: the generic StoRM estimator}\blue{\bg^{k}=\left\{\begin{array}{ll}\nabla \phi\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla \phi\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_{k-1}\right)\left( \bg^{k-1} - \nabla \phi\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right.}
+\end{align}
+This estimator exploits the smoothness of $\blue{\phi}(\cdot, \xi)$, leading to efficient variance reduction. \blue{Here $\bg^{k}$ is the stochastic direction at iteration $k$, used in the generic update $\bx^{k+1}=\bx^{k}-\eta_{k}\bg^{k}$.} When $\rho_{k} = 1$, $\bg^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in this paper.
 
-A function $f: \RR^q \rightarrow \RR$ is said to be $L_f$-smooth if $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^q$.
-A mapping $\mathcal{M} : \mathcal{D} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \mathcal{D}$.
-For an $L_f$-smooth function, the descent lemma states that
+\blue{A differentiable} function $f: \RR^q \rightarrow \RR$ is said to be $L_f$-smooth if $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^q$.
+A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \blue{\Omega}$.
+For an $L_f$-smooth function, the descent lemma \blue{\cite{Bertsekas1997}} states that
 \begin{align}
 % \label{Eq: the descent lemma}
     f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. \notag

@@ -132,7 +132,7 @@
 %           \STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}
 %           \STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}
 %         \ENDFOR
-%         \STATE \textbf{Return:} $\bx_R$ where $R$ is uniformly sampled from $\{2, \ldots, T+1\}$
+%         \STATE \textbf{Return:} $\bx_R$ where \blue{$R$ is uniformly sampled from $\{1, \ldots, T\}$}
 %       \end{algorithmic}
 %     \end{algorithm}
 %   \end{minipage}
@@ -151,7 +151,7 @@
 %         \STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}.
 %         \STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}.
 %         \ENDFOR
-%         \STATE \textbf{Return:} $\bx_R$ where $R$ is uniformly sampled from $\{2, \ldots, T+1\}$
+%         \STATE \textbf{Return:} $\bx_R$ where \blue{$R$ is uniformly sampled from $\{1, \ldots, T\}$}
 %       \end{algorithmic}
 %     \end{algorithm}
 %   \end{minipage}
@@ -183,18 +183,14 @@
 % and its nonconvex extension PPDG \cite{guoPreconditionedPrimalDualGradient2023}, 
 Let us consider the equivalent constrained formulation of Problem \eqref{Prop: block-wise regularized problem}:
 \begin{align} 
-\min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
+\min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
 \text{s.t. } &\quad \bY = \bB \nonumber ,
 \end{align} whose corresponding dual problem is 
 \begin{align}
 \label{Prop: the dual problem}
-\max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
+\max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
 \end{align} 
-Recalling the definition of the conjugate function \cite{Rockafellar1998VariationalA}:
-\begin{equation}
-% \label{eq:fenchel_conjugate}
-h^*(\bx) := \sup_{\by \in \RR^{n}} \{ \langle \bx, \by \rangle - h(\by) \}, \quad \bx \in \RR^{n}
-\end{equation} and observing that the minimization with respect to $\bY$ in Problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
+\blue{Recalling the definition of the conjugate function $h^*$ from the Notations paragraph} and observing that the minimization with respect to $\bY$ in Problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
 \begin{equation}
 \label{Eq: simplified_lagrangian}
 \calL(\bx, \bB, \bLmbd) := F(\bx, \bB) + \langle \bB, \bLmbd \rangle - h^*(\bLmbd).
@@ -298,12 +294,12 @@ This motivates us to perform a proximal step to update \(\bLmbd\).
 % \end{figure}
 We now outline the \textbf{DualHash} framework, which employs an alternating update scheme for $\bx, \bB, \bm{\Lambda}$. 
 
-First, we adopt a stochastic first-order method for the $\bx$-update since computing the full gradient \( \nabla_{\bx} F(\bx, \bB) \) is computationally expensive when the number of samples \(n\) is large, as is typical in deep learning. Specifically, at each iteration $k$, we update $\bx$ by utilizing a stochastic gradient descent step
+First, we adopt a stochastic first-order method for the $\bx$-update since computing the full gradient \( \nabla_{\bx} F(\bx, \bB) \) is computationally expensive when the number of samples \(n\) is large, as is typical in deep learning. \blue{At iteration $k$, $\bd^k$ denotes the stochastic direction used in the generic update $\bx^{k+1}=\bx^k-\eta_k\bd^k$.} Specifically, at each iteration $k$, we update $\bx$ by utilizing a stochastic gradient descent step
 \[
 \bx^{k+1} = \bx^k - \eta_k \tilde{\nabla}_{\bx} F(\bx^k, \bB^k),
 \]where $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k)$ is a stochastic estimator of $\nabla_{\bx} F(\bx^k, \bB^k)$.
 
-Second, the auxiliary variable $\bB$ is updated via a vanilla gradient descent step \eqref{Eq: the update of B}; this suffices because the objective \eqref{Eq: simplified_lagrangian} with respect to $\bB$ is smooth with an inexpensive gradient, 
+Second, the auxiliary variable $\bB$ is updated via a vanilla gradient descent step \eqref{Eq: the update of B}; this suffices because the objective \eqref{Eq: simplified_lagrangian} with respect to $\bB$ is smooth and has the explicit gradient \blue{$\nabla_{\bB}\calL(\bx,\bB,\bLmbd)=\frac{\gamma}{n}(\bB-\mathcal{D}(\bx))+\bLmbd$, which is computed element-wise once $\mathcal{D}(\bx)$ is available and does not require backpropagation with respect to $\bx$},
 \begin{align}
    \bB^{k+1} = \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k) = \bB^k - \tau \left( \nabla_{\bB} F(\bx^{k+1}, \bB^k) + \bLmbd^k \right). \label{Eq: the update of B}
 \end{align}
@@ -322,11 +318,11 @@ Our framework accommodates flexible choices of $\tilde{\nabla}_{\bx} F(\bx^k, \b
 We first propose a stochastic first-order algorithm with momentum acceleration for solving Problem \eqref{Prop: block-wise regularized problem}. At each iteration $k$, we uniformly sample a mini-batch $\calJ_k \subseteq \{1,\cdots,n\}$ with $b_k = |\calJ_k| \leq n$, and compute $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k) := \nabla_{\bx} F(\bx^k, \bB^k; \calJ_k)$ evaluated at the extrapolated point $\bz^k$:
 \begin{align}
 \label{Eq: the stochastic approximate in SGDM}
-    \bG^k = \nabla_{\bx} F(\bz^k, \bB^k; \calJ_k),\quad \text{where } \bz^k = \bx^k + \beta_k (\bx^k - \bx^{k-1}).
-\end{align}The update of \( \bx^k\) is then:
+    \blue{\bg_m^k} = \nabla_{\bx} F(\bz^k, \bB^k; \calJ_k),\quad \text{where } \bz^k = \bx^k + \beta_k (\bx^k - \bx^{k-1}).
+\end{align}\blue{Here, $\bg_m^k\in\RR^q$ denotes the stochastic gradient estimator used in DualHash-StoM, with the subscript $m$ indicating momentum.} \blue{The mini-batch gradient in the definition of $\bg_m^k$ is $\nabla_{\bx}F(\bz^k,\bB^k;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bz^k,\bb_i^k)$, the average of the per-sample gradients, where $\bb_i^k\in\RR^d$ denotes the $i$-th row of $\bB^k$.} The update of \( \bx^k\) is then:
 \begin{align}
 \label{Eq: the update of x in SGDM}
-    \bx^{k+1} = \by^k - \eta_k \bG^k,\,\text{where } \by^k = \bx^k + \alpha_k (\bx^k - \bx^{k-1}). 
+    \bx^{k+1} = \by^k - \eta_k \blue{\bg_m^k},\,\text{where } \by^k = \bx^k + \alpha_k (\bx^k - \bx^{k-1}).
 \end{align}The overall algorithm, DualHash-StoM, is detailed in \Cref{alg:our_algorithm_sgdm}.
 \begin{remark}
 The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} covers these two accelerations: Nesterov acceleration  \cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method \cite{Polyak1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$. In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$.
@@ -335,45 +331,45 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \caption{DualHash-StoM}
 \label{alg:our_algorithm_sgdm}
 \begin{algorithmic}[1]
-\STATE \textbf{Initialize:} $\bx^1 = \bz^1 = \by^1 \in \RR^{d_{\bx}} $, \( \bB^1 \in \RR^{n\times d},\, \bLmbd^1\in \RR^{n\times d}\), parameters $\{\eta_k\} $, $\tau$, $b_k$, $\{\alpha_k, \beta_k \in (0,1)\}$
+\STATE \textbf{Initialize:} $\bx^1 = \bz^1 = \by^1 \in \RR^{\blue{q}} $, \( \bB^1 \in \RR^{n\times d},\, \blue{\bLmbd^1\in [-\lambda,\lambda]^{n\times d}}\), parameters $\{\eta_k\} $, $\tau$, $b_k$, $\{\alpha_k, \beta_k \in (0,1)\}$
 \FOR{$k = 1, 2, \ldots$}               
-  \STATE Compute \(\bG^k\) by \eqref{Eq: the stochastic approximate in SGDM}
+  \STATE Compute \(\blue{\bg_m^k}\) by \eqref{Eq: the stochastic approximate in SGDM}
   \STATE Update $\bx^{k+1}$ by \eqref{Eq: the update of x in SGDM}
   \STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}
   \STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}
 \ENDFOR
-\STATE \textbf{Return:} $\bx_R$ where $R$ is uniformly sampled from $\{2, \ldots, T+1\}$
+\STATE \textbf{Return:} $\bx_R$ where \blue{$R$ is uniformly sampled from $\{1, \ldots, T\}$}
 \end{algorithmic}
 \end{algorithm}
 \subsubsection{DualHash with Recursive Momentum}
  % StoRM utilizes a recursive momentum mechanism to reduce gradient variance, which is motivated by SGDM. Unlike some other variance reduction techniques (e.g., SVRG \cite{johnsonAcceleratingStochasticGradient2013}, SARAH \cite{SARAH2017}) that require full-gradient or large-batch gradient computations, 
 % StoRM achieves variance reduction without require full-gradient or large-batch gradient computations. 
-Alternatively, we consider the StoRM estimator \cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. Given its practical effectiveness in deep learning \cite{levy2021storm+}, we construct a recursive momentum estimator $\bD^k$ for $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k)$ as follows:
+Alternatively, we consider the StoRM estimator \cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. Given its practical effectiveness in deep learning \cite{levy2021storm+}, we construct a recursive momentum estimator $\blue{\bg_s^k}$ for $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k)$ as follows:
 {
 \begin{align}
 \label{Eq: the stochastic approximate in STORM}
-\bD^k =
+\blue{\bg_s^k} =
 \begin{cases} 
 \nabla_{\bx} F(\bx^1, \bB^1; \mathcal{J}_1), &\text{if }  k = 1, \\
-(1 - \rho_{k-1}) \big( \bD^{k-1} - \nabla_{\bx} F(\bx^{k-1}, \bB^{k-1};\mathcal{J}_k)\big)+\nabla_{\bx} F(\bx^k, \bB^k; \mathcal{J}_k), & \text{if } k > 1.
+(1 - \rho_{k-1}) \big( \blue{\bg_s^{k-1}} - \nabla_{\bx} F(\bx^{k-1}, \bB^{k-1};\mathcal{J}_k)\big)+\nabla_{\bx} F(\bx^k, \bB^k; \mathcal{J}_k), & \text{if } k > 1.
 \end{cases}
-\end{align}}The update of $\bx$ is then 
+\end{align}}\blue{Here, $\bg_s^k\in\RR^q$ denotes the recursive gradient estimator used in DualHash-StoRM, with the subscript $s$ indicating StoRM; it follows the generic recursion in \eqref{Eq: the generic StoRM estimator}.} The update of $\bx$ is then
 \begin{align}
 \label{Eq: the update of x in STORM}
-    \bx^{k+1} = \bx^k - \eta_k \bD^k.
+    \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}.
 \end{align} The overall algorithm, DualHash-StoRM, is detailed in \Cref{alg:our_algorithm_storm}.
 \begin{algorithm}[t]
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
-\STATE  \textbf{Initialize:} $\bx^1  \in \RR^{d_{\bx}}$, \( \bB^1 \in \RR^{n\times d},\, \bLmbd^1\in \RR^{n\times d}\), parameters $\{\eta_k\} $, $\tau $, $b_k$, $\{\rho_k\in (0,1)\}$
+\STATE  \textbf{Initialize:} $\bx^1  \in \RR^{\blue{q}}$, \( \bB^1 \in \RR^{n\times d},\, \blue{\bLmbd^1\in [-\lambda,\lambda]^{n\times d}}\), parameters $\{\eta_k\} $, $\tau $, $b_k$, $\{\rho_k\in (0,1)\}$
 \FOR{$k = 1, 2, \ldots$}
-\STATE Compute $\bD^k$ by \eqref{Eq: the stochastic approximate in STORM}
+\STATE Compute $\blue{\bg_s^k}$ by \eqref{Eq: the stochastic approximate in STORM}
 \STATE Update $\bx^{k+1}$ by \eqref{Eq: the update of x in STORM}.
 \STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}.
 \STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}.
 \ENDFOR
-\STATE \textbf{Return:} $\bx_R$ where $R$ is uniformly sampled from $\{2, \ldots, T+1\}$
+\STATE \textbf{Return:} $\bx_R$ where \blue{$R$ is uniformly sampled from $\{1, \ldots, T\}$}
 \end{algorithmic}
 \end{algorithm}
 

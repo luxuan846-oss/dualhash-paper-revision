@@ -26,18 +26,18 @@ We consider deep supervised pairwise hashing in our experiments, which aims to l
 
 
 \paragraph{Network Architecture}  
-A CNN extracts features from $\ba_i$, followed by a fully connected hash layer producing $d$-dimensional outputs $\bC(\bx; \ba_i)$, which are passed through $\tanh$ to yield $\bu_i$.
+A CNN extracts features from $\ba_i$, followed by a fully connected hash layer producing $d$-dimensional outputs $\bC(\bx; \ba_i)\blue{=:\bC_i(\bx)}$, which are passed through $\tanh$ to yield \blue{the continuous codes $\bD_i(\bx)=\tanh(\bC_i(\bx))$}.
 
 
 \paragraph{Loss Function}  
 For hash codes in $\{-1,1\}^d$, the Hamming distance is $d_{ij}^h = \tfrac{1}{2}(d - \langle \bh_i, \bh_j \rangle)$. Following \cite{xiaSupervisedHashingImage2014,laiSimultaneousFeatureLearning2015}, similarity $s^o_{ij} = 1$ if samples share labels, else $0$. The likelihood is:
 \[
-P(s^o_{ij} \mid \bh_i, \bh_j) = \sigma(\langle \bh_i, \bh_j \rangle)^{s^o_{ij}} \left(1 - \sigma(\langle \bh_i, \bh_j \rangle)\right)^{1 - s^o_{ij}},
+P(s^o_{ij} \mid \bh_i, \bh_j) = \blue{\operatorname{sig}_{\kappa}}(\langle \bh_i, \bh_j \rangle)^{s^o_{ij}} \left(1 - \blue{\operatorname{sig}_{\kappa}}(\langle \bh_i, \bh_j \rangle)\right)^{1 - s^o_{ij}},
 \]
-where $\sigma(x) = (1 + \exp(-\alpha x))^{-1}$, $\alpha < 1$. Using continuous codes $\bu_i$ and $s^h_{ij} = \tfrac{1}{2} \langle \bu_i, \bu_j \rangle$, the loss becomes:
+where $\blue{\operatorname{sig}_{\kappa}(t) = (1 + \exp(-\kappa t))^{-1}}$, $\blue{\kappa} < 1$. Using continuous codes $\blue{\bD_i(\bx)}$ and $s^h_{ij} = \tfrac{1}{2} \langle \blue{\bD_i(\bx), \bD_j(\bx)} \rangle$, the loss becomes:
 \begin{align}
 \label{Eq: the pairwise CE loss}
-\min_{\bx} \; \calL_S(\bx) = -\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\alpha s^o_{ij} s^h_{ij}\right)\right).
+\min_{\bx} \; \blue{\ell_{\calS}}(\bx) = -\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\blue{\kappa} s^o_{ij} s^h_{ij}\right)\right).
 \end{align}
 
 We use the W-type regularization:
@@ -51,16 +51,16 @@ Combining \eqref{Eq: the pairwise CE loss} and \eqref{Eq: the W-type regularizat
 \begin{align}
 % \label{Eq: the pairwise quantization-based hashing}
 \min_{\bx \in \calX, \bB \in \RR^{n\times d}} \; 
-&-\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\alpha s^o_{ij} s^h_{ij}\right)\right) \notag \\
-&+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \bu_i\|_2^2 
+&-\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\blue{\kappa} s^o_{ij} s^h_{ij}\right)\right) \notag \\
+&+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \blue{\bD_i(\bx)}\|_2^2 
 + \sum_{i=1}^n \lambda \|\,|\bb_i| - \bm{1}\,\|_1. \notag
 \end{align}
 
 
 \paragraph{Out-of-sample Extension}  
-For an unseen query $\ba_q \notin \bA$, its binary code is predicted as:
+For an unseen query $\blue{\ba^{\mathrm{qry}}} \notin \bA$, its binary code is predicted as:
 \[
-\bb_q = \operatorname{sgn}(\bC(\bx; \ba_q)).
+\blue{\bh^{\mathrm{qry}}} = \operatorname{sgn}(\bC(\bx; \blue{\ba^{\mathrm{qry}}})).
 \]
 
 \subsection{Implementation Details}
@@ -81,12 +81,13 @@ For an unseen query $\ba_q \notin \bA$, its binary code is predicted as:
         $d_{ij}^{o}$, $d_{ij}^{h}$ & Distance in input space and \\
                                    & Hamming space \\
         $\bC(\bx; \ba_{i})$ & Network output before activation \\
-        $\bb_{i}\in \{-1, 1\}^{d}$ & Binary hash code for $i$-th sample \\
-        $\bu_{i}= \tanh(\bC(\bx; \ba_{i}))$ & Continuous code after activation \\
+        $\blue{\bh_{i}}\in \{-1, 1\}^{d}$ & Binary hash code for $i$-th sample \\
+        \blue{$\bb_{i}\in \RR^{d}$} & \blue{Continuous auxiliary variable ($i$-th row of $\bB$)} \\
+        $\blue{\bD_{i}(\bx)}= \tanh(\bC(\bx; \ba_{i}))$ & Continuous code after activation \\
         $n$, $d$ & Number of samples and hash \\
                  & code length \\
         $\bx$ & Network parameters \\
-        $d_{\ba}$, $d_{x}$ & Dimension of input feature and \\
+        $d_{\ba}$, $\blue{q}$ & Dimension of input feature and \\
                            & parameters \\
         \bottomrule
     \end{tabular}
@@ -116,11 +117,11 @@ We compare our method with eight baseline approaches, including one traditional 
 Following \cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
 
 \begin{enumerate}[label=\textup{(\roman{*})}, leftmargin=2em]
-    \item \textit{Mean Average Precision (mAP)}: For a query $\bx_q$, the Average Precision is computed as:
+    \item \textit{Mean Average Precision (mAP)}: For a query $\blue{\ba^{\mathrm{qry}}}$, the Average Precision is computed as:
     \[
-        \text{AP}(\bx_q) = \frac{\sum_{k=1}^{N} P(k) \cdot \mathbb{I}_{\text{rel}}(k)}{\min(N, R_q)},
+        \text{AP}(\blue{\ba^{\mathrm{qry}}}) = \frac{\sum_{k=1}^{N} P(k) \cdot \mathbb{I}_{\text{rel}}(k)}{\min(N, \blue{R^{\mathrm{qry}}})},
     \]
-    where $P(k)$ is precision at rank $k$, $\mathbb{I}_{\text{rel}}(k)$ indicates whether the $k$-th result is relevant, $R_q$ is the total relevant samples, and $N$ is the number of retrieved items. mAP averages AP over all queries. For CIFAR-10, we use all returned neighbors; for NUS-WIDE, we consider top-5000 results.
+    where $P(k)$ is precision at rank $k$, $\mathbb{I}_{\text{rel}}(k)$ indicates whether the $k$-th result is relevant, $\blue{R^{\mathrm{qry}}}$ is the total relevant samples, and $N$ is the number of retrieved items. mAP averages AP over all queries. For CIFAR-10, we use all returned neighbors; for NUS-WIDE, we consider top-5000 results.
     
     \item \textit{Precision at Top K (P@topK)}: The proportion of true neighbors among top-K retrieved results, averaged over all queries.
     

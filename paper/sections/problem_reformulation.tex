@@ -34,7 +34,7 @@ Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that ge
 where \(n\) is the number of training samples, \(\bC_i(\bx)\in\RR^d\) is the output of the \(i\)-th sample, and \(\ell_{s,i}\) is a similarity-preserving loss (e.g., pairwise cross-entropy \cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere.
 
 To address this issue, W-type regularization (e.g., \(h(z)=\lambda\bigl||z|-1\bigr|\)) is introduced to drive continuous outputs toward \(\{-1,1\}\).
-Specifically, the model is trained to produce the \(i\)-th continuous network output \(\bD_i(\bx)\) \blue{(in our experiments, \(\bD_i(\bx)=\tanh(\bC_i(\bx))\))} with W-type regularization \(h\), and binary codes are obtained post-training via \(\blue{\bh_i} = \operatorname{sgn}(\bD_i(\bx))\blue{\in\{-1,1\}^d}\). Consequently, we formulate the core optimization problem for W-type regularized deep hashing methods as follows 
+Specifically, the model is trained to produce the \(i\)-th continuous network output \(\bD_i(\bx)\) with W-type regularization \(h\), and binary codes are obtained post-training via \(\blue{\bh_i} = \operatorname{sgn}(\bD_i(\bx))\blue{\in\{-1,1\}^d}\). Consequently, we formulate the core optimization problem for W-type regularized deep hashing methods as follows 
 \begin{align}
 \label{Eq: the primal deep hashing problem}
 \min_{\bx \in \RR^{\blue{q}}} \quad \frac{1}{n}\sum_{i=1}^n f_i(\bx) + \sum_{i=1}^n h(\bD_i(\bx)),

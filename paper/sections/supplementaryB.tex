@@ -189,13 +189,64 @@ of $n$.}
 %     + \frac{L_{F}}{2}\| \bB - \bB'\|^{2}
 % \end{align}} for any $\bx \in \calX$.
 
+Before proceeding, Throughout Appendices C and D, we adopt the notation, \blue{the probabilistic setting} and intermediate results from \Cref{Section: Convergence analysis}.
 \section{Complexity analysis of DualHash-StoM (\texorpdfstring{\Cref{alg:our_algorithm_sgdm}}{Algorithm 1})}
 \label{Appendix: the complexity analysis of DualHash-StoM}
-We adopt the intermediate results from \Cref{Section: Convergence analysis} and the probabilistic setting of \Cref{Section: related work}, namely the probability space, the filtration $\{\mathcal{F}_k\}$, and the conditional and total expectations. \blue{Unless stated otherwise, $\EE[\cdot]$ below denotes the total expectation.}
 
-\subsection{Proof of \Cref{Lemma: One-iteration progress of B and Lambda}}
+\blue{\subsection{The proof of the SGDM gradient-error bound \eqref{eq: the gradient error in SGDM}}
+\label{Subsec: proof gradient error SGDM}
+\begin{proof}
+    Recall that the stochastic gradient error $\be^k$ of Algorithm \ref{alg:our_algorithm_sgdm} is defined as
+\[
+\be^k
+=
+\frac{1}{b_k}\sum_{i\in\calJ_k}
+\left(
+\nabla_{\bx}F_i(\bz^k,\bb_i^k)
+-
+\nabla_{\bx}F(\bz^k,\bB^k)
+\right).
+\]
+Since $(\bz^k,\bB^k)$ is $\mathcal F_k$-measurable and
+$\calJ_k$ is sampled uniformly without replacement and independently
+of $\mathcal F_k$, define
+\[
+\bm{v}_i^k
+:=
+\nabla_{\bx}F_i(\bz^k,\bb_i^k)
+-
+\nabla_{\bx}F(\bz^k,\bB^k).
+\]
+Conditionally on $\mathcal F_k$, Assumption~\ref{Ass: main assumptions}(iii)
+gives
+\[
+\frac{1}{n}\sum_{i=1}^n \bm{v}_i^k=\bm{0},
+\qquad
+\frac{1}{n}\sum_{i=1}^n\|\bm{v}_i^k\|^2\leq\sigma^2
+\quad\text{a.s.}
+\]
+For $n\geq2$, the variance formula for uniform sampling without replacement
+therefore yields
+\[
+\mathbb{E}_k[\be^k]=\bm{0},
+\]
+and
+\[
+\mathbb{E}_k\!\left[\|\be^k\|^2\right]
+=
+\frac{n-b_k}{n-1}\frac{1}{b_k}
+\frac{1}{n}\sum_{i=1}^n\|\bm{v}_i^k\|^2
+\leq
+\frac{\sigma^2}{b_k}
+\quad\text{a.s.}
+\]
+The case $n=1$ is immediate since $\be^k=\bm{0}$. Taking the full
+expectation and using the tower property gives \eqref{eq: the gradient error in SGDM}.
+\end{proof}
+}
+
+\subsection{The proof of Lemma 5.4}
 \label{Subsec: proof lemma 5.4}
-
 \begin{proof}
     Using the smoothness of $F$ with respect to $\bB$, we conclude that
     \begin{align}
@@ -306,7 +357,7 @@ We first present a lemma concerning a property of a continuously differentiable 
         \label{the descent property of Lyapunov func in SGDM first} & \EE\left[\Psi_m(\mathcal{Q}^{k+1})\right] - \EE\left[\Psi_m(\mathcal{Q}^{k})\right]\notag                                                                               \\
         \leq                                                        & - (C_{1}- K_{1}) \EE[\Delta_{\bm{B}}^{k+2}] -(K_{2}- C_{1}- C_{2}) \EE[\Delta_{\bm{B}}^{k+1}] - (C_{2}- K_{3}) \EE[\Delta_{\bm{B}}^{k}] \notag                     \\
                                                                     & - (C_{3}-K_{4}) \EE[\Delta_{\bx}^{k+2}]- (K_{5}-K_{3}-C_{3}-C_{4}) \EE[\Delta_{\bx}^{k+1}] - (C_{4}- K_{6}) \EE[\Delta_{\bx}^{k}] + \frac{\sigma^{2}}{b_{k}L_{F}}.
-    \end{align}}Then substituting the values of coefficients in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
+    \end{align}}Then, \blue{by \Cref{lem:lyapunov-coef-positivity},} substituting the values of coefficients in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
     and parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}
     into \eqref{the descent property of Lyapunov func in SGDM first}, we derive
     \begin{align*}
@@ -586,89 +637,83 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
 
 % \subsection{Proof of \Cref{Lemma: Weighted error accumulation}}
 % \label{Subsubsec: proof Weighted error accumulation}
-We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with analysis comparable to those in \cite[Lemma 2]{xu2023momentum} and \cite[Lemma 8]{shi2025momentum}.
+We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with analysis comparable to those in \cite[Lemma 2]{xu2023momentum} and \cite[Lemma 8]{shi2025momentum}. 
 \begin{lemma}[Recursive bound on gradient error]
-    \label{Lemma: Recursive bound on gradient error} Under \Cref{Ass: main assumptions},
+    \label{Lemma: Recursive bound on gradient error} Under \Cref{Ass: main assumptions}(iii) and \Cref{Ass: the mean squared smoothness of F},
     for any $k \geq 1$, it holds that
+    \blue{
     \begin{align}
-        % \label{Eq: recursive bound on gradient error}
-        \EE[\| \be^{k+1}\|^{2}] \leq \left(1 - \rho_{k}\right)^{2}\EE[\| \be^{k}\|^{2}] + \frac{2 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}}+ \frac{4(1 - \rho_{k})^{2}L_{F}^{2}}{\blue{b_{k+1}}}\EE\left[\Delta_{\bx}^{k+1}\right]. \notag
-    \end{align}
+        \EE[\| \be^{k+1}\|^{2}] \leq \left(1 - \rho_{k}\right)^{2}\EE[\| \be^{k}\|^{2}] + \frac{2 \rho_{k}^{2}\sigma^{2}}{b_{k+1}}+ \frac{4(1 - \rho_{k})^{2}L_{F}^{2}}{b_{k+1}}\EE\left[\Delta_{\bx}^{k+1}+\blue{\Delta_{\bB}^{k+1}}\right]. \notag
+    \end{align}}
 \end{lemma}
-% \begin{remark}
-%     This recursive bound reveals three key components affecting gradient error:
-%     (i) historical error decay (controlled by $1-\rho_{k}$), (ii) variance from current
-%     stochastic gradient estimation (proportional to $\rho_{k}^{2}$), and (iii)
-%     error propagation from recent updates (scaling with $(1-\rho_{k})^{2}\Delta_{\bx}
-%     ^{k+1}$). The momentum parameter $\rho_{k}$ creates a trade-off between these
-%     components.
-% \end{remark}
-We now establish a weighted error accumulation bound
-$\frac{1}{T}\sum_{k=1}^{T}\rho_{k}\EE\left[\|\be^{k}\|^{2}\right]$
-for the variance-reduced gradient estimator in \Cref{alg:our_algorithm_storm}.
-For this analysis, we require the parameters $\eta_{k}$, $\rho_{k}$, $\tau$ 
-and the batch size $b_k$ to satisfy:
+
+\blue{The term $\Delta_{\bB}^{k+1}$ cannot be dropped, because $\nabla_{\bx}F_i$ depends on $\bb_i$. We control it by tracking the increments of the $\bB$-block. Let $m:=\gamma/n$ and $r:=\tau m$. Since $\nabla_{\bB}F(\bx,\bB)=m(\bB-\mathcal{D}(\bx))$, we have $m\le L_F$. Put $\bm{U}^{k}:=\mathcal{D}(\bx^{k})$, $\bm{Z}^{k}:=\tau\bLmbd^{k}$, $\bB^{0}:=\bB^{1}$, $\bm{Z}^{0}:=\bm{Z}^{1}$ (auxiliary states used only in the analysis, not iterations of the algorithm), and
+\[
+    \bm\beta_k:=\bB^{k}-\bB^{k-1},\quad \bm\zeta_k:=\bm{Z}^{k}-\bm{Z}^{k-1},\quad \bm{w}_k:=\bm\zeta_k-\bm\beta_k,\quad H_k:=r\|\bm\beta_k\|_F^2+2r\langle\bm\beta_k,\bm{w}_k\rangle+\|\bm{w}_k\|_F^2 .
+\]}
+\begin{lemma}[Tracking of the $\bB$-increments]
+    \label{Lemma: tracking of B increments}
+    \blue{Let $\mathcal{D}$ be $L_{\mathcal{D}}$-Lipschitz, $0<r\le\frac27$, and let \Cref{alg:our_algorithm_storm} be initialized as in \Cref{Sec: Algorithm implementations}. Then $H_k\ge0$, $H_1=0$, and for every $k\ge1$,
+    \[
+        \Delta_{\bB}^{k+1}\ \le\ \frac{12}{r}\bigl(H_k-H_{k+1}\bigr)+G\,\Delta_{\bx}^{k+1},\qquad G:=1753L_{\mathcal{D}}^{2}.
+    \]}
+\end{lemma}
+\begin{proof}
+    \blue{\emph{Step 1: update identities.} The $\bB$-update gives $\bB^{k+1}=(1-r)\bB^{k}-\bm{Z}^{k}+r\bm{U}^{k+1}$. By the proximal form of the dual update, $\bm{Z}^{k+1}=P(\bm{Z}^{k}+2\bB^{k+1}-\bB^{k})$ with $P(\bm v):=\tau\operatorname{prox}_{\tau^{-1}h^{*}}(\bm v/\tau)$, which acts entrywise as a nondecreasing $1$-Lipschitz scalar function because $h^*$ is convex and separable. Both identities also hold at the index $0$: the initialization gives $\bm{Z}^{1}=r(\bm{U}^{1}-\bB^{1})$, which is the first identity with $(\bB^0,\bm Z^0)=(\bB^1,\bm Z^1)$; and $\bLmbd^{1}\in\partial h^{**}(\bB^{1})$ is equivalent to $\bB^{1}\in\partial h^{*}(\bLmbd^{1})$, i.e., $\bm{Z}^{1}=P(\bm{Z}^{1}+\bB^{1})$, which is the second identity. In particular $\bm\beta_1=\bm\zeta_1=\bm w_1=\bm 0$, so $H_1=0$.
+
+    \emph{Step 2: increment dynamics.} Let $\bm u_k:=\bm U^{k+1}-\bm U^{k}$. Subtracting consecutive identities gives $\bm\beta_{k+1}=(1-r)\bm\beta_k-\bm\zeta_k+r\bm u_k=-r\bm\beta_k-\bm w_k+r\bm u_k$. For each entry, let $d\in[0,1]$ be the slope of $P$ between its two consecutive arguments; then $\zeta_{k+1}=d(\zeta_k+2\beta_{k+1}-\beta_k)$ entrywise, and hence $w_{k+1}=\zeta_{k+1}-\beta_{k+1}=r(1-2d)\beta_k+(1-d)w_k+r(2d-1)u_k$. With $y_k:=(\beta_k,w_k)^{\top}$ (one entry),
+    \[
+        y_{k+1}=A_dy_k+f_du_k,\qquad A_d=\begin{pmatrix}-r&-1\\ r(1-2d)&1-d\end{pmatrix},\quad f_d=\begin{pmatrix}r\\ r(2d-1)\end{pmatrix}.
+    \]
+    The slope $d$ may depend on the entry and on $k$.
+
+    \emph{Step 3: a common quadratic form.} Let $\Pi_r:=\begin{pmatrix}r&r\\ r&1\end{pmatrix}\succ0$, so that $H_k=\sum_{\text{entries}}y_k^{\top}\Pi_ry_k\ge0$. Direct computation gives
+    \[
+        \Pi_r-A_0^{\top}\Pi_rA_0=\begin{pmatrix}r-r^2+r^3&r^2\\ r^2&r\end{pmatrix},\qquad
+        \Pi_r-A_1^{\top}\Pi_rA_1=\begin{pmatrix}r-r^2-3r^3&r-2r^2\\ r-2r^2&1-r\end{pmatrix}.
+    \]
+    For $0<r\le\frac27$, the first matrix minus $\frac r2I$ has positive leading entry and determinant $r^2(\frac14-\frac r2-\frac{r^2}2)\ge\frac{13}{196}r^2>0$, so it is $\succeq\frac r2I$. The second matrix minus $\frac r4I$ has leading entry $r(\frac34-r-3r^2)\ge\frac{43}{196}r>0$ and determinant $r\,p(r)$ with $p(r)=\frac34-\frac{47}{16}r+\frac94r^2-\frac14r^3$, which is decreasing on $(0,\frac27]$ with $p(\frac27)=\frac{243}{2744}>0$, so it is $\succeq\frac r4I$. Since $A_d=(1-d)A_0+dA_1$ and $\|\cdot\|_{\Pi_r}^2$ is convex, $\|A_dy\|_{\Pi_r}^2\le(1-d)\|A_0y\|_{\Pi_r}^2+d\|A_1y\|_{\Pi_r}^2\le\|y\|_{\Pi_r}^2-\frac r4\|y\|^2$ for all $d\in[0,1]$. Moreover $\|\Pi_r\|\le1+r\le\frac97$, $\|A_d\|\le\|A_d\|_F\le\sqrt{2+2r^2}\le\frac32$, and $\|f_d\|\le\sqrt2\,r$, so $\|A_d^{\top}\Pi_rf_d\|\le3r$ and $f_d^{\top}\Pi_rf_d\le\frac{18}{7}r^2\le r$. Therefore, using $6r\|y\||u|\le\frac r8\|y\|^2+72ru^2$,
+    \[
+        y_{k+1}^{\top}\Pi_ry_{k+1}\le y_k^{\top}\Pi_ry_k-\tfrac r4\|y_k\|^2+6r\|y_k\||u_k|+ru_k^2\le y_k^{\top}\Pi_ry_k-\tfrac r8\|y_k\|^2+73ru_k^2 .
+    \]
+    Summing over the entries,
+    \begin{equation}\label{Eq: the common quadratic decrease}
+        H_{k+1}-H_k\ \le\ -\tfrac r8\bigl(\|\bm\beta_k\|_F^2+\|\bm w_k\|_F^2\bigr)+73r\|\bm u_k\|_F^2 .
+    \end{equation}
+
+    \emph{Step 4.} From Step 2, $\|\bm\beta_{k+1}\|_F^2\le3(\|\bm\beta_k\|_F^2+\|\bm w_k\|_F^2)+3r^2\|\bm u_k\|_F^2$. Inserting $\|\bm\beta_k\|_F^2+\|\bm w_k\|_F^2\le\frac8r(H_k-H_{k+1})+584\|\bm u_k\|_F^2$ from \eqref{Eq: the common quadratic decrease} and using $\|\bm u_k\|_F^2\le L_{\mathcal{D}}^2\|\bx^{k+1}-\bx^{k}\|^2=2L_{\mathcal{D}}^2\Delta_{\bx}^{k+1}$ and $3r^2<1$ yields $\Delta_{\bB}^{k+1}=\frac12\|\bm\beta_{k+1}\|_F^2\le\frac{12}{r}(H_k-H_{k+1})+1753L_{\mathcal{D}}^2\Delta_{\bx}^{k+1}$.}
+\end{proof}
+
+For the analysis of \Cref{alg:our_algorithm_storm} we use constant parameters $\eta_k\equiv\eta_T$ and $\rho_k\equiv\rho_T$ and require
 \begin{align}
     \label{Eq: the parameters assumptions in storm appendix}
-    \eta_{k+1}\leq \eta_{k}, \quad \eta_{k}\tilde{L}_{F}\leq \frac{1}{2}, \quad 
-    0 < 8\eta_{1}\eta_{k}L_{F}^{2}\leq \rho_{k}\leq1, \quad 
+    \eta_{T}\tilde{L}_{F}\leq \frac{1}{2}, \quad 0<\rho_T\le\frac12,\quad
+    \blue{\frac{4\eta_TL_F^{2}(1+G)}{b\,\rho_T}\le\frac{1}{4\eta_T}}, \quad
     \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}}, \quad
     b_k = \begin{cases} b_1 & k = 1, \\ b & k \geq 2. \end{cases}
 \end{align}
-\begin{lemma}[Weighted error accumulation bound]
-    \label{Lemma: Weighted error accumulation} Under \Cref{Ass: main assumptions}
-    and parameter conditions \eqref{Eq: the parameters assumptions in storm appendix}, for any $T \geq 1$, the following weighted cumulative error bound
-    holds:
+\blue{For the schedule $\eta_T=\eta/(\tilde L_FT^{1/3})$, $\rho_T=8\rho\eta^2/T^{2/3}$ of \eqref{Eq: the parameters conditions in dualhash-storm}, the first inequality follows from $\eta\le\frac12$, the second from $\eta\le1/(4\sqrt\rho)$, and the third is equivalent to $\rho\ge2L_F^2(1+G)/(b\tilde L_F^2)$; see \eqref{Eq: the constants for storm}. Moreover $\delta=\frac16$ and $c_\delta<36(\frac{\sqrt{30}-2}{13})^2$ give $r=\tau m\le\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$.}
+\begin{lemma}[Descent of the augmented potential]
+    \label{Lemma: Weighted error accumulation} \blue{Under \Cref{Ass: main assumptions}(iii), \Cref{Ass: the mean squared smoothness of F}, the conditions of \Cref{Lemma: tracking of B increments}, and the parameter conditions \eqref{Eq: the parameters assumptions in storm appendix}, let $q_k:=\EE\|\be^{k}\|^2$, $d_0:=48L_F^2/(br)$, and
+    \[
+        \widehat{W}_k:=\EE[\Psi_r(\calQ^{k})]+\frac{\eta_T}{\rho_T}\bigl(q_k+d_0\,\EE H_k\bigr).
+    \]
+    Then for every $k\ge1$,
     \begin{align}
-        \label{Eq: weighted cumulative error bound}\frac{1}{T}\sum_{k=1}^{T}\rho_{k}\EE\left[ \| \be^{k}\|^{2}\right]\leq \frac{16 \eta_{1}L_{F}^{2}\tilde{\Delta}_{1}}{T}+ \frac{2\sigma^{2}}{Tb_{1}}+ \frac{1}{T}\blue{\sum_{k=1}^{T}}\frac{4\rho_{k}^{2}\sigma^{2}}{b},
-    \end{align} where $\tilde{\Delta}_{1}= \Psi_r^{1}- \Psi_r^{*}$, $\Psi_r^{1}= \Psi_r(\calQ^{1})$ and $\Psi_r^{*}$ is the lower bound
-of $\Psi_r$.
+        \widehat{W}_{k+1}\ \le\ \widehat{W}_k-C_{\bB}\,\EE\bigl[\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}\bigr]-\frac{1}{4\eta_T}\EE[\Delta_{\bx}^{k+1}]-\frac{\eta_T}{2}\,q_k+\frac{2\eta_T\rho_T\sigma^{2}}{b}.
+        \label{Eq: descent of the augmented potential}
+    \end{align}}
 \end{lemma}
 \begin{proof}
-    Under \eqref{Eq: the parameters assumptions in storm appendix}, we have a lower
-    bound for $C_{\bx}^{k}$ with
-    \begin{align}
-        \label{Eq: the bound coefficient of x}C_{\bx}^{k}\geq \frac{1}{2\eta_{1}}>0 .
-    \end{align}
-    Substituting this inequality into the second inequality of \eqref{Eq: bound B and x in storm}
-    and taking expectation on both sides yields
-    \begin{align}
-        \label{Eq: scaling recursive}\EE\left[\Psi_r(\calQ^{k+1})\right] - \EE\left[\Psi_r(\calQ^{k})\right] \leq - \frac{1}{2\eta_{1}}\EE\left[ \Delta_{\bx}^{k+1}\right] + \frac{\eta_{k}}{2}\EE\left[ \|\be^{k}\|^{2}\right].
-    \end{align}
-    From \Cref{Lemma: Recursive bound on gradient error}, we obtain
-    \begin{align}
-        \EE\left[\| \be^{k+1}\|^{2}\right] \leq \left(1 - \rho_{k}\right)\EE\left[\| \be^{k}\|^{2}\right] + \frac{2 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}}+ 4(1-\rho_{k})L_{F}^{2} \EE\left[ \Delta_{\bx}^{k+1} \right], \nonumber
-    \end{align}
-    where the inequality follows from $0 < \rho_{k}<1$ and  $\blue{b_{k+1}}
-    \geq 1$. \blue{Bounding $1-\rho_{k}\leq 1$ in the last term before rearranging}, this implies
-    \begin{align}
-        &- \EE\left[ \Delta_{\bx}^{k+1} \right] \notag \\
-        \leq&\, \blue{\frac{1}{4L_{F}^{2}}}\left(\EE\left[\| \be^{k}\|^{2}\right] - \EE\left[\| \be^{k+1}\|^{2}\right] -\rho_k \EE\left[\| \be^{k}\|^{2}\right]+ \frac{2 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}}\right). \nonumber
-    \end{align}
-    Substituting this inequality into \eqref{Eq: scaling recursive}, we obtain
-    {\small
-    \begin{align}
-             & \EE\left[\Psi_r(\calQ^{k+1})\right] - \EE\left[\Psi_r(\calQ^{k})\right] \notag     \\
-             \leq & \blue{\frac{1}{8\eta_1L^2_F}}\left(\EE\left[\| \be^{k}\|^{2}\right] - \EE\left[\| \be^{k+1}\|^{2}\right] -\rho_k \EE\left[\| \be^{k}\|^{2}\right]+ \frac{2 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}}\right) + \frac{\eta_{k}}{2}\EE\left[ \|\be^{k}\|^{2}\right]  \notag \\
-        = & \frac{1}{8\eta_{1}L_{F}^{2}}\left(\EE\left[\| \be^{k}\|^{2}\right] - \EE\left[\| \be^{k+1}\|^{2}\right] + \frac{2 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}}\right) - \left( \frac{\rho_{k}}{8\eta_{1}L_{F}^{2}}- \frac{\eta_{k}}{2}\right)\EE\left[\| \be^{k}\|^{2}\right] , \label{Eq: scaling recursive 2}
-        % \notag \\
-        % &+ \frac{\rho_{k}^{2}\sigma^{2}}{4\eta_{1}L_{F}^{2}| \calJ_{k+1}|}
-    \end{align}}\blue{where the last line only regroups the terms.}
-    From \eqref{Eq: the parameters assumptions in storm appendix}, it follows that
-    $\frac{\rho_{k}}{8\eta_{1}L_{F}^{2}}- \frac{\eta_{k}}{2}\geq \frac{\rho_{k}}{16\eta_{1}L_{F}^{2}}$.
-    Applying this inequality to \eqref{Eq: scaling recursive 2} yields the following
-    expected descent property of the Lyapunov function $\Psi_r$
-    \begin{align}
-        \label{Eq: One-iteration Expected descent} & \EE\left[ \Psi_r(\calQ^{k+1}) + \frac{1}{8\eta_{1}L_{F}^{2}}\| \be^{k+1}\|^{2}\right] - \EE\left[ \Psi_r(\calQ^{k}) + \frac{1}{8\eta_{1}L_{F}^{2}}\| \be^{k}\|^{2}\right] \notag \\
-        \leq                                       & - \frac{\rho_{k}}{16\eta_{1}L_{F}^{2}}\EE[\| \be^{k}\|^{2}] + \frac{\rho_{k}^{2}\sigma^{2}}{4\eta_{1}L_{F}^{2}\blue{b_{k+1}}}.
-    \end{align}
-    Finally, summing up \eqref{Eq: One-iteration Expected descent} from $k=1$ to
-    $T$ and dividing by $T$ yields
+    \blue{By \Cref{Lemma: approximate sufficient descent property storm}, $C_{\bx}^{k}=\eta_T^{-1}-\tilde L_F\ge\frac{1}{2\eta_T}$, and taking expectations,
     \[
-        \frac{1}{T}\sumT \rho_{k}\EE[\| \be^{k}\|^{2}]\leq \frac{16\eta_{1}L_{F}^{2}\tilde{\Delta}_{1}}{T}
-        + \frac{2\EE[\| \be^{1}\|^{2}]}{T}+ \frac{1}{T}\blue{\sum\limits_{k=1}
-        ^{T}}\frac{4 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}},
-    \]\blue{Since $b_{k+1}= b$ for all $k \geq 1$ by \eqref{Eq: the parameters assumptions in storm appendix} and $\EE[\| \be^{1}\|^{2}]\leq \sigma^{2}/b_{1}$ by \Cref{Ass: main assumptions}(iii), this} yields \eqref{Eq: weighted cumulative error bound} and completes the proof. 
+        \EE\Psi_r(\calQ^{k+1})-\EE\Psi_r(\calQ^{k})\le-C_{\bB}\EE[\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}]-\tfrac{1}{2\eta_T}\EE\Delta_{\bx}^{k+1}+\tfrac{\eta_T}{2}q_k .
+    \]
+    For $k\ge1$ we have $b_{k+1}=b$, and \Cref{Lemma: Recursive bound on gradient error} with $(1-\rho_T)^2\le1-\rho_T$ gives $q_{k+1}\le(1-\rho_T)q_k+\frac{2\rho_T^2\sigma^2}{b}+\frac{4L_F^2}{b}\EE[\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}]$. By \Cref{Lemma: tracking of B increments}, $\EE\Delta_{\bB}^{k+1}\le\frac{12}{r}\EE[H_k-H_{k+1}]+G\,\EE\Delta_{\bx}^{k+1}$, hence
+    \[
+        \bigl(q_{k+1}+d_0\EE H_{k+1}\bigr)-\bigl(q_k+d_0\EE H_k\bigr)\le-\rho_Tq_k+\frac{2\rho_T^2\sigma^2}{b}+\frac{4L_F^2(1+G)}{b}\EE\Delta_{\bx}^{k+1}.
+    \]
+    Multiply by $\eta_T/\rho_T$ and add it to the first display. By \eqref{Eq: the parameters assumptions in storm appendix}, $\frac{\eta_T}{\rho_T}\cdot\frac{4L_F^2(1+G)}{b}\le\frac{1}{4\eta_T}$, so the coefficient of $\EE\Delta_{\bx}^{k+1}$ is at most $-\frac{1}{4\eta_T}$, the coefficient of $q_k$ is $\frac{\eta_T}{2}-\eta_T=-\frac{\eta_T}{2}$, and the noise term is $\frac{\eta_T}{\rho_T}\cdot\frac{2\rho_T^2\sigma^2}{b}=\frac{2\eta_T\rho_T\sigma^2}{b}$.}
 \end{proof}
 
 We derive an upper stationarity error bound for the iterates generated by \Cref{alg:our_algorithm_storm}.
@@ -732,100 +777,46 @@ the optimality condition of $\bx^{k+1}$ from \eqref{Eq: the update of x in STORM
 Selecting appropriate parameters is crucial as the ultimate oracle complexities depend on these choices.
 \subsection{Proof of averaged stationarity error bound for STORM}
 \label{subsubsec:proof-avg-stationarity-storm}
-We now establish the convergence rate of \Cref{alg:our_algorithm_storm} by taking constant parameters, i.e., $\eta_{k}\equiv \eta_{1}$ and $\rho_{k}\equiv \rho_{1}$ for $k \geq 1$. The first result is to estimate the averaged expected stationarity error.
+We now take $\eta_{k}\equiv \eta_{T}$ and $\rho_{k}\equiv \rho_{T}$. The first result estimates the averaged expected stationarity error.
 \begin{lemma}
     \label{lemma: the averaged stationarity error bound} 
-    Under the conditions of
-    \Cref{Lemma: Weighted error accumulation} , it holds that for any $T \geq 1$,
+    \blue{Under the conditions of \Cref{Lemma: Weighted error accumulation}, let $S_3:=4(3\eta_T^{-2}+L_F^2+3(\tau L_F)^2)$, $N_T:=\max\{S_1/C_{\bB},\,S_2/C_{\bB},\,4\eta_TS_3,\,4/\eta_T\}$, and let $\Psi_r^{*}$ be a lower bound of $\EE[\Psi_r(\calQ^{k})]+\frac{\eta_T}{\rho_T}\EE\|\be^{k}\|^2$ for all $k\ge1$. Then for any $T \geq 1$,
     \begin{align}
-    \frac{1}{T}\sumT \EE [\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))]        
-        \leq & \, \frac{\tilde{\Delta}_{1}}{T}\left( \frac{\tilde{S}_{4}}{C_{\bB}}+ \frac{2(\blue{C_{\delta}}+ 4)}{\eta_{1}}+ \frac{(6+\blue{C_{\delta}}+ \frac{\tilde{S}_4\eta_1}{2C_{\bB}})16\eta_{1}L_{F}^{2}}{\rho_{1}}\right) \notag \\
-        &+ \left( 6 + \blue{C_{\delta}}+ \frac{\tilde{S}_{4}\eta_{1}}{2C_{\bB}}\right)\left(\frac{2\sigma^{2}}{b_{1}\rho_{1}T}+ \blue{\frac{4\rho_{1}\sigma^{2}}{b}}\right), \label{Eq: the averaged stationarity error bound in lemma}
+        \frac{1}{T}\sumT \EE [\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))]
+        \leq \frac{N_T}{T}\Bigl(\tilde{\Delta}_{1}+\frac{\eta_T\sigma^2}{\rho_Tb_1}\Bigr)+\frac{2N_T\eta_T\rho_T\sigma^{2}}{b}, \label{Eq: the averaged stationarity error bound in lemma}
     \end{align}
-\end{lemma} where $\tilde{S}_4= \max\{S_{1}, S_{2}\}$ and $\blue{C_{\delta}}= 1 + \frac{3\tilde{\delta}}{\tilde{L}_{F}^{2}}$.
+    where $\tilde{\Delta}_{1}:=\calL(\bx^{1},\bB^{1},\bLmbd^{1})-\Psi_r^{*}$.}
+\end{lemma}
 \begin{proof}
-    Applying $\eta_{k}\leq \eta_{1}$ from \eqref{Eq: the parameters assumptions in storm appendix}
-    to \eqref{Eq: the stationarity error bound in Lemma in storm} in \Cref{Lemma:
-    Stationarity error bound} yields
-    \begin{align}
-        \label{Eq: the stationarity error bound in proof storm}\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k})) \leq & \,\frac{S_{4}}{C_{\bB}}\left( \Psi_r(\calQ^{k}) - \Psi_r(\calQ^{k+1}) \right) + S_{3}^{k}\Delta_{\bm{x}}^{k+1}+(2 + \frac{S_{4}\eta_{1}}{2C_{\bB}})\| \be^{k}\|^{2}.
-    \end{align}
-    For the second term in \eqref{Eq: the stationarity error bound in proof storm},
-    by recalling the second inequality in \eqref{Eq: bound B and x in storm}, we
-    obtain
+    \blue{Taking expectations in \eqref{Eq: the stationarity error bound in Lemma in storm} and using $S_3^{k}=S_3$,
     \[
-        \Delta_{\bm{x}}^{k+1}\leq \frac{1}{ C_{\bx}^{k}}\left( \Psi_r(\mathcal{Q}
-        ^{k}) - \Psi_r(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}
-        \right),
-    \] where we use the positive value of $C_{\bx}^{k}$ from \eqref{Eq: the bound coefficient of x}. Therefore, substituting the inequality above and the definition of
-    $S_{3}^{k}$ from \eqref{Eq: the coefficients of stationarity error bound in SGDM},
-    into $S_{3}^{k}\Delta_{\bx}^{k+1}$, one has
-\begin{align}
-\label{Eq: the scaling for x sequence}
-&S_{3}^{k}\Delta_{\bx}^{k+1} \notag \\
-\leq &\,\frac{S_{3}^{k}}{C_{\bx}^{k}}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right)\notag    \\
-\leq &\, \frac{4 [ 1 + (1 + 3\tau^{2})(\eta_{k}L_{F})^{2}]}{\eta_{k}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right) \notag                                                                                                                                    \\
-\leq &\, \frac{4 [ 1 + (1 + \frac{3\tilde{\delta}}{L^2_F})(\eta_{k}L_{F})^{2}]}{\eta_{k}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1}) + \frac{\eta_{k}}{2}\| \be^{k}\|^{2}\right) \notag                                                                                                               \\
-\leq &\, \frac{4 [ 1 + (1 + \frac{3\tilde{\delta}}{\tilde{L}^2_F})(\eta_{k}\tilde{L}_{F})^{2}]}{\eta_{1}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1})\right) + \frac{2 [ 1 + (1 + \frac{3\tilde{\delta}}{\tilde{L}^2_F})(\eta_{k}\tilde{L}_{F})^{2}]}{1 - \eta_{k}\tilde{L}_{F}}\| \be^{k}\|^{2}\notag \\
-% &\leq \frac{4 [ 1 + C_{\delta}(\eta_k\tilde{L}_F)^2]}{\eta_k (1 - \eta_k\tilde{L}_F)} \left( \Psi_r(\mathcal{Q}^k) - \Psi_r(\mathcal{Q}^{k+1}) \right)  +  \frac{2[ 1 + C_{\delta}(\eta_k\tilde{L}_F)^2]}{\eta_1 (1 - \eta_k\tilde{L}_F)}\| \be^k\|^2\notag \\
-\leq &\,\frac{4 [ 1 + C_{\delta}(\eta_{k}\tilde{L}_{F})^{2}]}{\eta_{1}(1 - \eta_{k}\tilde{L}_{F})}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1})\right) + \frac{2 [ 1 +C_{\delta}(\eta_{k}\tilde{L}_{F})^{2}]}{1 - \eta_{k}\tilde{L}_{F}}\| \be^{k}\|^{2}\notag                                                                     \\
-\leq &\, \frac{2(C_{\delta}+ 4)}{\eta_{1}}\left( \Psi_r(\mathcal{Q}^{k}) - \Psi_r(\mathcal{Q}^{k+1})\right) + (C_{\delta}+ 4) \| \be^{k}\|^{2},
-\end{align} where the third inequality follows from $\tau^{2}\leq \tilde{\delta}/ L_{F}^{2}$,
-    the fourth inequality is derived from $\tilde{L}_{F}\geq L_{F}$ and
-    $\eta_{k}\equiv \eta_{1}$, and the last inequality holds because $(1 + cx^{2}
-    ) / (1 - x) \leq 2 + \frac{c}{2}$ for $0 < x \leq 1/2$ and constant $c >1$ under
-    parameter conditions \eqref{Eq: the parameters assumptions in storm appendix}.
-
-    On the other hand, by taking expectation on both sides of \eqref{Eq: the stationarity error bound in proof storm}
-    and averaging over $T$, we obtain
-    \begin{align}
-             & \frac{1}{T}\sumT \EE\left[\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))\right] \notag                                                                                                                                                                      \\
-        \leq & \,\frac{S_{4}}{C_{\bB}T}\sumT \left( \EE\left[\Psi_r(\calQ^{k})\right] - \EE\left[\Psi_r(\calQ^{k+1}) \right] \right)+ \frac{1}{T}\sumT S_{3}^{k}\EE\left[ \Delta_{\bm{x}}^{k+1}\right] \notag                                                     \\
-             & +\frac{1}{T}\sumT \left( 2 + \frac{S_{4}\eta_{1}}{2C_{\bB}}\right) \EE\left[\| \be^{k}\|^{2}\right] \notag                                                                                                                                                                                 \\
-        \leq & \frac{\frac{S_4}{C_B}\tilde{\Delta}_{1}}{ T}+ \frac{1}{T}\sumT S_{3}^{k}\EE\left[ \Delta_{\bm{x}}^{k+1}\right]+\left( 2 + \frac{S_{4}\eta_{1}}{2C_{\bB}}\right)\frac{1}{T}\sumT \EE\left[\| \be^{k}\|^{2}\right].\label{Eq: the averaged stationarity error bound in proof}
-    \end{align}
-
-    Then substituting \eqref{Eq: the scaling for x sequence} into \eqref{Eq: the averaged stationarity error bound in proof}
-    yields
-    \begin{align}
-             & \frac{1}{T}\sumT \EE[\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))] \notag                                                                                                                                                     \\
-        \leq & \frac{ \left( \frac{S_4}{C_B}+ \frac{2(C_{\delta}+ 4)}{S_4\eta_1}\right)\tilde{\Delta}_{1}}{ T}+\left( 6+ \frac{S_{4}\eta_{1}}{2C_{\bB}}+ C_{\delta}\right)\frac{1}{T}\sumT \EE[\| \be^{k}\|^{2}].\label{Eq: the averaged stationarity error bound in proof 2}
-    \end{align}
-
-    Since $\rho_{k}\equiv \rho_{1}$ for $k \geq 1$, then it follows from \eqref{Eq: weighted cumulative error bound}
-    that
-    \begin{align}
-        \label{Eq: the averaged cumulative error bound}\frac{1}{T}\sumT \EE[\| \be^{k}\|^{2}]\leq \frac{16 \eta_{1}L_{F}^{2}\tilde{\Delta}_{1}}{\rho_{1}T}+ \blue{\frac{2\sigma^{2}}{b_{1}\rho_{1}T}}+ \blue{\frac{4\rho_{1}\sigma^{2}}{b}}
-    \end{align}
-    Then, substituting \eqref{Eq: the averaged cumulative error bound} into \eqref{Eq: the averaged stationarity error bound in proof 2}
-    and taking the full expectation on both sides yields \eqref{Eq: the averaged stationarity error bound in lemma}.
+        \EE\,\text{dist}^{2}(\bm{0}, \partial \calL(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))\le S_1\EE\Delta_{\bB}^{k+1}+S_2\EE\Delta_{\bB}^{k}+S_3\EE\Delta_{\bx}^{k+1}+2q_k .
+    \]
+    By the definition of $N_T$, $S_1\le N_TC_{\bB}$, $S_2\le N_TC_{\bB}$, $S_3\le N_T/(4\eta_T)$, and $2\le N_T\eta_T/2$, so the right-hand side is at most
+    \[
+        N_T\Bigl(C_{\bB}\EE[\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}]+\tfrac{1}{4\eta_T}\EE\Delta_{\bx}^{k+1}+\tfrac{\eta_T}{2}q_k\Bigr)\le N_T\Bigl(\widehat{W}_k-\widehat{W}_{k+1}+\tfrac{2\eta_T\rho_T\sigma^2}{b}\Bigr),
+    \]
+    where the last step is \eqref{Eq: descent of the augmented potential}. Summing over $k=1,\ldots,T$ and dividing by $T$, the average is at most $\frac{N_T}{T}(\widehat{W}_1-\widehat{W}_{T+1})+\frac{2N_T\eta_T\rho_T\sigma^2}{b}$. Since $H_k\ge0$, $\widehat{W}_{T+1}\ge\EE\Psi_r(\calQ^{T+1})+\frac{\eta_T}{\rho_T}q_{T+1}\ge\Psi_r^{*}$. For $\widehat{W}_1$: $H_1=0$ and $q_1\le\sigma^2/b_1$ by \Cref{Ass: main assumptions}(iii); moreover $\Delta_{\bB}^{1}=0$ because $\bB^0=\bB^1$, so $\Psi_r(\calQ^{1})=\calL(\bx^1,\bB^1,\bLmbd^1)-C_1\Delta_{\bB}^{2}-C_3\Delta_{\bx}^{2}\le\calL(\bx^1,\bB^1,\bLmbd^1)$. Hence $\widehat{W}_1\le\calL(\bx^1,\bB^1,\bLmbd^1)+\frac{\eta_T\sigma^2}{\rho_Tb_1}$, which gives \eqref{Eq: the averaged stationarity error bound in lemma}.}
 \end{proof}
 
 \subsection{Proof of \Cref{Lemma: convergence rate of storm}}
 \label{Subsubsec: convergence rate STORM}
 \begin{proof}
-    Substituting the parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm} into \eqref{Eq: the averaged stationarity error bound in lemma} from \Cref{lemma: the averaged stationarity error bound}, and applying the bound $\rho_k \equiv \frac{8\rho\eta^2}{T^{2/3}}$, $b_1 = c_b T^{1/3}$, $b_k = b$ for $k \geq 2$, we obtain \eqref{Eq: the convergence rate of storm} by selecting \blue{$R$ uniformly from $\{1,\ldots,T\}$, independently of the iterates}.
+    \blue{Insert $\eta_T=\eta/(\tilde L_FT^{1/3})$, $\rho_T=8\rho\eta^2/T^{2/3}$, $b_1\ge c_bT^{1/3}$ and $b_k=b$ into \eqref{Eq: the averaged stationarity error bound in lemma}. Then $\eta_T/(\rho_Tb_1)\le1/(8\rho\eta\tilde L_Fc_b)$ and $2\eta_T\rho_T=16\rho\eta^3/(\tilde L_FT)$. Moreover $N_T\le\bar N\,T^{1/3}$: indeed $S_1,S_2,C_{\bB}$ do not depend on $T$, $4/\eta_T=4\tilde L_FT^{1/3}/\eta$, and $4\eta_TS_3=48\eta_T^{-1}+16\eta_TL_F^2(1+3\tau^2)\le\bigl(\frac{48\tilde L_F}{\eta}+\frac{16\eta L_F^2(1+3\tau^2)}{\tilde L_F}\bigr)T^{1/3}$. Consequently the right-hand side of \eqref{Eq: the averaged stationarity error bound in lemma} is at most
+    \[
+        \frac{\bar N T^{1/3}}{T}\Bigl(\tilde\Delta_1+\frac{\sigma^2}{8\rho\eta\tilde L_Fc_b}\Bigr)+\bar NT^{1/3}\cdot\frac{16\rho\eta^3\sigma^2}{\tilde L_F\,b\,T}=\frac{\bar N\,\Theta}{T^{2/3}}.
+    \]
+    Since $R$ is uniform on $\{1,\ldots,T\}$ and independent of the iterates, $\EE\,\text{dist}^2(\bm 0,\partial\calL(\bx^R,\bB^R,\bLmbd^R))$ equals the left-hand side of \eqref{Eq: the averaged stationarity error bound in lemma}.}
 \end{proof}
 With this parameter choice, we proceed to analyze the oracle complexity of \Cref{alg:our_algorithm_storm}.
 \subsection{Proof of \Cref{Theorem: the oracle complexity in STORM}}
 \label{Subsubsec: proof theorem STORM}
 \begin{proof}
-    When $b_{1}= c_{b}T^{1/3}$, we have
+    \blue{By \Cref{Lemma: convergence rate of storm}, $\EE\,\text{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))\le\bar N\Theta\,T^{-2/3}$, which is at most $\varepsilon^2$ for the $T$ in \eqref{Eq: the iterate number upper bound of algorithm VR}. With $b_1=\calO(T^{1/3})$ and $b_k=b$ for $k\ge2$, the number of stochastic gradient calls is
     \[
-        \EE[\text{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R})
-        ] \leq \frac{1}{T^{2/3}}\left(\tilde{L}_{\Delta}\tilde{\Delta}_{1}+ \tilde{C}_{\sigma}
-        \left( \frac{\sigma^{2}}{ 4\rho \eta^{2}c_{b}}+ \frac{32\rho\eta^{2}\sigma^{2}}{b}
-        \right) \right).
+        \text{Complexity}= b_{1}+ (T-1)b = \calO(T^{\frac{1}{3}}) + \calO(T) = \calO(T) = \calO(\varepsilon^{-3}).
     \]
-    With the conditions on $T$ in \eqref{Eq: the iterate number upper bound of algorithm VR},
-    this gives
-    $\EE[\text{dist}^{2}(0, \partial \calL(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))]
-    \leq \varepsilon^{2}$. Then, the oracle complexity is
-    \[
-        \text{Complexity}= b_{1}+ (T-1)b = \calO(T^{\frac{1}{3}}) + \calO(T) = \calO
-        (T) = \calO(\varepsilon^{-3}),
-    \]
-    which completes the proof. 
+    The initialization of $\bB^1,\bLmbd^1$ is a one-time deterministic computation and is not counted as a stochastic gradient call.}
 \end{proof}
 % \[
 % \eta_k = \frac{\eta}{L_F} \frac{1}{T^l}, \quad (L_F + K_3) \eta_k \leq \frac{1}{2}

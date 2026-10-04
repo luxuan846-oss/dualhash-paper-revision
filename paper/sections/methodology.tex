@@ -179,8 +179,6 @@
 \section{Stochastic Primal-Dual Hashing Algorithms}
 \label{Section: Methodology}
 \subsection{Algorithmic Framework}
-% Inspired by PDHG \cite{chambolleFirstOrderPrimalDualAlgorithm2011},
-% and its nonconvex extension PPDG \cite{guoPreconditionedPrimalDualGradient2023}, 
 Let us consider the equivalent constrained formulation of Problem \eqref{Prop: block-wise regularized problem}:
 \begin{align} 
 \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
@@ -190,7 +188,7 @@ Let us consider the equivalent constrained formulation of Problem \eqref{Prop: b
 \label{Prop: the dual problem}
 \max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
 \end{align} 
-\blue{Recalling the definition of the conjugate function $h^*$ from the Notations paragraph} and observing that the minimization with respect to $\bY$ in Problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
+\blue{Recalling the definition of the conjugate function $h^*$} and observing that the minimization with respect to $\bY$ in Problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
 \begin{equation}
 \label{Eq: simplified_lagrangian}
 \calL(\bx, \bB, \bLmbd) := F(\bx, \bB) + \langle \bB, \bLmbd \rangle - h^*(\bLmbd).
@@ -306,7 +304,7 @@ Second, the auxiliary variable $\bB$ is updated via a vanilla gradient descent s
 
 Finally, the dual variable $\bLmbd$ is updated via proximal gradient ascent on $h^*$, using an extrapolation step introduced in \cite{chambolleFirstOrderPrimalDualAlgorithm2011}. The update solves the following optimization problem:
 \begin{align}
-    \bLmbd^{k+1} &= \text{prox}_{(1/\tau h^*)} \left( \bLmbd^k + \left(2\bB^{k+1} - \bB^k  \right) \right) \notag \\
+    \bLmbd^{k+1} &= \text{prox}_{\blue{\tau^{-1}}h^*} \left( \bLmbd^k + \blue{\tau^{-1}}\left(2\bB^{k+1} - \bB^k  \right) \right) \notag \\
     &=  \arg\min_{\bLmbd \in \RR^{n\times d} } \left\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle  + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \right\}. 
     \label{Eq: the update of lambda}
 \end{align}
@@ -315,11 +313,14 @@ Our framework accommodates flexible choices of $\tilde{\nabla}_{\bx} F(\bx^k, \b
 \subsection{Implementations}
 \label{Sec: Algorithm implementations}
 \subsubsection{DualHash with Momentum Acceleration}
-We first propose a stochastic first-order algorithm with momentum acceleration for solving Problem \eqref{Prop: block-wise regularized problem}. At each iteration $k$, we uniformly sample a mini-batch $\calJ_k \subseteq \{1,\cdots,n\}$ with $b_k = |\calJ_k| \leq n$, and compute $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k) := \nabla_{\bx} F(\bx^k, \bB^k; \calJ_k)$ evaluated at the extrapolated point $\bz^k$:
+We first propose a stochastic first-order algorithm with momentum acceleration for solving Problem \eqref{Prop: block-wise regularized problem}. \blue{Here and below, $i\in\{1,\ldots,n\}$ indexes training samples, whereas $k$ indexes algorithmic iterations. At iteration $k$, we sample a mini-batch $\mathcal J_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of cardinality $b_k$, independently of the previous mini-batches, and define the stochastic gradient estimator evaluated at the extrapolated point $\mathbf z^k$ as}
 \begin{align}
 \label{Eq: the stochastic approximate in SGDM}
-    \blue{\bg_m^k} = \nabla_{\bx} F(\bz^k, \bB^k; \calJ_k),\quad \text{where } \bz^k = \bx^k + \beta_k (\bx^k - \bx^{k-1}).
-\end{align}\blue{Here, $\bg_m^k\in\RR^q$ denotes the stochastic gradient estimator used in DualHash-StoM, with the subscript $m$ indicating momentum.} \blue{The mini-batch gradient in the definition of $\bg_m^k$ is $\nabla_{\bx}F(\bz^k,\bB^k;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bz^k,\bb_i^k)$, the average of the per-sample gradients, where $\bb_i^k\in\RR^d$ denotes the $i$-th row of $\bB^k$.} The update of \( \bx^k\) is then:
+    \blue{\bg_m^k} := \nabla_{\bx}F(\bz^k,\bB^k;\calJ_k)
+    = \frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bz^k,\bb_i^k),
+    \qquad \bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1}),
+\end{align}
+\blue{where $\bb_i^k$ denotes the $i$-th row of $\bB^k$.} The update of \(\bx^k\) is then:
 \begin{align}
 \label{Eq: the update of x in SGDM}
     \bx^{k+1} = \by^k - \eta_k \blue{\bg_m^k},\,\text{where } \by^k = \bx^k + \alpha_k (\bx^k - \bx^{k-1}).
@@ -351,18 +352,21 @@ Alternatively, we consider the StoRM estimator \cite{cutkoskyMomentumBasedVarian
 \blue{\bg_s^k} =
 \begin{cases} 
 \nabla_{\bx} F(\bx^1, \bB^1; \mathcal{J}_1), &\text{if }  k = 1, \\
-(1 - \rho_{k-1}) \big( \blue{\bg_s^{k-1}} - \nabla_{\bx} F(\bx^{k-1}, \bB^{k-1};\mathcal{J}_k)\big)+\nabla_{\bx} F(\bx^k, \bB^k; \mathcal{J}_k), & \text{if } k > 1.
+(1 - \rho_{k-1}) \big( \blue{\bg_s^{k-1}} - \nabla_{\bx} F(\bx^{k-1}, \bB^{k-1};\blue{\mathcal{J}_k})\big)+\nabla_{\bx} F(\bx^k, \bB^k; \mathcal{J}_k), & \text{if } k > 1.
 \end{cases}
-\end{align}}\blue{Here, $\bg_s^k\in\RR^q$ denotes the recursive gradient estimator used in DualHash-StoRM, with the subscript $s$ indicating StoRM; it follows the generic recursion in \eqref{Eq: the generic StoRM estimator}.} The update of $\bx$ is then
+\end{align}} The update of $\bx$ is then
 \begin{align}
 \label{Eq: the update of x in STORM}
     \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}.
-\end{align} The overall algorithm, DualHash-StoRM, is detailed in \Cref{alg:our_algorithm_storm}.
+\end{align}The overall algorithm, DualHash-StoRM, is detailed in \Cref{alg:our_algorithm_storm}.
+\begin{remark}
+\blue{The $\bB$- and $\bLmbd$-blocks of DualHash-StoRM start from a block-stationary pair at $\bx^1$: with $m:=\gamma/n$ and $h^{**}(\bB)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ the biconjugate of $h$, we take $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$ and $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$. The proximal map acts entrywise on $U=[\mathcal{D}(\bx^1)]_{ij}$: it returns $U$ if $|U|\le1$, $\operatorname{sgn}(U)$ if $1<|U|\le1+\lambda/m$, and $U-(\lambda/m)\operatorname{sgn}(U)$ otherwise. Hence $\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$, and $\bB^1=\mathcal{D}(\bx^1)$, $\bLmbd^1=\bm{0}$ whenever all entries of $\mathcal{D}(\bx^1)$ lie in $[-1,1]$. This initialization is computed once and is not counted as stochastic gradient calls.} 
+\end{remark}
 \begin{algorithm}[t]
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
-\STATE  \textbf{Initialize:} $\bx^1  \in \RR^{\blue{q}}$, \( \bB^1 \in \RR^{n\times d},\, \blue{\bLmbd^1\in [-\lambda,\lambda]^{n\times d}}\), parameters $\{\eta_k\} $, $\tau $, $b_k$, $\{\rho_k\in (0,1)\}$
+\STATE  \textbf{Initialize:} $\bx^1  \in \RR^{\blue{q}}$, \blue{$\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m\bigl(\mathcal{D}(\bx^1)-\bB^1\bigr)$}, parameters $\{\eta_k\} $, $\tau $, $b_k$, $\{\rho_k\in (0,1)\}$
 \FOR{$k = 1, 2, \ldots$}
 \STATE Compute $\blue{\bg_s^k}$ by \eqref{Eq: the stochastic approximate in STORM}
 \STATE Update $\bx^{k+1}$ by \eqref{Eq: the update of x in STORM}.

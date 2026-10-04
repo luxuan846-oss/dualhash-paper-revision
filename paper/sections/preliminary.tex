@@ -21,21 +21,33 @@ properties.
     \end{enumerate}
 \end{proposition}
 
-\blue{We use the StoRM (stochastic recursive momentum) variance-reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}. In the following generic stochastic notation, let $\phi(\bx) = \mathbb{E}_{\xi}[\phi(\bx;\xi)]$ with $\xi \in \Xi$; this notation is distinct from the finite-sum function $F(\bx,\bB)$ defined later for the split hashing model.} Standard momentum methods use
-\begin{align*}
-    \blue{\bg^{k} = \rho_{k}\nabla \phi(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bg^{k-1}, \text{ where } \rho_{k}\in [0, 1],}
-\end{align*}
-\blue{yielding a biased estimate of $\nabla \phi(\bx^{k})$.}
-\blue{StoRM adds the correction term $(1 - \rho_{k-1}) (\nabla \phi(\bx^{k}, \xi^{k}) - \nabla \phi(\bx^{k-1}, \xi^{k}))$, resulting in:}
-\begin{align}
-     \label{Eq: the generic StoRM estimator}\blue{\bg^{k}=\left\{\begin{array}{ll}\nabla \phi\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla \phi\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_{k-1}\right)\left( \bg^{k-1} - \nabla \phi\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right.}
-\end{align}
-This estimator exploits the smoothness of $\blue{\phi}(\cdot, \xi)$, leading to efficient variance reduction. \blue{Here $\bg^{k}$ is the stochastic direction at iteration $k$, used in the generic update $\bx^{k+1}=\bx^{k}-\eta_{k}\bg^{k}$.} When $\rho_{k} = 1$, $\bg^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in this paper.
-
 \blue{A differentiable} function $f: \RR^q \rightarrow \RR$ is said to be $L_f$-smooth if $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^q$.
-A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \blue{\Omega}$.
-For an $L_f$-smooth function, the descent lemma \blue{\cite{Bertsekas1997}} states that
+A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \blue{\Omega}$. For an $L_f$-smooth function, \blue{the descent lemma \blue{\cite{Bertsekas1997}} states that
 \begin{align}
-% \label{Eq: the descent lemma}
-    f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. \notag
+\label{Eq: the descent lemma}
+    f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. 
+\end{align}}We use the StoRM (stochastic recursive momentum) variance-reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}.
+\blue{Consider a stochastic optimization problem with objective}
+\[
+\blue{\phi(\bx)=\mathbb{E}_{\xi}[\phi(\bx;\xi)], \qquad \xi\in\Xi.}
+\]
+\blue{A standard momentum-based stochastic first-order method constructs the stochastic direction}
+\begin{align*}
+    \blue{\bg^{k} = \rho_{k-1}\nabla\phi(\bx^{k},\xi^{k}) +(1-\rho_{k-1})\bg^{k-1}, \qquad \rho_{k-1}\in[0,1],}
+\end{align*}
+\blue{which is generally a biased estimator of $\nabla\phi(\bx^{k})$. The iterate is then updated according to}
+\[
+\blue{\bx^{k+1}=\bx^{k}-\eta_k\bg^{k}.}
+\]
+\blue{StoRM introduces the correction term}
+\[
+\blue{(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k},\xi^{k})-\nabla\phi(\bx^{k-1},\xi^{k})\bigr)}
+\]
+\blue{into the momentum estimator above, leading to the recursive estimator}
+\begin{align}
+    \label{Eq: the generic StoRM estimator}
+    \blue{\bg^{k}=\left\{\begin{array}{ll}
+        \nabla\phi(\bx^{k},\xi^{k}), & \text{if } k=1, \\[1mm]
+        \nabla\phi(\bx^{k},\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1},\xi^{k})\bigr), & \text{if } k>1,
+    \end{array}\right.}
 \end{align}

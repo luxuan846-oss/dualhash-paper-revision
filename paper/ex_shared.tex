@@ -7,6 +7,13 @@
 \usepackage[numbers]{natbib}
 % 图形和表格包
 \usepackage{algorithm,algorithmic}
+\usepackage{etoolbox}
+\AtBeginEnvironment{algorithmic}{%
+  \setlength{\abovedisplayskip}{3pt}%
+  \setlength{\belowdisplayskip}{3pt}%
+  \setlength{\abovedisplayshortskip}{0pt}%
+  \setlength{\belowdisplayshortskip}{3pt}%
+}
 \usepackage{array}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -203,6 +210,7 @@
 \theoremsymbol{}
 \renewtheorem{lemma}{Lemma}[section]
 \newtheorem{assumption}{Assumption}[section]
+\newtheorem{example}{Example}[section]
 \newsiamremark{remark}{Remark}
 
 % 公式编号按节

@@ -189,9 +189,10 @@ Let us consider the equivalent constrained formulation of Problem \eqref{Prop: b
 \max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
 \end{align} 
 \blue{Recalling the definition of the conjugate function $h^*$} and observing that the minimization with respect to $\bY$ in Problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
-\begin{equation}
-\label{Eq: simplified_lagrangian}
-\calL(\bx, \bB, \bLmbd) := F(\bx, \bB) + \langle \bB, \bLmbd \rangle - h^*(\bLmbd).
+\begin{equation}\label{Eq: simplified_lagrangian}
+\calL(\bx,\bB,\bLmbd):=\Phi(\bx,\bB,\bLmbd)-h^*(\bLmbd),
+\qquad\text{where}\quad
+\Phi(\bx,\bB,\bLmbd):=F(\bx,\bB)+\langle\bB,\bLmbd\rangle.
 \end{equation}
 Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
 For the W-type regularization on the matrix variable $\bB \in \RR^{n \times d}$,
@@ -283,48 +284,47 @@ This motivates us to perform a proximal step to update \(\bLmbd\).
 \vspace{-4ex}
 \end{figure}
 
-% \begin{figure}[t]
-% \centering
-% \includegraphics[width=0.6\textwidth]{papers_img/W_type_with_its_conjugate_func.pdf}
-% \caption{A W-type regularization slice $h(z) = \lambda ||z| - 1|$ and its conjugate function $h^*(x)$.}
-% \label{fig:w_type_regularization}
-% \vspace{-3 ex}
-% \end{figure}
-We now outline the \textbf{DualHash} framework, which employs an alternating update scheme for $\bx, \bB, \bm{\Lambda}$. 
-
-First, we adopt a stochastic first-order method for the $\bx$-update since computing the full gradient \( \nabla_{\bx} F(\bx, \bB) \) is computationally expensive when the number of samples \(n\) is large, as is typical in deep learning. \blue{At iteration $k$, $\bd^k$ denotes the stochastic direction used in the generic update $\bx^{k+1}=\bx^k-\eta_k\bd^k$.} Specifically, at each iteration $k$, we update $\bx$ by utilizing a stochastic gradient descent step
-\[
-\bx^{k+1} = \bx^k - \eta_k \tilde{\nabla}_{\bx} F(\bx^k, \bB^k),
-\]where $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k)$ is a stochastic estimator of $\nabla_{\bx} F(\bx^k, \bB^k)$.
-
-Second, the auxiliary variable $\bB$ is updated via a vanilla gradient descent step \eqref{Eq: the update of B}; this suffices because the objective \eqref{Eq: simplified_lagrangian} with respect to $\bB$ is smooth and has the explicit gradient \blue{$\nabla_{\bB}\calL(\bx,\bB,\bLmbd)=\frac{\gamma}{n}(\bB-\mathcal{D}(\bx))+\bLmbd$, which is computed element-wise once $\mathcal{D}(\bx)$ is available and does not require backpropagation with respect to $\bx$},
+We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and $\bm{\Lambda}$ alternately. The resulting algorithm can be viewed as a first-order multiblock primal--dual method. First, we update $\bx$ by a stochastic first-order step, as is standard in training neural networks. \blue{At iteration $k$, the $\bx$-update takes the form
+\begin{equation}
+    \label{Eq: the generic update of x}
+    \bx^{k+1} = \by^k - \eta_k \bg^k,
+\end{equation}
+where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
+The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: Algorithm implementations}.} Second, $\bB$ is updated by a gradient descent step on $\calL$. Finally, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
 \begin{align}
-   \bB^{k+1} = \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k) = \bB^k - \tau \left( \nabla_{\bB} F(\bx^{k+1}, \bB^k) + \bLmbd^k \right). \label{Eq: the update of B}
-\end{align}
+\bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1},\bB^k,\bLmbd^k) \notag\\
+&= \bB^k - \tau\big(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\big), \label{Eq: the update of B}\\
+\bLmbd^{k+1} &= \operatorname*{arg\,min}_{\bLmbd}\Big\{h^*(\bLmbd)-\langle\bLmbd,2\bB^{k+1}-\bB^k\rangle+\frac{\tau}{2}\|\bLmbd-\bLmbd^k\|^2\Big\} \notag\\
+&= \operatorname{prox}_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \label{Eq: the update of lambda}
+\end{align}\blue{Unlike the $\bx$-update, these two updates involve no sampling and are computed exactly. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}\big(\bB-\mathcal{D}(\bx)\big)$, once $\mathcal{D}(\bx^{k+1})$ is available, \eqref{Eq: the update of B} is evaluated entrywise without backpropagation through the network, and \eqref{Eq: the update of lambda} reduces to the proximal mapping of $h^*$, which is available in closed form.}
 
-Finally, the dual variable $\bLmbd$ is updated via proximal gradient ascent on $h^*$, using an extrapolation step introduced in \cite{chambolleFirstOrderPrimalDualAlgorithm2011}. The update solves the following optimization problem:
-\begin{align}
-    \bLmbd^{k+1} &= \text{prox}_{\blue{\tau^{-1}}h^*} \left( \bLmbd^k + \blue{\tau^{-1}}\left(2\bB^{k+1} - \bB^k  \right) \right) \notag \\
-    &=  \arg\min_{\bLmbd \in \RR^{n\times d} } \left\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle  + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \right\}. 
-    \label{Eq: the update of lambda}
-\end{align}
-
-Our framework accommodates flexible choices of $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k)$, enabling the incorporation of advanced momentum techniques to enhance both theoretical complexity and practical performance.
-\subsection{Implementations}
+\subsection{\blue{Instantiating the Stochastic Update}}
 \label{Sec: Algorithm implementations}
+\blue{We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
+\begin{equation}
+\label{Eq: minibatch oracle}
+\tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
+\end{equation}}
+
 \subsubsection{DualHash with Momentum Acceleration}
-We first propose a stochastic first-order algorithm with momentum acceleration for solving Problem \eqref{Prop: block-wise regularized problem}. \blue{Here and below, $i\in\{1,\ldots,n\}$ indexes training samples, whereas $k$ indexes algorithmic iterations. At iteration $k$, we sample a mini-batch $\mathcal J_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of cardinality $b_k$, independently of the previous mini-batches, and define the stochastic gradient estimator evaluated at the extrapolated point $\mathbf z^k$ as}
-\begin{align}
+We first present a momentum-based instance. At iteration $k$, we form two extrapolated points
+\begin{equation}
+\label{Eq: extrapolated points in SGDM}
+\by^k=\bx^k+\alpha_k(\bx^k-\bx^{k-1}),\qquad
+\bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1}),
+\end{equation}
+where $\by^k$ is the base point of the step and $\bz^k$ is the query point of the oracle. Since $(\bz^k,\bB^k)$ is determined before $\calJ_k$ is drawn, \blue{calling \eqref{Eq: minibatch oracle} at this point gives an unbiased estimator of $\nabla_{\bx}F(\bz^k,\bB^k)$:}
+\begin{equation}
 \label{Eq: the stochastic approximate in SGDM}
-    \blue{\bg_m^k} := \nabla_{\bx}F(\bz^k,\bB^k;\calJ_k)
-    = \frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bz^k,\bb_i^k),
-    \qquad \bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1}),
-\end{align}
-\blue{where $\bb_i^k$ denotes the $i$-th row of $\bB^k$.} The update of \(\bx^k\) is then:
-\begin{align}
+\blue{\bg_m^k} := \tilde{\nabla}_{\bx}F(\bz^k,\bB^k;\calJ_k).
+\end{equation}
+\blue{Taking $\bg^k=\bg_m^k$ in \eqref{Eq: the generic update of x} yields the $\bx$-update}
+\begin{equation}
 \label{Eq: the update of x in SGDM}
-    \bx^{k+1} = \by^k - \eta_k \blue{\bg_m^k},\,\text{where } \by^k = \bx^k + \alpha_k (\bx^k - \bx^{k-1}).
-\end{align}The overall algorithm, DualHash-StoM, is detailed in \Cref{alg:our_algorithm_sgdm}.
+\bx^{k+1} = \by^k - \eta_k \blue{\bg_m^k}.
+\end{equation}
+The overall algorithm, DualHash-StoM, is summarized in \Cref{alg:our_algorithm_sgdm}.
+
 \begin{remark}
 The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} covers these two accelerations: Nesterov acceleration  \cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method \cite{Polyak1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$. In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$.
 \end{remark}
@@ -332,66 +332,65 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \caption{DualHash-StoM}
 \label{alg:our_algorithm_sgdm}
 \begin{algorithmic}[1]
-\STATE \textbf{Initialize:} $\bx^1 = \bz^1 = \by^1 \in \RR^{\blue{q}} $, \( \bB^1 \in \RR^{n\times d},\, \blue{\bLmbd^1\in [-\lambda,\lambda]^{n\times d}}\), parameters $\{\eta_k\} $, $\tau$, $b_k$, $\{\alpha_k, \beta_k \in (0,1)\}$
-\FOR{$k = 1, 2, \ldots$}               
-  \STATE Compute \(\blue{\bg_m^k}\) by \eqref{Eq: the stochastic approximate in SGDM}
-  \STATE Update $\bx^{k+1}$ by \eqref{Eq: the update of x in SGDM}
-  \STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}
-  \STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}
+\STATE \textbf{Input:} \blue{$\bx^0=\bx^1\in\RR^{q}$}, $\bB^1\in\RR^{n\times d}$, \blue{$\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$}, step sizes $\{\eta_k\}$ and $\tau$, batch sizes $\{b_k\}$, momentum parameters \blue{$\{\alpha_k\},\{\beta_k\}\subset[0,1)$, number of iterations $T$}
+\FOR{\blue{$k = 1, \ldots, T$}}
+  \STATE \blue{Compute $\by^k$ and $\bz^k$ by \eqref{Eq: extrapolated points in SGDM}}
+  \STATE \blue{Draw $\calJ_k$ and compute $\bg_m^k$ by \eqref{Eq: the stochastic approximate in SGDM}}
+  \STATE Update $\bx^{k+1}$ by
+  \[
+  \bx^{k+1} = \by^k - \eta_k \blue{\bg_m^k}
+  \]
+  \STATE Update $\bB^{k+1}$ by
+  \[
+  \bB^{k+1} = \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k)
+  \]
+  \STATE Update $\bLmbd^{k+1}$ by
+  \[
+  \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
+  \]
 \ENDFOR
-\STATE \textbf{Return:} $\bx_R$ where \blue{$R$ is uniformly sampled from $\{1, \ldots, T\}$}
+\STATE \textbf{Output:} \blue{$\bx^R$ with $R$ drawn uniformly from $\{1,\ldots,T\}$}
 \end{algorithmic}
 \end{algorithm}
-\subsubsection{DualHash with Recursive Momentum}
- % StoRM utilizes a recursive momentum mechanism to reduce gradient variance, which is motivated by SGDM. Unlike some other variance reduction techniques (e.g., SVRG \cite{johnsonAcceleratingStochasticGradient2013}, SARAH \cite{SARAH2017}) that require full-gradient or large-batch gradient computations, 
-% StoRM achieves variance reduction without require full-gradient or large-batch gradient computations. 
-Alternatively, we consider the StoRM estimator \cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. Given its practical effectiveness in deep learning \cite{levy2021storm+}, we construct a recursive momentum estimator $\blue{\bg_s^k}$ for $\tilde{\nabla}_{\bx} F(\bx^k, \bB^k)$ as follows:
-{
-\begin{align}
-\label{Eq: the stochastic approximate in STORM}
-\blue{\bg_s^k} =
-\begin{cases} 
-\nabla_{\bx} F(\bx^1, \bB^1; \mathcal{J}_1), &\text{if }  k = 1, \\
-(1 - \rho_{k-1}) \big( \blue{\bg_s^{k-1}} - \nabla_{\bx} F(\bx^{k-1}, \bB^{k-1};\blue{\mathcal{J}_k})\big)+\nabla_{\bx} F(\bx^k, \bB^k; \mathcal{J}_k), & \text{if } k > 1.
-\end{cases}
-\end{align}} The update of $\bx$ is then
-\begin{align}
-\label{Eq: the update of x in STORM}
-    \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}.
-\end{align}The overall algorithm, DualHash-StoRM, is detailed in \Cref{alg:our_algorithm_storm}.
-\begin{remark}
-\blue{The $\bB$- and $\bLmbd$-blocks of DualHash-StoRM start from a block-stationary pair at $\bx^1$: with $m:=\gamma/n$ and $h^{**}(\bB)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ the biconjugate of $h$, we take $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$ and $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$. The proximal map acts entrywise on $U=[\mathcal{D}(\bx^1)]_{ij}$: it returns $U$ if $|U|\le1$, $\operatorname{sgn}(U)$ if $1<|U|\le1+\lambda/m$, and $U-(\lambda/m)\operatorname{sgn}(U)$ otherwise. Hence $\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$, and $\bB^1=\mathcal{D}(\bx^1)$, $\bLmbd^1=\bm{0}$ whenever all entries of $\mathcal{D}(\bx^1)$ lie in $[-1,1]$. This initialization is computed once and is not counted as stochastic gradient calls.} 
-\end{remark}
 \begin{algorithm}[t]
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
-\STATE  \textbf{Initialize:} $\bx^1  \in \RR^{\blue{q}}$, \blue{$\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m\bigl(\mathcal{D}(\bx^1)-\bB^1\bigr)$}, parameters $\{\eta_k\} $, $\tau $, $b_k$, $\{\rho_k\in (0,1)\}$
-\FOR{$k = 1, 2, \ldots$}
-\STATE Compute $\blue{\bg_s^k}$ by \eqref{Eq: the stochastic approximate in STORM}
-\STATE Update $\bx^{k+1}$ by \eqref{Eq: the update of x in STORM}.
-\STATE Update $\bB^{k+1}$ by \eqref{Eq: the update of B}.
-\STATE Update $\bm{\Lambda}^{k+1}$ by \eqref{Eq: the update of lambda}.
+\STATE \textbf{Input:} $\bx^1\in\RR^{\blue{q}}$, \blue{$\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m\bigl(\mathcal{D}(\bx^1)-\bB^1\bigr)$}, step sizes $\{\eta_k\}$ and $\tau$, batch sizes $\{b_k\}$, \blue{$m>0$}, momentum parameters $\{\rho_k\}\subset(0,1)$, \blue{number of iterations $T$}
+\FOR{\blue{$k = 1, \ldots, T$}}
+  \STATE \blue{Draw $\calJ_k$ and compute $\bg_s^k$ by \eqref{Eq: the stochastic approximate in STORM}}
+  \STATE Update $\bx^{k+1}$ by
+  \[
+  \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}
+  \]
+  \STATE Update $\bB^{k+1}$ by
+  \[
+  \bB^{k+1} = \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k)
+  \]
+  \STATE Update $\bLmbd^{k+1}$ by
+  \[
+  \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
+  \]
 \ENDFOR
-\STATE \textbf{Return:} $\bx_R$ where \blue{$R$ is uniformly sampled from $\{1, \ldots, T\}$}
+\STATE \textbf{Output:} \blue{$\bx^R$ with $R$ drawn uniformly from $\{1,\ldots,T\}$}
 \end{algorithmic}
 \end{algorithm}
-
+\subsubsection{DualHash with Recursive Momentum}
+Alternatively, we consider the StoRM estimator for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. Given its practical effectiveness in deep learning \cite{levy2021storm+}, we adapt the generic StoRM estimator in \eqref{Eq: the generic StoRM estimator} to construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
+\begin{equation}
+\label{Eq: the stochastic approximate in STORM}
+\blue{\bg_s^k} :=
+\begin{cases} 
+\tilde{\nabla}_{\bx} F(\bx^1, \bB^1; \calJ_1), &\text{if }  k = 1, \\
+(1 - \rho_{k-1}) \big( \blue{\bg_s^{k-1}} - \tilde{\nabla}_{\bx} F(\bx^{k-1}, \bB^{k-1};\blue{\calJ_k})\big)+\tilde{\nabla}_{\bx} F(\bx^k, \bB^k; \calJ_k), & \text{if } k > 1.
+\end{cases}
+\end{equation}
+\blue{Taking $\by^k=\bx^k$ and $\bg^k=\bg_s^k$ in \eqref{Eq: the generic update of x} yields the $\bx$-update}
+\begin{equation}
+\label{Eq: the update of x in STORM}
+    \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}.
+\end{equation}
+The overall algorithm, DualHash-StoRM, is summarized in \Cref{alg:our_algorithm_storm}.
 % \begin{remark}
-% The update steps for $\bB$ and $\bm{\Lambda}$ imply the following optimality conditions, which may result in explicit closed-solution in deep hashing. The $\bB$-update in \eqref{Eq: the update of B} yields:
-% \begin{align}
-%     \label{Eq: the optimality condition of Bk}
-%     \bB^{k} = \bB^{k-1} - \tau \left( \nabla_{\bB}F(\bx^{k}, \bB^{k-1}) + \bm{\Lambda}^{k-1} \right).
-% \end{align}
-% For the $\bm{\Lambda}$-update in \eqref{Eq: the update of lambda}, the proximal operator definition gives:
-% \[
-%     \tau \left( \bm{\Lambda}^{k} + \tau^{-1}(2\bB^{k} - \bB^{k-1}) - \bm{\Lambda}^{k} \right) \in \partial h^{*}(\bm{\Lambda}^{k}),
-% \]
-% which is equivalent to the existence of $\mathcal{G}_{\bm{\Lambda}}^{k} \in \partial h^{*}(\bm{\Lambda}^{k})$ such that:
-% \begin{align}
-%     \label{Eq: the optimality condition of lbda}
-%     \mathcal{G}_{\bm{\Lambda}}^{k} = (2\bB^{k} - \bB^{k-1}) + \tau(\bm{\Lambda}^{k-1} - \bm{\Lambda}^{k}).
-% \end{align}
-% If the sequence \(\{ (\bx^k, \bB^k, \bm{\Lambda}^k) \}\) converges to \((\bx^*, \bB^*, \bm{\Lambda}^*)\), then by the outer semicontinuity of $\partial h^{*}(\cdot)$, we have $\bB^* \in \partial h^*(\bm{\Lambda}^*)$.
-% This establishes \eqref{Eq: the sufficient and necessary condition for dual}, which is precisely the necessary condition for the second relation in \eqref{Eq: the sufficient and necessary condition}.
+% \blue{The $\bB$- and $\bLmbd$-blocks of DualHash-StoRM start from a block-stationary pair at $\bx^1$: with $m:=\gamma/n$ and $h^{**}(\bB)=\lambda\sum_{i,j}(|B_{ij}|-1)_+$ the biconjugate of $h$, we take $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$ and $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$. The proximal map acts entrywise on $U=[\mathcal{D}(\bx^1)]_{ij}$: it returns $U$ if $|U|\le1$, $\operatorname{sgn}(U)$ if $1<|U|\le1+\lambda/m$, and $U-(\lambda/m)\operatorname{sgn}(U)$ otherwise. Hence $\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$, and $\bB^1=\mathcal{D}(\bx^1)$, $\bLmbd^1=\bm{0}$ whenever all entries of $\mathcal{D}(\bx^1)$ lie in $[-1,1]$. This initialization is computed once and is not counted as stochastic gradient calls.} 
 % \end{remark}

@@ -1,5 +1,31 @@
 \section{Preliminary}
-The extended real-valued function $f: \mathbb{R}^{q}\rightarrow (-\infty, +\infty]$ is called \textit{proper} if its domain $\text{dom}(f) := \{\bx \in \RR^q\mid f(\bx) < +\infty\}$ is nonempty and $\inf\limits_{\bx \in \mathbb{R}^q}f > -\infty$; \blue{it is called \textit{lower semicontinuous} if its epigraph $\text{epi}(f) := \left\{ (\bx, t) \in \mathbb{R}^{q+1}\mid f(\bx) \leq t \right\}$ is closed.}
+\blue{An} extended real-valued function $f:\RR^{q}\to\blue{[-\infty,+\infty]}$ is called
+\textit{proper} if \blue{$f(\bx)>-\infty$ for all $\bx\in\RR^{q}$ and} its domain
+$\operatorname{dom}(f):=\{\bx\in\RR^{q}\mid f(\bx)<+\infty\}$ is nonempty; \blue{it is called
+\textit{lower semicontinuous} if its epigraph
+$\operatorname{epi}(f):=\{(\bx,t)\in\RR^{q+1}\mid f(\bx)\le t\}$ is closed.}
+\blue{A proper lower semicontinuous function is also called \textit{closed}. We write
+$\by\xrightarrow{f}\bx$ to denote $\by\to\bx$ and $f(\by)\to f(\bx)$. The \textit{(limiting)
+subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point
+$\bx$ where $f(\bx)$ is finite is given by
+\begin{equation}\label{Eq: limiting subdifferential}
+\begin{aligned}
+\partial f(\bx):={}&\Bigl\{\bv\in\RR^{q}:\ \exists\,\bx^{k}\xrightarrow{f}\bx,\ \bv^{k}\to\bv\ \text{with}\\
+&\quad \liminf_{\substack{\by\to\bx^{k}\\ \by\neq\bx^{k}}}
+\frac{f(\by)-f(\bx^{k})-\langle\bv^{k},\by-\bx^{k}\rangle}{\|\by-\bx^{k}\|}
+\ge0\quad\text{for all } k\Bigr\}.
+\end{aligned}
+\end{equation}
+When $f$ is continuously differentiable or convex, the above subdifferential coincides with the
+classical gradient or convex subdifferential of $f$
+\cite[Exercise~8.8(b) and Proposition~8.12]{Rockafellar1998VariationalA}.
+Moreover, for any continuously differentiable $g$, it holds that
+$\partial(f+g)(\bx)=\partial f(\bx)+\nabla g(\bx)$
+\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}; and if
+$f(\bx_{1},\bx_{2})=f_{1}(\bx_{1})+f_{2}(\bx_{2})$ with $f_{1},f_{2}$ proper and lower
+semicontinuous, then $\partial f(\bx_{1},\bx_{2})=\partial f_{1}(\bx_{1})\times\partial f_{2}(\bx_{2})$
+\cite[Proposition~10.5]{Rockafellar1998VariationalA}.}
+
 For a proper, \blue{lower semicontinuous}, and convex function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
 \begin{align}
     % \label{Def: the definition of proximal operator}
@@ -35,11 +61,7 @@ A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz co
 \begin{align*}
     \blue{\bg^{k} = \rho_{k-1}\nabla\phi(\bx^{k},\xi^{k}) +(1-\rho_{k-1})\bg^{k-1}, \qquad \rho_{k-1}\in[0,1],}
 \end{align*}
-\blue{which is generally a biased estimator of $\nabla\phi(\bx^{k})$. The iterate is then updated according to}
-\[
-\blue{\bx^{k+1}=\bx^{k}-\eta_k\bg^{k}.}
-\]
-\blue{StoRM introduces the correction term}
+\blue{which is generally a biased estimator of $\nabla\phi(\bx^{k})$.} \blue{StoRM introduces the correction term}
 \[
 \blue{(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k},\xi^{k})-\nabla\phi(\bx^{k-1},\xi^{k})\bigr)}
 \]
@@ -51,3 +73,4 @@ A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz co
         \nabla\phi(\bx^{k},\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1},\xi^{k})\bigr), & \text{if } k>1,
     \end{array}\right.}
 \end{align}
+\blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}

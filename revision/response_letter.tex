@@ -2,6 +2,7 @@
 
 \usepackage[margin=0.5in]{geometry}
 \usepackage{amsmath,amsfonts,amssymb,bm,mathrsfs,xspace}
+\usepackage{url}
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage[normalem]{ulem}
@@ -33,11 +34,13 @@
 \newcommand{\bG}{\bm{G}}
 \newcommand{\bLmbd}{\bm{\Lambda}}
 \newcommand{\bx}{\bm{x}}
+\newcommand{\bw}{\bm{w}}
 \newcommand{\by}{\bm{y}}
 \newcommand{\bz}{\bm{z}}
 \newcommand{\be}{\bm{e}}
 \newcommand{\bDelta}{\bm{\Delta}}
 \newcommand{\bb}{\bm{b}}
+\newcommand{\bc}{\bm{c}}
 \newcommand{\bh}{\bm{h}}
 \newcommand{\ba}{\bm{a}}
 \newcommand{\bg}{\bm{g}}
@@ -55,6 +58,7 @@
 \date{}
 
 \begin{document}
+\nocite{bauschkeCombettes2017,bertsekas1997,repettiWiaux2021}
 \maketitle
 \begingroup
 \let\reviewitem\item
@@ -193,58 +197,25 @@ $\mathbb{E}[\|\be^k\|^2]\le\sigma^2/b_k$.}
 
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
-We thank the reviewer for this comment to make our presentation rigiously. With the revised probabilistic
-framework and conditional-expectation notation above for our algorithms, we give the detailed derivation, which has been added to \green{ Appendix~C.1  (Page XX, lines XX--XX)}:
+We thank the reviewer for this comment. With the revised probabilistic framework and conditional-expectation notation above, we have added the detailed derivation to \green{Appendix~C.1 (Page XX, lines XX--XX)}:
 \begin{bluequote}
-Recall that the stochastic gradient error $\be^k$ of Algorithm 4.1 is defined as
+Recall that the stochastic gradient error of Algorithm~4.1 is
 \[
-\be^k
-=
-\frac{1}{b_k}\sum_{i\in\calJ_k}
-\left(
-\nabla_{\bx}F_i(\bz^k,\bb_i^k)
--
-\nabla_{\bx}F(\bz^k,\bB^k)
-\right).
-\]
-Since $(\bz^k,\bB^k)$ is $\mathcal F_k$-measurable and
-$\calJ_k$ is sampled uniformly without replacement and independently
-of $\mathcal F_k$, define
-\[
-\bm{v}_i^k
-:=
-\nabla_{\bx}F_i(\bz^k,\bb_i^k)
--
-\nabla_{\bx}F(\bz^k,\bB^k).
-\]
-Conditionally on $\mathcal F_k$, Assumption~5.1(iii)
-gives
-\[
-\frac{1}{n}\sum_{i=1}^n \bm{v}_i^k=\bm{0},
+\mathbf{e}^k=\frac{1}{b_k}\sum_{i\in\mathcal{J}_k}\mathbf{v}_i^k,
 \qquad
-\frac{1}{n}\sum_{i=1}^n\|\bm{v}_i^k\|^2\leq\sigma^2
-\quad\text{a.s.}
+\mathbf{v}_i^k:=\nabla_{\mathbf{x}}F_i(\mathbf{z}^k,\mathbf{b}_i^k)-\nabla_{\mathbf{x}}F(\mathbf{z}^k,\mathbf{B}^k).
 \]
-For $n\geq2$, the variance formula for uniform sampling without replacement
-therefore yields
+Here $1\le b_k\le n$, $(\mathbf{z}^k,\mathbf{B}^k)$ is $\mathcal{F}_k$-measurable, and $\mathcal{J}_k$ is sampled uniformly without replacement, independently of $\mathcal{F}_k$. Since $\nabla_{\mathbf{x}}F(\mathbf{z}^k,\mathbf{B}^k)$ is the average of the $\nabla_{\mathbf{x}}F_i(\mathbf{z}^k,\mathbf{b}_i^k)$, we have $\frac{1}{n}\sum_{i=1}^n\mathbf{v}_i^k=\mathbf{0}$, and Assumption~5.1(iii) gives $\frac{1}{n}\sum_{i=1}^n\|\mathbf{v}_i^k\|^2\le\sigma^2$ a.s. For $n\ge2$, the variance formula for uniform sampling without replacement yields
 \[
-\mathbb{E}_k[\be^k]=\bm{0},
+\mathbb{E}_k[\mathbf{e}^k]=\mathbf{0},
+\qquad
+\mathbb{E}_k\!\left[\|\mathbf{e}^k\|^2\right]
+=\frac{n-b_k}{n-1}\cdot\frac{1}{b_k}\cdot\frac{1}{n}\sum_{i=1}^n\|\mathbf{v}_i^k\|^2
+\le\frac{\sigma^2}{b_k}\quad\text{a.s.}
 \]
-and
-\[
-\mathbb{E}_k\!\left[\|\be^k\|^2\right]
-=
-\frac{n-b_k}{n-1}\frac{1}{b_k}
-\frac{1}{n}\sum_{i=1}^n\|\bm{v}_i^k\|^2
-\leq
-\frac{\sigma^2}{b_k}
-\quad\text{a.s.}
-\]
-The case $n=1$ is immediate since $\be^k=\bm{0}$. Taking the full
-expectation and using the tower property gives (5.11).
+The case $n=1$ is immediate since $\mathbf{e}^k=\mathbf{0}$. Taking the full expectation and using the tower property gives (5.11).
 \end{bluequote}
-
-We have also summarized this argument in the main text and added an equation label for \green{later reference (5.11)(Page 14, lines XX--XX)}.
+We have also summarized this argument in the main text and attached the label \green{(5.11) (Page 14, lines XX--XX)} for later reference.
 \end{itemize}
 
 \subsubsection{Boundedness and lower bounds}
@@ -371,34 +342,89 @@ Some important equations and formulations need to be referenced; the detailed re
 \item (page 5) I would give a number to the equation relative the reformulation of Problem (1.1). Also explain what the functions $f$ and $c$ are supposed to represent (for example is $f=1/n\sum f_i$ ? ...).
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
-The submitted manuscript did not number the deep-hashing formulation or identify the roles of $f$ and the network outputs clearly.
-We have revised Section~3 accordingly \green{(Page 7, lines 191--204):}
+We thank for the reviewer's careful comment. The submitted manuscript stated the constrained reformulation of Problem (1.1) in Section 1.2 with generic functions $f$, $h$, and $c$, and did not say how they correspond to Problem (1.1). We have numbered the equation as \green{(1.2)}. 
+
+(1). We first make the correspondence explicit. Following the auxiliary-variable reformulations in~\cite{wang2025augmentedrnn,jin2025multicomposite}, let
+$\bb_i=\bD_i(\bx)$ and define
+$\bw=(\bx,\bB)\in\RR^{q}\times\RR^{n\times d}$, where
+$\bB=[\bb_1^\top;\dots;\bb_n^\top]$. Then Problem~(1.1) is equivalent to
+\begin{equation}
+\label{Eq: lifted constrained formulation}
+    \min_{\bw}\; f(\bw)+h(\bw)
+    \quad\text{s.t.}\quad
+    \bc(\bw)=\bm{0},
+\end{equation}
+where
+\[
+f(\bw)=\frac{1}{n}\sum_{i=1}^{n}f_i(\bx),
+\qquad
+h(\bw)=\sum_{i=1}^{n}h(\bb_i),
+\]
+and
+\[
+\bc(\bw)=\bB-\calD(\bx),
+\qquad
+\calD(\bx)
+=
+[\bD_1(\bx)^\top;\dots;\bD_n(\bx)^\top].
+\]
+The equivalence is understood in the following sense:
+$\bx^\ast$ is a global minimizer of Problem~(1.1) if and only if
+$(\bx^\ast,\calD(\bx^\ast))$ is a global minimizer of
+\eqref{Eq: lifted constrained formulation}. 
+
+(2). We clarify that Problem~(1.2) admits a compact form in the stacked variable $\bw=(\bx,\bB)$, which connects it to the literature on nonconvex constrained optimization, including the auxiliary-variable reformulations in~\cite{wang2025augmentedrnn,jin2025multicomposite}. Inspired by the success of splitting methods in multiblock nonconvex nonsmooth optimization, we keep $\bx$ and $\bB$ as separate blocks to exploit the structure of hashing: the network parameters $\bx$ are updated by stochastic first-order steps, while the binary codes $\bB$ enjoy an explicit, inexpensive gradient and a dual treatment of the W-type regularizer.
+
+
+We have replaced the unbolded variable $w$ with the stacked variable $\bw$ and revised the constrained formulation as follows (\green{Page 2, line xx--xx}):
 \begin{bluequote}
-Deep hashing aims to learn network parameters $\bx \in \RR^{q}$ that generate binary codes preserving semantic similarity in the Hamming space. A direct formulation is
-\begin{align}
-\min_{\bx \in \RR^{q}}\ \frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}\!\big(\operatorname{sgn}(\bC_i(\bx))\big).
-\end{align}
-where $f_i(\bx)=\ell_{s,i}(\bx)+\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$ to ensure coercivity. Thus, $f(\bx):=n^{-1}\sum_{i=1}^{n}f_i(\bx)$ denotes the averaged smooth loss, while $\bD_i(\bx)$ denotes the continuous network output for sample $i$.
+  From a constrained optimization perspective, Problem~(1.1) can be reformulated via an auxiliary-variable lifting technique~\cite{wang2025augmentedrnn,jin2025multicomposite} as a nonlinearly constrained optimization problem of the form
+\begin{equation}
+%   \label{Eq: the constrained reformulation}
+  \min_{\bw}\; f(\bw) + h(\bw)
+  \quad \text{s.t.}\quad
+  \bc(\bw) = 0. \tag{(1.2)}
+\end{equation}
 \end{bluequote}
 
 \item (page 6) Remind the reader that $\mathbf{d}^k$ correspond to the current direction at iteration $k$ (you might even recall the generic scheme $\bx^{k+1}=\bx^k-\eta_k\bd^k$). Moreover, give a number to the equation relative to $\bd^k$ update's rule for StoRM algorithm.
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
-The submitted manuscript did not distinguish the stochastic update direction from the subgradient used in the stationarity analysis or provide a numbered StoRM recursion.
-We have clarified the direction notation and added the StoRM recursion in Sections~2 and~4.2 \green{(Page 6, lines 177--184; Page 9, lines 241--245):}
+We thank the reviewer for pointing out this notation problem. We should have presented the mini-batch oracle and the update direction more clearly. The oracle $\tilde{\nabla}_{\bx}F(\cdot,\cdot;\calJ_k)$, with $\calJ_k$ drawn uniformly from all subsets of $\{1,\dots,n\}$ of size $b_k$, is now defined once in (4.6). The stochastic update direction is $\bg^k\in\RR^{q}$, and the generic scheme is $\bx^{k+1}=\by^k-\eta_k\bg^k$ (4.3). StoM and StoRM are two instances of $\bg^k$: StoM takes $\bg^k=\bg_m^k=\tilde{\nabla}_{\bx}F(\bz^k,\bB^k;\calJ_k)$ with the update (4.9), and StoRM takes $\bg^k=\bg_s^k$ with $\by^k=\bx^k$ and the update (4.11). The StoRM recursion is numbered (2.2) in Section~2 and (4.10) in Section~4.2. The symbol $\bd^k$ is reserved for the Lagrangian subgradient defined in Appendix~A, equation~(A.1).
+\par\smallskip
+\noindent\green{Section~2 (Page 6, lines 178--185):}
 \begin{bluequote}
-A standard momentum-based stochastic first-order method constructs the stochastic direction
+A standard momentum-based stochastic first-order method constructs the stochastic direction $\bg^{k}=\rho_{k-1}\nabla\phi(\bx^{k},\xi^{k})+(1-\rho_{k-1})\bg^{k-1}$. StoRM introduces the correction term $(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k},\xi^{k})-\nabla\phi(\bx^{k-1},\xi^{k})\bigr)$ into the momentum estimator above, leading to the recursive estimator
 \[
-\bg^{k}=\rho_{k-1}\nabla\phi(\bx^{k},\xi^{k})+(1-\rho_{k-1})\bg^{k-1},\qquad \rho_{k-1}\in[0,1].
+\bg^{k}=\begin{cases}
+\nabla\phi(\bx^{k},\xi^{k}), & k=1,\\[1mm]
+\nabla\phi(\bx^{k},\xi^{k})+(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1},\xi^{k})\bigr), & k>1.
+\end{cases}\tag{2.2}
 \]
-At iteration $k$, $\bd^k$ denotes the stochastic direction used in the generic update $\bx^{k+1}=\bx^k-\eta_k\bd^k$.
+In Section~4.2, (2.2) is instantiated as $\bg_s^k$ in (4.10), which serves as the search direction $\bg^k$ in the update (4.3).
 \end{bluequote}
-
+\noindent\green{Section~4.1 (Page 9, lines 238--239):}
+\begin{bluequote}
+\[
+\bx^{k+1}=\by^k-\eta_k\bg^k,\tag{4.3}
+\]
+where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
+\end{bluequote}
+\noindent\green{Section~4.2 (Page 9, lines 258--261; Page 10, lines 279--284):}
+\begin{bluequote}
+\[
+\tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),\tag{4.6}
+\]
+$[\ldots]$ Taking $\by^k=\bx^k$ and $\bg^k=\bg_s^k$ in (4.3), with $\bg_s^k$ given by the recursion (4.10), yields
+\[
+\bx^{k+1}=\bx^k-\eta_k\bg_s^k.\tag{4.11}
+\]
+\end{bluequote}
 \item (page 6) Give a number to the equation relative to deep hashing + typo under the min `` $x\underline{\in}\mathbb{R}^q$ ''.
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
 The submitted manuscript left the direct deep-hashing problem unnumbered and contained the typo $x\underline{\in}\mathbb{R}^{q}$.
-We have numbered the formulation and restored the membership symbol in Section~3 \green{(Page 7, lines 191--204):}
+We have numbered the formulation and restored the membership symbol in Section~3. We have also added an explicit reference to this equation when introducing the W-type regularized surrogate, clarifying its connection to the direct deep-hashing problem \green{(Page 7, lines 191--204):}
 \begin{bluequote}
 \begin{align}
 \min_{\bx \in \RR^{q}}\ \frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}\!\big(\operatorname{sgn}(\bC_i(\bx))\big).
@@ -408,18 +434,31 @@ We have numbered the formulation and restored the membership symbol in Section~3
 \item (Relation (C.8)) Remind the reader the expression of $\bd^k$ (this can be throughout a reference to an equation). Regarding your definitions relative to StoM, do we have $\bG^k=-\bd^k$ ? If not, how do you define $\bd^k$ otherwise (in section 2, you only remind the update's rule relative to StoRM) ? Furthermore, it is not clear how you define $\bd_{\bx}^k,\bd_{\bB}^k,\bd_{\bLmbd}^k$.
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
-The submitted manuscript used $\bd^k$ both for an update direction and for a Lagrangian subgradient, leaving the components in (C.8) unclear.
-We have separated these roles and defined the subgradient components explicitly in Appendix~C \green{(Page 32, lines 951--956):}
+We apologize for the unclear definitions.
+\begin{itemize}
+\item No, $\bG^k\neq-\bd^k$. In the submitted version, $\bG^k$ is the StoM update direction, a mini-batch estimator of $\nabla_{\bx}F(\bz^k,\bB^k)$; it is now denoted $\bg_m^k$ in (4.8).
+\item $\bd^k$ is not computed by either algorithm. It is the element of the KKT mapping $\mathcal K(\bx^k,\bB^k,\bLmbd^k)$ in (5.2) whose components are now defined at the beginning of Appendix~A in (A.1)--(A.2); $\mathcal{G}_{\bLmbd}^k\in\partial h^*(\bLmbd^k)$ is given explicitly by the optimality condition of the $\bLmbd$-update (4.5). Hence $\mathrm{dist}(\bm{0},\mathcal K(\bx^k,\bB^k,\bLmbd^k))\le\|\bd^k\|$.
+\item Relation (C.8) of the submitted version is now (C.14), and the sentence following it refers back to (A.1)--(A.2) \green{(Page 31, lines 892--902; Page 37, lines 1067--1071):}
+\end{itemize}
 \begin{bluequote}
-The vector $\bd^{k}$ below is a subgradient of $\calL$ used only to measure stationarity; the update directions of the algorithms are $\bg_m^k$ and $\bg_s^k$. For $\bd^{k}\in\partial\calL(\bx^{k},\bB^{k},\bm{\Lambda}^{k})$, let us denote $\bd^{k}=(\bd_{\bx}^{k},\bd_{\bB}^{k},\bd_{\bm{\Lambda}}^{k})$ and
-\begin{align}
-\label{Eq: the components of the subgradient}
+Throughout the appendix, stationarity at $(\bx^{k},\bB^{k},\bLmbd^{k})$ is measured by the element $\bd^{k}=(\bd_{\bx}^{k},\bd_{\bB}^{k},\bd_{\bLmbd}^{k})$ of the KKT mapping $\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k})$ in (5.2) given by
+\[
 \begin{cases}
 \bd_{\bx}^{k}=\nabla_{\bx}F(\bx^{k},\bB^{k}),\\
-\bd_{\bB}^{k}=\nabla_{\bB}F(\bx^{k},\bB^{k})+\bm{\Lambda}^{k},\\
-\bd_{\bm{\Lambda}}^{k}=\bB^{k}-\mathcal{G}_{\bm{\Lambda}}^{k},
-\end{cases}
-\end{align}
+\bd_{\bB}^{k}=\nabla_{\bB}F(\bx^{k},\bB^{k})+\bLmbd^{k},\\
+\bd_{\bLmbd}^{k}=\bB^{k}-\mathcal{G}_{\bLmbd}^{k},
+\end{cases}\tag{A.1}
+\]
+where, for $k\ge2$,
+\[
+\mathcal{G}_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})\tag{A.2}
+\]
+by the optimality condition of the $\bLmbd$-update (4.5) at iteration $k-1$. Hence $\mathrm{dist}(\bm{0},\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd^{k}\|$. The vector $\bd^{k}$ serves only the analysis and is not computed by the algorithms: $\bd_{\bx}^{k}=\nabla_{\bx}F(\bx^{k},\bB^{k})$ is the exact partial gradient, whereas the update directions are the stochastic estimators $\bg_m^{k}$ in (4.8) and $\bg_s^{k}$ in (4.10).
+\par\medskip
+\[
+\mathrm{dist}^{2}(\bm{0},\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd^{k}\|^{2}=\|\bd_{\bx}^{k}\|^{2}+\|\bd_{\bB}^{k}\|^{2}+\|\bd_{\bLmbd}^{k}\|^{2}.\tag{C.14}
+\]
+Here $\bd^{k}=(\bd_{\bx}^{k},\bd_{\bB}^{k},\bd_{\bLmbd}^{k})\in\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k})$ is the element defined in (A.1)--(A.2); it is used only to measure stationarity, whereas the $\bx$-update of Algorithm~4.1 uses the stochastic direction $\bg_m^{k}$.
 \end{bluequote}
 \item (Lemma 5.2/proof) Some objects as $G$ function is not explicitly defined, making your proof a bit hard to follow. Moreover, which subdifferential property do you use to conclude ? To rework.
 \par\smallskip
@@ -432,13 +471,80 @@ Since $f_i=\ell_{s,i}+\frac{\mu}{2}\|\cdot\|^2$ with $\mu>0$, we have $n^{-1}\su
 \item (Lemma 5.4/proof) I don't really understand how you reach inequality (5.9). Provide far more details (intermediate inequalities, mention descent lemma whenever it is used, how you deal with the conjugate quantities...). Assuming (5.9) holds, the rest of the proof is correct. Moreover, why did you choose to include this proof here while those of its counterpart (iteration progress on $\bx$) is presented in the appendix ?
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
-The submitted proof skipped the smoothness substitution and the treatment of the stochastic-direction error in the one-step estimate.
-We have expanded the proof and moved it with the analogous proof to Appendix~C \green{(Page 33, lines 969--1000):}
+You are right that our previous response addressed the $\bx$-update, whereas this comment concerns Lemma~5.4, the one-step change in $(\bB,\bLmbd)$. We have corrected the alignment and expanded the proof of (5.9) in Appendix~C.2. The proof of its $\bx$-update counterpart is given separately in Appendix~C.3; both proofs are now in the appendix, with pointers in the main text \green{(Appendices~C.2 and~C.3):}
 \begin{bluequote}
-Then, applying the auxiliary lemma to $F(\cdot,\bB^{k})$, which is $L_F$-smooth, with $\bx=\bx^{k}$, $\by=\by^{k}$, $\eta=\eta_{k}$, and $\bd=\bg_m^{k}$, yields
+Write $\bm{s}_{\bB}^{k+1}:=\bB^{k+1}-\bB^k$ and
+$\bm{s}_{\bLmbd}^{k+1}:=\bLmbd^{k+1}-\bLmbd^k$. By the descent lemma for the
+$L_F$-smooth function $F(\bx^{k+1},\cdot)$,
 \begin{align}
-F(\bx^{k+1},\bB^{k})\leq F(\bx^{k},\bB^{k})-\left(\frac{1-\alpha_k}{\eta_k}-2L_F\right)\frac{\|\bx^{k+1}-\bx^k\|^2}{2}+\left(\frac{\alpha_k}{\eta_k}+2L_F\beta_k^2\right)\frac{\|\bx^k-\bx^{k-1}\|^2}{2}+\frac{1}{L_F}\|\nabla_{\bx}F(\bz^k,\bB^k)-\bg_m^k\|^2.
+F(\bx^{k+1},\bB^{k+1})-F(\bx^{k+1},\bB^k)
+\leq\left\langle\nabla_{\bB}F(\bx^{k+1},\bB^k),\bm{s}_{\bB}^{k+1}\right\rangle
++\frac{L_F}{2}\|\bm{s}_{\bB}^{k+1}\|^2.
 \end{align}
+The $\bB$-update gives
+$\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k=-\tau^{-1}\bm{s}_{\bB}^{k+1}$.
+For the conjugate term, the proximal optimality condition gives
+\[
+\mathcal{G}_{\bLmbd}^{k}:=2\bB^k-\bB^{k-1}
++\tau(\bLmbd^{k-1}-\bLmbd^k)\in\partial h^*(\bLmbd^k).
+\]
+Convexity of $h^*$ then yields
+$-h^*(\bLmbd^{k+1})+h^*(\bLmbd^k)
+\leq-\langle\mathcal{G}_{\bLmbd}^{k},\bm{s}_{\bLmbd}^{k+1}\rangle$.
+Using also
+$\langle\bB^{k+1},\bLmbd^{k+1}\rangle-\langle\bB^k,\bLmbd^k\rangle
+=\langle\bLmbd^k,\bm{s}_{\bB}^{k+1}\rangle
++\langle\bB^{k+1},\bm{s}_{\bLmbd}^{k+1}\rangle$
+and the $\bB$-update at iteration $k-1$, we obtain
+\[
+\bB^{k+1}-\mathcal{G}_{\bLmbd}^{k}
+=\tau\bigl(\nabla_{\bB}F(\bx^k,\bB^{k-1})
+-\nabla_{\bB}F(\bx^{k+1},\bB^k)\bigr).
+\]
+Consequently,
+\begin{align}
+&\calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})
+-\calL(\bx^{k+1},\bB^k,\bLmbd^k)\notag\\
+\leq{}&-\left(\tau^{-1}-\frac{L_F}{2}\right)
+\|\bm{s}_{\bB}^{k+1}\|^2
++\left\langle \bm{s}_{\bLmbd}^{k+1},
+\tau\bigl(\nabla_{\bB}F(\bx^k,\bB^{k-1})
+-\nabla_{\bB}F(\bx^{k+1},\bB^k)\bigr)\right\rangle.
+\end{align}
+Apply Young's inequality
+$\langle a,b\rangle\leq\frac{\delta\tau}{2}\|a\|^2+
+\frac{\tau}{2\delta}\|b\|^2$, then use joint $L_F$-smoothness:
+\[
+\begin{aligned}
+&\left\langle \bm{s}_{\bLmbd}^{k+1},
+\tau\bigl(\nabla_{\bB}F(\bx^k,\bB^{k-1})
+-\nabla_{\bB}F(\bx^{k+1},\bB^k)\bigr)\right\rangle\\
+&\quad\leq\frac{\delta\tau}{2}\|\bm{s}_{\bLmbd}^{k+1}\|^2
++\frac{\tau L_F^2}{2\delta}
+\left(\|\bx^{k+1}-\bx^k\|^2+\|\bB^k-\bB^{k-1}\|^2\right).
+\end{aligned}
+\]
+The dual-increment estimate established immediately before Lemma~5.4 is
+\[
+\|\bm{s}_{\bLmbd}^{k+1}\|^2
+\leq3\tau^{-2}\|\bm{s}_{\bB}^{k+2}\|^2
++3(\tau^{-1}+L_F)^2\|\bm{s}_{\bB}^{k+1}\|^2
++3L_F^2\|\bx^{k+2}-\bx^{k+1}\|^2.
+\]
+Substituting this bound and writing
+$\Delta_{\bB}^k=\frac12\|\bB^k-\bB^{k-1}\|^2$ and
+$\Delta_{\bx}^k=\frac12\|\bx^k-\bx^{k-1}\|^2$ gives
+\begin{align}
+\calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})
+-\calL(\bx^{k+1},\bB^k,\bLmbd^k)
+\leq K_1\Delta_{\bB}^{k+2}-K_2\Delta_{\bB}^{k+1}
++K_3\Delta_{\bB}^k+K_4\Delta_{\bx}^{k+2}
++K_3\Delta_{\bx}^{k+1}.
+\end{align}
+Here
+$K_1=3\delta\tau^{-1}$,
+$K_2=2\tau^{-1}-L_F-3\delta\tau(\tau^{-1}+L_F)^2$,
+$K_3=\tau L_F^2/\delta$, and $K_4=3\delta\tau L_F^2$.
 \end{bluequote}
 \item (Lemma 5.8) I understand the connection between your algorithm and those presented in [62]. However, I think a brief proof would be welcome, particularly to explain why you do not obtain the same coefficients in the right-hand side of (5.20) as in the original paper.
 \par\smallskip
@@ -458,22 +564,24 @@ C_{\bx}^{k}=\eta_k^{-1}-\widetilde L_F,\qquad \widetilde L_F=L_F+K_3+K_4.
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
 The submitted manuscript placed closely related one-step proofs in different locations without an explanatory pointer.
-We have moved the proof to Appendix~C and added an explicit pointer from the main text \green{(Page 10, lines 160--165; Page 32, lines 951--956):}
+The proofs of Lemmas~5.4 and~5.5 are now presented in Appendices~C.2 and~C.3, respectively, with pointers from the main text \green{(Page 14, line 379 and lines 390--391; Page 33, lines 952--963; Page 34, lines 977--992):}
 \begin{bluequote}
-The one-iteration progress on $\bx$ is estimated as follows, with the proof provided in Appendix~C.
+The one-iteration progress on $\bx$ is estimated as follows, with the proof provided in Appendix~C.3.
 \end{bluequote}
 \item (page 10) ``the set $\mathrm{crit}(\mathscr{L})$... is nonempty'', I would place this fact in Assumption 5.1.
 \item (Assumption 5.1) I would reformulate (ii) as ``$F$ is $L_F$-smooth ($L_F\in(0,+\infty)$) over $\mathbb{R}^q\times\mathbb{R}^{n\times d}$;''.
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
-The submitted manuscript stated nonemptiness of the critical set outside the assumptions and did not specify the domain and range of $L_F$ in Assumption~5.1(ii).
-We have incorporated both points into Assumption~5.1 \green{(Page 11, lines 308--310):}
+We have included nonemptiness of the critical set in Assumption~5.1(i), together with the lower-boundedness condition on the average loss. We have also reformulated Assumption~5.1(ii) as suggested, explicitly stating the smoothness domain and that $L_F\in(0,+\infty)$ \green{(Page 11, lines 308--310):}
 \begin{bluequote}
-The critical set
+\begin{itemize}[leftmargin=2em]
+\item[{(i)}] The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}(\bx)>-\infty$, where $\bar{\ell}_{s}(\bx):=n^{-1}\sum_{i=1}^{n}\ell_{s,i}(\bx)$; The critical set
 \[
 \mathrm{crit}\,\calL:=\{(\bx^*,\bB^*,\bLmbd^*)\in\RR^q\times\RR^{n\times d}\times\RR^{n\times d}:\bm{0}\in\partial\calL(\bx^*,\bB^*,\bLmbd^*)\}
 \]
 is nonempty.
+\item[{(ii)}] $F$ is $L_F$-smooth, with $L_F\in(0,+\infty)$, over $\RR^q\times\RR^{n\times d}$;
+\end{itemize}
 \end{bluequote}
 \item (page 13) For better consistency and since you state that $C_1,C_2,C_3,C_4$ are independent of $k$, you should introduce (5.14) setup before (5.12) and (5.13).
 \par\smallskip
@@ -524,7 +632,7 @@ For simplicity, we use the same symbols $h$ and $h^*$ for their scalar forms and
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
 The submitted manuscript used capital letters for stochastic direction vectors, conflicting with the notation convention for vectors.
-We have renamed the two stochastic directions as $\bg_m^k$ and $\bg_s^k$ and updated their definitions \green{(Page 9, lines 260--267; Page 10, lines 348--360):}
+We have renamed the two stochastic directions as $\bg_m^k$ and $\bg_s^k$ and updated their definitions \green{(Page 9, lines 265--268; Page 10, lines 269--270 and 279--284):}
 \begin{bluequote}
 \[
 \bg_m^k:=\nabla_{\bx}F(\bz^k,\bB^k;\calJ_k)=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bz^k,\bb_i^k),
@@ -671,7 +779,7 @@ $\ba^{\mathrm{qry}}$, $\bh^{\mathrm{qry}}$, $R^{\mathrm{qry}}$ & an unseen query
 \hline
 \multicolumn{3}{@{}l}{\textit{Network outputs, auxiliary variables, and codes}}\\
 $\bC_i(\bx)$, $\bD_i(\bx)$, $\mathcal{D}(\bx)$ & $\bC_i(\bx)=\bC(\bx;\ba_i)$ is the output before activation; $\bD_i(\bx)\in\mathbb{R}^d$ is the continuous output of sample $i$; $\mathcal{D}(\bx)=(\bD_1(\bx),\ldots,\bD_n(\bx))$ & $\bu_i$ of Appendix~E is written $\bD_i(\bx)$, since both denote the same object; the domain of the mapping in Section~2, formerly $\mathcal{D}$, is now $\Omega$, so that $\mathcal{D}$ always denotes the stacked map$^\star$\\
-$\bb_i$, $\bB$ & continuous auxiliary variable $\bb_i\in\mathbb{R}^d$, the $i$-th row of $\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\mathbb{R}^{n\times d}$, tied to $\bD_i(\bx)$ by the penalty $P$ & $\bb_i$ no longer denotes the binary code (Section~3, Appendix~E); $\bB$ was written $[\bb_1,\ldots,\bb_n]$, which suggests columns$^\star$\\
+$\bb_i$, $\bB$ & continuous auxiliary column vector $\bb_i\in\RR^d$, with $\bb_i^\top$ the $i$-th row of $\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\RR^{n\times d}$, tied to $\bD_i(\bx)$ by the penalty $P$ & $\bb_i$ no longer denotes the binary code (Section~3, Appendix~E); the row-stacking convention is now stated in Notations; $\bB$ was written $[\bb_1,\ldots,\bb_n]$, which suggests columns$^\star$\\
 $\bh_i$ & binary hash code $\bh_i=\operatorname{sgn}(\bD_i(\bx))\in\{-1,1\}^d$ & replaces $\bb_i$ as the binary code in Section~3 and Appendix~E, where $\bh_i$ already denotes the code in the likelihood\\
 \hline
 \multicolumn{3}{@{}l}{\textit{Functions}}\\
@@ -870,14 +978,7 @@ The gradient bound gives $\Gamma\|\nabla_{\bx}F\|^2\le2L_F\Gamma(F-\underline{\e
 \end{proof}
 \endgroup
 
-\section*{References}
-
-\begin{enumerate}
-\item H. H. Bauschke and P. L. Combettes. \emph{Convex Analysis and Monotone Operator Theory in Hilbert Spaces}. CMS Books in Mathematics. Springer, Cham, 2 edition, 2017.
-
-\item D. P. Bertsekas. Nonlinear programming. \emph{Journal of the Operational Research Society}, 48(3):334--334, 1997.
-
-\item A. Repetti and Y. Wiaux. Variable metric forward-backward algorithm for composite minimization problems. \emph{SIAM Journal on Optimization}, 31(2):1215--1241, 2021.
-\end{enumerate}
+\bibliographystyle{unsrt}
+\bibliography{revision_refs}
 
 \end{document}

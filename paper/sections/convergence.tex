@@ -1,12 +1,13 @@
 \section{Complexity Analysis}
 \label{Section: Convergence analysis}
 \subsection{First-Order Optimality Conditions}
+\label{Sec: first-order optimality conditions}
 We now analyze the complexity of the proposed algorithms in terms of the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-KKT point of the Lagrangian function~\eqref{Eq: simplified_lagrangian}. 
-\blue{Since even checking whether a point is a local minimizer of a nonconvex problem is NP-hard in general, we target a first-order stationarity condition of the saddle-point reformulation~\eqref{Eq: simplified_lagrangian}, namely the KKT condition of $\calL$. We say that $(\bx^*,\bB^*,\bLmbd^*)$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$, that is,
+Since even checking whether a point is a local minimizer of a nonconvex problem is NP-hard in general, we target a first-order stationarity condition of the saddle-point reformulation~\eqref{Eq: simplified_lagrangian}, namely the KKT condition of $\calL$. We say that $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$, that is,
 \begin{equation}\label{Eq: KKT conditions}
-\nabla_{\bx}F(\bx^*,\bB^*)=\bm{0},\qquad
-\nabla_{\bB}F(\bx^*,\bB^*)+\bLmbd^*=\bm{0},\qquad
-\bB^*\in\partial h^*(\bLmbd^*),
+\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0},\qquad
+\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})+\tilde{\bLmbd}=\bm{0},\qquad
+\tilde{\bB}\in\partial h^*(\tilde{\bLmbd}),
 \end{equation}
 where
 \begin{equation}\label{Eq: KKT mapping}
@@ -23,7 +24,7 @@ where
 -\partial_{\bLmbd}(-\calL)(\bx,\bB,\bLmbd)
 \end{pmatrix}.
 \end{equation}
-Moreover, the KKT condition is implied by stationarity in the sense of the limiting subdifferential, i.e., $\bm{0}\in\partial\calL(\bx^*,\bB^*,\bLmbd^*)$. Indeed, for every $(\bx,\bB,\bLmbd)$ with $\bLmbd\in\operatorname{dom}(h^*)=[-\lambda,\lambda]^{n\times d}$, it is routine to show that
+Moreover, the KKT condition is implied by stationarity in the sense of the limiting subdifferential, i.e., $\bm{0}\in\partial\calL(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$. Indeed, for every $(\bx,\bB,\bLmbd)$ with $\bLmbd\in\operatorname{dom}(h^*)=[-\lambda,\lambda]^{n\times d}$, it is routine to show that
 \begin{equation}
 \begin{aligned}
 \partial\calL(\bx,\bB,\bLmbd)
@@ -38,13 +39,14 @@ Given $\varepsilon>0$, we say that a random point $(\bx,\bB,\bLmbd)$ is an \emph
 \mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)\big]
 \leq\varepsilon^2.
 \end{equation}
-We denote by $\operatorname{crit}\calL:=\{(\bx^*, \bB^*, \bLmbd^*) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx^*, \bB^*, \bLmbd^*)\}$ the set of KKT points of $\calL$.
-
-We first examine whether primal--dual optimality yields a KKT point of $\calL$; the answer depends on whether strong duality holds. The following proposition shows that a zero-gap primal--dual optimal pair, whenever it exists, is a KKT point of $\calL$.
+We denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$. We prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} satisfies the first-order necessary optimality condition of the Lagrangian~\eqref{Eq: simplified_lagrangian}, i.e., it is a \blue{KKT point} of $\calL$.
 \begin{proposition}\label{prop:zerogap}
-Under \Cref{Ass: main assumptions}, suppose that $(\bx^*,\bB^*)$ and $\bLmbd^*$ are optimal solutions of Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem}, respectively, and that the duality gap is zero, i.e., $p^*=d^*$, where $p^*$ and $d^*$ denote the optimal values of Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem}. Then $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $(\bx^*,\bB^*,\bLmbd^*)$ satisfies~\eqref{Eq: KKT conditions}.
+Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
 \end{proposition}
+\blue{The proof is provided in \Cref{Subsec: proof zerogap}.}
+
 Such a pair need not exist, however: since $h$ is nonconvex, strong duality between Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem} may fail, as the following example shows.
+
 \begin{example}\label{ex:gap}
 Consider Problem~\eqref{Prop: block-wise regularized problem} with $n=d=1$ and without the $\bx$-block, and let $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal value is
 $p^*=\min_{b\in\RR}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}=\tfrac12$, attained at $b^*=\pm1$.
@@ -54,7 +56,9 @@ d^*=\sup_{|\Lambda|\le1}\Bigl\{-\tfrac12\Lambda^2-|\Lambda|\Bigr\}=0,
 \]
 attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$, and no zero-gap primal--dual pair exists.
 \end{example}
+
 Because a zero-gap pair need not exist, we relate KKT points of $\calL$ directly to Problem~\eqref{Prop: block-wise regularized problem}. The next proposition characterizes exactly when a KKT point of $\calL$ is a stationary point of this problem.
+
 \begin{proposition}\label{prop:transfer}
 Let $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ be a KKT point of $\calL$, i.e., it satisfies~\eqref{Eq: KKT conditions}. Then the following statements are equivalent:
 \begin{enumerate}[label=\textup{(\alph*)}]
@@ -64,7 +68,8 @@ $\bm{0}\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\bm{0}\}\times\partial h(\tilde{\b
 $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
 \item $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
 \end{enumerate}
-\end{proposition}}
+\end{proposition}
+\blue{The proof is provided in \Cref{Subsec: proof transfer}.}
 
 \subsection{Main Assumption}
 In the remainder of this paper, we impose the following assumptions.
@@ -73,7 +78,7 @@ In the remainder of this paper, we impose the following assumptions.
 \begin{itemize}[leftmargin=2em]
     \blue{\item[{(i)}] The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}(\bx)>-\infty$, where $\bar{\ell}_{s}(\bx):=n^{-1}\sum_{i=1}^{n}\ell_{s,i}(\bx)$; the set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.}
     \item[{(ii)}] $F$ is $L_F$-smooth, with $L_F\in(0,+\infty)$, over $\RR^{q}\times\RR^{n\times d}$;
-    \item[{(iii)}] For any $\bB \in \RR^{n\times d}$, there exists a constant $\sigma^2 \geq 0$ such that
+    \item[{(iii)}] \blue{There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$,}
     \begin{align}
         \label{Eq: finite-sum sampling identities}
         &\frac{1}{n}\sum_{i=1}^{n}\nabla_{\bx} F_i(\bx, \bb_i)
@@ -94,7 +99,7 @@ In the remainder of this paper, we impose the following assumptions.
 \label{Eq: quadratic growth of F}
 F(\bx,\bB)-\underline{\ell}\ge\frac{\mu}{2}\|\bx\|^{2}+\frac{\gamma}{2n}\|\bB-\mathcal{D}(\bx)\|^{2}\ge0 .
 \end{equation}
-Since $\mathcal{D}$ is continuous, $F$ is coercive; adding $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ shows that $J$ is also bounded below and coercive.}
+Since $\mathcal{D}$ is continuous, $F$ is coercive; adding $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ shows that $J$ is also bounded below and coercive. Since $J$ is continuous, Problem~\eqref{Prop: block-wise regularized problem} admits an optimal solution.}
 \end{enumerate}
 \end{remark}
 We limit the maximum number of iterations to a fixed integer,
@@ -108,9 +113,9 @@ given the past and $\mathbb E[\cdot]$ for the total expectation. All equalities 
 inequalities involving $\mathbb E_k[\cdot]$ are understood to hold almost surely, and we
 explicitly indicate ``a.s.'' whenever such conditional relations are stated.}
 
-Our analysis bounds the KKT residual $\mathrm{dist}(\bm{0},\mathcal K(\bx^k,\bB^k,\bLmbd^k))$ through the element $\bd^k$ in \eqref{Eq: the components of the subgradient}--\eqref{Eq: the selection from the conjugate subdifferential}. The presence of dual variables $\bLmbd$ {makes it difficult to establish a descent property for the Lagrangian $\calL$ in \eqref{Eq: simplified_lagrangian}: the dual update can increase $\calL$, so $\calL$ need not decrease along the iterates, which precludes} the direct use of standard methods \cite{xu2023momentum,zhang2022stochastic}.
+The presence of dual variables $\bLmbd$ \blue{makes it difficult to establish a descent property for the Lagrangian $\calL$ in \eqref{Eq: simplified_lagrangian}: the dual update can increase $\calL$, so $\calL$ need not decrease along the iterates, which precludes} the direct use of standard methods \cite{xu2023momentum,zhang2022stochastic}.
 To this end, we construct suitable Lyapunov functions (see \eqref{Eq: the Lyapunov function in SGDM} and \eqref{Eq: the Lyapunov function in STORM}) to obtain the approximate descent property.  We first analyze the dual dynamics by establishing bounds on $\|\bLmbd^{k+1}-\bLmbd^k\|^2$ in terms of the primal residuals, enabling the Lyapunov construction.
-\begin{lemma}
+\begin{lemma}[Dual increment bound]
 \label{Lemma: dual boundedness}
 Under \Cref{Ass: main assumptions}, for any $k \geq 1$, it holds that
     \begin{align}
@@ -151,6 +156,7 @@ as \eqref{Eq: dual boundedness} and \eqref{Eq: the inner product in the recursiv
 randomness in the $\bx$-updates propagates to the $\bB$- and $\bLmbd$-updates, necessitating careful parameter tuning and the construction of Lyapunov functions. We present the key lemmas and complexity results of both algorithms below\footnote{Detailed proofs of all lemmas and theorems, along with complete parameter derivations,
 are given in Appendices~\ref{Appendix: the complexity analysis of DualHash-StoM} and~\ref{Appendix: the complexity analysis of DualHash-StoRM}.}
 \subsection{Oracle Complexity of DualHash-StoM}
+\label{Section: complexity of StoM}
 Let us denote the gradient error in the $k$-th iteration as
 \[
 \be^{k} = \blue{\bg_m^{k}} - \nabla_{\bx}F(\bz^{k}, \bB^{k}),
@@ -159,7 +165,7 @@ Let us denote the gradient error in the $k$-th iteration as
     \label{eq: the gradient error in SGDM}
     \mathbb{E}\!\left[\|\be^k\|^2\right]
     \leq \frac{\sigma^2}{b_k}.
-\end{align} with the detailed derivation provided in \Cref{Subsec: proof gradient error SGDM}.}
+\end{align}}
 
 The one-iteration progress on $\bx$ is estimated as follows, with the proof provided in \Cref{Subsubsec: proof x progress SGDM}.
 \begin{lemma}[One-iteration progress on $\bx$]
@@ -258,7 +264,7 @@ Moreover, the total number of SFO calls is of order \(\calO(\varepsilon^{-4})\).
 \end{theorem}
 \subsection{Oracle Complexity of DualHash-StoRM} 
 Before proceeding, we introduce an additional assumption, also known as the mean-squared smoothness
-assumption, widely used in variance reduction methods \cite{arjevani2023lower,fang2018spider,tran2020hybridvrsgd,driggs2021stochastic}.
+assumption, widely used in variance reduction methods \cite{arjevani2023lower,driggs2021stochastic}.
 \blue{
 \begin{assumption}
 \label{Ass: the mean squared smoothness of F}
@@ -273,7 +279,7 @@ assumption, widely used in variance reduction methods \cite{arjevani2023lower,fa
 
 Let us denote the gradient error \[\be^{k} = \blue{\bg_s^{k}} - \nabla_{\bx}F(\bx^{k}, \bB^{k})
 ,\]where $\blue{\bg_s^k}$ is defined in \eqref{Eq: the stochastic approximate in STORM}. Similarly, the following lemma estimates the one-iteration progress
-of the Lagrangian function \eqref{Eq: simplified_lagrangian} via the $\bx$-update \eqref{Eq: the update of x in STORM}.
+of the Lagrangian function \eqref{Eq: simplified_lagrangian} via the $\bx$-update \eqref{Eq: the update of x in STORM}. \blue{Its proof follows from \cite[Lemma~2.1]{xu2023momentum} and is given in \Cref{Subsec: proof x progress STORM}.}
 \begin{lemma}[One-iteration progress on $\bx$ \cite{xu2023momentum}]
     \label{Lemma: One-iteration progress of x in STORM} Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_storm}. Under \Cref{Ass: main assumptions}(i)-(ii), for any $k \geq 1$, it holds that
     \begin{align}
@@ -348,7 +354,7 @@ with $\bar{N}$ and $\Theta$ from \Cref{Lemma: convergence rate of storm}. Moreov
 \end{theorem} 
 \begin{remark}
 \begin{enumerate}[label=(\roman*), leftmargin=2em]
-\item The results in Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM} are novel for stochastic, non-convex, multi-block primal-dual optimization, a challenging area where existing work has largely focused on one-block \cite{xu2023momentum,shi2025momentum,tran2022hybrid} or deterministic settings \cite{ADMMNolinear2024}.  
+\item The results in Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM} are novel for stochastic, non-convex, multi-block primal-dual optimization, a challenging area where existing work has largely focused on one-block \cite{xu2023momentum,shi2025momentum} or deterministic settings \cite{ADMMNolinear2024}.  
     \item  \Cref{alg:our_algorithm_sgdm} with constant parameters from \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. This matches the best-known lower bound \cite{arjevani2023lower} and the complexity of variance-reduced SFOMs for single-block problems \cite{shi2025momentum,xu2023momentum}. Notably, despite tackling a multi-block problem, our primal-dual framework preserves this efficiency without degrading the dependence on $\varepsilon$.
 %    \item  While DualHash-StoRM with parameters in \eqref{Eq: the parameters conditions in dualhash-storm} achieves better theoretical complexity than DualHash-StoM under \eqref{Eq: the parameters conditions of dualhash-sgdm}, the latter relies on a weaker assumption (\Cref{Ass: main assumptions} [ii]). In our experiments, while DualHash-StoRM enjoys faster training convergence, DualHash-StoM enerally delivers better final retrieval performance.
 \end{enumerate}

@@ -4,9 +4,8 @@
 $\operatorname{dom}(f):=\{\bx\in\RR^{q}\mid f(\bx)<+\infty\}$ is nonempty; \blue{it is called
 \textit{lower semicontinuous} if its epigraph
 $\operatorname{epi}(f):=\{(\bx,t)\in\RR^{q+1}\mid f(\bx)\le t\}$ is closed.}
-\blue{A proper lower semicontinuous function is also called \textit{closed}. We write
-$\by\xrightarrow{f}\bx$ to denote $\by\to\bx$ and $f(\by)\to f(\bx)$. The \textit{(limiting)
-subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point
+\blue{We write
+$\by\xrightarrow{f}\bx$ to denote $\by\to\bx$ and $f(\by)\to f(\bx)$. The \textit{(limiting) subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point
 $\bx$ where $f(\bx)$ is finite is given by
 \begin{equation}\label{Eq: limiting subdifferential}
 \begin{aligned}
@@ -59,18 +58,18 @@ A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz co
 \]
 \blue{A standard momentum-based stochastic first-order method constructs the stochastic direction}
 \begin{align*}
-    \blue{\bg^{k} = \rho_{k-1}\nabla\phi(\bx^{k},\xi^{k}) +(1-\rho_{k-1})\bg^{k-1}, \qquad \rho_{k-1}\in[0,1],}
+    \blue{\bg^{k} = \rho_{k-1}\nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bg^{k-1}, \qquad \rho_{k-1}\in[0,1],}
 \end{align*}
 \blue{which is generally a biased estimator of $\nabla\phi(\bx^{k})$.} \blue{StoRM introduces the correction term}
 \[
-\blue{(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k},\xi^{k})-\nabla\phi(\bx^{k-1},\xi^{k})\bigr)}
+\blue{(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k};\xi^{k})-\nabla\phi(\bx^{k-1};\xi^{k})\bigr)}
 \]
 \blue{into the momentum estimator above, leading to the recursive estimator}
 \begin{align}
     \label{Eq: the generic StoRM estimator}
     \blue{\bg^{k}=\left\{\begin{array}{ll}
-        \nabla\phi(\bx^{k},\xi^{k}), & \text{if } k=1, \\[1mm]
-        \nabla\phi(\bx^{k},\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1},\xi^{k})\bigr), & \text{if } k>1,
+        \nabla\phi(\bx^{k};\xi^{k}), & \text{if } k=1, \\[1mm]
+        \nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1};\xi^{k})\bigr), & \text{if } k>1,
     \end{array}\right.}
 \end{align}
 \blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}

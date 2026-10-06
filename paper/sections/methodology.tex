@@ -290,13 +290,13 @@ We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and 
     \bx^{k+1} = \by^k - \eta_k \bg^k,
 \end{equation}
 where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
-The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: Algorithm implementations}.} Second, $\bB$ is updated by a gradient descent step on $\calL$. Finally, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
+The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: Algorithm implementations}.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\mathcal{D}(\bx^{k+1})$ is available, this step is evaluated from the closed-form expression of $\nabla_{\bB}F$.} Finally, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
 \begin{align}
 \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1},\bB^k,\bLmbd^k) \notag\\
 &= \bB^k - \tau\big(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\big), \label{Eq: the update of B}\\
 \bLmbd^{k+1} &= \operatorname*{arg\,min}_{\bLmbd}\Big\{h^*(\bLmbd)-\langle\bLmbd,2\bB^{k+1}-\bB^k\rangle+\frac{\tau}{2}\|\bLmbd-\bLmbd^k\|^2\Big\} \notag\\
 &= \operatorname{prox}_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \label{Eq: the update of lambda}
-\end{align}\blue{Unlike the $\bx$-update, these two updates involve no sampling and are computed exactly. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}\big(\bB-\mathcal{D}(\bx)\big)$, once $\mathcal{D}(\bx^{k+1})$ is available, \eqref{Eq: the update of B} is evaluated entrywise without backpropagation through the network, and \eqref{Eq: the update of lambda} reduces to the proximal mapping of $h^*$, which is available in closed form.}
+\end{align}
 
 \subsection{\blue{Instantiating the Stochastic Update}}
 \label{Sec: Algorithm implementations}
@@ -305,6 +305,8 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 \label{Eq: minibatch oracle}
 \tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
 \end{equation}}
+
+\blue{The batch sizes $\{b_k\}$ are prescribed by a deterministic rule, which may depend on the iteration index and the total iteration budget $T$, with each $b_k$ an integer between $1$ and $n$. This specifies only the number of samples; the mini-batch $\calJ_k$ is drawn randomly at iteration $k$. The complexity analysis uses a constant batch size within each run for DualHash-StoM, and a prescribed initial batch size followed by a constant batch size for DualHash-StoRM.}
 
 \subsubsection{DualHash with Momentum Acceleration}
 We first present a momentum-based instance. At iteration $k$, we form two extrapolated points

@@ -29,7 +29,7 @@
 Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that generate binary codes preserving semantic similarity in the Hamming space. A direct formulation is
 \begin{align}
 \label{Eq:direct_deep_hashing_problem}
-\blue{\min_{\bx \in \RR^{q}}\ \frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}\!\big(\operatorname{sgn}(\bC_i(\bx))\big).}
+\blue{\min_{\bx \in \RR^{q}}\ \frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}\!\big(\operatorname{sgn}(\bC_i(\bx))\big),}
 \end{align}
 where \(n\) is the number of training samples, \(\bC_i(\bx)\in\RR^d\) is the output of the \(i\)-th sample, and \(\ell_{s,i}\) is a similarity-preserving loss (e.g., pairwise cross-entropy \cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere.
 

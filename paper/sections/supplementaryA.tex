@@ -11,15 +11,17 @@
 
 This supplementary material provides detailed experimental settings and additional results.
 
-% In \Cref{Appendix: Preliminaries and notations}, we give some basic definitions and lemmas for the following analysis.
+% In \Cref{Appendix: optimality properties}, we discuss the optimality properties used in the analysis.
 
 % In \Cref{Appendix: main proofs}, we discuss the main assumptions.
 
 % In \Cref{Appendix: Experiment details}, we provide the experimental details and additional experiments.
 
 \section{Experiment Details}
+\label{app-toc-19}
 \label{Appendix: Experiment details} 
 \subsection{Deep Pairwise Supervised Hashing Formulation}
+\label{app-toc-20}
 \label{Appendix: hashing formulation}
 
 We consider deep supervised pairwise hashing in our experiments, which aims to learn binary codes that minimize Hamming distances for similar pairs and maximize them for dissimilar pairs. Let $\bA = \{\ba_i \in \RR^{d_a} : i = 1, \ldots, n\}$ be the training set with labels $\calY = \{\by_i \in \{0,1\}^C\}$ (one-hot for single-label, multi-hot for multi-label). Key notations are in \Cref{Table:notations_for_deep_hashing}.
@@ -64,6 +66,7 @@ For an unseen query $\blue{\ba^{\mathrm{qry}}} \notin \bA$, its binary code is p
 \]
 
 \subsection{Implementation Details}
+\label{app-toc-21}
 \label{Appendix: Details of experiment implementation}
 \begin{table}[thbp]
     \centering
@@ -134,11 +137,13 @@ Following \cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
 \end{enumerate}
 
 \section{Additional Experimental Results}
+\label{app-toc-22}
 \subsection{Comparison of Optimization Algorithms with Different W-Type Regularizations}
+\label{app-toc-23}
 To validate the effectiveness of our primal-dual framework, we compare DualHash-StoM
 against optimization algorithms with different W-type regularizations. \Cref{tab:4_algorithms_for_hash_regularization_and_update}
 summarizes the configurations of different regularization functions and their corresponding optimization approaches. For StoMHash-WCR, we employ the regularization $\lambda \| \bz^{2}- \mathbf{1}\|_1$
-following the iSPALM framework \cite{InertialProximalAlternating}. The proximal
+following the iSPALM framework \cite{Hertrich2020InertialSP}. The proximal
 operator is computed with parameter $\rho > 0$ under the condition
 $\frac{\rho}{\eta}> \frac{1}{2}$, which ensures the subproblem is strongly convex
 with a unique solution.

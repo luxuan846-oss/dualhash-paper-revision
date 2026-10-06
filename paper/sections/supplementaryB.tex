@@ -1,7 +1,81 @@
-This supplementary material provides useful definitions and propositions, necessary lemmas with detailed proofs, and the complete derivations for the main theoretical results and parameters presented in the primary work.
+\section{Proofs of Propositions in \Cref{Sec: first-order optimality conditions}}
+\label{Appendix: optimality properties}
+\subsection{Proof of \Cref{prop:zerogap}}
+\label{app-toc-zerogap}
+\label{Subsec: proof zerogap}
+\begin{proof}
+    According to \cite[Theorem 2.158]{temporary-citekey-11039},
+    $(\bx^{*}, \bB^{*}, \bLmbd^{*})$ are optimal solutions to the
+    primal problem \eqref{Prop: block-wise regularized problem} and the dual problem
+    \eqref{Prop: the dual problem} \blue{with zero duality gap} if and only if:
+    \begin{align}
+        \label{Eq: the sufficient and necessary condition}
+        \begin{cases}
+        (\bx^{*}, \bB^{*}) \in \argmin\limits_{\bx \in \RR^{q}, \bB \in \RR^{n\times d}}\calL(\blue{\bx, \bB}, \bLmbd^{*}), \\
+        0 = h(\bB^{*}) + h^{*}(\bLmbd^{*}) - \langle \bLmbd^{*}, \bB^{*}\rangle.
+        \end{cases}
+    \end{align}
+    The first condition in \eqref{Eq: the sufficient and necessary condition} implies
+    that $\bm{0}$ belongs to the subdifferential of $\calL$ with respect to
+    $(\bx, \bB)$ at $(\bx^{*}, \bB^{*}, \bLmbd^{*})$. Since $\calL$
+    is continuously differentiable in $(\bx, \bB)$, we have
+    \begin{align}
+        \label{Eq: the sufficient and necessary condition for primal}
+        \begin{cases}
+        \bm{0} = \blue{\nabla_{\bx}F(\bx^{*}, \bB^{*})},\\
+        \bm{0} = \blue{\nabla_{\bB}F(\bx^{*}, \bB^{*})} + \bLmbd^{*}.
+        \end{cases}
+    \end{align}
+    For the second condition in \eqref{Eq: the sufficient and necessary condition},
+    \blue{since $h^{**}\le h$, the Fenchel--Young inequality for $h^{**}$ yields
+    $\langle\bLmbd^*,\bB^*\rangle\le h^{**}(\bB^*)+h^*(\bLmbd^*)\le h(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$.
+    Thus $h^{**}(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$, which, by the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex}, gives}
+    \begin{align}
+        \label{Eq: the sufficient and necessary condition for dual}\bB^{*}\in \partial h^{*}(\bLmbd^{*}).
+    \end{align}
+    Combining \eqref{Eq: the sufficient and necessary condition for primal} and \eqref{Eq: the sufficient and necessary condition for dual}, we obtain \blue{$\bm{0}\in\mathcal{K}(\bx^{*}, \bB^{*}, \bLmbd^{*})$ with $\mathcal{K}$ in \eqref{Eq: KKT mapping}}, completing the proof.
+\end{proof}
 
-\section{I}
-\subsection{Discussions on \Cref{Ass: main assumptions}(ii) in \Cref{Section: Convergence analysis}}
+\subsection{\blue{Proof of \Cref{prop:transfer}}}
+\label{Subsec: proof transfer}
+\begingroup\color{blue}
+\begin{proof}
+    Since $h^{*}$ is proper, lower semicontinuous, and convex, its conjugate is $h^{**}(\bB)=\lambda\sum_{i,j}(|b_{ij}|-1)_{+}$, and the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
+    \begin{align}
+        \label{Eq: inversion rule of the conjugate}
+        \tilde{\bB}\in\partial h^{*}(\tilde{\bLmbd})
+        \iff \tilde{\bLmbd}\in\partial h^{**}(\tilde{\bB})
+        \iff h^{**}(\tilde{\bB})+h^{*}(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle.
+    \end{align}
+    Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies \eqref{Eq: KKT conditions}, all three statements in \eqref{Eq: inversion rule of the conjugate} hold, and $\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})$ together with $\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0}$ shows that (a) holds if and only if $\tilde{\bLmbd}\in\partial h(\tilde{\bB})$.
+
+    (b)$\iff$(c). By the last equality in \eqref{Eq: inversion rule of the conjugate}, (b) holds if and only if $h(\tilde{\bB})=h^{**}(\tilde{\bB})$. Since $h$ and $h^{**}$ are separable and $\lambda\big||b|-1\big|=\lambda(|b|-1)_{+}$ if and only if $|b|\ge1$, this is equivalent to $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
+
+    (b)$\Rightarrow$(a). By the definition of $h^{*}$, (b) means that $\tilde{\bB}$ is a global minimizer of $h(\cdot)-\langle\tilde{\bLmbd},\cdot\rangle$. Fermat's rule~\cite[Theorem~10.1]{Rockafellar1998VariationalA} and \cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} then give $\bm{0}\in\partial h(\tilde{\bB})-\tilde{\bLmbd}$, i.e., $\tilde{\bLmbd}\in\partial h(\tilde{\bB})$, which is (a).
+
+    (a)$\Rightarrow$(c). By \eqref{Eq: inversion rule of the conjugate} and (a), $\tilde{\bLmbd}\in\partial h(\tilde{\bB})\cap\partial h^{**}(\tilde{\bB})$. Since $h$ and $h^{**}$ are separable~\cite[Proposition~10.5]{Rockafellar1998VariationalA}, it suffices to consider a scalar entry $b=\tilde{b}_{ij}$. If $|b|<1$, then $\partial h^{**}(b)=\{0\}$, whereas $\partial h(b)=\{-\lambda\operatorname{sgn}(b)\}$ for $b\neq0$ and $\partial h(0)=\{-\lambda,\lambda\}$; hence $0\notin\partial h(b)$ and the intersection is empty. Therefore $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
+\end{proof}
+\endgroup
+
+\noindent\blue{Our complexity bounds concern $\mathbb{E}[\mathrm{dist}^{2}(\bm{0},\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k}))]$. For $\bd^{k}\in\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k})$, let us denote $\bd^{k}=(\bd_{\bx}^{k},\bd_{\bB}^{k},\bd_{\bLmbd}^{k})$ and
+\begin{align}
+    \label{Eq: the components of the subgradient}
+    \begin{cases}&\bd_{\bx}^{k}= \nabla_{\bx}F(\bx^{k}, \bB^{k}),\\&\bd_{\bB}^{k}=\nabla_{\bB}F(\bx^{k}, \bB^{k}) + \bLmbd^{k}, \\&\bd_{\bLmbd}^{k}= \bB^{k}- \calG_{\bLmbd}^{k},\end{cases}
+\end{align}
+where $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})$ for $k\ge2$ by the optimality condition of the $\bLmbd$-update \eqref{Eq: the update of lambda}, implying
+\begin{align}
+    \label{Eq: the stationarity error bound in proof}
+    \mathrm{dist}^{2}(\bm{0},\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd_{\bx}^{k}\|^{2}+\|\bd_{\bB}^{k}\|^{2}+\|\bd_{\bLmbd}^{k}\|^{2}.
+\end{align}}
+
+\section{Auxiliary Results for the Complexity Analysis}
+\label{app-toc-1}
+
+\subsection{Bounds Used in the Complexity Analysis}
+\label{Subsec: bounds for complexity analysis}
+
+\subsubsection{Discussions on \Cref{Ass: main assumptions}(ii) in \Cref{Section: Convergence analysis}}
+\label{app-toc-2}
 \label{Appendix: discussion on assumptions} 
 \blue{This section shows that the smoothness constant $L_F$ in \Cref{Ass: main assumptions}(ii) is bounded by a constant independent of the sample size $n$, which is essential for our convergence analysis.}
 
@@ -70,7 +144,8 @@ of $n$.}
 %     + \frac{L_{F}}{2}\| \bB - \bB'\|^{2}
 % \end{align}} for any $\bx \in \calX$.
 
-\subsection{Lower bounds for the Lyapunov functions}
+\subsubsection{Lower bounds for the Lyapunov functions}
+\label{app-toc-3}
 \label{sec:lowerbounds}
 Throughout this section, let $m:=\gamma/n$, $M:=\lambda\sqrt{nd}$, and
 $\mathcal{D}(\bx):=(\bD_1(\bx),\ldots,\bD_n(\bx))$. We use the convention
@@ -216,76 +291,11 @@ W_k\ge\underline{\ell}+\frac{\mu}{8}\mathbb{E}\|\bx^k\|^2
 This proves both lower bounds.
 \end{proof}
 
-Before proceeding, Throughout Appendices C and D, we adopt the notation, \blue{the probabilistic setting} and intermediate results from \Cref{Section: Convergence analysis}.
+\subsection{Estimates for the Common Updates}
+\label{Subsec: estimates for common updates}
 
-\section{Preliminaries}
-\label{Appendix: Preliminaries and notations}
-\blue{Throughout the appendix, stationarity at $(\bx^{k},\bB^{k},\bLmbd^{k})$ is measured by the element $\bd^{k}=(\bd_{\bx}^{k},\bd_{\bB}^{k},\bd_{\bLmbd}^{k})$ of the KKT mapping $\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k})$ in \eqref{Eq: KKT mapping} given by}
-\begin{align}
-    \label{Eq: the components of the subgradient}
-    \begin{cases}&\bd_{\bx}^{k}= \nabla_{\bx}F(\bx^{k}, \bB^{k}),\\&\bd_{\bB}^{k}= \nabla_{\bB}F(\bx^{k}, \bB^{k}) + \bm{\Lambda}^{k}, \\&\bd_{\bm{\Lambda}}^{k}= \bB^{k}- \calG_{\bm{\Lambda}}^{k},\end{cases}
-\end{align}
-\blue{where, for $k\ge2$,
-\begin{equation}
-    \label{Eq: the selection from the conjugate subdifferential}
-    \calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})
-\end{equation}
-by the optimality condition of the $\bLmbd$-update \eqref{Eq: the update of lambda} at iteration $k-1$. Hence $\mathrm{dist}(\bm{0},\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd^{k}\|$. The vector $\bd^{k}$ serves only the analysis and is not computed by the algorithms: $\bd_{\bx}^{k}=\nabla_{\bx}F(\bx^{k},\bB^{k})$ is the exact partial gradient, whereas the update directions are the stochastic estimators $\bg_m^{k}$ in \eqref{Eq: the stochastic approximate in SGDM} and $\bg_s^{k}$ in \eqref{Eq: the stochastic approximate in STORM}.}
-For \Cref{alg:our_algorithm_sgdm}, the key relationships among iterates via the momentum acceleration framework in \eqref{Eq: the update of x in SGDM} are established as follows.
-\begin{proposition}[\blue{Proposition 4.1 in \cite{InertialProximalAlternating}}]
-    \label{Pp: relations of xyz} Let $\{\bx^{k}\}_{k \in \mathbb{N}}$,
-    $\{\by^{k}\}_{k \in \mathbb{N}}$, and $\{\bz^{k}\}_{k \in \mathbb{N}}$ be sequences
-    generated by \eqref{Eq: the update of x in SGDM} and \eqref{Eq: the stochastic approximate in SGDM}. For all $k \in \mathbb{N}$,
-    we have:
-    \begin{enumerate}[label=(\roman{*})]
-        \item $\|\bx^{k}- \by^{k}\|^{2}= \alpha_{k}^{2}\|\bx^{k}- \bx^{k-1}\|^{2}$,
-
-        \item $\|\bx^{k}- \bz^{k}\|^{2}= \beta_{k}^{2}\|\bx^{k}- \bx^{k-1}\|^{2}$,
-
-        \item $\|\bx^{k+1}- \by^{k}\|^{2}\geq (1 - \alpha_{k})\|\bx^{k+1}- \bx^{k}
-            \|^{2}+ \alpha_{k}(\alpha_{k}- 1)\|\bx^{k}- \bx^{k-1}\|^{2}$.
-    \end{enumerate}
-\end{proposition}
-\Cref{Pp: relations of xyz}(iii) decomposes the  extrapolation error $\|\bx^{k+1} - \by^k\|^2$ into a weighted combination of consecutive squared displacements, which, for $\alpha_k \in [0,1)$, enables the telescoping descent 
-structure essential to the Lyapunov-based convergence analysis.
-% For  \Cref{alg:our_algorithm_sgdm},  we establish key relationships among iterates via the momentum acceleration framework in \eqref{Eq: the update of x in SGDM}.
-% \begin{proposition}[Proposition 4.1 in \cite{InertialProximalAlternating}]
-%     \label{Pp: relations of xyz} Let $\{\bx^{k}\}_{k \in \mathbb{N}}$,
-%     $\{\by^{k}\}_{k \in \mathbb{N}}$, and $\{\bz^{k}\}_{k \in \mathbb{N}}$ be sequences
-%     generated by \eqref{Eq: the update of x in SGDM}. For all $k \in \mathbb{N}$,
-%     we have:
-%     \begin{enumerate}[label=(\roman{*})]
-%         \item $\|\bx^{k}- \by^{k}\|^{2}= \alpha_{k}^{2}\|\bx^{k}- \bx^{k-1}\|^{2}$,
-
-%         \item $\|\bx^{k}- \bz^{k}\|^{2}= \beta_{k}^{2}\|\bx^{k}- \bx^{k-1}\|^{2}$,
-
-%         \item $\|\bx^{k+1}- \by^{k}\|^{2}\geq 2(1 - \alpha_{k})\|\bx^{k+1}- \bx^{k}
-%             \|^{2}+ 2\alpha_{k}(\alpha_{k}- 1)\|\bx^{k}- \bx^{k-1}\|^{2}$.
-%     \end{enumerate}
-% \end{proposition}
-% For \Cref{alg:our_algorithm_storm}, we employ the STORM (STochastic Recursive Momentum)  variance reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}.
-% In stochastic optimization problems where $F(\bx) = \mathbb{E}_{\xi}[F(\bx;\xi)]$ with $\xi \in \Xi$, standard momentum methods use
-% \[
-%     \bd^{k}= \rho_{k}\nabla F(\bx^{k}, \xi^{k}) + (1 - \rho_{k}) \bd^{k-1}, \text{
-%     where }\rho_{k}\in [0, 1],
-% \] yielding a biased estimate of $\nabla F(\bx^{k})$. 
-% STORM adds a
-% correction term, $(1 - \rho_{k}) (\nabla F(\bx^{k}, \xi^{k}) - \nabla F(\bx^{k-1}
-% , \xi^{k})$, resulting in:
-% \[
-%     \begin{aligned}
-%          & \bd^{k}=\left\{\begin{array}{ll}\nabla F\left(\bx^{k}, \xi^{k}\right), & \text{if } k=1, \\ \nabla F\left(\bx^{k}, \xi^{k}\right) + \left(1-\rho_k\right)\left( \bd^{k-1} - \nabla F\left(\bx^{k-1}, \xi^{k}\right) \right), & \text{if } k>1,\end{array}\right. \\
-%          & \bx^{k+1}=\bx^{k}-\eta_{k}\bd^{k}.
-%     \end{aligned}
-% \]
-% This exploits the smoothness of $F(\cdot, \xi)$, leading to efficient
-% variance reduction. When $\rho_{k}= 1$, $\bd^{k}$ reduces to vanilla mini-batch SGD. We set $\rho_{k}\in (0,1)$ for $k \geq 1$ in \Cref{alg:our_algorithm_storm}.
-% \newpage
-
-\section{Complexity Analysis of DualHash-StoM (\texorpdfstring{\Cref{alg:our_algorithm_sgdm}}{Algorithm 1})}
-\label{Appendix: the complexity analysis of DualHash-StoM}
-
-\subsection{Proof of \Cref{Lemma: dual boundedness}}
+\subsubsection{Proof of \Cref{Lemma: dual boundedness}}
+\label{app-toc-5}
 \label{Subsec: proof dual boundedness}
 \begin{proof}
     Applying the $\bB$-update~\eqref{Eq: the update of B} at iterations $k+1$ and $k+2$ gives
@@ -314,210 +324,102 @@ structure essential to the Lyapunov-based convergence analysis.
     which is the claimed result.
 \end{proof}
 
-\blue{\subsection{Proof of the Gradient-Error Bound \eqref{eq: the gradient error in SGDM} for DualHash-StoM}
-\label{Subsec: proof gradient error SGDM}
-\begin{proof}
-    Recall that the stochastic gradient error $\be^k$ of Algorithm \ref{alg:our_algorithm_sgdm} is defined as
-\[
-\be^k
-=
-\frac{1}{b_k}\sum_{i\in\calJ_k}
-\left(
-\nabla_{\bx}F_i(\bz^k,\bb_i^k)
--
-\nabla_{\bx}F(\bz^k,\bB^k)
-\right).
-\]
-Since $(\bz^k,\bB^k)$ is $\mathcal F_k$-measurable and
-$\calJ_k$ is sampled uniformly without replacement and independently
-of $\mathcal F_k$, define
-\[
-\bm{v}_i^k
-:=
-\nabla_{\bx}F_i(\bz^k,\bb_i^k)
--
-\nabla_{\bx}F(\bz^k,\bB^k).
-\]
-Conditionally on $\mathcal F_k$, Assumption~\ref{Ass: main assumptions}(iii)
-gives
-\[
-\frac{1}{n}\sum_{i=1}^n \bm{v}_i^k=\bm{0},
-\qquad
-\frac{1}{n}\sum_{i=1}^n\|\bm{v}_i^k\|^2\leq\sigma^2
-\quad\text{a.s.}
-\]
-For $n\geq2$, the variance formula for uniform sampling without replacement
-therefore yields
-\[
-\mathbb{E}_k[\be^k]=\bm{0},
-\]
-and
-\[
-\mathbb{E}_k\!\left[\|\be^k\|^2\right]
-=
-\frac{n-b_k}{n-1}\frac{1}{b_k}
-\frac{1}{n}\sum_{i=1}^n\|\bm{v}_i^k\|^2
-\leq
-\frac{\sigma^2}{b_k}
-\quad\text{a.s.}
-\]
-The case $n=1$ is immediate since $\be^k=\bm{0}$. Taking the full
-expectation and using the tower property gives \eqref{eq: the gradient error in SGDM}.
-\end{proof}
-}
-
-\subsection{Proof of \Cref{Lemma: One-iteration progress of B and Lambda}}
+\subsubsection{Proof of \Cref{Lemma: One-iteration progress of B and Lambda}}
+\label{app-toc-7}
 \label{Subsec: proof lemma 5.4}
 \begin{proof}
-    Set $\bs_{\bB}^{k+1}:=\bB^{k+1}-\bB^k$ and
-    $\bs_{\bLmbd}^{k+1}:=\bLmbd^{k+1}-\bLmbd^k$. The $L_F$-smoothness of
-    $F(\bx^{k+1},\cdot)$ gives
+    \blue{By the descent lemma~\eqref{Eq: the descent lemma} for $F(\bx^{k+1},\cdot)$,
+    \[
+        F(\bx^{k+1},\bB^{k+1})-F(\bx^{k+1},\bB^{k})\le\langle\nabla_{\bB}F(\bx^{k+1},\bB^{k}),\bB^{k+1}-\bB^{k}\rangle+\frac{L_F}{2}\|\bB^{k+1}-\bB^{k}\|^{2}.
+    \]
+    The bilinear term satisfies
+    \[
+        \langle\bB^{k+1},\bLmbd^{k+1}\rangle-\langle\bB^{k},\bLmbd^{k}\rangle=\langle\bLmbd^{k},\bB^{k+1}-\bB^{k}\rangle+\langle\bB^{k+1},\bLmbd^{k+1}-\bLmbd^{k}\rangle,
+    \]
+    and the $\bB$-update gives
+    \[
+        \nabla_{\bB}F(\bx^{k+1},\bB^{k})+\bLmbd^{k}=-\tau^{-1}(\bB^{k+1}-\bB^{k}).
+    \]
+    For the conjugate term, $\calG_{\bLmbd}^{k}\in\partial h^{*}(\bLmbd^{k})$ defined after \eqref{Eq: the components of the subgradient} and the convexity of $h^{*}$ give
+    \[
+        -h^{*}(\bLmbd^{k+1})+h^{*}(\bLmbd^{k})\le-\langle\calG_{\bLmbd}^{k},\bLmbd^{k+1}-\bLmbd^{k}\rangle.
+    \]
+    Adding these three relations yields
+    \[
+        \calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})-\calL(\bx^{k+1},\bB^{k},\bLmbd^{k})\le-\Bigl(\tau^{-1}-\frac{L_F}{2}\Bigr)\|\bB^{k+1}-\bB^{k}\|^{2}+\langle\bLmbd^{k+1}-\bLmbd^{k},\bB^{k+1}-\calG_{\bLmbd}^{k}\rangle.
+    \]
+    By the $\bB$-updates at iterations $k$ and $k-1$ and the expression of $\calG_{\bLmbd}^{k}$, we have
+    \[
+        \bB^{k+1}-\calG_{\bLmbd}^{k}=\tau\bigl(\nabla_{\bB}F(\bx^{k},\bB^{k-1})-\nabla_{\bB}F(\bx^{k+1},\bB^{k})\bigr),
+    \]
+    and hence}
     \begin{align}
-        F(\bx^{k+1},\bB^{k+1})-F(\bx^{k+1},\bB^k)
-        \leq &\left\langle\nabla_{\bB}F(\bx^{k+1},\bB^k),
-        \bs_{\bB}^{k+1}\right\rangle
-        +\frac{L_F}{2}\|\bs_{\bB}^{k+1}\|^2.
+        \label{Eq: the recursive relation of L on B and Lambda} & \calL(\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL(\bx^{k+1}, \bB^{k}, \bLmbd^{k}) \notag \\
+        \leq & - \left(\tau^{-1}- \frac{L_{F}}{2}\right) \|\bB^{k+1}- \bB^{k}\|^{2}+ \Big\langle \bLmbd^{k+1}- \bLmbd^{k}, \tau \Big( \nabla_{\bB}F(\bx^{k}, \bB^{k-1}) - \nabla_{\bB}F(\bx^{k+1}, \bB^{k}) \Big) \Big\rangle.
     \end{align}
-    The $\bB$-update gives
-    $\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k
-    =-\tau^{-1}\bs_{\bB}^{k+1}$. For the conjugate term, the optimality
-    condition of the proximal $\bLmbd$-update at iteration $k-1$ gives
-    \[
-    \calG_{\bLmbd}^{k}:=
-    2\bB^k-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^k)
-    \in\partial h^*(\bLmbd^k).
-    \]
-    Convexity of $h^*$ therefore implies
-    $h^*(\bLmbd^{k+1})\geq h^*(\bLmbd^k)
-    +\langle\calG_{\bLmbd}^{k},\bs_{\bLmbd}^{k+1}\rangle$, or
-    \[
-    -h^*(\bLmbd^{k+1})+h^*(\bLmbd^k)
-    \leq-\langle\calG_{\bLmbd}^{k},\bs_{\bLmbd}^{k+1}\rangle.
-    \]
-    Combining these relations with
-    $\langle\bB^{k+1},\bLmbd^{k+1}\rangle-
-    \langle\bB^k,\bLmbd^k\rangle
-    =\langle\bLmbd^k,\bs_{\bB}^{k+1}\rangle+
-    \langle\bB^{k+1},\bs_{\bLmbd}^{k+1}\rangle$, we obtain
+    For the inner product term in \eqref{Eq: the recursive relation of L on B and Lambda}, we obtain
     \begin{align}
-    \label{Eq: the recursive relation of L on B and Lambda}
-    &\calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})
-      -\calL(\bx^{k+1},\bB^k,\bLmbd^k)\notag\\
-    &\leq-\left(\tau^{-1}-\frac{L_F}{2}\right)
-      \|\bs_{\bB}^{k+1}\|^2
-      +\left\langle \bs_{\bLmbd}^{k+1},
-      \bB^{k+1}-\calG_{\bLmbd}^{k}\right\rangle.
+        \label{Eq: the inner product in the recursive relation of L on B and Lambda} & \langle \bLmbd^{k+1}- \bLmbd^{k}, \tau (\nabla_{\bB}F(\bx^{k}, \bB^{k-1}) - \nabla_{\bB}F(\bx^{k+1}, \bB^{k})) \rangle \notag \\
+        \leq & \, \frac{\delta\tau}{2}\|\bLmbd^{k+1}- \bLmbd^{k}\|^{2}+ \frac{\tau}{2\delta}\|\nabla_{\bB}F(\bx^{k+1}, \bB^{k}) - \nabla_{\bB}F(\bx^{k}, \blue{\bB^{k-1}}) \|^{2} \notag \\
+        \leq & \, \frac{\delta\tau}{2}\|\bLmbd^{k+1}- \bLmbd^{k}\|^{2}+ \frac{\tau L_{F}^{2}}{2\delta}\left( \|\bx^{k+1}- \bx^{k}\|^{2}+ \|\bB^{k}- \bB^{k-1}\|^{2}\right),
     \end{align}
-    To identify the last vector, apply the $\bB$-update also at iteration
-    $k-1$:
-    \[
-    \bs_{\bB}^{k+1}=-\tau\bigl(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\bigr),
-    \qquad
-    \bs_{\bB}^{k}=-\tau\bigl(\nabla_{\bB}F(\bx^k,\bB^{k-1})+\bLmbd^{k-1}\bigr).
-    \]
-    Substitution of the expression for $\calG_{\bLmbd}^{k}$ then yields
-    \[
-    \bB^{k+1}-\calG_{\bLmbd}^{k}
-    =\tau\bigl(\nabla_{\bB}F(\bx^k,\bB^{k-1})
-    -\nabla_{\bB}F(\bx^{k+1},\bB^k)\bigr).
-    \]
-    Hence \eqref{Eq: the recursive relation of L on B and Lambda} becomes
-    \begin{align}
-    &\calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})
-      -\calL(\bx^{k+1},\bB^k,\bLmbd^k)\notag\\
-    \leq&-\left(\tau^{-1}-\frac{L_F}{2}\right)
-      \|\bs_{\bB}^{k+1}\|^2
-      +\left\langle \bs_{\bLmbd}^{k+1},
-      \tau\bigl(\nabla_{\bB}F(\bx^k,\bB^{k-1})
-      -\nabla_{\bB}F(\bx^{k+1},\bB^k)\bigr)\right\rangle.
-    \end{align}
-    Apply Young's inequality
-    $\langle a,b\rangle\leq\frac{\delta\tau}{2}\|a\|^2+
-    \frac{\tau}{2\delta}\|b\|^2$ with
-    $a=\bs_{\bLmbd}^{k+1}$ and
-    $b=\nabla_{\bB}F(\bx^k,\bB^{k-1})
-    -\nabla_{\bB}F(\bx^{k+1},\bB^k)$. By joint $L_F$-smoothness of $F$,
-    \begin{align}
-    \label{Eq: the inner product in the recursive relation of L on B and Lambda}
-    &\left\langle \bs_{\bLmbd}^{k+1},
-    \tau\bigl(\nabla_{\bB}F(\bx^k,\bB^{k-1})
-    -\nabla_{\bB}F(\bx^{k+1},\bB^k)\bigr)\right\rangle\notag\\
-    \leq&\frac{\delta\tau}{2}\|\bs_{\bLmbd}^{k+1}\|^2
-    +\frac{\tau}{2\delta}
-    \|\nabla_{\bB}F(\bx^k,\bB^{k-1})
-    -\nabla_{\bB}F(\bx^{k+1},\bB^k)\|^2\notag\\
-    \leq&\frac{\delta\tau}{2}\|\bs_{\bLmbd}^{k+1}\|^2
-    +\frac{\tau L_F^2}{2\delta}
-    \left(\|\bx^{k+1}-\bx^k\|^2+
-    \|\bB^k-\bB^{k-1}\|^2\right).
-    \end{align}
-    The dual-increment estimate \eqref{Eq: dual boundedness in proof} reads
-    \[
-    \|\bs_{\bLmbd}^{k+1}\|^2
-    \leq3\tau^{-2}\|\bs_{\bB}^{k+2}\|^2
-    +3(\tau^{-1}+L_F)^2\|\bs_{\bB}^{k+1}\|^2
-    +3L_F^2\|\bx^{k+2}-\bx^{k+1}\|^2.
-    \]
-    Substituting this estimate and the smoothness bound into
-    \eqref{Eq: the recursive relation of L on B and Lambda}, and using
-    $\Delta_{\bB}^k=\frac12\|\bB^k-\bB^{k-1}\|^2$ and
-    $\Delta_{\bx}^k=\frac12\|\bx^k-\bx^{k-1}\|^2$, gives
-    \[
-    \begin{aligned}
-    \Delta\calL_{B,\Lambda}^{k+1}
-    \leq{}&
-    \frac{3\delta}{2\tau}\|\bs_{\bB}^{k+2}\|^2
-    -\frac12\left(2\tau^{-1}-L_F
-       -3\delta\tau(\tau^{-1}+L_F)^2\right)\|\bs_{\bB}^{k+1}\|^2\\
-    &+\frac{\tau L_F^2}{2\delta}\|\bs_{\bB}^{k}\|^2
-    +\frac{3\delta\tau L_F^2}{2}\|\bx^{k+2}-\bx^{k+1}\|^2
-    +\frac{\tau L_F^2}{2\delta}\|\bx^{k+1}-\bx^k\|^2,
-    \end{aligned}
-    \]
-    where $\Delta\calL_{B,\Lambda}^{k+1}$ denotes the Lagrangian difference
-    on the left-hand side of \eqref{Eq: the recursive relation of L on B and Lambda}.
-    Rewriting each squared increment using the $\Delta$ notation gives
-    \begin{align}
-    &\calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})
-    -\calL(\bx^{k+1},\bB^k,\bLmbd^k)\notag\\
-    \leq{}&K_1\Delta_{\bB}^{k+2}-K_2\Delta_{\bB}^{k+1}
-    +K_3\Delta_{\bB}^{k}+K_4\Delta_{\bx}^{k+2}
-    +K_3\Delta_{\bx}^{k+1},
-    \end{align}
-    where
-    $K_1=3\delta\tau^{-1}$,
-    $K_2=2\tau^{-1}-L_F-3\delta\tau(\tau^{-1}+L_F)^2$,
-    $K_3=\tau L_F^2/\delta$, and $K_4=3\delta\tau L_F^2$.
+    where the first inequality follows from the fact that
+    $\langle \bu, \bv \rangle \leq \frac{\delta}{2}\|\bu\|^{2}+ \frac{1}{2\delta}\|\bv\|^{2}$ for any $\delta >0$ and the second inequality follows from the $L_F$-smoothness of $F$. Then, substituting \eqref{Eq: the inner product in the recursive relation of L on B and Lambda}
+    and \eqref{Eq: dual boundedness in proof} into \eqref{Eq: the recursive relation of L on B and Lambda}
+    and rearranging the inequality yields \eqref{item: B and Lambda}.
 \end{proof}
 
+Before proceeding, throughout Appendices~\ref{Appendix: the complexity analysis of DualHash-StoM} and~\ref{Appendix: the complexity analysis of DualHash-StoRM}, we adopt the notation, \blue{the probabilistic setting} and intermediate results from \Cref{Section: Convergence analysis}. 
 
-We first present a lemma concerning a property of a continuously differentiable function with a Lipschitz continuous gradient, followed by a proposition that details the interrelations among the sequences $\{\bx^{k}\}_{k \in \NN},\, \{\bm{y}^{k}\}_{k \in \NN},\, \{\bm{z}^{k}\}_{k \in \NN}$ generated by the algorithm.
-% In particular, $\Delta_{\bx}^{k}$ and $\Delta_{\bB}^{k}$ are as defined therein, and we refer to \Cref{Lemma: dual boundedness} and \Cref{Lemma: One-iteration progress of B and Lambda} for the bounds on dual variable dynamics and one-iteration Lagrangian progress on $\bB$ and $\bLmbd$. The gradient error is defined as $\be^{k}= \bG^{k}- \nabla_{\bx}F(\bz^{k}, \bB^{k})$, satisfying $\EE[\|\be^{k}\|^{2}] \leq \sigma^{2}/b_{k}$ under \Cref{Ass: main assumptions}~(iii).
+\section{Complexity Analysis of DualHash-StoM (\texorpdfstring{\Cref{alg:our_algorithm_sgdm}}{Algorithm 1})}
+\label{app-toc-8}
+\label{Appendix: the complexity analysis of DualHash-StoM}
+
+\blue{This appendix proves the complexity results for DualHash-StoM stated in \Cref{Section: complexity of StoM}.}
+We first present a lemma on continuously differentiable functions with Lipschitz continuous gradients. Since the analysis also requires the relations among the extrapolated iterates, we next establish the key relationships among the iterates generated by \eqref{Eq: the update of x in SGDM} and \eqref{Eq: extrapolated points in SGDM}.
+
+\begin{proposition}[\blue{Proposition 4.1 in \cite{InertialProximalAlternating}}]
+    \label{Pp: relations of xyz} Let $\{\bx^{k}\}_{k \in \mathbb{N}}$,
+    $\{\by^{k}\}_{k \in \mathbb{N}}$, and $\{\bz^{k}\}_{k \in \mathbb{N}}$ be sequences
+    generated by \eqref{Eq: the update of x in SGDM} and \eqref{Eq: extrapolated points in SGDM}. For all $k \in \mathbb{N}$,
+    we have:
+    \begin{enumerate}[label=(\roman{*})]
+        \item $\|\bx^{k}- \by^{k}\|^{2}= \alpha_{k}^{2}\|\bx^{k}- \bx^{k-1}\|^{2}$,
+
+        \item $\|\bx^{k}- \bz^{k}\|^{2}= \beta_{k}^{2}\|\bx^{k}- \bx^{k-1}\|^{2}$,
+
+        \item $\|\bx^{k+1}- \by^{k}\|^{2}\geq (1 - \alpha_{k})\|\bx^{k+1}- \bx^{k}
+            \|^{2}+ \alpha_{k}(\alpha_{k}- 1)\|\bx^{k}- \bx^{k-1}\|^{2}$.
+    \end{enumerate}
+\end{proposition}
+
 \begin{lemma}
     \label{Lemma: auxiliary lemma for f} Let $f(\bx): \mathbb{R}^{q}\rightarrow \mathbb{R}$
     be a continuously differentiable function with an $L$-Lipschitz continuous gradient.
-    Then, for any $\bx,\, \by,\,\blue{\bd} \in \mathbb{R}^{q}$ and any $\bx^{+}\in \mathbb{R}
+    Then, for any $\bx,\, \by,\,\blue{\bg} \in \mathbb{R}^{q}$ and any $\bx^{+}\in \mathbb{R}
     ^{q}$ defined by
     \[
-        \bx^{+}= \by - \eta \blue{\bd}, \hspace{5pt}\eta > 0,
+        \bx^{+}= \by - \eta \blue{\bg}, \hspace{5pt}\eta > 0,
     \]it holds that
     \begin{align}
-        \label{Eq: auxiliary lemma for f}f(\bx^{+}) \leq f(\bx) + \langle \nabla f(\bx) - \blue{\bd}, \bx^{+}- \bx \rangle + \frac{L}{2}\|\bx^{+}- \bx\|^{2}+ \frac{1}{2\eta}\|\bx - \by\|^{2}- \frac{1}{2\eta}\|\bx^{+}- \by\|^{2}.
+        \label{Eq: auxiliary lemma for f}f(\bx^{+}) \leq f(\bx) + \langle \nabla f(\bx) - \blue{\bg}, \bx^{+}- \bx \rangle + \frac{L}{2}\|\bx^{+}- \bx\|^{2}+ \frac{1}{2\eta}\|\bx - \by\|^{2}- \frac{1}{2\eta}\|\bx^{+}- \by\|^{2}.
     \end{align}
 \end{lemma}
 \begin{proof}
     By the definition of $\bx^{+}$, we obtain that
     \[
-        \bx^{+}= \argmin\limits_{\bu \in \mathbb{R}^{q}}\{ \langle \blue{\bd}, \bu
+        \bx^{+}= \argmin\limits_{\bu \in \mathbb{R}^{q}}\{ \langle \blue{\bg}, \bu
         - \by \rangle + \frac{1}{2\eta}\| \bu - \by\|^{2}\},
     \]
     and hence, in particular, by taking $\bu = \bx$, we obtain
     \begin{align*}
-        0 \leq \langle \blue{\bd}, \bx - \bx^{+}\rangle + \frac{1}{2\eta}\| \bx - \by\|^{2}- \frac{1}{2\eta}\| \bx^{+}- \by\|^{2}.
+        0 \leq \langle \blue{\bg}, \bx - \bx^{+}\rangle + \frac{1}{2\eta}\| \bx - \by\|^{2}- \frac{1}{2\eta}\| \bx^{+}- \by\|^{2}.
     \end{align*}
     Invoking the descent lemma for a smooth function yields the result. 
 \end{proof}
+
 \subsection{Proof of \Cref{Lemma: One-iteration progress of x in SGDM}}
+\label{app-toc-9}
 \label{Subsubsec: proof x progress SGDM}
 
 \begin{proof}
@@ -525,7 +427,7 @@ We first present a lemma concerning a property of a continuously differentiable 
     \begin{align}
         \label{Eq: the update of x one progress in StoM}\mathcal{L}(\bx^{k+1}, \bm{B}^{k}, \bm{\Lambda}^{k}) - \mathcal{L}(\bx^{k}, \bm{B}^{k}, \bm{\Lambda}^{k}) = F(\bx^{k+1}, \bm{B}^{k}) - F(\bx^{k}, \bm{B}^{k}).
     \end{align}
-    Then, applying \eqref{Eq: auxiliary lemma for f} \blue{to $F(\cdot, \bB^{k})$, which is $L_F$-smooth, with $\bx=\bx^{k}$, $\by=\by^{k}$, $\eta=\eta_{k}$, and $\bd=\bg_m^{k}$ (so that $\bx^{+}=\bx^{k+1}$ by \eqref{Eq: the update of x in SGDM}),}
+    Then, applying \eqref{Eq: auxiliary lemma for f} \blue{to $F(\cdot, \bB^{k})$, which is $L_F$-smooth, with $\bx=\bx^{k}$, $\by=\by^{k}$, $\eta=\eta_{k}$, and $\bg=\bg_m^{k}$ (so that $\bx^{+}=\bx^{k+1}$ by \eqref{Eq: the update of x in SGDM}),}
     yields
     \begin{align}
         \label{Eq: the update of theta core}F(\bx^{k+1}, \bm{B}^{k}) \leq & F(\bx^{k}, \bm{B}^{k}) + \langle \nabla_{\bx}F(\bx^{k}, \bm{B}^{k}) - \blue{\bg_m^{k}}, \bx^{k+1}- \bx^{k}\rangle \notag                              \\
@@ -555,6 +457,7 @@ We first present a lemma concerning a property of a continuously differentiable 
     % \end{align} 
 \end{proof}
 \subsection{Proof of \Cref{Lemma: approximate sufficient descent property in SGDM}}
+\label{app-toc-10}
 \label{Subsubsec: proof descent SGDM}
 \begin{proof}
     Substituting one-iteration progress \eqref{Eq: One-iteration progress of x in SGDM}
@@ -633,11 +536,7 @@ The technical proof that the coefficients of $\Psi_m$ in \eqref{Eq: the coeffici
     $\Psi_m$ in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
     and $C_{\bB}, \, C_{\bx}>0$. 
 \end{proof}
-We then derive an upper error bound on $\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))$ based on
-\begin{align}
-    \label{Eq: the stationarity error bound in proof}\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k})) \leq \| \bd^{k}\|^{2}=\|\bd_{\bx}^{k}\|^{2}+ \| \bd_{\bB}^{k}\|^{2}+ \| \bd_{\bm{\Lambda}}^{k}\|^{2}.
-\end{align}
-\blue{Here $\bd^{k}=(\bd_{\bx}^{k},\bd_{\bB}^{k},\bd_{\bLmbd}^{k})\in\mathcal K(\bx^{k},\bB^{k},\bLmbd^{k})$ is the element defined in \eqref{Eq: the components of the subgradient}--\eqref{Eq: the selection from the conjugate subdifferential}; it is used only to measure stationarity, whereas the $\bx$-update of \Cref{alg:our_algorithm_sgdm} uses the stochastic direction $\bg_m^{k}$.}
+We then bound the three terms on the right-hand side of \eqref{Eq: the stationarity error bound in proof}.
 
 \begin{lemma}[Stationarity error bound]
     \label{Lemma: Stationarity error bound in SGDM} Under \Cref{Ass: main assumptions},
@@ -703,8 +602,8 @@ We then derive an upper error bound on $\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx
         =    & \,\eta_{k}^{-2}\bigg\|\eta_{k}\Big( \nabla_{\bx}F(\bx^{k}, \bm{B}^{k}) - \nabla_{\bx}F(\bm{z}^{k}, \bm{B}^{k}) + \nabla_{\bx}F(\bm{z}^{k}, \bm{B}^{k})- \blue{\bg_m^{k}}\Big) + \bm{y}^{k}- \bx^{k}+ \bx^{k}- \bx^{k+1}\bigg\|^{2}\label{eq:d_x_ineq1} \\
         \leq & \, 3 \|\nabla_{\bx}F(\bx^{k}, \bm{B}^{k}) - \nabla_{\bx}F(\bm{z}^{k}, \bm{B}^{k})\|^{2}+ 3\eta_{k}^{-2}\|\bx^{k+1}- \bx^{k}+ \bx^{k}- \bm{y}^{k}\|^{2}+ 3 \|\be^{k}\|^{2}\label{eq:d_x_ineq2}                                                 \\
         \leq & \, 3L_{F}^{2}\|\bx^{k}- \bm{z}^{k}\|^{2}+ 6\eta_{k}^{-2}\left(\|\bx^{k+1}- \bx^{k}\|^{2}+ \|\bx^{k}- \bm{y}^{k}\|^{2}\right) + 3 \|\be^{k}\|^{2},\label{eq:d_x_ineq3}                                                                      
-    \end{align}}where \eqref{eq:d_x_ineq1} is deduced by using the fact that
-    $(a + b+ c)^{2}\leq 3(a^{2}+ b^{2}+c^{2})$ and \eqref{eq:d_x_ineq2} is deduced
+    \end{align}}where \eqref{eq:d_x_ineq2} is deduced by using the fact that
+    $(a + b+ c)^{2}\leq 3(a^{2}+ b^{2}+c^{2})$ and \eqref{eq:d_x_ineq3} is deduced
     \blue{from the $L_F$-smoothness of $F(\cdot, \bB^{k})$} and $(a + b)^{2}\leq 2(a^{2}+ b^{2})$.
     Then applying \Cref{Pp: relations of xyz} to \eqref{eq:d_x_ineq3} concludes
     \begin{align}
@@ -750,6 +649,7 @@ We then derive an upper error bound on $\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx
 %     \end{align}
 % \end{lemma}
 \subsection{Proof of \Cref{lemma: convergence rate sgdm}}
+\label{app-toc-11}
 \label{Subsubsec: convergence rate SGDM}
 \begin{proof}
     From \eqref{Eq: the stationarity error bound in SGDM Lemma}, we obtain
@@ -797,6 +697,7 @@ We then derive an upper error bound on $\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx
 % $b_{k}= b = c_{b}T$ for all $k \geq 1$ in this way and establish the complexity
 % results of \Cref{alg:our_algorithm_sgdm} with the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}.
 \subsection{Proof of \Cref{Theorem: the oracle complexity in SGDM}}
+\label{app-toc-12}
 \label{Subsec: proof theorem SGDM}
 % \setcounter{proof}{0}
 \begin{proof}
@@ -815,11 +716,45 @@ We then derive an upper error bound on $\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx
         \text{Complexity}= (T-1)b_{k}=\calO(T^{2}) = \calO(\varepsilon^{-4}).
     \]
 \end{proof}
-
 \section{Complexity Analysis of DualHash-StoRM (\texorpdfstring{\Cref{alg:our_algorithm_storm}}{Algorithm 2})}
+\label{app-toc-13}
 \label{Appendix: the complexity analysis of DualHash-StoRM}
 We adopt the same notation as in \Cref{Appendix: the complexity analysis of DualHash-StoM}. 
+\subsection{\blue{Proof of \Cref{Lemma: One-iteration progress of x in STORM}}}
+\label{app-toc-14}
+\label{Subsec: proof x progress STORM}
+\begin{proof}
+    \blue{Recalling the equivalent relation:}
+    \blue{\begin{align}
+        \label{Eq: the update of x one progress in StoRM}\calL(\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL(\bx^{k}, \bB^{k}, \bLmbd^{k}) = F(\bx^{k+1}, \bB^{k}) - F(\bx^{k}, \bB^{k}).
+    \end{align}}
+    \blue{By the $L_F$-smoothness of $F(\cdot,\bB^{k})$ and the $\bx$-update \eqref{Eq: the update of x in STORM}, we have}
+    \blue{\begin{align}
+        F(\bx^{k+1}, \bB^{k}) - F(\bx^{k}, \bB^{k})
+        \leq & \,\langle \nabla_{\bx}F(\bx^{k}, \bB^{k}), \bx^{k+1}-\bx^{k}\rangle + \frac{L_F}{2}\|\bx^{k+1}-\bx^{k}\|^{2}\notag\\
+        = & \,-\eta_k\langle \nabla_{\bx}F(\bx^{k}, \bB^{k}), \bg_s^{k}\rangle + \frac{\eta_k^{2}L_F}{2}\|\bg_s^{k}\|^{2}.
+        \label{Eq: the smoothness step in StoRM}
+    \end{align}}
+    \blue{Using the definition of $\be^{k}$, we have
+    \[
+        -\langle \nabla_{\bx}F(\bx^{k}, \bB^{k}), \bg_s^{k}\rangle = \langle \be^{k}, \bg_s^{k}\rangle - \|\bg_s^{k}\|^{2}.
+    \]
+    Plugging the above equality into \eqref{Eq: the smoothness step in StoRM} gives
+    \[
+        F(\bx^{k+1}, \bB^{k}) - F(\bx^{k}, \bB^{k}) \leq \eta_k\langle \be^{k}, \bg_s^{k}\rangle - \eta_k\|\bg_s^{k}\|^{2} + \frac{\eta_k^{2}L_F}{2}\|\bg_s^{k}\|^{2}.
+    \]
+    By the Cauchy--Schwarz inequality, it holds $\eta_k\langle \be^{k}, \bg_s^{k}\rangle\leq\frac{\eta_k}{2}\|\be^{k}\|^{2}+\frac{\eta_k}{2}\|\bg_s^{k}\|^{2}$, which together with the above inequality implies}
+    \blue{\begin{align}
+        F(\bx^{k+1}, \bB^{k}) - F(\bx^{k}, \bB^{k})
+        \leq & \,\frac{\eta_k}{2}\|\be^{k}\|^{2} - \frac{\eta_k}{2}(1-\eta_kL_F)\|\bg_s^{k}\|^{2}\notag\\
+        = & \,\frac{\eta_k}{2}\|\be^{k}\|^{2} - (\eta_k^{-1}-L_F)\Delta_{\bx}^{k+1},
+        \label{Eq: the update of x of L in StoRM}
+    \end{align}}
+    \blue{where the equality uses $\|\bx^{k+1}-\bx^{k}\|^{2}=\eta_k^{2}\|\bg_s^{k}\|^{2}=2\Delta_{\bx}^{k+1}$. Substituting \eqref{Eq: the update of x of L in StoRM} into \eqref{Eq: the update of x one progress in StoRM} yields \eqref{Eq: the recursive relation of L on x} and completes the proof.}
+\end{proof}
+
 \subsection{Proof of \Cref{Lemma: approximate sufficient descent property storm}}
+\label{app-toc-15}
 \label{Subsubsec: proof descent STORM}
 \begin{proof}
     Substituting the one-iteration progress \eqref{Eq: the recursive relation of L on x}
@@ -852,7 +787,7 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
 
 % \subsection{Proof of \Cref{Lemma: Weighted error accumulation}}
 % \label{Subsubsec: proof Weighted error accumulation}
-We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with analysis comparable to those in \cite[Lemma 2]{xu2023momentum} and \cite[Lemma 8]{shi2025momentum}. 
+We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with analysis comparable to those in \cite[Lemma~2\blue{.2}]{xu2023momentum} and \cite[Lemma 8]{shi2025momentum}. \blue{We provide the proof for completeness.}
 \begin{lemma}[Recursive bound on gradient error]
     \label{Lemma: Recursive bound on gradient error} Under \Cref{Ass: main assumptions}(iii) and \Cref{Ass: the mean squared smoothness of F},
     for any $k \geq 1$, it holds that
@@ -861,6 +796,31 @@ We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with ana
         \EE[\| \be^{k+1}\|^{2}] \leq \left(1 - \rho_{k}\right)^{2}\EE[\| \be^{k}\|^{2}] + \frac{2 \rho_{k}^{2}\sigma^{2}}{b_{k+1}}+ \frac{4(1 - \rho_{k})^{2}L_{F}^{2}}{b_{k+1}}\EE\left[\Delta_{\bx}^{k+1}+\blue{\Delta_{\bB}^{k+1}}\right]. \notag
     \end{align}}
 \end{lemma}
+\begin{proof}
+    \blue{For $k\geq1$, recall that $\mathcal F_{k+1}=\sigma(\calJ_1,\ldots,\calJ_k)$. Then $\bx^{k},\bB^{k},\bx^{k+1},\bB^{k+1}$ and $\be^{k}$ are $\mathcal F_{k+1}$-measurable, while $\calJ_{k+1}$ is sampled uniformly without replacement and independently of $\mathcal F_{k+1}$. For $j\in\{k,k+1\}$, write $\tilde\nabla^{j}:=\tilde{\nabla}_{\bx}F(\bx^{j},\bB^{j};\calJ_{k+1})$ and $\nabla^{j}:=\nabla_{\bx}F(\bx^{j},\bB^{j})$. Recalling \eqref{Eq: the stochastic approximate in STORM} and the definition of $\be^{k}$, it holds that}
+    \blue{\begin{align}
+        \EE_{k+1}[\|\be^{k+1}\|^{2}]
+        = & \,\EE_{k+1}[\|\bg_s^{k+1}-\nabla^{k+1}\|^{2}]\notag\\
+        = & \,\EE_{k+1}[\|\tilde\nabla^{k+1}-\nabla^{k+1}+(1-\rho_k)(\bg_s^{k}-\tilde\nabla^{k})\|^{2}]\notag\\
+        = & \,\EE_{k+1}[\|(1-\rho_k)\be^{k}+\tilde\nabla^{k+1}-\nabla^{k+1}+(1-\rho_k)(\nabla^{k}-\tilde\nabla^{k})\|^{2}]\notag\\
+        = & \,(1-\rho_k)^{2}\|\be^{k}\|^{2}+\EE_{k+1}[\|\tilde\nabla^{k+1}-\nabla^{k+1}+(1-\rho_k)(\nabla^{k}-\tilde\nabla^{k})\|^{2}]\quad\text{a.s.},
+        \label{Eq: the error recursion first step in StoRM}
+    \end{align}}
+    \blue{where \eqref{Eq: the error recursion first step in StoRM} follows from \Cref{Ass: main assumptions}(iii), which ensures that $\EE_{k+1}[\tilde\nabla^{j}]=\frac1n\sum_{i=1}^{n}\nabla_{\bx}F_i(\bx^{j},\bb_i^{j})=\nabla^{j}$ a.s. for $j\in\{k,k+1\}$, and hence
+    \begin{align*}
+        \EE_{k+1}[\langle\tilde\nabla^{k+1}-\nabla^{k+1},\be^{k}\rangle] = & \,0,\\
+        \EE_{k+1}[\langle\tilde\nabla^{k}-\nabla^{k},\be^{k}\rangle] = & \,0\quad\text{a.s.}
+    \end{align*}
+    Let us focus on the second term of \eqref{Eq: the error recursion first step in StoRM} by rewriting this term as}
+    \blue{\begin{align}
+        & \,\EE_{k+1}[\|\tilde\nabla^{k+1}-\nabla^{k+1}+(1-\rho_k)(\nabla^{k}-\tilde\nabla^{k})\|^{2}]\notag\\
+        = & \,\EE_{k+1}[\|\rho_k(\tilde\nabla^{k+1}-\nabla^{k+1})+(1-\rho_k)(\tilde\nabla^{k+1}-\tilde\nabla^{k}-\nabla^{k+1}+\nabla^{k})\|^{2}]\notag\\
+        \leq & \,2\rho_k^{2}\,\EE_{k+1}[\|\tilde\nabla^{k+1}-\nabla^{k+1}\|^{2}]+2(1-\rho_k)^{2}\,\EE_{k+1}[\|\tilde\nabla^{k+1}-\tilde\nabla^{k}-(\nabla^{k+1}-\nabla^{k})\|^{2}]\notag\\
+        \leq & \,\frac{2\rho_k^{2}\sigma^{2}}{b_{k+1}}+\frac{2(1-\rho_k)^{2}}{b_{k+1}}\cdot\frac1n\sum_{i=1}^{n}\|\nabla_{\bx}F_i(\bx^{k+1},\bb_i^{k+1})-\nabla_{\bx}F_i(\bx^{k},\bb_i^{k})\|^{2}\label{Eq: the error recursion variance step in StoRM}\\
+        \leq & \,\frac{2\rho_k^{2}\sigma^{2}}{b_{k+1}}+\frac{4(1-\rho_k)^{2}L_F^{2}}{b_{k+1}}\left(\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}\right)\quad\text{a.s.},\label{Eq: the error recursion mss step in StoRM}
+    \end{align}}
+    \blue{where the first inequality uses $\|\bm a+\bm b\|^{2}\leq2\|\bm a\|^{2}+2\|\bm b\|^{2}$; \eqref{Eq: the error recursion variance step in StoRM} uses the variance formula for uniform sampling without replacement, together with $\frac{n-b_{k+1}}{n-1}\leq1$, \Cref{Ass: main assumptions}(iii) for the first term, and the fact that a variance is bounded by the second moment for the second term; and \eqref{Eq: the error recursion mss step in StoRM} uses \Cref{Ass: the mean squared smoothness of F} together with $\|\bx^{k+1}-\bx^{k}\|^{2}=2\Delta_{\bx}^{k+1}$ and $\|\bB^{k+1}-\bB^{k}\|^{2}=2\Delta_{\bB}^{k+1}$. The case $n=1$ is immediate since both terms vanish. Substituting \eqref{Eq: the error recursion mss step in StoRM} into \eqref{Eq: the error recursion first step in StoRM} and taking full expectation on both sides of this inequality, we obtain the claimed bound and complete the proof.}
+\end{proof}
 
 \blue{The term $\Delta_{\bB}^{k+1}$ cannot be dropped, because $\nabla_{\bx}F_i$ depends on $\bb_i$. We control it by tracking the increments of the $\bB$-block. Let $m:=\gamma/n$ and $r:=\tau m$. Since $\nabla_{\bB}F(\bx,\bB)=m(\bB-\mathcal{D}(\bx))$, we have $m\le L_F$. Put $\bm{U}^{k}:=\mathcal{D}(\bx^{k})$, $\bm{Z}^{k}:=\tau\bLmbd^{k}$, $\bB^{0}:=\bB^{1}$, $\bm{Z}^{0}:=\bm{Z}^{1}$ (auxiliary states used only in the analysis, not iterations of the algorithm), and
 \[
@@ -991,6 +951,7 @@ the optimality condition of $\bx^{k+1}$ from \eqref{Eq: the update of x in STORM
 
 Selecting appropriate parameters is crucial as the ultimate oracle complexities depend on these choices.
 \subsection{Proof of the Averaged Stationarity Error Bound for DualHash-StoRM}
+\label{app-toc-16}
 \label{subsubsec:proof-avg-stationarity-storm}
 We now take $\eta_{k}\equiv \eta_{T}$ and $\rho_{k}\equiv \rho_{T}$. The first result estimates the averaged expected stationarity error.
 \begin{lemma}
@@ -1015,6 +976,7 @@ We now take $\eta_{k}\equiv \eta_{T}$ and $\rho_{k}\equiv \rho_{T}$. The first r
 \end{proof}
 
 \subsection{Proof of \Cref{Lemma: convergence rate of storm}}
+\label{app-toc-17}
 \label{Subsubsec: convergence rate STORM}
 \begin{proof}
     \blue{Insert $\eta_T=\eta/(\tilde L_FT^{1/3})$, $\rho_T=8\rho\eta^2/T^{2/3}$, $b_1\ge c_bT^{1/3}$ and $b_k=b$ into \eqref{Eq: the averaged stationarity error bound in lemma}. Then $\eta_T/(\rho_Tb_1)\le1/(8\rho\eta\tilde L_Fc_b)$ and $2\eta_T\rho_T=16\rho\eta^3/(\tilde L_FT)$. Moreover $N_T\le\bar N\,T^{1/3}$: indeed $S_1,S_2,C_{\bB}$ do not depend on $T$, $4/\eta_T=4\tilde L_FT^{1/3}/\eta$, and $4\eta_TS_3=48\eta_T^{-1}+16\eta_TL_F^2(1+3\tau^2)\le\bigl(\frac{48\tilde L_F}{\eta}+\frac{16\eta L_F^2(1+3\tau^2)}{\tilde L_F}\bigr)T^{1/3}$. Consequently the right-hand side of \eqref{Eq: the averaged stationarity error bound in lemma} is at most
@@ -1025,6 +987,7 @@ We now take $\eta_{k}\equiv \eta_{T}$ and $\rho_{k}\equiv \rho_{T}$. The first r
 \end{proof}
 With this parameter choice, we proceed to analyze the oracle complexity of \Cref{alg:our_algorithm_storm}.
 \subsection{Proof of \Cref{Theorem: the oracle complexity in STORM}}
+\label{app-toc-18}
 \label{Subsubsec: proof theorem STORM}
 \begin{proof}
     \blue{By \Cref{Lemma: convergence rate of storm}, $\EE\,\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))\le\bar N\Theta\,T^{-2/3}$, which is at most $\varepsilon^2$ for the $T$ in \eqref{Eq: the iterate number upper bound of algorithm VR}. With $b_1=\calO(T^{1/3})$ and $b_k=b$ for $k\ge2$, the number of stochastic gradient calls is

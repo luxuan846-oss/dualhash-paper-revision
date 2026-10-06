@@ -305,9 +305,6 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 \label{Eq: minibatch oracle}
 \tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
 \end{equation}}
-
-\blue{The batch sizes $\{b_k\}$ are prescribed by a deterministic rule, which may depend on the iteration index and the total iteration budget $T$, with each $b_k$ an integer between $1$ and $n$. This specifies only the number of samples; the mini-batch $\calJ_k$ is drawn randomly at iteration $k$. The complexity analysis uses a constant batch size within each run for DualHash-StoM, and a prescribed initial batch size followed by a constant batch size for DualHash-StoRM.}
-
 \subsubsection{DualHash with Momentum Acceleration}
 We first present a momentum-based instance. At iteration $k$, we form two extrapolated points
 \begin{equation}

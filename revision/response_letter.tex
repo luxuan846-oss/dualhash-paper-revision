@@ -93,7 +93,9 @@ When an item has been renumbered, we give its number in the submitted manuscript
 \subsection{Reviewer's general assessment}
 
 \noindent\textit{Summary.}
-\red{The paper presents DualHash, a primal-dual reformulation for deep hashing with W-type quantization regularization. My understanding is that the main contribution is an adaptation of primal-dual splitting, combined with stochastic momentum/STORM updates, to deep hashing. The method uses the Fenchel conjugate of a specific W-type regularizer to obtain a closed-form dual proximal update. However, the convexity of the dual/conjugate side is standard.}
+ {The paper presents DualHash, a primal-dual reformulation for deep hashing with W-type quantization regularization. My understanding is that the main contribution is an adaptation of primal-dual splitting, combined with stochastic momentum/STORM updates, to deep hashing. The method uses the Fenchel conjugate of a specific W-type regularizer to obtain a closed-form dual proximal update. However, the convexity of the dual/conjugate side is standard.}
+\par\smallskip
+\normalfont\upshape\textbf{\red{Response:}} xxx
 
 \subsection{Major issues}
 
@@ -103,14 +105,19 @@ When an item has been renumbered, we give its number in the submitted manuscript
 \item The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is strong duality, zero duality gap, or at least a rigorous stationarity relationship between the transformed primal-dual problem and the original objective.
 \par\smallskip
 \normalfont\upshape\textbf{Response:}
-{\color{red}
-We thank the reviewer for this key question. Since $h$ is nonconvex, strong duality between Problems~(P) and~(D) may fail, and we do not claim it. We now establish the relationship in Section~5.1 in two steps.
+{
+We thank the reviewer for this key question. Since $h$ is nonconvex, strong duality between Problems~(P) and~(D) may fail, and we do not claim it. \red{why, many nonconvex problem has strong duality. I suggest to move it after stating  Example 5.1.}
+We now establish the relationship in Section~5.1 in two steps. 
+\red{To me the response is too straight. Please be more elegant.}
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=2.2em]
 \item \textbf{Zero duality gap.} Proposition~5.1 shows that a zero-gap primal--dual optimal pair, whenever it exists, is a KKT point of $\calL$. Example~5.1 shows that such a pair need not exist: for a one-dimensional instance, the duality gap equals $\tfrac12$.
 \item \textbf{Stationarity relationship.} Proposition~5.2 characterizes exactly when a KKT point of $\calL$ yields a stationary point of Problem~(P): this holds if and only if the Fenchel--Young equality holds for $h$, which is equivalent to $|\tilde b_{ij}|\ge1$ for all $i,j$.
 \end{enumerate}
-Proposition~5.2 is stated in Section~5.1, and its proof is given in Appendix~A.2, with a pointer after the statement \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.2, Page XX, lines XX--XX)}:
-\begin{quote}\normalfont\upshape\color{red}
+% Proposition~5.2 is stated in Section~5.1, and its proof is given in Appendix~A.2, with a pointer after the statement \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.2, Page XX, lines XX--XX)}:
+% 
+
+\red{For your convenience, we repeat Proposition 5.2 below.}
+\begin{quote}\normalfont\upshape
 \textbf{Proposition 5.2.} Let $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ be a KKT point of $\calL$, i.e., it satisfies (5.1). Then the following statements are equivalent:
 \begin{enumerate}[label=\textup{(\alph*)}]
 \item $(\tilde{\bx},\tilde{\bB})$ is a stationary point of Problem~(P), i.e., $\zero\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\zero\}\times\partial h(\tilde{\bB})$;
@@ -148,7 +155,7 @@ Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three stat
 \subsubsection*{Length and organization}
 
 \begin{itemize}\itshape
-\item \red{Finally, the paper feels longer than necessary relative to its main contribution. Some of the space spent on standard preliminaries and routine descent arguments could be shortened, cited, or moved further into the supplement. This would allow the main text to focus more sharply on what is actually novel, especially the relationship between the primal-dual reformulation and the original nonconvex W-regularized hashing objective.}
+\item  {Finally, the paper feels longer than necessary relative to its main contribution. Some of the space spent on standard preliminaries and routine descent arguments could be shortened, cited, or moved further into the supplement. This would allow the main text to focus more sharply on what is actually novel, especially the relationship between the primal-dual reformulation and the original nonconvex W-regularized hashing objective.}
 \par\smallskip
 \normalfont\upshape\textbf{Response:} 
 \end{itemize}

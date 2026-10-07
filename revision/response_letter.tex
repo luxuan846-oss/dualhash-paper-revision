@@ -67,6 +67,7 @@
 \newenvironment{bluequote}{\begin{quote}\normalfont\upshape\color{blue}}{\end{quote}}
 \newcommand{\red}[1]{\begin{color}{red}\itshape #1\end{color}}
 \newcommand{\green}[1]{{\color{green!50!black}#1}}
+\newcommand{\responseLabel}{\colorbox{yellow}{\normalfont\upshape\textbf{Response:}}}
 
 \title{Response to Reviewers}
 \author{}
@@ -79,32 +80,51 @@
 \let\reviewitem\item
 \renewcommand{\item}{\reviewitem\itshape}
 
-For ease of reference, excerpts from the revised manuscript are shown in blue.
+\noindent Dear Editors and Reviewers,
+
+\medskip
+We sincerely thank you for the opportunity to submit a revised version of our manuscript entitled ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing.'' We are truly grateful for the time, effort, and professional guidance that the editors and reviewers have devoted to evaluating our work. The critical comments and thoughtful suggestions have been extremely valuable to us and have led to substantial improvements of the manuscript.
+
+We have carefully considered every comment and revised the manuscript accordingly; all changes in the revised manuscript are marked in blue. To make this letter easier to follow, we first list the conventions used below, followed by a summary of the major changes and our point-by-point responses.
 
 \par\smallskip
 \noindent\normalfont\upshape\textbf{Conventions used in this response letter.}
-When an item has been renumbered, we give its number in the submitted manuscript first, followed by its number in the revised manuscript in parentheses, e.g., Lemma~5.4 (now Lemma~5.2). Excerpts from the revised manuscript use the revised numbering.
-% Additional response conventions to be added here.
+\begin{itemize}[leftmargin=2em,before=\let\item\reviewitem]
+\item The reviewers' comments are reproduced in \textit{italic font} and numbered as in the reports.
+\item Excerpts from the revised manuscript are shown in \blue{blue}, and their locations (section, page, and lines) are indicated in \green{green}.
+\item When an item has been renumbered, we give its number in the submitted manuscript first, followed by its number in the revised manuscript in parentheses, e.g., Lemma~5.4 (now Lemma~5.2). Excerpts from the revised manuscript use the revised numbering.
+\end{itemize}
+
+\section*{Summary of the Response Letter}
+\red{[Summary for the AC to be added here.]}
+
 
 \vspace{1em}
 
-\section{Reviewer 1}
+\clearpage
+\setcounter{tocdepth}{2}
+\tableofcontents
 
-\subsection{Reviewer's general assessment}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{part}{Reviewer 1}
+{\normalfont\LARGE Reviewer 1\par}
+\setcounter{section}{0}
+\section{Reviewer's general assessment}
 
 \noindent\textit{Summary.}
  {The paper presents DualHash, a primal-dual reformulation for deep hashing with W-type quantization regularization. My understanding is that the main contribution is an adaptation of primal-dual splitting, combined with stochastic momentum/STORM updates, to deep hashing. The method uses the Fenchel conjugate of a specific W-type regularizer to obtain a closed-form dual proximal update. However, the convexity of the dual/conjugate side is standard.}
 \par\smallskip
-\normalfont\upshape\textbf{\red{Response:}} xxx
+\normalfont\upshape\responseLabel xxx
 
-\subsection{Major issues}
+\section{Major issues}
 
 \subsubsection*{(a) Relation between the primal-dual reformulation and the original objective}
 
 \begin{itemize}\itshape
 \item The key question is whether this transformed problem provides meaningful guarantees for the original nonconvex W-regularized hashing objective. I do not find this connection convincingly established. In particular, the paper should clarify whether there is strong duality, zero duality gap, or at least a rigorous stationarity relationship between the transformed primal-dual problem and the original objective.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 {
 We thank the reviewer for this key question. Since $h$ is nonconvex, strong duality between Problems~(P) and~(D) may fail, and we do not claim it. \red{why, many nonconvex problem has strong duality. I suggest to move it after stating  Example 5.1.}
 We now establish the relationship in Section~5.1 in two steps. 
@@ -142,14 +162,14 @@ Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three stat
 }
 \end{itemize}
 
-\subsection{Minor issues}
+\section{Minor issues}
 
 \subsubsection*{Definition of the W-type regularizer and clarity of the setting}
 
 \begin{itemize}\itshape
 \item I also found the setting and writing unclear. The term ``W-type regularizer'' is used repeatedly but never properly defined; only one example is given. Even by the start of Section 3, the precise problem being studied is still not fully clear. If ``W-type'' denotes a class of regularizers, that class should be formally specified. If it refers only to the particular regularizer $h(z) = \lambda \lVert |z| - 1 \rVert_1$, the paper should state this much earlier and avoid presenting the results as applying to a broader family.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} 
+\normalfont\upshape\responseLabel 
 \end{itemize}
 
 \subsubsection*{Length and organization}
@@ -157,23 +177,14 @@ Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three stat
 \begin{itemize}\itshape
 \item  {Finally, the paper feels longer than necessary relative to its main contribution. Some of the space spent on standard preliminaries and routine descent arguments could be shortened, cited, or moved further into the supplement. This would allow the main text to focus more sharply on what is actually novel, especially the relationship between the primal-dual reformulation and the original nonconvex W-regularized hashing objective.}
 \par\smallskip
-\normalfont\upshape\textbf{Response:} 
+\normalfont\upshape\responseLabel 
 \end{itemize}
 
 \clearpage
-\begin{center}
+\phantomsection
+\addcontentsline{toc}{part}{Reviewer 2}
 {\normalfont\LARGE Reviewer 2\par}
-\end{center}
 \setcounter{section}{0}
-\startcontents[reviewertwo]
-
-\section*{Contents}
-\printcontents[reviewertwo]{}{1}{\setcounter{tocdepth}{2}}
-
-\section*{Summary of the Response Letter}
-% Summary for the AC to be added here.
-
-\clearpage
 
 \section{Reviewer's general assessment}
 
@@ -255,7 +266,7 @@ There exists $L_{F} > 0$ such that for all $\bx, \bx' \in \RR^{q}$ and $\bB, \bB
 $\EE[\|\be^k\|^2]\le\sigma^2/b_k$.}
 
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We thank the reviewer for this comment. The bound (5.11) follows from the standard variance formula for uniform sampling. With the revised probabilistic framework and conditional-expectation notation above, its derivation reads as follows.
 \begin{quote}\normalfont\upshape
 \textit{Proof.} Recall that the stochastic gradient error $\be^k$ of Algorithm 4.1 is defined as
@@ -313,7 +324,7 @@ expectation and using the tower property gives (5.11).
 \begin{itemize}\itshape
 \item (Lemma 5.1/proof) Having $J$ coercive and lower-bounded is generally not enough to directly obtain the boundedness of $(\bx^k,\bB^k)$. You classically also need to prove that sequence $\{J(\bx^k,\bB^k)\}$ converges (or at least its boundedness). Note also that having boundedness of all level-sets is equivalent to coercivity. Finally, the coercivity of $J$ is not assumed in your assumption 5.1.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer for the important comment about the boundedness argument. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(\bx,\bB)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it requires lower bounds on the potentials used in the analysis. This was the original motivation for introducing Lemma~5.1.
+\normalfont\upshape\responseLabel We thank the reviewer for the important comment about the boundedness argument. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(\bx,\bB)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it requires lower bounds on the potentials used in the analysis. This was the original motivation for introducing Lemma~5.1.
 
 Regarding coercivity, we already stated in the submitted manuscript (p.~7) that the objective $J$ in~(3.1),
 \[
@@ -333,10 +344,10 @@ Under the refined Assumption~5.1(i) and the appropriate parameter conditions, th
 \item (Lemma 5.7) Why $R\in 2,...,T+1$ instead of $R\in 1,...,T$ ? Furthermore, I am not particularly in favour of using uniform sampling to present a rate; I would prefer to use the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[dist^2(...)]$. Finally, to use $\Psi_m^*$ you need at least to justify the lower-boundedness of $\{\Psi_m(\calQ^k)\}$ which doesn't seem straightforward.
 \par I would first introduce $L_\Delta$ before mentioning $S_1,S_2,S_3,S_4$ (these constant actually don't appear in (5.17) as such).
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the iterates, in Lemma~5.7 (now Lemma~5.5), Theorem~5.2 (now Theorem~5.4), and the output step of Algorithm 4.1; the same correction is made in Lemma~5.10 (now Lemma~5.8), Theorem~5.3 (now Theorem~5.5), and Algorithm 4.2. Following the reviewer's preference, Lemma~5.5 now also states the bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\partial\calL(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\partial\calL(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, the lower bound of $\{\Psi_m(\calQ^k)\}$ is established in Proposition~\ref{prop:lyapunov-lower-bound}(i); it uses only the global $L_F$-smoothness, $F\ge\underline{\ell}$, the box constraint on $\bLmbd^k$, and the output condition of Appendix~B, and it does not require the iterates to be bounded. We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~5.5, before $S_1,\ldots,S_4$ are mentioned.
+\normalfont\upshape\responseLabel We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the iterates, in Lemma~5.7 (now Lemma~5.5), Theorem~5.2 (now Theorem~5.4), and the output step of Algorithm 4.1; the same correction is made in Lemma~5.10 (now Lemma~5.8), Theorem~5.3 (now Theorem~5.5), and Algorithm 4.2. Following the reviewer's preference, Lemma~5.5 now also states the bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\partial\calL(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\partial\calL(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, the lower bound of $\{\Psi_m(\calQ^k)\}$ is established in Proposition~\ref{prop:lyapunov-lower-bound}(i); it uses only the global $L_F$-smoothness, $F\ge\underline{\ell}$, the box constraint on $\bLmbd^k$, and the output condition of Appendix~B, and it does not require the iterates to be bounded. We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~5.5, before $S_1,\ldots,S_4$ are mentioned.
 \item (Lemma 5.10) Similar comment as for Lemma 5.7, especially the fact you need to justify the lower-boundedness of $\{\Psi_r(\calQ^k)\}$ to be able to invoke $\Psi_r^*$.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer. As for Lemma~5.7 (now Lemma~5.5), the lower bound needed to define $\Psi_r^*$ is given in Proposition~\ref{prop:lyapunov-lower-bound}(ii). It bounds from below the augmented potential $W_k=\EE[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\EE\|\be^k\|^2$, which contains the estimation-error term that the descent inequality produces, and $\Psi_r^*$ is defined from this bound.
+\normalfont\upshape\responseLabel We thank the reviewer. As for Lemma~5.7 (now Lemma~5.5), the lower bound needed to define $\Psi_r^*$ is given in Proposition~\ref{prop:lyapunov-lower-bound}(ii). It bounds from below the augmented potential $W_k=\EE[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\EE\|\be^k\|^2$, which contains the estimation-error term that the descent inequality produces, and $\Psi_r^*$ is defined from this bound.
 \end{itemize}
 
 \subsection{\red{Errors in Appendix C (DualHash-StoM)}}
@@ -347,15 +358,15 @@ Under the refined Assumption~5.1(i) and the appropriate parameter conditions, th
 \item (Lemma 5.7/proof) See my comments relative to Appendix C.
 \item (Theorem 5.2/proof) See my comments relative to Appendix C.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} These four comments refer to the Appendix~C comments listed below, which are answered individually: Lemmas~C.1--C.3, the proofs of Lemmas~5.5--5.7 (now Lemmas~5.3--5.5), and the proof of Theorem~5.2 (now Theorem~5.4) (now Theorem~5.4).
+\normalfont\upshape\responseLabel These four comments refer to the Appendix~C comments listed below, which are answered individually: Lemmas~C.1--C.3, the proofs of Lemmas~5.5--5.7 (now Lemmas~5.3--5.5), and the proof of Theorem~5.2 (now Theorem~5.4) (now Theorem~5.4).
 \item (Lemma 5.6/proof) In (C.7) you don't pass to conditional expectation correctly ; this should be be $\EE_{\xi^{[k+1]}}$ before every terms. Fortunately, this doesn't seem compromise your proof to the extent that the ``wrong'' terms in $\EE_{\xi^{[k]}}$ in your inequality seems measurable (to check) and can therefore be written without a conditional expectation, for example $\cancel{\EE_{\xi^{[k]}}[\Delta_{\bx}^k]}\to\EE_{\xi^{[k+1]}}[\Delta_{\bx}^k]=\Delta_{\bx}^k$. Moreover, remind the reader you also use $\EE_{\xi^{[k+1]}}[\|e_k\|^2]\le\sigma^2/b_k$ (to justify).
 \par Finally, to reach the inequality after (C.7), you need to invoke Lemma C.2. For this reason, I would place Lemma C.2 before Lemma C.1.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer. In the proof of Lemma~5.6 (now Lemma~5.4), we now pass to the total expectation $\EE[\cdot]$ right after the pathwise Lyapunov inequality, in line with the reviewer's own suggestion for Lemma~D.1 to work with in-expectation statements. No conditional expectation remains in this proof, so the measurability of the terms in $\EE_{\bxi^{[k]}}$ no longer needs to be checked. The bound $\EE[\|\be^k\|^2]\le\sigma^2/b_k$ used there is justified in our responses on the probabilistic setting and to the comment on page~13 above. The proof now invokes Lemma~C.2 explicitly where the coefficients are substituted. We keep the order of the lemmas, since swapping them would renumber Lemma~C.1 and Lemma~C.2, which are cited throughout the reviewer's comments and this letter.
+\normalfont\upshape\responseLabel We thank the reviewer. In the proof of Lemma~5.6 (now Lemma~5.4), we now pass to the total expectation $\EE[\cdot]$ right after the pathwise Lyapunov inequality, in line with the reviewer's own suggestion for Lemma~D.1 to work with in-expectation statements. No conditional expectation remains in this proof, so the measurability of the terms in $\EE_{\bxi^{[k]}}$ no longer needs to be checked. The bound $\EE[\|\be^k\|^2]\le\sigma^2/b_k$ used there is justified in our responses on the probabilistic setting and to the comment on page~13 above. The proof now invokes Lemma~C.2 explicitly where the coefficients are substituted. We keep the order of the lemmas, since swapping them would renumber Lemma~C.1 and Lemma~C.2, which are cited throughout the reviewer's comments and this letter.
 \item (Lemma C.2/proof) Before the calculus relative to $K_5-K_3-C_3-C_4$, remind the reader equalities $K_5=\frac{1-\alpha_k}{\eta_k}-L_F$, $C_3=K_4$, $\overline{L}_F=2L_F+K_3+K_4$. In the calculus of $C_4-K_6$, the 3rd line is even an equality. Moreover, this should be $\beta_k$ instead of $\beta$ everywhere.
 \par Regarding the last part, delete the two ``$\ge 0$'' after $C_B$ and $\frac{2}{L_F}C_B$ expression respectively. Otherwise, this would be a logical error as, at this stage of the proof, you have not yet shown that $C_B$ is positive. Moreover, I found $\tau\in\left(0,6\left(\frac{\sqrt{56}-2}{13}\right)\delta\frac{1}{L_F}\right)$. Finally, could you provide additionnal details to justify why $C_B>0$ ensures $C_2>0$ ?
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer for the careful verification. In the revised proof of Lemma C.2, we recall $K_5=\frac{1-\alpha_k}{\eta_k}-2L_F$, $C_3=K_4$, and $\overline{L}_F=2L_F+K_3+K_4$ before the computation of $K_5-K_3-C_3-C_4$; we state $\alpha_k=\alpha$ and $\beta_k=\beta$ from the parameter conditions before computing $C_4-K_6$, which makes the use of the constant $\beta$ consistent with the definition of $C_4$; and the third line of that computation is now written as an equality. We have also removed the two premature assertions ``$\ge 0$''.
+\normalfont\upshape\responseLabel We thank the reviewer for the careful verification. In the revised proof of Lemma C.2, we recall $K_5=\frac{1-\alpha_k}{\eta_k}-2L_F$, $C_3=K_4$, and $\overline{L}_F=2L_F+K_3+K_4$ before the computation of $K_5-K_3-C_3-C_4$; we state $\alpha_k=\alpha$ and $\beta_k=\beta$ from the parameter conditions before computing $C_4-K_6$, which makes the use of the constant $\beta$ consistent with the definition of $C_4$; and the third line of that computation is now written as an equality. We have also removed the two premature assertions ``$\ge 0$''.
 
 Regarding the range of $\tau$: with $\delta=1/6$ and $t=\tau L_F$, the general expression of $C_{\bB}$ gives
 \[
@@ -364,19 +375,19 @@ Regarding the range of $\tau$: with $\delta=1/6$ and $t=\tau L_F$, the general e
 The first term was misprinted as $\frac{2}{t}$ in the submitted manuscript. The value $\frac{\sqrt{56}-2}{13}$ found by the reviewer is exactly what the misprinted coefficient produces, whereas the corrected coefficient gives $C_{\bB}>0$ if and only if $0<\tau<\frac{\sqrt{30}-2}{13L_F}$, which is the range stated in the manuscript. We have corrected the coefficient and written the range as an open interval. We have also added the requested justification: $C_1=K_1=3\delta\tau^{-1}>0$ and $C_2=\frac{1}{2}(K_2-K_1+K_3)=C_{\bB}+K_3>0$, because $K_3=\tau L_F^2/\delta>0$. Finally, we state explicitly that $\tilde\delta=c_\delta\delta^2$ with $0<c_\delta<36\big(\frac{\sqrt{30}-2}{13}\big)^2$, so that $\tau\le\sqrt{\tilde\delta}/L_F$ implies the above range.
 \item (Lemma C.3) In (C.10), I think the correct expression is $S_4^k=6(L_F^2\beta_k^2+\underline{2}\eta_k^{-1}\alpha_k^2)$. To maintain consistency in the structure of your terms, I would rewrite $S_1=4(\tau^{-2}+3)$.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer. The coefficient $6$ in front of $\eta_k^{-2}\alpha_k^2$ was indeed a typo: the proof (estimate of $\|\bd_{\bx}^k\|^2$) gives $6\eta_k^{-2}\|\bx^k-\by^k\|^2=12\eta_k^{-2}\alpha_k^2\Delta_{\bx}^k$, so that $S_4^k=6(L_F^2\beta_k^2+2\eta_k^{-2}\alpha_k^2)$, which we have corrected. We note that the exponent of $\eta_k$ is $-2$, since the term arises from $\eta_k^{-2}\|\bx^k-\by^k\|^2$. We have also rewritten $S_1=4(\tau^{-2}+3)$ as suggested.
+\normalfont\upshape\responseLabel We thank the reviewer. The coefficient $6$ in front of $\eta_k^{-2}\alpha_k^2$ was indeed a typo: the proof (estimate of $\|\bd_{\bx}^k\|^2$) gives $6\eta_k^{-2}\|\bx^k-\by^k\|^2=12\eta_k^{-2}\alpha_k^2\Delta_{\bx}^k$, so that $S_4^k=6(L_F^2\beta_k^2+2\eta_k^{-2}\alpha_k^2)$, which we have corrected. We note that the exponent of $\eta_k$ is $-2$, since the term arises from $\eta_k^{-2}\|\bx^k-\by^k\|^2$. We have also rewritten $S_1=4(\tau^{-2}+3)$ as suggested.
 \item (Lemma 5.7/proof) Remind the reader $\eta_k$ is constant to justify $S_3^k=S_3$, $S_4^k=S_4$. Since all the terms are positive, I think it would be more appropriate to bound (C.9) using $\max\{S_1,S_2,S_3,S_4\}$ instead of $\max\{S_1,S_2\}+\max\{S_3,S_4\}$.
 \par When you sum over $k=1,...,T$, term $(3+L_\Delta)\frac{\sigma^2}{b_k}$ is incorrect and should be $\frac{(3+L_\Delta)\sigma^2}{L_FT}\sum_{k=1}^{T}\frac{1}{b_k}$.
 \par In (5.17), in the upper bound, you thus should obtain $\frac{C_\sigma\sigma^2}{T}\sum_{k=1}^{T}\frac{1}{b_k}$ with $C_\sigma=\frac{3+L_\Delta}{L_F}$.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer for identifying this error and agree that, for varying batch sizes, the averaged bound must retain $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}$. Tracing this term back also revealed an inconsistency in Lemma C.3: its proof yields the noise term $3\|\be^k\|^2$, whose expectation is bounded by $3\sigma^2/b_k$, so the factor $1/L_F$ in the statement was a typo. We have removed it. Combining the corrected Lemma C.3 with the Lyapunov descent inequality, whose noise term $\sigma^2/(b_kL_F)$ is unchanged, gives the corrected bound (5.17) (now (5.18)):
+\normalfont\upshape\responseLabel We thank the reviewer for identifying this error and agree that, for varying batch sizes, the averaged bound must retain $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}$. Tracing this term back also revealed an inconsistency in Lemma C.3: its proof yields the noise term $3\|\be^k\|^2$, whose expectation is bounded by $3\sigma^2/b_k$, so the factor $1/L_F$ in the statement was a typo. We have removed it. Combining the corrected Lemma C.3 with the Lyapunov descent inequality, whose noise term $\sigma^2/(b_kL_F)$ is unchanged, gives the corrected bound (5.17) (now (5.18)):
 \[
 \frac{1}{T}\sum_{k=1}^{T}\EE\big[\dist^2(0,\partial\calL(\bx^k,\bB^k,\bLmbd^k))\big]\le\frac{L_\Delta\Delta_1}{T}+\frac{C_\sigma\sigma^2}{T}\sum_{k=1}^{T}\frac{1}{b_k},\qquad C_\sigma=3+\frac{L_\Delta}{L_F}.
 \]
 The constant differs from the reviewer's $(3+L_\Delta)/L_F$ only because of the corrected Lemma C.3; the reviewer's expression is what the uncorrected statement gives. The corresponding steps in the proof of Lemma~5.7 (now Lemma~5.5) have been revised.
 \item (Theorem 5.2/proof) The previous mistake propagates into the proof of Theorem 5.2.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer. With the constant batch size $b_k=b=c_bT$ used in Theorem~5.2 (now Theorem~5.4), we have $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}=\frac{1}{c_bT}$, so the corrected (5.17) (now (5.18)) gives $\EE[\dist^2(0,\partial\calL(\bx^R,\bB^R,\bLmbd^R))]\le\frac{1}{T}\big(L_\Delta\Delta_1+C_\sigma\frac{\sigma^2}{c_b}\big)$. This is the bound used in the proof of Theorem~5.4, which we have updated to state this substitution explicitly. Hence the iteration bound and the $\calO(\varepsilon^{-4})$ SFO complexity in Theorem~5.4 remain unchanged.
+\normalfont\upshape\responseLabel We thank the reviewer. With the constant batch size $b_k=b=c_bT$ used in Theorem~5.2 (now Theorem~5.4), we have $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}=\frac{1}{c_bT}$, so the corrected (5.17) (now (5.18)) gives $\EE[\dist^2(0,\partial\calL(\bx^R,\bB^R,\bLmbd^R))]\le\frac{1}{T}\big(L_\Delta\Delta_1+C_\sigma\frac{\sigma^2}{c_b}\big)$. This is the bound used in the proof of Theorem~5.4, which we have updated to state this substitution explicitly. Hence the iteration bound and the $\calO(\varepsilon^{-4})$ SFO complexity in Theorem~5.4 remain unchanged.
 \end{itemize}
 
 \subsection{\red{Errors in Appendix D (DualHash-StoRM)}}
@@ -384,7 +395,7 @@ The constant differs from the reviewer's $(3+L_\Delta)/L_F$ only because of the 
 \begin{itemize}\itshape
 \item ((Lemma 5.10)/Theorem 5.3 proofs) See my comments relative to Appendix D.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} This comment refers to the Appendix~D comments listed below, which are answered individually: Lemma~5.9 (now Lemma~5.7), Lemmas~D.1, D.2, and D.4, and the proofs of Lemma~5.10 (now Lemma~5.8) and Theorem~5.3 (now Theorem~5.5). The two notation comments of Appendix~D, on $|\calI_{k+1}|$ and on $C_\delta$, are answered under Notation and terminology.
+\normalfont\upshape\responseLabel This comment refers to the Appendix~D comments listed below, which are answered individually: Lemma~5.9 (now Lemma~5.7), Lemmas~D.1, D.2, and D.4, and the proofs of Lemma~5.10 (now Lemma~5.8) and Theorem~5.3 (now Theorem~5.5). The two notation comments of Appendix~D, on $|\calI_{k+1}|$ and on $C_\delta$, are answered under Notation and terminology.
 \item (Lemma 5.9/proof) I don't really catch the interest of intermediate variable $s$ here. You should write (D.1) directly. Moreover, (D.1) is a simple direct consequence of Lemma 5.4 combined with Lemma 5.8. Why make things more complicated with intermediate equations (5.9), (5.7) ?
 \par In (D.2), I don't understand where the term $(C_4-K_6)\Delta_x^k$ comes from.
 \item (Lemma D.1) In Inequality of Lemma (D.1) and after a quick check of the proof of Lemma 8 of [49], I think this should be $\EE_{\xi^{[k+1]}}[\|\be^k\|^2]$ instead of $\EE_{\xi^{[k]}}[\|\be^k\|^2]$ (similar confusion as in the proof of (C.7)) . If it is so, you can hardly consider $\EE_{\xi^{[k]}}[\|\be^k\|^2]$ as metric for the rest of your analysis. To avoid, this kind of problem, I think you should work with $\EE[\|\be^k\|^2]$ metric instead and present an ``in-expectation'' version of Lemma D.1 i.e. of the form of :
@@ -393,7 +404,7 @@ The constant differs from the reviewer's $(3+L_\Delta)/L_F$ only because of the 
 \]
 The resulting proof should therefore not undergo any significant changes. That is why, in the remaining proofs/results to review, I will assume that the inequalities are passed to the expectation rather than conditional expectation.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We agree with the reviewer. The correct conditioning is on $\calF_{k+1}=\sigma(\calJ_1,\ldots,\calJ_k)$: given $\calF_{k+1}$, the error $\be^k$ and the points $(\bx^k,\bB^k)$, $(\bx^{k+1},\bB^{k+1})$ are fixed, while $\calJ_{k+1}$ is independent, so that the cross terms with $\be^k$ vanish. Following the reviewer's suggestion, Lemma~D.1 is now stated for total expectations, and the subsequent analysis uses $\EE[\|\be^k\|^2]$ throughout. Compared with [49, Lemma~8], the bound contains the additional term $\Delta_{\bB}^{k+1}$: since $\nabla_{\bx}F_i$ depends on $\bb_i$, the mean-squared smoothness bound involves the increment of $\bB$ as well as that of $\bx$; this term is controlled by Lemma~D.2. As this term is not covered by [49], we have added a complete proof of Lemma~D.1 \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We agree with the reviewer. The correct conditioning is on $\calF_{k+1}=\sigma(\calJ_1,\ldots,\calJ_k)$: given $\calF_{k+1}$, the error $\be^k$ and the points $(\bx^k,\bB^k)$, $(\bx^{k+1},\bB^{k+1})$ are fixed, while $\calJ_{k+1}$ is independent, so that the cross terms with $\be^k$ vanish. Following the reviewer's suggestion, Lemma~D.1 is now stated for total expectations, and the subsequent analysis uses $\EE[\|\be^k\|^2]$ throughout. Compared with [49, Lemma~8], the bound contains the additional term $\Delta_{\bB}^{k+1}$: since $\nabla_{\bx}F_i$ depends on $\bb_i$, the mean-squared smoothness bound involves the increment of $\bB$ as well as that of $\bx$; this term is controlled by Lemma~D.2. As this term is not covered by [49], we have added a complete proof of Lemma~D.1 \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 \[
 \EE[\|\be^{k+1}\|^{2}]\leq(1-\rho_{k})^{2}\EE[\|\be^{k}\|^{2}]+\frac{2\rho_{k}^{2}\sigma^{2}}{b_{k+1}}+\frac{4(1-\rho_{k})^{2}L_{F}^{2}}{b_{k+1}}\EE\left[\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}\right].
@@ -403,7 +414,7 @@ The resulting proof should therefore not undergo any significant changes. That i
 \par Using (D.3) and more specifically $\rho_k\ge 8\eta_1\eta_kL_F^2$, I obtain $\frac{\rho_k}{8\eta_1L_F^2}-\frac{\eta_k}{2}\ge\frac{\eta_k}{2}$.
 \par As in the proof of Lemma 5.7, you here need to justify that $\{\EE[\Psi_r(\calQ^k)]\}$ is non-increasing.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer for this careful check. The reviewer is right that the factor $\frac{1}{8(1-\rho_k)\eta_1L_F^2}$ cannot simply be replaced by $\frac{1}{8\eta_1L_F^2}$, since the bracket it multiplies need not be nonpositive. We now apply the bound $1-\rho_k\le 1$ one step earlier, to the coefficient $4(1-\rho_k)L_F^2$ of $\EE[\Delta_{\bx}^{k+1}]$ in the recursion of Lemma D.1, before rearranging. This gives $-\EE[\Delta_{\bx}^{k+1}]\le\frac{1}{4L_F^2}\big((1-\rho_k)\EE[\|\be^k\|^2]-\EE[\|\be^{k+1}\|^2]+\frac{2\rho_k^2\sigma^2}{b_{k+1}}\big)$ and therefore yields the second inequality of (D.7) directly with the factor $\frac{1}{8\eta_1L_F^2}$, so the rest of the proof is unaffected. Regarding (D.3): both the reviewer's bound $\frac{\rho_k}{8\eta_1L_F^2}-\frac{\eta_k}{2}\ge\frac{\eta_k}{2}$ and the bound $\frac{\rho_k}{8\eta_1L_F^2}-\frac{\eta_k}{2}\ge\frac{\rho_k}{16\eta_1L_F^2}$ used in the manuscript follow from $\rho_k\ge 8\eta_1\eta_kL_F^2$; we keep the latter because the subsequent summation requires the weight $\rho_k$. While revising this proof, we also restored the term with $k=1$ that had been omitted in the final summation, so that the last sum in (D.4) now runs over $k=1,\ldots,T$; this adds a term of the same order and does not change the rate in Theorem~5.3 (now Theorem~5.5).
+\normalfont\upshape\responseLabel We thank the reviewer for this careful check. The reviewer is right that the factor $\frac{1}{8(1-\rho_k)\eta_1L_F^2}$ cannot simply be replaced by $\frac{1}{8\eta_1L_F^2}$, since the bracket it multiplies need not be nonpositive. We now apply the bound $1-\rho_k\le 1$ one step earlier, to the coefficient $4(1-\rho_k)L_F^2$ of $\EE[\Delta_{\bx}^{k+1}]$ in the recursion of Lemma D.1, before rearranging. This gives $-\EE[\Delta_{\bx}^{k+1}]\le\frac{1}{4L_F^2}\big((1-\rho_k)\EE[\|\be^k\|^2]-\EE[\|\be^{k+1}\|^2]+\frac{2\rho_k^2\sigma^2}{b_{k+1}}\big)$ and therefore yields the second inequality of (D.7) directly with the factor $\frac{1}{8\eta_1L_F^2}$, so the rest of the proof is unaffected. Regarding (D.3): both the reviewer's bound $\frac{\rho_k}{8\eta_1L_F^2}-\frac{\eta_k}{2}\ge\frac{\eta_k}{2}$ and the bound $\frac{\rho_k}{8\eta_1L_F^2}-\frac{\eta_k}{2}\ge\frac{\rho_k}{16\eta_1L_F^2}$ used in the manuscript follow from $\rho_k\ge 8\eta_1\eta_kL_F^2$; we keep the latter because the subsequent summation requires the weight $\rho_k$. While revising this proof, we also restored the term with $k=1$ that had been omitted in the final summation, so that the last sum in (D.4) now runs over $k=1,\ldots,T$; this adds a term of the same order and does not change the rate in Theorem~5.3 (now Theorem~5.5).
 \item (Lemma D.4 proof) I would justify the first term in (D.12) in a similar way to what you did for the second one, this time by invoking the second inequality in (5.23) and the fact that $\widetilde{S}_4\ge S_1,S_2$. Moreover, I think this is $\widetilde{S}_4$ everywhere instead of $S_4$.
 \par It appears more logical me to substitute (D.13) into (D.12) before passing to expectation.
 \par In (D.15), I think this is $\frac{2(C_\delta^1+4)}{\eta_1}$ instead of $\frac{2(C_\delta^1+4)}{S_4\eta_1}$.
@@ -414,22 +425,75 @@ The resulting proof should therefore not undergo any significant changes. That i
 
 \begin{itemize}\itshape
 \item (page 7) If I have clearly understood, problem (P) is a regularized version of (3.1) which is supposed to better leverage the structure of the initial problem. However, there seems to be a confusion relative to some variables definitions otherwise I don't really understand the point of introducing $P(\bx,\bB)$, (since $\bb_i=\bD_i(\bx)$, we have $\|\bb_i-\bD_i(\bx)\|^2=0$ and therefore $P(\bx,\bB)=0$). Finally, could you provide further details which would explain the interest of term $P(\bx,\bB)$ (it looks like a coupling one at first glance), don't hesitate to use references if necessary.
+
+\par\smallskip
+\normalfont\upshape\responseLabel
+We thank the reviewer for this helpful question. The reviewer's reading is exactly what we intended: Problem~(P) is a reformulation of Problem~(3.1) (now Problem~(P0)) that better exploits the structure of the hashing problem. We apologize for the confusion, which would have been avoided had we made the transformation explicit. We address the concerns in two points.
+\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
+\item \textbf{$P(\bx,\bB)$ is a quadratic penalty and does not vanish in Problem~(P).} Problem~(P0) is equivalent to
+\[
+\min_{\bx,\,\bB}\ \frac{1}{n}\sum_{i=1}^n f_i(\bx)+\sum_{i=1}^n h(\bb_i)
+\quad\text{s.t.}\quad \bb_i=\bD_i(\bx),\ \ i=1,\dots,n,
+\]
+whose feasible points satisfy the identity noted by the reviewer.  Since these nonlinear constraints are hard to handle directly, we relax them by a penalty, and we choose the quadratic penalty~\cite[Sec.~17.1]{nocedalWright2006} because it is smooth; this gives $P(\bx,\bB)$. Consequently, $\bB$ becomes a free variable and $P(\bx,\bB)$ vanishes only when $\bb_i=\bD_i(\bx)$ for all $i$. The smoothness of $P$ also allows $\bx$ to be updated by stochastic gradients, while $h$ acts only on $\bB$ and is handled through $h^*$ in closed form.
+\item \textbf{$P(\bx,\bB)$ reduces the quantization error of the network outputs.} The regularizer $h$ pushes $\bb_i$ toward $\{-1,1\}^d$, while $P$ pulls $\bD_i(\bx)$ toward $\bb_i$; hence $\bD_i(\bx)$ itself approaches a binary vector, and its gap to the final code $\operatorname{sgn}(\bD_i(\bx))$ decreases. Indeed, since $\operatorname{sgn}(\bD_i(\bx))$ is a nearest point of $\{-1,1\}^d$ to $\bD_i(\bx)$, and $\operatorname{dist}(\bb_i,\{-1,1\}^d)=\||\bb_i|-\mathbf{1}\|_2\le\lambda^{-1}h(\bb_i)$,
+\[
+\big\|\bD_i(\bx)-\operatorname{sgn}(\bD_i(\bx))\big\|\le\|\bD_i(\bx)-\bb_i\|+\lambda^{-1}h(\bb_i),
+\]
+where both terms on the right are penalized in Problem~(P). The same squared term is the quantization term $Q(\bu,\bb)$ in DDSH, DSDH, and DPSH (Table~1.1).
+\end{enumerate}
+We have made this transformation explicit in the revised manuscript; for your convenience, the revised passage is reproduced below \green{(Section~3.2, Page XX, lines XX--XX)}:
+\begin{bluequote}
+    We then employ variable splitting by introducing \blue{continuous} auxiliary variables \(\bb_i\blue{\in\RR^d}\) \blue{subject to} \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\), \blue{which yields the following equivalent nonlinearly constrained problem:
+\begin{align}
+    \min_{\bx \in \RR^{q}, \bB \in \RR^{n\times d}} \quad & \frac{1}{n} \sum_{i=1}^n f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
+    \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n\blue{,} \notag
+\end{align}}
+and then \blue{relax these constraints by} the quadratic penalty method \cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
+\begin{align}
+    \min_{\bx \in \RR^{q}, \bB \in \RR^{n\times d}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sum_{i=1}^n F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}, \tag{P}
+\end{align}
+where $\gamma>0$ is the penalty parameter.
+\end{bluequote}
+
 \item (page 9) In (4.5) first line, to avoid any confusion I would write ``$(\tau^{-1}h^*)$'' instead of ``$(1/\tau h^*)$''. Moreover, I think a $1/\tau$ factor is missing before $(2\bB^{k+1}-\bB^k)$.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} \red{We thank the reviewer for pointing out these errors.} The corrected update reads \green{(Page XX, lines XX--XX):}
+\normalfont\upshape\responseLabel {We thank the reviewer for pointing out the unclear notation and the typo.} The typo was confined to the first line of (4.5); all subsequent derivations were based on the correct update, which now reads \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 \begin{align}
 \bLmbd^{k+1} &= \operatorname*{arg\,min}_{\bLmbd}\Big\{h^*(\bLmbd)-\langle\bLmbd,2\bB^{k+1}-\bB^k\rangle+\frac{\tau}{2}\|\bLmbd-\bLmbd^k\|^2\Big\} \notag\\
 &= \prox_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \tag{4.5}
 \end{align}
 \end{bluequote}
-\item (Algorithms 4.1,4.2) Reading through your pseudo-code, one might think the choice of every batch size is determined before the algorithm is run. In the case of a constant batch size $b_k=b$, that makes perfect sense otherwise, it seems a bit strange to me.
+\item \red{(Algorithms 4.1,4.2) Reading through your pseudo-code, one might think the choice of every batch size is determined before the algorithm is run. In the case of a constant batch size $b_k=b$, that makes perfect sense otherwise, it seems a bit strange to me.}
 \par\smallskip
-\normalfont\upshape\textbf{Response:} \red{We thank the reviewer for pointing out that the batch-size specification needs clarification.}
+\normalfont\upshape\responseLabel {We thank the reviewer for this careful observation.} We agree that the general notation $\{b_k\}$ could give this impression. In both algorithms the batch size is constant, and we have revised the pseudo-code to make this explicit.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item The input $\{b_k\}$ specifies a deterministic batch-size rule. Even when the sizes vary with $k$, they can be computed from this rule at each iteration; the sampled indices are drawn randomly at that iteration.
-\item In our complexity analysis, DualHash-StoM uses $b_k=b=c_bT$, which depends on the total iteration budget but remains constant within a run. DualHash-StoRM uses $b_1=c_bT^{1/3}$ and $b_k=b$ for $k\ge2$, so only the initial batch size differs from the subsequent constant size.
+\item \textbf{DualHash-StoM.} The batch size is the constant $b=c_bT$ for all iterations. It is set from the iteration budget $T$ before the run and remains unchanged during the run.
+\item \textbf{DualHash-StoRM.} An initial batch $b_1=c_bT^{1/3}$ initializes the recursive estimator, followed by a constant batch size $b$ for all $k\ge2$. Since the recursive estimator reduces the variance by itself, $b$ can be any positive integer, including $b=1$; see Lemma~5.8 under condition~(5.27).
+\item \textbf{Practice.} Our experiments also use a constant batch size \green{(Section~6.1, Page XX, lines XX--XX)}:
+\begin{bluequote}
+We use a fixed mini-batch size of 256 for CIFAR-10 and 128 for NUS-WIDE and ImageNet-100.
+\end{bluequote}
 \end{enumerate}
+
+\item \red{Regarding your Theorem 5.2, having a good $\epsilon$-precision thus requires to have a number of samples $b$ large enough (as $b=c_bT$) under the constraint to be smaller than $n$. Is it really achievable and not too restrictive in practice ?}
+\par\smallskip
+\normalfont\upshape\responseLabel {We appreciate this insightful practical question.} We are glad to clarify this point. The reviewer is right that $b=c_bT$ grows with the iteration budget; below we explain how the constraint $b\le n$ is accommodated.
+\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
+\item \textbf{When $c_bT\le n$ can be met.} For a constant batch size $b$, Lemma~5.5 gives
+\[
+\EE\big[\mathrm{dist}^{2}\big(\zero,\mathcal K(\bx^{R},\bB^{R},\bLmbd^{R})\big)\big]\le\frac{L_\Delta\Delta_1}{T}+\frac{C_\sigma\sigma^2}{b}.
+\]
+The first term is controlled by $T$ and the second by $b$; the choice $b=c_bT$ balances the two, and the free constant $c_b$ adjusts this balance. Since $b=c_bT\approx(c_bL_\Delta\Delta_1+C_\sigma\sigma^2)/\varepsilon^2$, a sufficiently small $c_b$ gives $b\le n$ whenever $\varepsilon^2>C_\sigma\sigma^2/n$.
+\item \textbf{When $c_bT$ exceeds $n$.} The mini-batch is drawn uniformly without replacement \green{(Section~4.2, Page XX, lines XX--XX)}:
+\begin{bluequote}
+At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past.
+\end{bluequote}
+Under this sampling, the gradient error is bounded by $\frac{n-b}{n-1}\cdot\frac{\sigma^2}{b}$, which vanishes at $b=n$. Hence, when $c_bT>n$, taking $b=n$ yields exact gradients, and the bound of Theorem~5.2 (now Theorem~5.4) reduces to $L_\Delta\Delta_1/T\le\varepsilon^2$. With $b=\min\{\lceil c_bT\rceil,n\}$, the guarantee thus extends to every $\varepsilon>0$.
+\item \textbf{The StoRM variant.} DualHash-StoRM uses $b_1=c_bT^{1/3}=\calO(\varepsilon^{-1})$ at the first iteration and a constant $b$ afterwards, which may be as small as $1$, while attaining the improved $\calO(\varepsilon^{-3})$ complexity.
+\end{enumerate}
+
 \end{itemize}
 
 \subsection{Claims and applicability}
@@ -437,37 +501,24 @@ The resulting proof should therefore not undergo any significant changes. That i
 \begin{itemize}\itshape
 \item (page 4) Regarding to Table 1.1, your paper seems to be the first one to conduct a complexity analysis for deep hashing methods. Are you totally sure of this ?
 \par\smallskip
-\normalfont\upshape\textbf{Response:} \red{We thank the reviewer for asking us to clarify the scope of our contribution.}
+\normalfont\upshape\responseLabel \red{We thank the reviewer for asking us to clarify the scope of our contribution.}
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item We do not claim to be the first to study complexity across the entire deep hashing literature. Table~1.1 compares selected methods; it should not be read as an exhaustive priority claim or as excluding other forms of theoretical guarantees for hashing.
 \item Our contribution concerns the specific nonsmooth W-type regularized hashing model and its stochastic multi-block primal-dual formulation. We use the conjugate $h^*$ to obtain a tractable dual update and establish non-asymptotic oracle complexity bounds for the KKT residual of the resulting formulation. The contribution lies in combining this structure with stochastic momentum estimators and controlling their errors together with the primal and dual updates. We regard this as a contribution connecting optimization theory with deep hashing applications, while recognizing the contributions of prior hashing and stochastic optimization methods.
 \end{enumerate}
-\item Regarding your Theorem 5.2, having a good $\epsilon$-precision thus requires to have a number of samples $b$ large enough (as $b=c_bT$) under the constraint to be smaller than $n$. Is it really achievable and not too restrictive in practice ?
-\par\smallskip
-\normalfont\upshape\textbf{Response:} \red{We thank the reviewer for pointing out this limitation of the batch-size prescription.}
-\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item \textbf{Dependence on the target accuracy.} In Theorem~5.2 (now Theorem~5.4), $\varepsilon$ is the target root-mean-square KKT residual: the expected squared residual is required to be at most $\varepsilon^2$. With the problem and algorithmic constants fixed, the prescribed iteration budget is $T=\calO(\varepsilon^{-2})$, and $b=c_bT=\calO(\varepsilon^{-2})$. The batch size is constant within a run, although it changes with the prescribed accuracy and budget. The resulting total oracle cost is $\calO(Tb)=\calO(\varepsilon^{-4})$.
-\item \textbf{Feasibility for a finite dataset.} The constant $c_b$ allows a tradeoff between batch size and iteration budget, but it does not remove the requirement that $b=c_bT$ be an integer satisfying $1\le b\le n$. Indeed, the prescribed budget gives
-\[
-T=\left\lceil\frac{L_\Delta\Delta_1+C_\sigma\sigma^2/c_b}{\varepsilon^2}\right\rceil,
-\qquad
-b=c_bT\ge\frac{c_bL_\Delta\Delta_1+C_\sigma\sigma^2}{\varepsilon^2}.
-\]
-Thus reducing $c_b$ also increases the required budget. For a fixed dataset, this sufficient guarantee applies only when the prescribed batch size is feasible; when $C_\sigma\sigma^2>0$, it does not certify arbitrarily small target accuracies. This limitation concerns the guarantee and does not establish an accuracy barrier for the algorithm itself.
-\item \textbf{Practical choices and momentum variants.} Our experiments use fixed mini-batches of 256 for CIFAR-10 and 128 for NUS-WIDE and ImageNet-100. These are practical choices, rather than a claim that the experiments satisfy the theorem's accuracy-dependent prescription. For a fixed batch size $b$, our stated bound is $L_\Delta\Delta_1/T+C_\sigma\sigma^2/b$; setting $b=1$ in this bound does not establish arbitrarily small residuals. Our framework includes both Nesterov and heavy-ball extrapolation, but obtaining a single-sample guarantee would require a separate parameter choice and analysis. We therefore do not infer such a guarantee directly from results for other stochastic momentum methods.
-\end{enumerate}
+
 \end{itemize}
 
 \section{Minor issues}
 
 \subsection{Proof exposition and organization}
 
-Some important equations and formulations need to be referenced; the detailed responses follow.
+\textbf{General response:} We thank the reviewer for the detailed reading of our proofs. In the revision, we have (i) numbered all equations referred to in the proofs, (ii) moved all proofs to the appendix, with a pointer after each statement, and (iii) added the missing intermediate steps. The detailed responses follow.
 \begin{itemize}\itshape
 \item (page 5) I would give a number to the equation relative the reformulation of Problem (1.1). Also explain what the functions $f$ and $c$ are supposed to represent (for example is $f=1/n\sum f_i$ ? ...).
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We thank the reviewer for the careful comment.}
+\normalfont\upshape\responseLabel
+We thank the reviewer for the careful comment.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item We have numbered the equation as \green{(1.2)}.
 \item We first make the correspondence explicit. Following the auxiliary-variable reformulations in~\cite{wang2025augmentedrnn,jin2025multicomposite}, let
@@ -514,8 +565,8 @@ We have replaced the unbolded variable $w$ with the stacked variable $\bw$ and r
 
 \item (page 6) Remind the reader that $\bd^k$ correspond to the current direction at iteration $k$ (you might even recall the generic scheme $\bx^{k+1}=\bx^k-\eta_k\bd^k$). Moreover, give a number to the equation relative to $\bd^k$ update's rule for StoRM algorithm.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We thank the reviewer for pointing out this notation problem. We should have presented the mini-batch oracle and the update direction more clearly.}
+\normalfont\upshape\responseLabel
+We thank the reviewer for pointing out this notation problem. We should have presented the mini-batch oracle and the update direction more clearly. We have revised the notation and numbered the recursion as follows.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item The current direction at iteration $k$ is now denoted by $\bg^k\in\RR^{q}$, and the generic scheme $\bx^{k+1}=\by^k-\eta_k\bg^k$ is recalled in (4.3). The oracle $\tilde{\nabla}_{\bx}F(\cdot,\cdot;\calJ_k)$, with $\calJ_k$ drawn uniformly from all subsets of $\{1,\dots,n\}$ of size $b_k$, is defined once in (4.6). StoM and StoRM are two instances of $\bg^k$: StoM takes $\bg^k=\bg_m^k=\tilde{\nabla}_{\bx}F(\bz^k,\bB^k;\calJ_k)$ with the update (4.9), and StoRM takes $\bg^k=\bg_s^k$ with $\by^k=\bx^k$ and the update (4.11).
 \par
@@ -554,7 +605,7 @@ In Section~4.2, (2.3) is instantiated as $\bg_s^k$ in (4.10), which serves as th
 \end{enumerate}
 \item (page 6) Give a number to the equation relative to deep hashing + typo under the min `` $x\underline{\in}\RR^q$ ''.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have numbered the formulation and restored the membership symbol in Section~3. We have also added an explicit reference to this equation when introducing the W-type regularized surrogate, clarifying its connection to the direct deep-hashing problem \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 A direct formulation is
@@ -566,8 +617,8 @@ A direct formulation is
 
 \item (Relation (C.8)) Remind the reader the expression of $\bd^k$ (this can be throughout a reference to an equation). Regarding your definitions relative to StoM, do we have $\bG^k=-\bd^k$ ? If not, how do you define $\bd^k$ otherwise (in section 2, you only remind the update's rule relative to StoRM) ? Furthermore, it is not clear how you define $\bd_{\bx}^k,\bd_{\bB}^k,\bd_{\bLmbd}^k$.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We apologize for the unclear definitions. We now use distinct notation for the search directions and the components of the stationarity measure. We address each question below.}
+\normalfont\upshape\responseLabel
+We apologize for the unclear definitions. We now use distinct notation for the search directions and the components of the stationarity measure. We address each question below.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item No, $\bG^k\neq-\bd^k$. In the submitted version, $\bd^k$ denoted both the StoRM update direction in Section~2 and the stationarity measure in Appendix~C. All update directions are now denoted by $\bg$: $\bg_m^k$ in (4.8) for StoM (formerly $\bG^k$), $\bg_s^k$ in (4.10) for StoRM, and the generic direction in Lemma~C.1.
 \item $\bd^k$ now denotes only the stationarity measure, an element of the KKT mapping $\calK(\bx^k,\bB^k,\bLmbd^k)$ in (5.2). Its components $\bd_{\bx}^k,\bd_{\bB}^k,\bd_{\bLmbd}^k$ are the $\bx$-, $\bB$-, and $\bLmbd$-blocks, defined in (A.5); $\calG_{\bLmbd}^k$ is given explicitly by the optimality condition of the $\bLmbd$-update (4.5).
@@ -589,15 +640,15 @@ where $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\p
 \end{bluequote}
 \item (Lemma 5.2/proof) Some objects as $G$ function is not explicitly defined, making your proof a bit hard to follow. Moreover, which subdifferential property do you use to conclude ? To rework.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We apologize for the unclear proof.} We thank the reviewer for this question. We have revised the statement and proof of Lemma~5.2 (now Proposition~5.1) as follows; the proposition is stated in Section~5.1, and its proof is given in Appendix~A.1, with a pointer after the statement.
+\normalfont\upshape\responseLabel
+We apologize for the unclear proof. We have revised the statement and proof of Lemma~5.2 (now Proposition~5.1) as follows; the proposition is stated in Section~5.1, and its proof is given in Appendix~A.1, with a pointer after the statement.
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=2.2em]
 \item \textbf{The function $G$.} $G$ was a typo for the penalty term $P$; it no longer appears in the proof.
 \item \textbf{Zero duality gap.} The proof in the submitted version already relied on a zero duality gap: together with the first condition in (5.2), the second condition $h(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$ is the zero-gap characterization in~[6, Theorem~2.158], and it is this equality that yields $\bB^*\in\partial h^*(\bLmbd^*)$. However, the statement of the original Lemma~5.2 did not include this assumption, and we apologize for this omission. Proposition~5.1 now states it explicitly; without it the conclusion fails, see Example~5.1 and our response to Reviewer~1(a).
 \item \textbf{Subdifferential property.} Since $-h^*$ is concave, $\partial(-h^*)$ differs from $-\partial h^*$ in general, so $\zero\in\partial\calL$ was not the right conclusion. Proposition~5.1 now concludes $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$, which is exactly the KKT system (A.2)--(A.3). The only subdifferential property used is the subgradient inversion rule for the convex function $h^{**}$~\cite[Theorem~23.5]{rockafellar1970convex}, combined with the Fenchel--Young inequality. This does not affect the complexity results: the vector $\bd^k$ in (A.5), on which all bounds in Section~5 are proved, satisfies $\bd^k\in\calK(\bx^k,\bB^k,\bLmbd^k)$, hence $\dist(\zero,\calK(\bx^k,\bB^k,\bLmbd^k))\le\|\bd^k\|$ and the stated bounds hold verbatim for the KKT residual.
 \item \textbf{Coercivity.} While the submitted proof began by invoking the coercivity of $\calL$, this step is not needed: $p^*$ is finite because Problem~(P) has an optimal solution, and the zero duality gap gives $\inf_{\bx,\bB}\calL(\bx,\bB,\bLmbd^*)=d^*=p^*>-\infty$. We have therefore removed this sentence and the reference to Assumption~5.1(i). The existence of an optimal solution of Problem~(P) is now discussed in Remark~5.3(ii): Assumption~5.1(i), the term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$ in $f_i$, and $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ make $J=F+h$ coercive, which guarantees that Problem~(P) has an optimal solution.
 \end{enumerate}
-The revised statement and the last step of the proof read \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.1, Page XX, lines XX--XX)}:
+For your convenience, we reproduce the revised statement and the last step of the proof \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.1, Page XX, lines XX--XX)}:
 \begin{bluequote}
 \textbf{Proposition 5.1.} Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~(P) and Problem~(D), respectively, with zero duality gap. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$.
 
@@ -611,10 +662,10 @@ Thus $h^{**}(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$, which, by the s
 \end{bluequote}
 \item (Lemma 5.4/proof) I don't really understand how you reach inequality (5.9). Provide far more details (intermediate inequalities, mention descent lemma whenever it is used, how you deal with the conjugate quantities...). Assuming (5.9) holds, the rest of the proof is correct. Moreover, why did you choose to include this proof here while those of its counterpart (iteration progress on $\bx$) is presented in the appendix ?
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We apologize for the missing steps.}
+\normalfont\upshape\responseLabel
+We apologize for the missing steps. We have added the full derivation of (5.9) and address both questions below.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item Lemma~5.4 is now Lemma~5.2, and inequality (5.9) is now (B.5). We have added the derivation of (B.5) before it: the descent lemma (2.2) is applied to $F(\bx^{k+1},\cdot)$, the conjugate term is handled through $\calG_{\bLmbd}^{k}\in\partial h^*(\bLmbd^k)$ and the convexity of $h^*$, and the $\bB$-updates at iterations $k$ and $k-1$ identify the remaining vector. \green{(Appendix~B.2.2, Page XX, lines XX--XX)}:
+\item Lemma~5.4 is now Lemma~5.2, and inequality (5.9) is now (B.5). We have added the derivation of (B.5) before it: the descent lemma (2.2) is applied to $F(\bx^{k+1},\cdot)$, the conjugate term is handled through $\calG_{\bLmbd}^{k}\in\partial h^*(\bLmbd^k)$ and the convexity of $h^*$, and the $\bB$-updates at iterations $k$ and $k-1$ identify the remaining vector. For your convenience, the added derivation reads \green{(Appendix~B.2.2, Page XX, lines XX--XX)}:
 \begin{bluequote}
 \textit{Proof.} [\ldots] By the descent lemma~(2.2) for $F(\bx^{k+1},\cdot)$,
     \[
@@ -651,10 +702,10 @@ Thus $h^{**}(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$, which, by the s
 \end{enumerate}
 \item (Lemma 5.8) I understand the connection between your algorithm and those presented in [62]. However, I think a brief proof would be welcome, particularly to explain why you do not obtain the same coefficients in the right-hand side of (5.20) as in the original paper.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We thank the reviewer for this suggestion.}
+\normalfont\upshape\responseLabel
+We thank the reviewer for this suggestion. We have added the proof and explain the difference in coefficients below.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item We have added the proof of Lemma~5.8 (now Lemma~5.6) in Appendix~D.1 \green{(Page XX, lines XX--XX)}:
+\item We have added the proof of Lemma~5.8 (now Lemma~5.6) in Appendix~D.1; for your convenience, we repeat the statement and proof below \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 \textbf{Lemma 5.6} (One-iteration progress on $\bx$). Consider the sequence $\{\bx^k,\bB^k,\bLmbd^k\}_{k\in\NN}$ generated by Algorithm~4.2. Under Assumption~5.1(i)--(ii), for any $k\geq1$, it holds that
 \[
@@ -695,8 +746,8 @@ In our analysis, the step term $\Delta_{\bx}^{k+1}$ is combined with the estimat
 \item Some proofs are placed in the main paper and others similar in the appendix (for example Lemma 5.4/Lemma 5.5). Is there a specific reason for this ?
 
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We thank the reviewer for this question.}
+\normalfont\upshape\responseLabel
+We thank the reviewer for this question. We explain the original arrangement and the revised one below.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item In the submitted version, the proof of Lemma~5.4 (now Lemma~5.2) was kept in the main text because this estimate, on the $(\bB,\bLmbd)$-updates, is shared by DualHash-StoM and DualHash-StoRM, whereas Lemma~5.5 (now Lemma~5.3) concerns the $\bx$-update of DualHash-StoM only and was deferred to the algorithm-specific appendix. We agree that this split made the exposition uneven.
 \item In the revision, all proofs are given in the appendix, and the main text keeps the statements with pointers to their proofs; the proofs of Lemmas~5.2 and~5.3 are in Appendices~B.2.2 and~C.1, respectively. 
@@ -709,11 +760,11 @@ The one-iteration progress on $\bx$ is estimated as follows, with the proof prov
 
 \item (page 10) ``the set $\mathrm{crit}(\calL)$... is nonempty'', I would place this fact in Assumption 5.1.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have included nonemptiness of the critical set in Assumption~5.1(i), together with the lower-boundedness condition on the average loss; see the excerpt in our response to the next comment.
 \item (Assumption 5.1) I would reformulate (ii) as ``$F$ is $L_F$-smooth ($L_F\in(0,+\infty)$) over $\RR^q\times\RR^{n\times d}$;''.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have reformulated Assumption~5.1(ii) as suggested, explicitly stating the smoothness domain and that $L_F\in(0,+\infty)$ \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 \begin{itemize}[leftmargin=2em,before=\let\item\reviewitem]
@@ -723,8 +774,8 @@ We have reformulated Assumption~5.1(ii) as suggested, explicitly stating the smo
 \end{bluequote}
 \item (page 13) For better consistency and since you state that $C_1,C_2,C_3,C_4$ are independent of $k$, you should introduce (5.14) setup before (5.12) and (5.13).
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
-\red{We agree that the independence of $C_1,C_2,C_3,C_4$ from $k$ should be visible where these coefficients are introduced.}
+\normalfont\upshape\responseLabel
+\red{We agree that the independence of $C_1,C_2,C_3,C_4$ from $k$ should be visible where these coefficients are introduced.} We have made this explicit at the definition, and we explain below why the parameter conditions remain after it.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item We have stated the constant-parameter conditions under which $C_1,C_2,C_3,C_4$ are independent of $k$ in the Lyapunov-function definition \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
@@ -734,7 +785,7 @@ where the positive coefficients $C_1,C_2,C_3,C_4$ (independent of $k$, since $\a
 \end{enumerate}
 \item (Lemma C.1) I would replace $\nabla f(\bz)$ by a generic direction $\bd\in\RR^q$, this doesn't change the proof. The reason is that, in the proof of Lemma 5.5, you apply (C.1) by considering $\bG^k$, which is not a gradient strictly speaking (but merely an oracle).
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer for this remark. We have restated Lemma~C.1 for an arbitrary direction; since $\bd^k$ already denotes the element of the KKT mapping in (A.5), we denote this direction by $\bg$ \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We thank the reviewer for this remark. We have restated Lemma~C.1 for an arbitrary direction; since $\bd^k$ already denotes the element of the KKT mapping in (A.5), we denote this direction by $\bg$ \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 Let $f(\bx):\RR^q\to\RR$ be a continuously differentiable function with an $L$-Lipschitz continuous gradient. Then, for any $\bx,\by,\bg\in\RR^q$ and any $\bx^+\in\RR^q$ defined by
 \[
@@ -747,7 +798,7 @@ f(\bx^{+})\leq f(\bx)+\langle\nabla f(\bx)-\bg,\bx^{+}-\bx\rangle+\frac{L}{2}\|\
 \end{bluequote}
 \item (Lemma 5.5/proof) To better justify (C.3), simply say you apply Lemma C.1 to $F(.,\bB^k)$ considering $\bx=\bx_k,\by=\by_k,\eta=\eta_k,\bd=\bG^k$. The rest of the proof appears correct to me.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have added the substitution $F(\cdot,\bB^k)$, $\bx=\bx^k$, $\by=\by^k$, $\eta=\eta_k$, and $\bg=\bg_m^k$ in the proof \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 Then, applying (C.1) to $F(\cdot,\bB^{k})$, which is $L_F$-smooth, with $\bx=\bx^{k}$, $\by=\by^{k}$, $\eta=\eta_{k}$, and $\bg=\bg_m^{k}$ (so that $\bx^{+}=\bx^{k+1}$ by (4.9)), yields [\ldots]
@@ -756,27 +807,27 @@ Then, applying (C.1) to $F(\cdot,\bB^{k})$, which is $L_F$-smooth, with $\bx=\bx
 
 \subsection{Notation and terminology}
 \par\smallskip
-\textbf{General response:} \red{We thank the reviewer for the careful reading of our notation, and we apologize for the inconsistencies in the submitted version.} Prompted by these comments, we re-examined the notation of the whole manuscript, appendices included, so that every symbol carries a single meaning. We respond to each item below.
+\textbf{General response:} {We thank the reviewer for the careful reading of our notation, and we apologize for the inconsistencies in the submitted version.} Prompted by these comments, we re-examined the notation of the whole manuscript, appendices included, so that every symbol carries a single meaning. We respond to each item below.
 
 
 \begin{itemize}\itshape
 \item In some places, you use of letter $d_x$ to denote the space dimension relative to variable $x$ and sometimes letter $q$ instead. I would prefer the use of letter $q$ everywhere, $d_x$ notation suggests that the space dimension may change depending on the value of $x$ which is a bit confusing.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have replaced $d_x$ by $q$ consistently throughout the manuscript \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 Deep hashing aims to learn network parameters $\bx\in\RR^{q}$ that generate binary codes preserving semantic similarity in the Hamming space.
 \end{bluequote}
 \item $h$ and $h^*$ functions are used for vectors and matrix objects. This is an acceptable abuse of notation in the context of your work provided that this is clearly stated, for example in your notation subsection.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have added the convention in the Notations paragraph \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 For simplicity, we use the same symbols $h$ and $h^*$ for their scalar forms and their separable extensions to vectors and matrices whenever no confusion can arise. The Fenchel conjugate of $h$ is $h^*(\bLmbd):=\sup_{\bZ\in\RR^{n\times d}}\{\langle\bLmbd,\bZ\rangle-h(\bZ)\}$.
 \end{bluequote}
 \item Some `non-matrix' variables (for example, $\bD^k$, $\bG^k$) are written in capital letters, which does not strictly adhere to the conventions you set out in the notations subsection.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have renamed the two stochastic directions as $\bg_m^k$ and $\bg_s^k$ and updated their definitions \green{(Page XX, lines XX--XX; Page XX, lines XX--XX and XX--XX):}
 \begin{bluequote}
 \[
@@ -787,7 +838,7 @@ We have renamed the two stochastic directions as $\bg_m^k$ and $\bg_s^k$ and upd
 \end{bluequote}
 \item (page 5) Your definition of closeness for $f$ is equivalent to those of the lower semicontinuity (see for example chapter 1 of [1]. In the appendix, you mention the two terms (closeness in Def A.1, lower semicontinuity Prop A.2) . Because the second one, appears more popular to me, I would suggest to work with lower semicontinuity everywhere.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have replaced the function terminology in the preliminary definitions \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 For a proper, lower semicontinuous, and convex function $f$, the proximal mapping of $f$ is defined as
@@ -797,7 +848,7 @@ For a proper, lower semicontinuous, and convex function $f$, the proximal mappin
 \end{bluequote}
 \item (page 28) See my first comment of preliminaries section about closeness vs lower-semicontinuity.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 The content of Definition~A.1 and Proposition~A.2 is now stated in Section~2, where only ``lower semicontinuous'' is used \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 An extended real-valued function $f:\RR^{q}\to[-\infty,+\infty]$ is called \textit{proper} if $f(\bx)>-\infty$ for all $\bx\in\RR^{q}$ and its domain $\dom(f):=\{\bx\in\RR^{q}\mid f(\bx)<+\infty\}$ is nonempty; it is called \textit{lower semicontinuous} if its epigraph $\epi(f):=\{(\bx,t)\in\RR^{q+1}\mid f(\bx)\le t\}$ is closed. [...] The \textit{(limiting) subdifferential} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point $\bx$ where $f(\bx)$ is finite is given by
@@ -808,7 +859,7 @@ An extended real-valued function $f:\RR^{q}\to[-\infty,+\infty]$ is called \text
 \end{bluequote}
 \item (Appendix B) I didn't really understand how you deduce, from the expression of $L_s$ that $L_F$ is $n$-independent. I would rather say that $L_F$ can be bounded by a constant independent of $n$. Following one of my previous comment, I don't really like the use of $\calO$ notation speaking of constants.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item Since $\calD(\bx)$ stacks the $n$ network outputs, $C_{\calD B}$ and $G_{\calD}$ grow at most like $\sqrt{n}$, and this growth is offset by the factor $\gamma/n$ in $P$; hence $L_s\leq C_s$ with $C_s$ independent of $n$.
 \item We now state that $L_F$ is bounded by a constant independent of $n$, through explicit $C_s$ and $C_F$ bounds \green{(Page XX, lines XX--XX):}
@@ -819,7 +870,7 @@ Thus $C_s$ is finite and independent of $n$. Since $F=f+P$, its smoothness const
 \end{enumerate}
 \item Why do you keep $|\calI_{k+1}|$ instead of using notation $b_{k+1}$?
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have replaced the cardinality notation by $b_{k+1}$ throughout Appendix~D \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 \[
@@ -828,14 +879,14 @@ We have replaced the cardinality notation by $b_{k+1}$ throughout Appendix~D \gr
 \end{bluequote}
 \item (page 7) Variable $\bb_i$ denotes first $sgn(\bD_i(\bx))$ and then, in subsection 3.2, corresponds to $\bD_i(\bx)$, please clarify with two separated notations.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We now reserve $\bb_i$ for the continuous auxiliary variable and write the binary code as $\bh_i=\operatorname{sgn}(\bD_i(\bx))$ \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 The model is trained to produce the $i$-th continuous network output $\bD_i(\bx)$ with W-type regularization $h$, and binary codes are obtained post-training via $\bh_i=\operatorname{sgn}(\bD_i(\bx))\in\{-1,1\}^{d}$.
 \end{bluequote}
 \item (page 7) I would place definition in (4.1) in the subsection notations. Do not forget to mention the fact you use the same notations for both vectors and matrices (see 4th remark of ``General comments'' section)
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item We have moved the definition to the Notations paragraph and corrected the domain to $\RR^{n\times d}$ \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
@@ -845,7 +896,7 @@ The Fenchel conjugate of $h$ is $h^*(\bLmbd):=\sup_{\bZ\in\RR^{n\times d}}\{\lan
 \end{enumerate}
 \item (page 6) Wouldn't it be ``$f(\bx)=\EE_{\epsilon}[F(\bx,\epsilon)]$'' instead ? Moreover, what function $F:(\bx,\epsilon)\mapsto F(\bx,\epsilon)$ is supposed to represent, is this a generic one ?
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item Yes, the expectation is taken with respect to the random variable; the objective is now written as $\phi(\bx)=\EE_{\xi}[\phi(\bx;\xi)]$.
 \item The stochastic problem in Section~2 is a generic one introduced only to explain the StoRM estimator. To avoid the clash with $f$ and $F$ in Problem~(P), it is now written with $\phi$ \green{(Page XX, lines XX--XX):}
@@ -878,28 +929,28 @@ into the momentum estimator above, leading to the recursive estimator
 
 \item (Prop A.2) In (iii), I would rather write $\hat{\partial}f_1(\overline{\bx}_1),\hat{\partial}f_2(\overline{\bx}_2)$ instead of $\hat{\partial}_{\bx_1}f_1(\overline{\bx}_1),\hat{\partial}_{\bx_2}f_2(\overline{\bx}_2)$
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 The content of Proposition~A.2 is now stated in Section~2, where the analysis uses only the limiting subdifferential. The separable rule is written without coordinate subscripts \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 If $f(\bx_{1},\bx_{2})=f_{1}(\bx_{1})+f_{2}(\bx_{2})$ with $f_{1},f_{2}$ proper and lower semicontinuous, then $\partial f(\bx_{1},\bx_{2})=\partial f_{1}(\bx_{1})\times\partial f_{2}(\bx_{2})$.
 \end{bluequote}
 \item (page 12) In the definition of $\Delta_B^k$, there is no need to specify the `$F$' for the norm as there is no ambiguity here.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have removed the subscript in the complexity-analysis notation \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 \[\Delta_{\bx}^{k}=\frac{\|\bx^{k}-\bx^{k-1}\|^{2}}{2},\qquad \Delta_{\bB}^{k}=\frac{\|\bB^{k}-\bB^{k-1}\|^{2}}{2}.\]
 \end{bluequote}
 \item \red{(Lemma D.4) I would change notation $C_\delta^1$ by $C_\delta$ (you did this in the proof).
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have unified the notation as $c_\delta$ in Lemma~D.4 and its proof \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 Moreover $\delta=\frac16$ and $c_\delta<36\left(\frac{\sqrt{30}-2}{13}\right)^2$ give $r=\tau m\leq\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$.
 \end{bluequote}}
 \item (Remark 5.1) ``The smoothness constant $L_F$ remains $\calO(1)$'', useless comment, a non-zero constant being always a $\calO(1)$.
 \par\smallskip
-\normalfont\upshape\textbf{Response:}
+\normalfont\upshape\responseLabel
 We have replaced it with an explicit bound independent of $n$ \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 The smoothness constant $L_F$ is bounded by a constant independent of the sample size $n$.
@@ -916,7 +967,7 @@ The smoothness constant $L_F$ is bounded by a constant independent of the sample
 \item (page 2) ``using subgradients may result in slow convergence and oscillation.'' add references to illustrate such a fact.
 
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We have revised the sentence and added the following references \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We have revised the sentence and added the following references \green{(Page XX, lines XX--XX)}:
 
 \begin{bluequote}
 The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence [46] and oscillatory behavior [6].
@@ -940,7 +991,7 @@ The regularizer is often nonsmooth; for such objectives, classical subgradient m
 \item (page 2) ``inverse imaging problems'' I would also add additional references, in the vein of [3] et al.
 
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We have added the following references \green{(Page XX, line XX)}:
+\normalfont\upshape\responseLabel We have added the following references \green{(Page XX, line XX)}:
 \begin{bluequote}
 inverse imaging problems [20, 11, 50, 54, 37]
 \end{bluequote}
@@ -951,7 +1002,7 @@ inverse imaging problems [20, 11, 50, 54, 37]
 
 \item (page 6) Add reference [2] for descent lemma.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We have added the reference \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We have added the reference \green{(Page XX, lines XX--XX)}:
 
 \begin{bluequote}
 For an $L_f$-smooth function, the descent lemma [3] states that [$\cdots$]
@@ -962,7 +1013,7 @@ For an $L_f$-smooth function, the descent lemma [3] states that [$\cdots$]
 \item (page 17) including pointwise [...] methods'' add references.
 
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We have added the following references \green{(Page XX, line XX)}:
+\normalfont\upshape\responseLabel We have added the following references \green{(Page XX, line XX)}:
 
 \begin{bluequote}
 [$\cdots$] including pointwise [52], pairwise [41], and tripletwise [61] methods.
@@ -976,7 +1027,7 @@ For an $L_f$-smooth function, the descent lemma [3] states that [$\cdots$]
 
 \item (Prop A.3) I agree with the results of (i), (ii) and (iii) but the corresponding lemma/article (Lemma 5.2 [45]) doesn't not appear to be the correct reference.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We thank the reviewer for identifying this error. We have corrected the reference in Proposition~A.3 (now Proposition~C.1) \green{(Page XX, line XX)}:
+\normalfont\upshape\responseLabel We thank the reviewer for identifying this error. We have corrected the reference in Proposition~A.3 (now Proposition~C.1) \green{(Page XX, line XX)}:
 \begin{bluequote}
 For Algorithm 4.1, the key relationships among iterates via the momentum acceleration framework in (4.9) are established as follows.
 
@@ -995,7 +1046,7 @@ Proposition B.1 (Proposition 4.1 in [48]).
 \item (page 3) ``[...] deep hashing; directly extending their results to our setting is nontrivial.'' I would cut the sentence in two, for example : ``[...] deep-hashing. A direct extension of their results to our setting is far from being trivial. ''
 
 \par\smallskip
-{\normalfont\upshape\textbf{Response:} We have split the sentence as suggested and added why the extension is nontrivial \green{(Page XX, lines XX--XX)}:
+{\normalfont\upshape\responseLabel We have split the sentence as suggested and added why the extension is nontrivial \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 However, all consider only the \emph{deterministic} setting, whereas ours addresses the \emph{stochastic} finite-sum formulation that naturally arises in large-scale deep hashing. A direct extension of their results to our setting is far from trivial, since the stochastic gradient errors have to be controlled together with the dual dynamics, which we accomplish through the Lyapunov analysis in Section~5.
 \end{bluequote}}
@@ -1010,7 +1061,7 @@ However, all consider only the \emph{deterministic} setting, whereas ours addres
 \begin{itemize}\itshape
 \item (page 18) Is there a particular reason why you are using a step size of $0.1\tau$ rather than $\tau$ when updating $\Lambda_k$?
 \par\smallskip
-{\normalfont\upshape\textbf{Response:} The analysis uses the same parameter $\tau$ in the $\bB$- and $\bLmbd$-updates because it yields an exact cancellation in the descent estimate of Section~5. Combining the $\bB$-update with the optimality condition of the $\bLmbd$-update gives
+{\normalfont\upshape\responseLabel The analysis uses the same parameter $\tau$ in the $\bB$- and $\bLmbd$-updates because it yields an exact cancellation in the descent estimate of Section~5. Combining the $\bB$-update with the optimality condition of the $\bLmbd$-update gives
 \[
 \bB^{k+1}-\calG_{\bLmbd}^{k}=\tau\bigl(\nabla_{\bB}F(\bx^{k},\bB^{k-1})-\nabla_{\bB}F(\bx^{k+1},\bB^{k})\bigr),
 \qquad \calG_{\bLmbd}^{k}\in\partial h^*(\bLmbd^{k}),
@@ -1030,7 +1081,7 @@ so the dual term is controlled by the smoothness of $F$ alone. In the experiment
 
 \item (page 1) (Typo ?) ``up to $512\times$''
 \par\smallskip
-{\normalfont\upshape\textbf{Response:} \red{We apologize for the unclear wording and the misleading phrase ``up to.''} The factor $512$ is the storage compression ratio of encoding a $1024$-dimensional \texttt{float32} feature vector as a $64$-bit binary code:
+{\normalfont\upshape\responseLabel \red{We apologize for the unclear wording and the misleading phrase ``up to.''} The factor $512$ is the storage compression ratio of encoding a $1024$-dimensional \texttt{float32} feature vector as a $64$-bit binary code:
 \[
 \frac{1024\times 32\ \text{bits}}{64\ \text{bits}}=512.
 \]
@@ -1055,7 +1106,7 @@ reducing storage by a factor of $512$ (a $1024$-dimensional \texttt{float32} fea
 \item ``and binary neural networks'' (no comma).
 \item (page 28) In the equality just before Prop A.2, one of the $x$ is not in bold.
 \par\smallskip
-{\normalfont\upshape\textbf{Response:} Since the subdifferential facts in Definition~A.1 and Proposition~A.2 underpin the first-order optimality conditions in Section~5.1, their content is now stated in Section~2, where all vector variables are set in bold. The equality in question, i.e., the convex-case formula, is replaced by the following statement \green{(Page XX, lines XX--XX)}:
+{\normalfont\upshape\responseLabel Since the subdifferential facts in Definition~A.1 and Proposition~A.2 underpin the first-order optimality conditions in Section~5.1, their content is now stated in Section~2, where all vector variables are set in bold. The equality in question, i.e., the convex-case formula, is replaced by the following statement \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 When $f$ is continuously differentiable or convex, the above subdifferential coincides with the classical gradient or convex subdifferential of $f$.
 \end{bluequote}}
@@ -1069,24 +1120,24 @@ When $f$ is continuously differentiable or convex, the above subdifferential coi
 \section{Clarification and possible misunderstanding}
 
 \par\smallskip
-\textbf{General response:} \red{We thank the reviewer for pointing out these passages, and we apologize for the imprecise wording in the submitted version.} Each passage has been clarified in the manuscript, and we respond to each item below.
+\textbf{General response:} {We thank the reviewer for pointing out these passages, and we apologize for the imprecise wording in the submitted version.} Each passage has been clarified in the manuscript, and we respond to each item below.
 
 \begin{itemize}\itshape
 \item (page 2) ``its composition with neural network outputs $h(\bD{}i(x))$'' sounds a bit unclear to me.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We now define $\bD_i(\bx)$ when Problem~(1.1) is introduced, so that $h(\bD_i(\bx))$ reads as the regularizer applied to the network output of the $i$-th sample \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We now define $\bD_i(\bx)$ when Problem~(1.1) is introduced, so that $h(\bD_i(\bx))$ reads as the regularizer applied to the network output of the $i$-th sample \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 where $\bx\in\RR^{q}$ collects the network parameters, $\bD_i(\bx)\in\RR^{d}$ is the continuous network output for the $i$-th sample, $f_i$ and $\bD_i$ are continuously differentiable, and $h$ is a proper and lower semicontinuous regularizer.
 \end{bluequote}
 \item (page 2) ``when $h$ is component-wise nondecreasing'', to verify but after quickly checked [29], I think $h$ also need to be convex. This would corroborate your next sentence ``when $h$ itself is nonconvex...''.
 \par\smallskip
-\normalfont\upshape\textbf{Response:} We agree that the previous wording conflated two different sufficient conditions. We now state the assumptions separately: the first cited condition uses convex $h$ and smooth $\bD$, while the cited monotonicity-based result assumes a weakly convex and component-wise nondecreasing outer function together with a weakly convex inner mapping. We also clarify that our nonconvex W-type regularizer is outside these sufficient-condition results \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We agree that the previous wording conflated two different sufficient conditions. We now state the assumptions separately: the first cited condition uses convex $h$ and smooth $\bD$, while the cited monotonicity-based result assumes a weakly convex and component-wise nondecreasing outer function together with a weakly convex inner mapping. We also clarify that our nonconvex W-type regularizer is outside these sufficient-condition results \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 For instance, $h\circ\bD$ is weakly convex when $h$ is convex and $\bD$ is smooth~\cite{davis2019,Drusvyatskiy2019,wang2024}, or under the monotonicity-based conditions in~\cite{hu23}, where the outer function is weakly convex and component-wise nondecreasing and the inner mapping is weakly convex.
 \end{bluequote}
 \item (page 8) What do you mean by ``inexpensive gradient'' ?
 \par\smallskip
-\normalfont\upshape\textbf{Response:} By ``inexpensive'' we meant that the $\bB$-update requires neither stochastic sampling nor backpropagation through the network. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}\big(\bB-\calD(\bx)\big)$, once the network outputs $\calD(\bx^{k+1})$ are available, the update (4.4) is an entrywise operation on an $n\times d$ matrix, and the $\bLmbd$-update (4.5) is a closed-form proximal step of $h^*$. As the word was informal, we have removed it and now describe only the computational structure \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel By ``inexpensive'' we meant that the $\bB$-update requires neither stochastic sampling nor backpropagation through the network. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}\big(\bB-\calD(\bx)\big)$, once the network outputs $\calD(\bx^{k+1})$ are available, the update (4.4) is an entrywise operation on an $n\times d$ matrix, and the $\bLmbd$-update (4.5) is a closed-form proximal step of $h^*$. As the word was informal, we have removed it and now describe only the computational structure \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\calD(\bx^{k+1})$ is available, this step is evaluated from the closed-form expression of $\nabla_{\bB}F$.
 \end{bluequote}
@@ -1188,6 +1239,14 @@ Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\calD(\bx^
 % The gradient bound gives $\Gamma\|\nabla_{\bx}F\|^2\le2L_F\Gamma(F-\underline{\ell})$, and \eqref{eq:P2s} implies $2L_F\Gamma\le\frac58$. Hence, as in (i), $F-2L_F\Gamma(F-\underline{\ell})-(\frac m{16}+A_B)\|\br_k\|_F^2\ge\underline{\ell}+\frac{3\mu}{16}\|\bx^k\|^2+\frac{m}{8}\|\br_k\|_F^2$. The error term has coefficient $\frac{\eta_T}{\rho_T}-\Gamma\ge0$ by \eqref{eq:P1s}, and $C_2\EE\Delta_B^k\ge0$.
 % \end{proof}
 % \endgroup
+
+\clearpage
+\noindent Once again, we sincerely thank the editors and reviewers for their time, patience, and constructive comments. We believe that the revision has clarified the relation between the reformulation and the original model, strengthened the rigor and readability of the analysis, and stated the scope of our contributions more precisely. We hope that the revised manuscript now meets your approval, and we would be glad to address any further questions.
+
+\medskip
+\noindent With our deepest gratitude and best regards,
+
+\noindent The authors
 
 \bibliographystyle{unsrt}
 \bibliography{revision_refs}

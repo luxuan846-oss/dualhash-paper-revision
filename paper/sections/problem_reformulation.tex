@@ -26,6 +26,7 @@
 \section{Problem Reformulation}
 \label{Section: Problem Reformulation}
 \subsection{W-type Regularized Deep Hashing Model}
+\label{Sec:W-type Regularized Deep Hashing Model}
 Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that generate binary codes preserving semantic similarity in the Hamming space. A direct formulation is
 \begin{align}
 \label{Eq:direct_deep_hashing_problem}
@@ -34,22 +35,24 @@ Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that ge
 where \(n\) is the number of training samples, \(\bC_i(\bx)\in\RR^d\) is the output of the \(i\)-th sample, and \(\ell_{s,i}\) is a similarity-preserving loss (e.g., pairwise cross-entropy \cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere.
 
 To address this issue, W-type regularization (e.g., \(\blue{h(\bz)=\lambda\lVert|\bz|-\bm{1}\rVert_1}\)) is introduced to drive continuous outputs toward \(\blue{\{-1,1\}^d}\).
-Specifically, the model is trained to produce the \(i\)-th continuous network output \(\bD_i(\bx)\) with W-type regularization \(h\), and binary codes are obtained post-training via \(\blue{\bh_i} = \operatorname{sgn}(\bD_i(\bx))\blue{\in\{-1,1\}^d}\). \blue{Consequently, we formulate the following core optimization problem for W-type regularized deep hashing methods, which serves as a continuous surrogate of Problem~\eqref{Eq:direct_deep_hashing_problem}:}
+Specifically, the model is trained to produce the \(i\)-th continuous network output \(\bD_i(\bx)\) with W-type regularization \(h\), and binary codes are obtained post-training via \(\operatorname{sgn}(\bD_i(\bx))\blue{\in\{-1,1\}^d}\). \blue{Consequently, we formulate the following core optimization problem for W-type regularized deep hashing methods, which serves as a continuous surrogate of Problem~\eqref{Eq:direct_deep_hashing_problem}:}
 \begin{align}
 \label{Eq: the primal deep hashing problem}
 \min_{\bx \in \RR^{\blue{q}}} \quad \frac{1}{n}\sum_{i=1}^n f_i(\bx) + \sum_{i=1}^n h(\bD_i(\bx)),
+\tag{P0}
 \end{align}where \(f_i(\bx)=\ell_{s,i}(\bx)+\frac{\mu}{2}\|\bx\|^2\) with \(\mu>0\) to ensure coercivity.
+
 \subsection{Structured Reformulation}
-% equivalently as the constrained problem:
-% % \begin{align}
-% %     % \label{Eq: constrained_dlh}
-% %     \min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
-% %     \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n. \notag
-% % \end{align}Combined with the quadratic penalty method, this transformation yields the following two-block finite-sum optimization problem:
-We then employ variable splitting by introducing \blue{continuous} auxiliary variables \(\bb_i\blue{\in\RR^d}\) \blue{subject to} \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\), and then \blue{relax these constraints by} the quadratic penalty method to obtain the following two-block finite-sum optimization problem:
+We then employ variable splitting by introducing \blue{continuous} auxiliary variables \(\bb_i\blue{\in\RR^d}\) \blue{subject to} \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\), \blue{which yields the following equivalent nonlinearly constrained problem:
+\begin{align}
+    % \label{Eq: constrained_dlh}
+    \min_{\bx \in \RR^{q}, \bB \in \RR^{n\times d}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
+    \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n\blue{,} \notag
+\end{align}}
+and then \blue{relax these constraints by} the quadratic penalty method \cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
 \begin{align}
     \label{Prop: block-wise regularized problem}
-    \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
+    \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}\blue{,} \tag{P}
 \end{align}
 \blue{where $\gamma>0$ is the penalty parameter.} This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better.
 Building upon Problem~\eqref{Prop: block-wise regularized problem}, we develop a stochastic primal-dual algorithm {that addresses the lack of tractable proximal mappings in the nonsmooth composite form and the absence of convergence guarantees in existing deep hashing methods.}

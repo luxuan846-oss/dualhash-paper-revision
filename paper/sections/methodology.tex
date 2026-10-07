@@ -300,7 +300,7 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 
 \subsection{\blue{Instantiating the Stochastic Update}}
 \label{Sec: Algorithm implementations}
-\blue{We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
+\blue{We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. In both instances, the batch size is constant: $b_k\equiv b$ for DualHash-StoM, and $b_1$ followed by $b_k\equiv b$ for $k\ge2$ for DualHash-StoRM; their values are specified in \Cref{Section: Convergence analysis}. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
 \begin{equation}
 \label{Eq: minibatch oracle}
 \tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
@@ -331,7 +331,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \caption{DualHash-StoM}
 \label{alg:our_algorithm_sgdm}
 \begin{algorithmic}[1]
-\STATE \textbf{Input:} \blue{$\bx^0=\bx^1\in\RR^{q}$}, $\bB^1\in\RR^{n\times d}$, \blue{$\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$}, step sizes $\{\eta_k\}$ and $\tau$, batch sizes $\{b_k\}$, momentum parameters \blue{$\{\alpha_k\},\{\beta_k\}\subset[0,1)$, number of iterations $T$}
+\STATE \textbf{Input:} \blue{$\bx^0=\bx^1\in\RR^{q}$}, $\bB^1\in\RR^{n\times d}$, \blue{$\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$}, parameters {$\{\alpha_k\},\{\beta_k\}\subset[0,1)$, $\{\eta_k\}$ and $\tau$, number of iterations $T$}
 \FOR{\blue{$k = 1, \ldots, T$}}
   \STATE \blue{Compute $\by^k$ and $\bz^k$ by \eqref{Eq: extrapolated points in SGDM}}
   \STATE \blue{Draw $\calJ_k$ and compute $\bg_m^k$ by \eqref{Eq: the stochastic approximate in SGDM}}
@@ -355,7 +355,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
-\STATE \textbf{Input:} $\bx^1\in\RR^{\blue{q}}$, \blue{$\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m\bigl(\mathcal{D}(\bx^1)-\bB^1\bigr)$}, step sizes $\{\eta_k\}$ and $\tau$, batch sizes $\{b_k\}$, \blue{$m>0$}, momentum parameters $\{\rho_k\}\subset(0,1)$, \blue{number of iterations $T$}
+\STATE \textbf{Input:} $\bx^1\in\RR^{\blue{q}}$, \blue{$\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m\bigl(\mathcal{D}(\bx^1)-\bB^1\bigr)$}, parameters {$m>0$, $\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$ and $\tau$, number of iterations $T$}
 \FOR{\blue{$k = 1, \ldots, T$}}
   \STATE \blue{Draw $\calJ_k$ and compute $\bg_s^k$ by \eqref{Eq: the stochastic approximate in STORM}}
   \STATE Update $\bx^{k+1}$ by

@@ -46,10 +46,11 @@ continuous values and the final binary codes~\cite{weissSpectralHashing2008}.
 \vspace{-3ex}
 \end{figure}
 To mitigate this issue, researchers have developed specialized regularization techniques \cite{caoDeepCauchyHashing2018,li2017deep,liuDeepSupervisedHashing}. Among them, W-type regularizations, such as \blue{$\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$}, have proven effective.
-These regularizers impose sharp penalties to encourage variables towards binary values (e.g., $-1$ or $1$). Mathematically, this approach naturally formulates deep hashing as a nonconvex composite optimization problem\footnote{A formal definition of this problem is provided in \Cref{Section: Problem Reformulation}.}:
+These regularizers impose sharp penalties to encourage variables towards binary values (e.g., $-1$ or $1$). Mathematically, this approach naturally formulates deep hashing as a nonconvex composite optimization problem\footnote{A formal definition of this problem is provided in \Cref{Sec:W-type Regularized Deep Hashing Model}}:
 \begin{align}
 \label{Eq: the general nonlinear composite problem in intro}
 \min_{\bx \in \RR^{\blue{q}}} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
+\tag{P0}
 \end{align}where \blue{$\bx\in\RR^{q}$ collects the network parameters, $\bD_i(\bx)\in\RR^{d}$ is the continuous network output for the $i$-th sample,} \(f_i\) and \(\bD_i\) are continuously differentiable, and \(h\) is a proper and lower semicontinuous regularizer. Classic examples include the 
 \(\ell_1\) norm to introduce sparsity and the \(\ell_2\) norm weight decay to prevent overfitting. In practice, researchers typically apply stochastic (sub)gradient methods (SGD) directly to optimize the objective \eqref{Eq: the general nonlinear composite problem in intro}, and deep hashing follows this paradigm as well. This seemingly effective choice, however, frequently leads to suboptimal performance. \blue{The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.}
 

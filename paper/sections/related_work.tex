@@ -70,10 +70,11 @@ This is precisely the gap this work aims to fill.
 \paragraph{Stochastic Nonconvex Constrained Optimization}
 From a constrained optimization perspective, Problem~\eqref{Eq: the general nonlinear composite problem in intro} \blue{can be reformulated via a variable lifting technique~\cite{wang2025augmentedrnn,jin2025multicomposite} as a nonlinearly constrained optimization problem of the form
 \begin{equation}
-  \label{Eq: the constrained reformulation}
+  % \label{Eq: the constrained reformulation}
   \min_{\bw}\; f(\bw) + h(\bw)
   \quad \text{s.t.}\quad
-  \bc(\bw) = 0.
+  \bc(\bw) = 0. 
+  \notag
 \end{equation}}Several recent works have established oracle complexity results for first-order stochastic augmented-Lagrangian and penalty methods for problems of this type. For instance, Jin and Wang \cite{jin2022stochastic} proposed a single-loop stochastic primal-dual method based on a linearized augmented-Lagrangian function, achieving oracle complexities of $\mathcal{O}(\varepsilon^{-6})$ from an arbitrary initial point and $\mathcal{O}(\varepsilon^{-5})$ from a feasible one for locating an $\varepsilon$-KKT point. By incorporating the recursive momentum estimator of \cite{cutkoskyMomentumBasedVarianceReduction2019}, Shi et al. \cite{shi2025momentum} developed a momentum-based linearized augmented-Lagrangian method, improving these bounds to $\mathcal{O}(\varepsilon^{-4})$, or the nearly optimal $\mathcal{O}(\varepsilon^{-3})$ when initialized at a nearly feasible point. To certify a stronger notion of stationarity that deterministically enforces constraint violation of at most $\varepsilon$, Lu et al. \cite{lu2024variancereducedfirstordermethodsdeterministically} introduced a linearized quadratic-penalty method with truncated momentum. Under a regularity condition on the constraint gradients, recursive momentum yields the nearly optimal complexity $\widetilde{\mathcal{O}}(\varepsilon^{-3})$. 
 
 \smallskip

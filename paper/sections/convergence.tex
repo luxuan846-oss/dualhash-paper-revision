@@ -1,6 +1,14 @@
 \section{Complexity Analysis}
 \label{Section: Convergence analysis}
 
+We analyze the proposed algorithms in terms of the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-KKT point of the Lagrangian function~\eqref{Eq: simplified_lagrangian}. Since even checking whether a point is a local minimizer of a nonconvex problem is NP-hard in general, we target first-order stationarity of the saddle-point reformulation~\eqref{Eq: simplified_lagrangian}, namely the KKT condition of $\calL$.
+Given $\varepsilon>0$, we say that a random point $(\bx,\bB,\bLmbd)$ is an \emph{$\varepsilon$-KKT point} of $\calL$ if
+\begin{equation}
+\label{equ:esp}
+\mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)\big]
+\leq\varepsilon^2.
+\end{equation}
+
 \subsection{\blue{Main Assumption}}
 In the remainder of this paper, we impose the following assumptions.
 \begin{assumption}

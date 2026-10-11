@@ -1,5 +1,5 @@
-% \section{Algorithm}
-% \label{Section: Methodology}
+\section{DualHash: A Stochastic Primal--Dual Framework}
+\label{Section: Methodology}
 % \subsection{DualHash: A Stochastic Primal-Dual Hashing Algorithm}
 % Inspired by PDHG \cite{chambolleFirstOrderPrimalDualAlgorithm2011} in convex optimization and its nonconvex extension PPDG \cite{guoPreconditionedPrimalDualGradient2023}, we consider the equivalent constrained formulation of  the problem \eqref{Prop: block-wise regularized problem}:
 % \begin{align} 
@@ -176,40 +176,32 @@
 % % which corresponds to the necessary condition \eqref{Eq: the sufficient and necessary condition for dual} for the second relation in optimality condition \eqref{Eq: the sufficient and necessary condition}.
 % This establishes \eqref{Eq: the sufficient and necessary condition for dual}, which is precisely the necessary condition for the second relation in \eqref{Eq: the sufficient and necessary condition}.
 % \end{remark}
-\section{Stochastic Primal-Dual Hashing Algorithms}
-\label{Section: Methodology}
-\blue{This section reformulates Problem~\eqref{Prop: block-wise regularized problem} as a min--max problem, characterizes the first-order conditions of the reformulation, and develops stochastic algorithms that compute points satisfying them.}
-
 \subsection{\blue{Min--Max Reformulation}}
-Let us consider the equivalent constrained formulation of Problem~\eqref{Prop: block-wise regularized problem}:
+Consider the equivalent constrained formulation of Problem~\eqref{Prop: block-wise regularized problem}:
 \begin{align}
-\min_{\bx \in \RR^{\blue{q}},\, \bB \in \RR^{n\times d},\, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
+\min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
 \text{s.t. } &\quad \bY = \bB, \notag
 \end{align}
 whose dual problem is
 \begin{align}
 \label{Prop: the dual problem}
-\max_{\bLmbd \in \RR^{n\times d}}\ \min_{\bx \in \RR^{\blue{q}},\, \bB \in \RR^{n\times d},\, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + \langle \bLmbd, \bB - \bY \rangle + h(\bY). \tag{D}
+\max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + \langle \bLmbd, \bB - \bY \rangle + h(\bY). \tag{D}
 \end{align}
-\blue{The variable $\bY$ enters \eqref{Prop: the dual problem} only through $h(\bY)-\langle\bLmbd,\bY\rangle$, so the minimization over $\bY$ can be carried out independently. By the definition of the conjugate $h^*$, this reduces the Lagrangian in \eqref{Prop: the dual problem} to}
+\blue{Recalling the definition of the conjugate function $h^*$} and observing that the minimization over $\bY$ in Problem~\eqref{Prop: the dual problem} can be carried out independently, we simplify the Lagrangian in Problem~\eqref{Prop: the dual problem} to
 \begin{equation}\label{Eq: simplified_lagrangian}
 \calL(\bx,\bB,\bLmbd):=\Phi(\bx,\bB,\bLmbd)-h^*(\bLmbd),
 \qquad\text{where}\quad
 \Phi(\bx,\bB,\bLmbd):=F(\bx,\bB)+\langle\bB,\bLmbd\rangle.
 \end{equation}
-\blue{Exchanging the order of optimization in \eqref{Prop: the dual problem} gives the min--max problem associated with $\calL$. Since $\sup_{\bLmbd}\{\langle\bB,\bLmbd\rangle-h^*(\bLmbd)\}=h^{**}(\bB)$ for every $\bB$, this problem satisfies}
+\blue{Closely related to Problem~\eqref{Prop: the dual problem} is the nonconvex--concave min--max problem associated with $\calL$, which is equivalent to the convexified problem, i.e.,
 \begin{equation}\label{Eq: minmax problem}
 \min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd)
-=\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB),
+=\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB).
 \end{equation}
-\blue{that is, it is Problem~\eqref{Prop: block-wise regularized problem} with $h$ replaced by its convex envelope $h^{**}$.}
-
-\blue{The function $\calL$ is concave in $\bLmbd$, but the term $\mathcal{D}$ makes it nonconvex in $(\bx,\bB)$ jointly. Consequently, a saddle point of $\calL$ may fail to exist and is hard to compute even when it exists. Moreover, even verifying whether a given point is a local minimizer of a nonconvex problem is NP-hard in general~\cite{Murty1987NP}. We therefore target first-order stationarity of the min--max problem~\eqref{Eq: minmax problem}, namely the KKT system of $\calL$. \Cref{Sec: first-order optimality conditions} introduces this system and relates its solutions to the stationary points of Problem~\eqref{Prop: block-wise regularized problem}.}
-%  need to revise the name
-\subsection{\blue{First-Order Optimality Conditions}}
+where the equality follows from $\sup_{\bLmbd}\{\langle\bB,\bLmbd\rangle-h^*(\bLmbd)\}=h^{**}(\bB)$. Here, the function $\calL$ is concave in $\bLmbd$ but, through $\mathcal{D}$, nonconvex in $(\bx,\bB)$ jointly. Consequently, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard in general~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for the problem \eqref{Eq: minmax problem} and subsequently relate these conditions to those of Problem~\eqref{Prop: block-wise regularized problem}.}
+\subsection{\blue{KKT Conditions of the Min--Max Reformulation}}
 \label{Sec: first-order optimality conditions}
-
-We say that $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$, that is,
+\blue{Following \cite{chambolleFirstOrderPrimalDualAlgorithm2011,clasonAccelerationGlobalConvergence2019,botBohm2023alternating},} we say that $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$, that is,
 \begin{equation}\label{Eq: KKT conditions}
 \nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0},\qquad
 \nabla_{\bB}F(\tilde{\bx},\tilde{\bB})+\tilde{\bLmbd}=\bm{0},\qquad
@@ -229,18 +221,19 @@ where
 \nabla_{\bB}\calL(\bx,\bB,\bLmbd)\\
 -\partial_{\bLmbd}(-\calL)(\bx,\bB,\bLmbd)
 \end{pmatrix}.
-\end{equation}
-\blue{Moreover, $\mathcal{K}$ contains the limiting subdifferential of $\calL$: for every $(\bx,\bB,\bLmbd)$ with $\bLmbd\in\operatorname{dom}h^*$,}
-\begin{equation}
+\end{equation} 
+\blue{In fact, every local saddle point of $\calL$ is a KKT point by Fermat's rule~\cite[Theorem~10.1]{Rockafellar1998VariationalA}. Moreover, for every $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ with $\tilde{\bLmbd}\in\dom h^*$, KKT points of $\calL$ correspond one-to-one to stationary points of the convexified problem~\eqref{Eq: minmax problem} through $\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})$, i.e.,
+\begin{equation}\label{Eq: saddle-KKT-convexified}
 \begin{aligned}
-\partial\calL(\bx,\bB,\bLmbd)
-&=\nabla\Phi(\bx,\bB,\bLmbd)+\{\bm{0}\}\times\{\bm{0}\}\times\partial(-h^*)(\bLmbd)\\
-&\subseteq\nabla\Phi(\bx,\bB,\bLmbd)+\{\bm{0}\}\times\{\bm{0}\}\times\big(-\partial h^*(\bLmbd)\big)
-=\mathcal{K}(\bx,\bB,\bLmbd),
+\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})
+\quad\Longleftrightarrow\quad
+\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})\ \text{ and }\ \bm{0}\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\bm{0}\}\times\partial h^{**}(\tilde{\bB}), 
 \end{aligned}
-\end{equation}
-\blue{where the equality follows from~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}. The inclusion holds because every element of $\partial(-h^*)(\bLmbd)$ is a limit of $-\nabla h^*(\bLmbd^r)$ with $\bLmbd^r\to\bLmbd$ and $h^*(\bLmbd^r)\to h^*(\bLmbd)$, and the graph of $\partial h^*$ is closed. Following the first-order conditions used for nonconvex--concave min--max problems with a convex term in the maximization variable~\cite[(2.1)]{clasonAccelerationGlobalConvergence2019},~\cite[Section~1]{botBohm2023alternating}, we define stationarity through the convex subdifferential $\partial h^*$, i.e., by $\bm{0}\in\mathcal{K}$. If $h^*$ is continuously differentiable near $\bLmbd$, the inclusion holds as an equality; it is strict in general: for the row $p=1$ of Table~\ref{tab:wtype} and $\Lambda_{ij}=0$, one has $\partial(-\phi^*)(0)=\{-1,1\}\subsetneq[-1,1]=-\partial\phi^*(0)$.}
-We denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$. We prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} satisfies the first-order necessary optimality condition of the Lagrangian~\eqref{Eq: simplified_lagrangian}, i.e., it is a \blue{KKT point} of $\calL$.
+\end{equation} where the equivalence follows from the subgradient inversion and sum rules~\cite[Theorems~23.5 and~23.8]{rockafellar1970convex}.} In the following, we denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$.  
+
+In general, the strong duality means zero duality gap. While many nonconvex problem has  strong duality fails but zero gap holds, But for our W-regularizatin, 两边都可达，零间隙和强对偶就是同一个条件，; 
+We then 
+We prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ ()\blue{with zero duality gap/srong } satisfies the first-order necessary optimality condition of the Lagrangian~\eqref{Eq: simplified_lagrangian}, i.e., it is a \blue{KKT point} of $\calL$.
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
 \end{proposition}

@@ -1,82 +1,12 @@
 \section{Complexity Analysis}
 \label{Section: Convergence analysis}
-\subsection{\blue{First-Order Optimality Conditions}}
-\label{Sec: first-order optimality conditions}
-We now analyze the complexity of the proposed algorithms in terms of the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-KKT point of the Lagrangian function~\eqref{Eq: simplified_lagrangian}. 
-Since even checking whether a point is a local minimizer of a nonconvex problem is NP-hard in general, we target a first-order stationarity condition of the saddle-point reformulation~\eqref{Eq: simplified_lagrangian}, namely the KKT condition of $\calL$. We say that $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$, that is,
-\begin{equation}\label{Eq: KKT conditions}
-\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0},\qquad
-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})+\tilde{\bLmbd}=\bm{0},\qquad
-\tilde{\bB}\in\partial h^*(\tilde{\bLmbd}),
-\end{equation}
-where
-\begin{equation}\label{Eq: KKT mapping}
-\mathcal{K}(\bx,\bB,\bLmbd):=
-\begin{pmatrix}
-\nabla_{\bx}F(\bx,\bB)\\
-\nabla_{\bB}F(\bx,\bB)+\bLmbd\\
-\bB-\partial h^*(\bLmbd)
-\end{pmatrix}
-=
-\begin{pmatrix}
-\nabla_{\bx}\calL(\bx,\bB,\bLmbd)\\
-\nabla_{\bB}\calL(\bx,\bB,\bLmbd)\\
--\partial_{\bLmbd}(-\calL)(\bx,\bB,\bLmbd)
-\end{pmatrix}.
-\end{equation}
-Moreover, the KKT condition is implied by stationarity in the sense of the limiting subdifferential, i.e., $\bm{0}\in\partial\calL(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$. Indeed, for every $(\bx,\bB,\bLmbd)$ with $\bLmbd\in\operatorname{dom}(h^*)=[-\lambda,\lambda]^{n\times d}$, it is routine to show that
-\begin{equation}
-\begin{aligned}
-\partial\calL(\bx,\bB,\bLmbd)
-&=\nabla\Phi(\bx,\bB,\bLmbd)+\{\bm{0}\}\times\{\bm{0}\}\times\partial(-h^*)(\bLmbd)\\
-&\subseteq\nabla\Phi(\bx,\bB,\bLmbd)+\{\bm{0}\}\times\{\bm{0}\}\times\big(-\partial h^*(\bLmbd)\big)
-=\mathcal{K}(\bx,\bB,\bLmbd),
-\end{aligned}
-\end{equation}
-where the equality follows from~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}, and the inclusion holds because every element of $\partial(-h^*)(\bLmbd)$ has the form $-\calG_{\bLmbd}$, where $\calG_{\bLmbd}\in\{-1,1\}^{n\times d}$ satisfies $(\calG_{\bLmbd})_{ij}=\operatorname{sgn}(\Lambda_{ij})$ whenever $\Lambda_{ij}\neq0$, and every such $\calG_{\bLmbd} \in \partial h^*(\bLmbd)$.
-Given $\varepsilon>0$, we say that a random point $(\bx,\bB,\bLmbd)$ is an \emph{$\varepsilon$-KKT point} of $\calL$ if
-\begin{equation}\label{equ:esp}
-\mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)\big]
-\leq\varepsilon^2.
-\end{equation}
-We denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$. We prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} satisfies the first-order necessary optimality condition of the Lagrangian~\eqref{Eq: simplified_lagrangian}, i.e., it is a \blue{KKT point} of $\calL$.
-\begin{proposition}\label{prop:zerogap}
-Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
-\end{proposition}
-\blue{The proof is provided in \Cref{Subsec: proof zerogap}.}
-
-Such a pair need not exist, however: since $h$ is nonconvex, strong duality between Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem} may fail, as the following example shows.
-
-\begin{example}\label{ex:gap}
-Consider Problem~\eqref{Prop: block-wise regularized problem} with $n=d=1$ and without the $\bx$-block, and let $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal value is
-$p^*=\min_{b\in\RR}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}=\tfrac12$, attained at $b^*=\pm1$.
-Since $\min_b\{\tfrac12 b^2+\Lambda b\}=-\tfrac12\Lambda^2$ and $h^*(\Lambda)=|\Lambda|$ on $[-1,1]$ ($+\infty$ elsewhere), the dual value is
-\[
-d^*=\sup_{|\Lambda|\le1}\Bigl\{-\tfrac12\Lambda^2-|\Lambda|\Bigr\}=0,
-\]
-attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$, and no zero-gap primal--dual pair exists.
-\end{example}
-
-Because a zero-gap pair need not exist, we relate KKT points of $\calL$ directly to Problem~\eqref{Prop: block-wise regularized problem}. The next proposition characterizes exactly when a KKT point of $\calL$ is a stationary point of this problem.
-
-\begin{proposition}\label{prop:transfer}
-Let $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ be a KKT point of $\calL$, i.e., it satisfies~\eqref{Eq: KKT conditions}. Then the following statements are equivalent:
-\begin{enumerate}[label=\textup{(\alph*)}]
-\item $(\tilde{\bx},\tilde{\bB})$ is a stationary point of Problem~\eqref{Prop: block-wise regularized problem}, i.e.,
-$\bm{0}\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\bm{0}\}\times\partial h(\tilde{\bB})$;
-\item the Fenchel--Young equality holds for $h$ at $(\tilde{\bB},\tilde{\bLmbd})$:
-$h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
-\item $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
-\end{enumerate}
-\end{proposition}
-\blue{The proof is provided in \Cref{Subsec: proof transfer}.}
 
 \subsection{\blue{Main Assumption}}
 In the remainder of this paper, we impose the following assumptions.
 \begin{assumption}
 \label{Ass: main assumptions}
 \begin{itemize}[leftmargin=2em]
-    \blue{\item[{(i)}] The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}(\bx)>-\infty$, where $\bar{\ell}_{s}(\bx):=n^{-1}\sum_{i=1}^{n}\ell_{s,i}(\bx)$; the set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.}
+    \blue{\item[{(i)}] The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}\!\left(\mathcal{D}(\bx)\right)>-\infty$, where $\bar{\ell}_{s}\!\left(\mathcal{D}(\bx)\right):=n^{-1}\sum_{i=1}^{n}\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)$; the set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.}
     \item[{(ii)}] $F$ is $L_F$-smooth, with $L_F\in(0,+\infty)$, over $\RR^{q}\times\RR^{n\times d}$;
     \item[{(iii)}] \blue{There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$,}
     \begin{align}
@@ -94,7 +24,7 @@ In the remainder of this paper, we impose the following assumptions.
 \label{Remark: main assumptions}
 \begin{enumerate}[label=(\roman*), leftmargin=2em]
 \item The smoothness constant $L_F$ is bounded by a constant independent of the sample size $n$. A rigorous analysis is in Appendix~\ref{Appendix: discussion on assumptions}.
-\item \blue{By \Cref{Ass: main assumptions}(i) and $f_i=\ell_{s,i}+\frac{\mu}{2}\|\cdot\|^{2}$, for all $(\bx,\bB)$,
+\item \blue{By \Cref{Ass: main assumptions}(i) and $f_i(\bx)=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^{2}$, for all $(\bx,\bB)$,
 \begin{equation}
 \label{Eq: quadratic growth of F}
 F(\bx,\bB)-\underline{\ell}\ge\frac{\mu}{2}\|\bx\|^{2}+\frac{\gamma}{2n}\|\bB-\mathcal{D}(\bx)\|^{2}\ge0 .

@@ -1,0 +1,35 @@
+# OS and editor files
+.DS_Store
+.claude/settings.local.json
+
+# LaTeX build outputs
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.ptc
+*.synctex.gz
+*.toc
+*.tmp
+*.bak
+
+# Generated project outputs and scratch research files
+/tmp/
+/output/
+
+# Generated revision artifacts
+/revision/*.pdf
+/revision/*.zip
+/revision/*.aux
+/revision/*.bbl
+/revision/*.blg
+/revision/*.fdb_latexmk
+/revision/*.fls
+/revision/*.log
+/revision/*.out
+/revision/*.ptc
+/revision/*.synctex.gz
+/revision/*.toc

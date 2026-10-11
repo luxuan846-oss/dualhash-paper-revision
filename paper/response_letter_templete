@@ -1,0 +1,27 @@
+\par\smallskip
+\normalfont\upshape\textbf{Response:}
+We thank the reviewer for pointing out this issue. We agree that the original manuscript did not make [ISSUE] sufficiently clear. To address this, we have [STRATEGY], see \green{Section~X (Page XX, lines XX--XX)}:
+\begin{bluequote}
+[REVISED TEXT]
+\end{bluequote}
+This revision [WHY IT RESOLVES THE ISSUE].
+
+DualHash 返修规则
+ 
+流程
+1. 诊断 comment 类别：定义不清 / 逻辑跳步 / 证明不足 / 假设不明 / 实验不足 / claim 过强 / 表述引起的误解。
+2. 先修正文，后写回复。核对该概念在正文首次出现处、后续依赖处、Appendix 重述处，三处一致。
+3. 正文修改着色；回复信中的新文本用 \blue，位置用 \green；页码行号在最终编译后统一填写。
+4. 第一轮完成全部 reviewer comments；第二轮做加深项（KKT 显式化、momentum 动机、算法呈现、非常规条件改写），与某条 comment 重合时并入该条 response。
+5. 回复信首页放 summary of major changes（4-5 条）。
+6. 每条 comment 都有回应，编号与 reviewer 报告一一对应。
+ 
+Response 结构
+concern → 原稿问题 → 修改后的原文 → 为何解决
+- 开头 1-2 句：承认哪里表述不清，说明修改策略。
+- 紧接 revised passage。
+- 之后 1-2 句：说明该修改解决的逻辑问题。
+- 误解情形：为表述致歉，澄清正确含义，贴修改，说明两者关系；不写 "the reviewer misunderstood"。
+- 不采纳的建议：认可其背后的问题，给证据，修改正文消除同类误读。
+- claim 过强：直接弱化 claim。
+

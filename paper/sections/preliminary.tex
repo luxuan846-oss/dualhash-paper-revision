@@ -5,7 +5,7 @@ $\operatorname{dom}(f):=\{\bx\in\RR^{q}\mid f(\bx)<+\infty\}$ is nonempty; \blue
 \textit{lower semicontinuous} if its epigraph
 $\operatorname{epi}(f):=\{(\bx,t)\in\RR^{q+1}\mid f(\bx)\le t\}$ is closed.}
 \blue{We write
-$\by\xrightarrow{f}\bx$ to denote $\by\to\bx$ and $f(\by)\to f(\bx)$. The \textit{(limiting) subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point
+$\by\xrightarrow{f}\bx$ to denote $\by\to\bx$ and $f(\by)\to f(\bx)$. The superscript $f$ on the arrow indicates that both the points and their function values converge. The \textit{(limiting) subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point
 $\bx$ where $f(\bx)$ is finite is given by
 \begin{equation}\label{Eq: limiting subdifferential}
 \begin{aligned}
@@ -25,7 +25,7 @@ $f(\bx_{1},\bx_{2})=f_{1}(\bx_{1})+f_{2}(\bx_{2})$ with $f_{1},f_{2}$ proper and
 semicontinuous, then $\partial f(\bx_{1},\bx_{2})=\partial f_{1}(\bx_{1})\times\partial f_{2}(\bx_{2})$
 \cite[Proposition~10.5]{Rockafellar1998VariationalA}.}
 
-For a proper, \blue{lower semicontinuous}, and convex function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
+For a proper, \blue{lower semicontinuous, and bounded-below} function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
 \begin{align}
     % \label{Def: the definition of proximal operator}
     \operatorname{prox}_{\tau f}(\by) := \argmin\limits_{\bx \in \operatorname{dom}(f)}\left\{ f(\bx) + \frac{1}{2\tau}\|\bx - \by\|^{2}\right\}, \notag
@@ -34,8 +34,7 @@ where $\tau$ is a positive scalar parameter. The proximal mapping admits the fol
 properties.
 \begin{proposition}\label{prop:rockafellar}
 \textnormal{\cite{Rockafellar1998VariationalA}}
-    Let $f : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper and
-    \blue{lower semicontinuous}. Then, the following holds.
+    Let $f : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper, \blue{lower semicontinuous, and bounded below}. Then, the following holds.
     \begin{enumerate}[label=(\roman*)]
         \item The set $\operatorname{prox}_{\tau f}(\bx)$ is nonempty and compact
             for any $\bx \in \mathbb{R}^{q}$ and $\tau > 0$.
@@ -45,6 +44,12 @@ properties.
             $\tau > 0$.
     \end{enumerate}
 \end{proposition}
+
+\blue{For a W-type regularizer, \(\phi\) denotes the scalar function, while \(h\) and \(h^*\) denote its separable vector- and matrix-valued extensions and conjugates. In particular,
+\[
+h^*(\bLmbd)=\sum_{i=1}^{n}\sum_{j=1}^{d}\phi^*(\Lambda_{ij}),\qquad
+\phi^*(s):=\sup_{t\in\mathbb{R}}\{st-\phi(t)\},\qquad \bLmbd\in\mathbb{R}^{n\times d}.
+\]}
 
 \blue{A differentiable} function $f: \RR^q \rightarrow \RR$ is said to be $L_f$-smooth if $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^q$.
 A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \blue{\Omega}$. For an $L_f$-smooth function, \blue{the descent lemma \blue{\cite{Bertsekas1997}} states that
@@ -72,4 +77,4 @@ A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz co
         \nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1};\xi^{k})\bigr), & \text{if } k>1,
     \end{array}\right.}
 \end{align}
-\blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}
+% \blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}

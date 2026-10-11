@@ -1,0 +1,2780 @@
+© 2025 Society for Industrial and Applied Mathematics
+
+SIAM J. OPTIM.
+Vol. 35, No. 4, pp. 2343--2371
+
+NONCONVEX NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+AND ITS APPLICATIONS TO RECURRENT NEURAL NETWORKS\ast 
+LINGZI JIN\dagger  , XIAO WANG\ddagger  , AND XIAOJUN CHEN\S 
+Abstract. We consider a class of nonconvex nonsmooth multicomposite optimization problems where the objective function consists of a Tikhonov regularizer and a composition of multiple
+nonconvex nonsmooth component functions. Such optimization problems arise from tangible applications in machine learning and beyond. To define and compute its first-order and second-order
+d(irectional)-stationary points effectively, we first derive the closed-form expression of the tangent
+cone for the feasible region of its constrained reformulation. Building on this, we establish its equivalence with the corresponding constrained and \ell 1 -penalty reformulations in terms of global optimality
+and d-stationarity. The equivalence offers indirect methods to attain the first-order and second-order
+d-stationary points of the original problem in certain cases. We apply our results to the training
+process of recurrent neural networks (RNNs).
+Key words. multicomposite optimization, tangent cone, first-order d-stationarity, second-order
+d-stationarity, recurrent neural network
+MSC codes. 49J52, 90B10, 90C26, 90C30
+DOI. 10.1137/25M1728168
+
+1. Introduction. In this paper, we consider the following unconstrained nonconvex nonsmooth optimization problem
+min \Psi (\theta ) + \lambda \| \theta \| 2 ,
+
+(P)
+
+\theta \in \BbbR n
+
+where \lambda  > 0, \|  \cdot  \|  is the Euclidean norm, and the mapping \Psi  : \BbbR n \rightarrow  \BbbR + is defined by
+\Psi (\theta ) := g(u1 , \cdot  \cdot  \cdot  , uL )
+with u1 := \psi 0 (\theta ) and u\ell  := \psi \ell  - 1 (\theta , u1 , \cdot  \cdot  \cdot  , u\ell  - 1 ), \ell  = 2, \cdot  \cdot  \cdot  , L
+for L + 1 continuous but possibly nonconvex nonsmooth component functions
+\=
+
+\psi \ell  - 1 : \BbbR n+N\ell  - 1 \rightarrow  \BbbR N\ell  ,
+
+\ell  = 1, . . . , L,
+
+\=
+
+and g : \BbbR NL \rightarrow  \BbbR +
+
+\=0 := 0 and N
+\=\ell  := \sum \ell  Nj for all \ell  = 1, . . . , L. Problem (P) covers a wide
+with N
+j=1
+range of applications in machine learning where \theta  refers to the network parameter, \Psi 
+is the loss function, and \lambda \| \theta \| 2 is the regularizer to guarantee the boundedness of the
+solution set [21] and alleviate the overfitting [27] for (P).
+\ast  Received by the editors January 22, 2025; accepted for publication (in revised form) August 12,
+2025; published electronically October 22, 2025.
+https://doi.org/10.1137/25M1728168
+Funding: The second author is partially supported by the National Natural Science Foundation
+of China (12271278). The third author is partially supported by Hong Kong Research Grant Council
+PolyU15300123, JLFS/P-501/24, CAS Joint Laboratory of Applied Mathematics.
+\dagger  Department of Applied Mathematics, Hong Kong Polytechnic University, Kowloon, Hong Kong
+(ling-zi.jin@connect.polyu.hk).
+\ddagger  School of Computer Science and Engineering, Sun Yat-sen University, Guangzhou, China
+(wangx936@mail.sysu.edu.cn).
+\S  Department of Applied Mathematics, Hong Kong Polytechnic University, Kowloon, Hong Kong
+(maxjchen@polyu.edu.hk).
+
+2343
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2344
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+In [9], Cui et al. present a novel deterministic algorithmic framework that enables
+the computation of a d-stationary point of the empirical deep neural network training
+problem formulated as a multicomposite optimization problem. The model (P) differs
+from the model (2.1)--(2.2) of [9] in two aspects. The first difference is that we unify
+parameters \{ \theta 0 , . . . , \theta L - 1 \}  (corresponding to \{ z1 , . . . , zL \}  in [9]) as \theta  since the process
+of selecting \theta \ell  - 1 from \theta  can be achieved by \psi \ell  - 1 , which facilitates the sharing of
+parameters across layers simultaneously. Secondly, we explicitly articulate the information transmission across multiple layers (i.e., dependence of \psi \ell  - 1 on u1 , . . . , u\ell  - 2 ),
+which is widely used in network structure, such as RNN [13] and shortcut in Resnet.
+In [9] it assumes that g only depends on uL and \psi \ell  - 1 only depends on (\theta , u\ell  - 1 ).
+Although \Psi  in (P) can be reorganized into \Psi (\theta ) = g(\cdot 
+\= ) \circ  \psi \=L - 1 (\theta , \cdot ) \circ  \cdot  \cdot  \cdot  \circ  \psi \=0 (\theta ) with
+some functions g,
+\= \{ \psi \=\ell  \}  coinciding the formulation (2.1) and (2.2) in [9] if neglecting
+the first difference, it can be found that the required number of auxiliary variables
+\=L . We illustrate the differences by an
+under this decomposition is much larger than N
+example of RNNs in Remark 4.1 with Figure 1. Thus, model (P) encompasses the
+formulation (2.1)--(2.2) presented in [9].
+Directly solving (P) by SGD-type methods (SGDs) is common in computer science. However, the automatic differentiation (AD), the key of SGDs, based on chain
+rules fails for the subdifferential of \Psi  at a nondifferentiable point \theta  [4]. To the best
+of our knowledge, existing algorithms that directly solve unconstrained nonconvex
+nonsmooth problem (P) with rigorous convergence analysis can be roughly separated
+into two groups. One combines (S)GDs with smoothing techniques aiming at (approximate) Clarke stationary points [7, 20, 31]. Another approach constructs advanced
+AD algorithms based on chain rules for some generalized subdifferentials. The latter
+further branches into two distinct paths. Along the first path Nesterov [23] utilizes the
+chain rule of directional derivatives to define lexicographic differentiation and evaluate lexicographic subdifferential [2, 18]. However, the nice properties of lexicographic
+subdifferential [18, 23] seem to be mostly applied in sensitivity analysis and have not
+helped to develop an algorithm converging to a stationary point defined by lexicographic subdifferential or a d-stationary point. Moreover, it is mentioned in [3] that
+the AD method based on lexicographic differentiation is incompatible with existing
+AD frameworks. Therefore, Bolte and Pauwels [4] follow a path of conservative field,
+which is a generalization of Clarke subdifferential. Further study establishes convergence of SGDs in the sense of conservative field stationarity, which can be improved to
+Clarke stationarity under certain conditions. More references can be referred to [28].
+From the existing literature, directly solving (P) may only be able to find a Clarke
+stationary point if there is no special structure, such as weak convexity [19] and weak
+concavity [1].
+However, in general, Clarke stationarity may be an overly lenient condition in
+contrast with d-stationarity [11]. On the other hand, the d-stationary points of multicomposite optimization (P) are too complicated to calculate directly (Proposition 3.4).
+Therefore, a more practical approach is to reformulate (P) to derive a model with easily computable d-stationary points, while establishing their relationship in terms of
+d-stationarity. In [10, section 9.4.2], the equivalence between (P) with L = 1 and its
+\ell 1 -penalty form in d-stationarity is established under the premise of feasibility. In
+[9], a one-sided relation is obtained for simplified (P) with L > 1 and its \ell 1 -penalty
+form, which provides the algorithm for calculating d-stationary points of DNN training problem. More references that establish and utilize the relationship between the
+simplified (P) and its different reformulations in other kinds of stationarity can be
+referred to [22, 26, 27].
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2345
+
+Apart from the above first-order optimality conditions, the second-order optimality conditions for nonsmooth optimization problems have attracted widespread
+interest since the 1970s [25, Chapter 13]. To avoid the concept of second-order tangent cone, Cui et al. [8] use a kind of second-order subderivative [25, 13(7)] to establish
+second-order conditions for minimizing twice semidifferentiable and locally Lipschitz
+continuous functions with polyhedral constraints [8, Proposition 2.3], and apply the
+results on piecewise linear-quadratic programs. Jiang and Chen [16, Lemma 3.8] further extend the second-order necessary condition to convexly constrained optimization
+problems with twice semidifferentiable objective functions, and apply the results on
+minimax problems by using generalized directional derivatives and subderivatives.
+For (P) with L = 1 and twice semidifferentiable component functions, [10, Proposition 9.4.2] offers second-order conditions by the relation between the original problem
+and its \ell 1 -penalty reformulation, and the structure of the reformulation. However, the
+aforementioned second-order conditions are inapplicable to (P) with L > 1 even when
+g and \{ \psi \ell  \}  are all twice semidifferentiable since the composition of such functions
+may not retain this property. More references that establish second-order optimality conditions by other generalized Hessians and generalized second-order directional
+derivatives can be referred to commentary at the end of [25, Chapter 13].
+1.1. Model reformulation. Motivated by [6, 9], we reformulate (P) as a constrained optimization problem. First we introduce auxiliary variables
+(1.1)
+
+\=
+
+\top  \top 
+N\ell 
+u\ell  := (u\top 
+1 , . . . , u\ell  ) \in  \BbbR  , \ell  = 1, . . . , L, and an empty placeholder u0
+
+to decompose the nested structure of \Psi , obtaining the constrained form
+(P0)
+
+min F (z) := g(u) + \lambda \| \theta \| 2 , subject to u\ell  = \psi \ell  - 1 (\theta , u\ell  - 1 ), \ell  = 1, . . . , L,
+z
+
+\=
+
+where for brevity we denote u := uL \in  \BbbR NL ,
+\=
+\= := n + N
+\=L .
+z := (\theta \top  , u\top  )\top  \in  \BbbR N , and N
+
+(1.2)
+
+The nonconvex nonsmooth objective function and the nonsmooth equality constraints in (P0) pose significant challenges for both theoretical analysis and numerical tractability. Therefore, (P0) will only be used as an intermediary. Denote
+[L] := \{ 1, . . . , L\} . As the final reformulation, the \ell 1 -penalty form of (P0) with positive
+penalty parameters \{ \beta \ell  , \ell  \in  [L]\}  is defined as
+(P1)
+
+min \Theta (z) := F (z) +
+z
+
+L
+\sum 
+
+\beta \ell  \| u\ell   -  \psi \ell  - 1 (\theta , u\ell  - 1 )\| 1 .
+
+\ell =1
+
+We will analyze the properties of (P), (P0), and (P1) and establish the relationship
+between them, which makes it realistic to attain second-order stationary points of (P).
+1.2. Contribution. The contributions of this paper lie in threefold.
+Firstly, we obtain a full characterization of the tangent cone of the feasible region of (P0) under directional differentiability and local Lipschitz continuity of g and
+\{ \psi \ell  - 1 , \ell  \in  [L]\}  in Theorem 3.6. In general, it is challenging to express the tangent
+cone of a nonconvex feasible region [10, p525 and Remark 9.2.1]. For the nonconvex
+feasible region constructed by nonsmooth equality constraints in (P0), it can be verified that no nonzero abnormal multiplier constraint qualification (NNAMCQ) [29,
+Remark 2] holds using the method similar to [22, Lemma 6]. Based on that, a subset
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2346
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+of its tangent cone can be expressed by a superset of its normal cone [25, Corollary
+10.50] using the relations between tangent and normal cones [25, Theorems 6.26 and
+6.28]. However, the closed-form of its tangent cone is still difficult to obtain solely
+through constraint qualifications (CQs). In contrast, we provide a closed-form expression of the tangent cone of the feasible region of (P0) by directly utilizing the pull-out
+structure of constraints.
+Secondly, we show the equivalence between (P), (P0), and (P1) regarding dstationary points and global minimizers, which generalizes the results in [9] and Chapter 9 of [10]. As a consequence of the equivalence between (P) and (P1), the penalty
+form (P1) with according algorithms [11, 30] offers an alternative way to solve the
+original problem (P). Furthermore, we derive a unified second-order necessary condition for nonconvex nonsmooth constrained minimization with twice directionally
+differentiable objective functions, which extends the results in [8, 16]. Together with
+the equivalence between (P), (P0), and (P1), the second-order optimality conditions
+for (P0) and (P1) provide second-order necessary and sufficient criteria for (P), which
+cover the ones proposed in [10, Proposition 9.4.2].
+Thirdly, we apply our theoretical results to the minimization problem for training an Elman RNN with a single unidirectional hidden layer. The equivalence in
+d-stationarity of (P0-RNN) and (P1-RNN) not only generalizes the result from Theorem 2.1 of [9] but also provides the explicit thresholds for penalty parameters. Moreover, we observe that every d-stationary point of (P0-RNN) is also a second-order
+d-stationary point for (P0-RNN), and the same result holds for (P1-RNN) under certain conditions, which makes their second-order d-stationary points computable by
+the methods for DC programs [11].
+1.3. Organization. The rest of this paper is organized as follows. In section 2,
+we introduce some basic definitions and preliminary properties of (P), (P0), and (P1).
+The d-stationarity of (P), (P0), (P1), and the second-order d-stationarity of (P0),
+(P1) are defined in section 3. Based on the closed-form expression of the tangent
+cone of the feasible region of (P0) in subsection 3.1, we establish the equivalence
+between (P), (P0), and (P1) in terms of global optimality and d-stationarity under
+certain conditions in subsection 3.2. And subsection 3.3 shows that second-order
+d-stationarity of (P0) and (P1) provides second-order necessary conditions for (P).
+Subsection 3.4 offers second-order sufficient conditions for strong local minimizers of
+(P) through (P1). In section 4, we apply the general theoretical results to RNNs.
+Concluding remarks are given in section 5.
+1.4. Notation. In the following, we denote the set of integers and nonnegative
+(positive) integers as \BbbZ  and \BbbZ + (\BbbZ ++ ), respectively. For any m \in  \BbbZ ++\prod , we denote
+[m] := \{ 1, . . . , m\} . The accumulative multiplication is presented by . For any
+\sum j2
+sequence \{ aj \geq  0, j \in  \BbbZ + \}  and any j1 , j2 \in  \BbbZ + with j1 > j2 , denote j=j
+aj := 0
+1
+\prod j2
+and j=j1 aj := 1. For any vector sequence \{ uj , j \in  \BbbZ + \}  and any j1 , j2 \in  \BbbZ + with
+j1 > j2 , denote (uj1 , . . . , uj2 ) as an empty placeholder. For any vector a and positive
+integer i, [a]i refers to the ith component of a. For any two sets A, B \subseteq  \BbbR m , denote
+\=
+A + B = \{ a + b |  a \in  A, b \in  B\} . Denote \BbbB (0; 1) := \{ z \in  \BbbR N |  \| z\|  \leq  1\} . For any set
+m
+\scrF  \subseteq  \BbbR  , the indicator function is defined as \delta \scrF  (x) = 0, if x \in  \scrF , and +\infty , otherwise.
+For any m \in  \BbbZ ++ , \gamma  \in  \BbbR , and any function f : \BbbR m \rightarrow  \BbbR  \cup  \{ +\infty \} , the level set is defined
+as lev\leq \gamma  f := \{ x \in  \BbbR m |  f (x) \leq  \gamma \} .
+Denote the optimal solution sets of (P), (P0), and (P1) by
+\bigl[ 
+\bigr] 
+\scrS  := argmin \Psi (\theta ) + \lambda \| \theta \| 2 , \scrS 0 := argmin F (z), \scrS 1 := argmin \Theta (z),
+\theta \in \BbbR n
+
+z\in \scrF 0
+
+\=
+z\in \BbbR N
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2347
+
+respectively, where
+\Bigl\{ 
+\Bigr\} 
+\=
+\scrF 0 := z \in  \BbbR N |  u\ell  = \psi \ell  - 1 (\theta , u\ell  - 1 ), \ell  \in  [L] .
+
+(1.3)
+
+2. Preliminaries. In this section, we present some preliminaries that are used
+in subsequent sections. Let
+(2.1)
+
+\Bigl( 
+\bigl(  \bigr) \top  \Bigr) \top 
+\bigr) 
+\bigl(  \bigr) \top 
+\bigl( 
+with u0\ell  := \psi \ell  - 1 0, u01 , . . . , u0\ell  - 1 , \ell  = 1, . . . , L,
+z 0 := 0\top  , u01 , . . . , u0L
+\gamma \= := \Theta (z 0 ).
+
+Then we have z 0 \in  \scrF 0 \not = \emptyset  and \gamma \= = F (z 0 ). Next, we prove that \scrS , \scrS 0 , and \scrS 1 are
+\=
+\=
+nonempty and compact under the continuity of g : \BbbR NL \rightarrow  \BbbR + and \{ \psi \ell  - 1 : \BbbR n+N\ell  - 1 \rightarrow 
+N\ell 
+\BbbR  , \ell  \in  [L]\} . Noting the nonnegativity of g, we can obtain the following result by
+the level-boundedness [25, Theorem 1.9] of (\Psi (\cdot ) + \lambda \|  \cdot  \| 2 ) and (F + \delta \scrF 0 ).
+Lemma 2.1. The optimal solution sets \scrS  and \scrS 0 are nonempty and compact.
+In fact, it can be naturally obtained that (P) is equivalent to (P0) in global op\top 
+\=\ell  := \psi \ell  - 1 (\theta \=, u
+\=1 , . . . , u
+\=\ell  - 1 )
+timality. If \theta \= \in  \scrS , then z\= := (\theta \=\top  , u
+\=\top 
+\=\top 
+1 ,...,u
+L ) \in  \scrS 0 , where u
+\top  \top 
+\=
+)
+\in 
+\scrS 
+,
+then
+\theta 
+\in 
+\scrS .
+for all \ell  \in  [L]; conversely, if z\= := (\theta \=\top  , u
+\=\top 
+,
+.
+.
+.
+,
+u
+\=
+0
+1
+L
+Lemma 2.2. The optimal solution set \scrS 1 is nonempty and compact.
+Proof. Since \Theta  is proper and continuous, we only need to show its level boundedness [25, Theorem 1.9]. For any \gamma  \in  \BbbR + and any z \in  lev\leq \gamma  \Theta , it follows from g(\cdot ) \geq  0
+and \|  \cdot  \|  \leq  \|  \cdot  \| 1 that
+\sqrt{} 
+\| \theta \|  \leq  \gamma /\lambda ,
+(2.2)
+(2.3)
+
+\| u\ell   -  \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 )\|  \leq  \gamma \beta \ell  - 1 , \forall \ell  \in  [L].
+
+Next, we will finish the proof in an inductive manner. For \ell  = 1, it follows from
+(2.2)--(2.3) and the continuity of \psi 0 on \BbbR n that
+\Bigl\{ 
+\Bigr\} 
+\sqrt{} 
+\| u1 \|  \leq  \| u1  -  \psi 0 (\theta )\|  + \| \psi 0 (\theta )\|  \leq  \gamma \beta 1 - 1 + max \psi 0 (\theta ) |  \| \theta \|  \leq  \gamma \lambda  - 1 < +\infty .
+For any \ell  = 2, . . . , L, assume that u1 , . . . , u\ell  - 1 are bounded. Then it follows from (2.2)
+and (2.3) that
+\| u\ell  \|  \leq  \| u\ell   -  \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 )\|  + \| \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 )\| 
+\leq  \gamma \beta \ell  - 1 + \| \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 )\|  < +\infty .
+Hence, u is bounded by induction. Together with (2.2) and arbitrariness of z, it
+implies the boundedness of lev\leq \gamma  \Theta .
+For the main analysis we need the following concepts of directional differentiability
+and local Lipschitz continuity.
+Definition 2.3 ((twice) directional differentiability, Definition 1.1.3 and (4.10)
+of [10]). Given an open subset \scrO  of \BbbR n and a scalar-valued function f : \scrO  \rightarrow  \BbbR . The
+directional derivative of f at a point x \in  \scrO  along a direction d \in  \BbbR n is defined as
+(2.4)
+
+f \prime  (x; d) := lim
+\tau  \downarrow 0
+
+f (x + \tau  d)  -  f (x)
+,
+\tau 
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2348
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+if the limit exists. The function f is directionally differentiable at x, if the limit (2.4)
+exists for all d \in  \BbbR n . The second-order directional derivative of f at a point x \in  \scrO 
+along a direction d \in  \BbbR n is defined as
+(2.5)
+
+f (x + \tau  d)  -  f (x)  -  \tau  f \prime  (x; d)
+,
+\tau  \downarrow 0
+\tau  2 /2
+
+f (2) (x; d) := lim
+
+if the limit and the one for (2.4) exist. The function f is twice directionally differentiable at x, if the limits (2.4) and (2.5) exist for all d \in  \BbbR n .
+For a vector-valued function f : \scrO  \rightarrow  \BbbR m with component functions \{ fi : \scrO  \rightarrow 
+\BbbR , i \in  [m]\} , the directional derivative f \prime  (x; d) is defined as
+\prime 
+f \prime  (x; d) := (f1\prime  (x; d), . . . , fm
+(x; d))\top  ,
+(2)
+
+if fi\prime  (x; d), i \in  [m] exist. Furthermore, if fi (x; d), i \in  [m] exist, then the second-order
+directional derivative f (2) (x; d) is defined as
+\Bigl( 
+\Bigr) \top 
+(2)
+(2)
+f (2) (x; d) := f1 (x; d), . . . , fm
+(x; d) .
+Function f is (twice) directionally differentiable at x, if all of its component functions
+are (twice) directionally differentiable at x.
+Definition 2.4 (local Lipschitz continuity). For any function f : \scrO  \subseteq  \BbbR n \rightarrow  \BbbR m ,
+we say f is locally Lipschitz continuous near x \in  \scrO , if there exists a neighborhood X
+of x and K \geq  0 such that \| f (x1 )  -  f (x2 )\|  \leq  K\| x1  -  x2 \|  for all x1 , x2 \in  X. And we
+say f is locally Lipschitz continuous, if f is locally Lipschitz continuous near every
+point in its domain \scrO .
+If f is directionally differentiable at x and locally Lipschitz continuous near x
+with modulus K \geq  0, then it follows from Definitions 2.3 and 2.4 that for all d \in  \BbbR n ,
+\bigm\| 
+\bigm\| 
+\bigm\| 
+f (x + \tau  d)  -  f (x) \bigm\| 
+\prime 
+\bigm\| 
+\bigm\|  \leq  lim K\tau  \| d\|  = K\| d\|  < \infty .
+(2.6)
+\| f (x; d)\|  = \bigm\| lim
+\bigm\|  \tau  \downarrow 0
+\tau  \downarrow 0
+\tau 
+\tau 
+\= is well-defined and we can similarly obtain
+Hence, for all d, d\= \in  \BbbR n , \| f \prime  (x; d) - f \prime  (x; d)\| 
+that
+(2.7)
+
+\= \leq  K\| d  -  d\| ,
+\= \forall d, d\= \in  \BbbR n .
+\| f \prime  (x; d)  -  f \prime  (x; d)\| 
+
+The remaining analysis will be based on the following assumptions about the
+directional differentiability and local Lipschitz continuity.
+Assumption 1. Functions g and \{ \psi \ell  - 1 , \ell  \in  [L]\}  are directionally differentiable on
+\=
+\=
+\BbbR NL and \BbbR n+N\ell  - 1 , \ell  \in  [L], respectively. Functions g and \{ \psi \ell  - 1 , \ell  \in  [L]\}  are locally
+Lipschitz continuous.
+According to Lemma 2.2, lev\leq \=\gamma  \Theta  with \gamma \= := \Theta (z 0 ) defined in (2.1) is nonempty
+and compact. Under Assumption 1, it follows from the compactness of lev\leq \=\gamma  \Theta  that
+there exist Kg > 0 and \{ K\ell  > 0, \ell  \in  [L  -  1]\}  such that
+(2.8)
+(2.9)
+
+| g(u)  -  g(\=
+u)|  \leq  Kg \| u  -  u\| ,
+\=
+\= \ell  - 1 )\|  \leq  K\ell  - 1 \| u\ell  - 1  -  u
+\= \ell  - 1 \| , \ell  = 2, . . . , L
+\| \psi \ell  - 1 (\theta , u\ell  - 1 )  -  \psi \ell  - 1 (\theta , u
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2349
+
+\= \top  )\top  \in  (lev\leq \=\gamma  \Theta  + \epsilon \BbbB (0; 1)), where the positive real number \epsilon 
+for all (\theta \top  , u\top  )\top  , (\theta \top  , u
+is sufficiently small. In (2.9), the two terms at the left-hand side are consistent in
+the component \theta , since the subsequent analysis only needs the Lipschitz continuity
+moduli of \{ \psi \ell  , \ell  \in  [L  -  1]\}  in component u. Besides, it should be noted that Kg and
+\{ K\ell  , \ell  \in  [L  -  1]\}  are nonincreasing as \{ \beta \ell  , \ell  \in  [L]\}  increase since functions g, \{ \psi \ell  , \ell  \in 
+[L  -  1]\}  and \gamma \= = F (z 0 ) are independent of penalty parameters and for any z, \Theta (z) is
+nondecreasing as \{ \beta \ell  , \ell  \in  [L]\}  increase. Furthermore, in Example 3.13 and section 4
+we will show how to estimate Kg and \{ K\ell  , \ell  \in  [L  -  1]\}  for specific applications.
+Remark 2.5. In fact, z 0 and \gamma \= can be replaced by any feasible point of (P0) and
+the value of \Theta  at that point. The replacement will not affect any theoretical results
+in this paper. We choose z 0 and \gamma \= defined in (2.1) since 0 is usually not a good
+candidate in data fitting. Thus, the requirement z \in  lev\leq \=\gamma  \Theta  can be regarded as a
+mild condition.
+\=
+
+For clarity, break the direction d \in  \BbbR N according to the blocks of variable z as
+follows
+\bigl( 
+\bigr) 
+\top  \top 
+d = d\top 
+, where
+\theta  , du
+\Bigl( 
+\Bigr) \top 
+(2.10)
+\top 
+\top 
+du = (du1 ) , . . . , (duL )
+with du\ell  \in  \BbbR N\ell  , \ell  \in  [L].
+Then under Assumption 1, it follows from (2.6)--(2.7) and (2.8)--(2.9) that for any
+\=
+z \in  lev\leq \=\gamma  \Theta , and any d, d\= \in  \BbbR N with d\theta  = d\=\theta  ,
+| g \prime  (u; du )  -  g \prime  (u; d\=u )|  \leq  Kg \| du  -  d\=u \| ,
+(2.11)
+
+\| \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )  -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\=\theta  , d\=u\ell  - 1 )\| 
+\leq  K\ell  - 1 \| du  -  d\=u \| , \ell  = 2, . . . , L,
+\ell  - 1
+
+\ell  - 1
+
+where du\ell  - 1 := ((du1 )\top  , . . . , (du\ell  - 1 )\top  )\top  for all \ell  \in  [L].
+Apart from Assumption 1, the analysis concerning second-order necessary
+conditions also requires the following assumption about the twice directional
+differentiability.
+Assumption 2. Functions g and \{ \psi \ell  - 1 , \ell  \in  [L]\}  are twice directionally differen\=
+\=
+tiable on \BbbR NL and \BbbR n+N\ell  - 1 , \ell  \in  [L], respectively.
+We use the definitions of tangent cone [25, Definition 6.1] and radial cone [5].
+Definition 2.6 (tangent cone and radial cone). The tangent cone of a set \scrF  \subseteq 
+\BbbR m at any point x \in  \scrF  is defined as
+\biggr\} 
+\biggl\{ 
+xk  -  x
+\rightarrow  d .
+\scrT \scrF  (x) := d \in  \BbbR m |  \exists xk \rightarrow  x with xk \in  \scrF  and \tau k \downarrow  0, such that
+\tau k
+The radial cone of a set \scrF  \subseteq  \BbbR m at any point x \in  \scrF  is defined as
+P\scrF  (x) := \{ d \in  \BbbR m |  \exists \tau k \downarrow  0 such that x + \tau k d \in  \scrF  \} .
+Then it can be observed that P\scrF  (x) \subseteq  \scrT \scrF  (x). When \scrF  is convex, P\scrF  (x) coincides
+with \scrT \scrF \circ  (x) used in [16], and it further equals to \scrT \scrF  (x) when \scrF  is polyhedral.
+3. Optimality and stationarity. This section will establish the relationship
+between (P), (P0), and (P1) in global optimality and (second-order) d-stationarity,
+and discuss the byproducts regarding second-order sufficient conditions. The dstationary points are defined by the necessary tangent condition outlined at the end
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2350
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+of [25, Chapter 8.C] without proof. And the second-order d-stationarity extends the
+second-order necessary condition in [16, Lemma 3.8] from a twice semidifferentiable
+objective function with convex constraints to a twice directionally differentiable objective function with general constraints. We provide a detailed proof for the necessity
+of (second-order) d-stationarity under the assumptions of the nonemptiness of solution sets, twice directional differentiability, and local Lipschitz continuity of objective
+functions as follows.
+Lemma 3.1. Assume that argminx\in \scrF  f (x) \not = \emptyset  with f : \BbbR m \rightarrow  \BbbR . If x
+\= \in  \scrF  is
+a local minimizer of minx\in \scrF  f (x), f is directionally differentiable at x
+\= and locally
+Lipschitz continuous near x,
+\= then f \prime  (\=
+x; d) \geq  0 for any d \in  \scrT \scrF  (\=
+x). Moreover, if f is
+twice directionally differentiable at x,
+\= then f (2) (\=
+x; d) \geq  0 for all d \in  P\scrF  (\=
+x) \cap  \{ d \in  \BbbR m | 
+f \prime  (\=
+x; d) = 0\} .
+Proof. Firstly, the local optimality implies that x
+\= \in  \scrF  is a local minimizer of
+(f + \delta \scrF  )(x) over \BbbR m . Hence it follows from [25, Theorem 10.1] that
+(f + \delta \scrF  )(\=
+x + \tau  d\prime  )  -  (f + \delta \scrF  )(\=
+x)
+\geq  0, \forall d \in  \BbbR m .
+\tau  \downarrow 0,d \rightarrow d
+\tau 
+lim inf
+\prime 
+
+Then the remainder is to show that for any d \in  \scrT \scrF  (\=
+x),
+(f + \delta \scrF  )(\=
+x + \tau  d\prime  )  -  (f + \delta \scrF  )(\=
+x)
+\leq  f \prime  (\=
+x; d).
+\tau  \downarrow 0,d \rightarrow d
+\tau 
+lim inf
+\prime 
+
+For any d \in  \scrT \scrF  (\=
+x), it follows from the definition of tangent cone that there exist
+k
+x
+xk \rightarrow  x,
+\= xk \in  \scrF , and \tau k \downarrow  0 such that dk := x \tau  - \=
+\rightarrow  d as k \rightarrow  \infty , which implies
+k
+f (\=
+x + \tau  d\prime  )  -  f (\=
+x) + \delta \scrF  (\=
+x + \tau  d\prime  )  -  \delta \scrF  (\=
+x)
+d \rightarrow d,\tau  \downarrow 0
+\tau 
+f (\=
+x + \tau k dk )  -  f (\=
+x) + \delta \scrF  (\=
+x + \tau k dk )  -  \delta \scrF  (\=
+x)
+\leq  lim inf
+k\rightarrow \infty 
+\tau k
+f (\=
+x + \tau k dk )  -  f (\=
+x)
+= lim inf
+k\rightarrow \infty 
+\tau k
+= f \prime  (\=
+x; d),
+lim
+inf
+\prime 
+
+where the first equality uses x
+\= + \tau k dk = xk \in  \scrF  and x
+\= \in  \scrF , the last equality comes
+from
+f (\=
+x + \tau  d\prime  )  -  f (\=
+x)
+d \rightarrow d,\tau  \downarrow 0
+\tau 
+f (\=
+x + \tau  d)  -  f (\=
+x)
+f (\=
+x + \tau  d\prime  )  -  f (\=
+x + \tau  d)
+= \prime  lim
++ \prime  lim
+d \rightarrow d,\tau  \downarrow 0
+d \rightarrow d,\tau  \downarrow 0
+\tau 
+\tau 
+f (\=
+x + \tau  d)  -  f (\=
+x)
+= lim
++ 0 = f \prime  (\=
+x; d)
+\tau  \downarrow 0
+\tau 
+lim
+\prime 
+
+by the fact that f is directionally differentiable at x
+\= and locally Lipschitz continuous
+near x.
+\=
+For the second-order optimality condition, since x
+\= \in  \scrF  is a local minimizer of
+minx\in \BbbR m (f + \delta \scrF  )(x), it follows from [25, Theorem 13.24 (a)] that for all d \in  \BbbR m ,
+(f + \delta \scrF  )(\=
+x + \tau  d\prime  )  -  (f + \delta \scrF  )(\=
+x)
+,
+\tau  \downarrow 0,d \rightarrow d
+\tau  2 /2
+
+0 \leq  lim inf
+\prime 
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2351
+
+which implies that for all d \in  P\scrF  (\=
+x) \cap  \{ d \in  \BbbR m |  f \prime  (\=
+x; d) = 0\} ,
+(f + \delta \scrF  )(\=
+x + \tau  d)  -  (f + \delta \scrF  )(\=
+x)
+f (\=
+x + \tau k d)  -  f (\=
+x)
+\leq  lim inf
+2
+2
+\tau  \downarrow 0
+k\rightarrow \infty 
+\tau  /2
+\tau k /2
+f (\=
+x + \tau k d)  -  f (\=
+x)  -  \tau k f \prime  (\=
+x; d)
+= lim inf
+= f (2) (\=
+x; d),
+k\rightarrow \infty 
+\tau k2 /2
+
+0 \leq  lim inf
+
+where the second inequality uses the definition of P\scrF  (\=
+x), the first equality holds due
+to f \prime  (\=
+x; d) = 0, and the last equality comes from the twice directional differentiability
+of f at x
+\= and \tau k \downarrow  0.
+The first-order condition for convexly constrained optimization problems with
+a semidifferentiable objective function is established in [16, Lemma 3.8]. Lemma 3.1
+extends this condition to nonconvexly constrained optimization problems with a directionally differentiable objective function. Actually, the two first-order conditions are
+completely identical in form since the directional derivative equals to the subderivative used in [16, Lemma 3.8] under directional differentiability and local Lipschitz
+continuity. However, for the second-order condition, the nonconvexity of the feasible region and non-twice-semidifferentiability of the objective function entail us to
+narrow the range of directions from \scrT \scrF \circ  (x) in [16] to P\scrF  (x) and relax the nonnegativity of second-order subderivatives to the nonnegativity of second-order directional
+derivatives. Based on Lemma 3.1, we can define unified first-order and second-order
+necessary conditions as follows.
+Definition 3.2 (second-order d-stationary point). For any f : \BbbR m \rightarrow  \BbbR  that is
+directionally differentiable on \BbbR m and locally Lipschitz continuous, and any \scrF  \subseteq  \BbbR m
+such that \emptyset  =
+\not  argminx\in \scrF  f (x), we call x
+\= \in  \scrF  a d(irectional)-stationary point of
+minx\in \scrF  f (x) if f \prime  (\=
+x; d) \geq  0 for all d \in  \scrT \scrF  (\=
+x). And we further call x
+\= a second-order
+d-stationary point of minx\in \scrF  f (x) if f is also twice directionally differentiable at x
+\=
+with f (2) (\=
+x; d) \geq  0 for all d \in  P\scrF  (\=
+x) \cap  \{ d \in  \BbbR m |  f \prime  (\=
+x; d) = 0\} .
+Example 3.3. To illustrate Definition 3.2, we consider minx\in \scrF  f (x) with f (x) =
+max\{  - 1, x1 x2 \}  + 0.1\| x\| 2 and \scrF  = [ - 1, 1]2 . This example has only three first-order
+d-stationary points (0, 0)\top  , ( - 1, 1)\top  , and (1,  - 1)\top  , while f is differentiable at the
+first point, but not differentiable at the other two points. At x
+\= := (0, 0)\top  , f \prime  (\=
+x; d) =
+\top 
+2
+(2)
+\nabla f (\=
+x) d \equiv  0 for all d \in  \scrT \scrF  (\=
+x) = \BbbR  , whereas f (\=
+x; d) = 2d1 d2 + 0.2\| d\| 2 < 0 for any
+d := (d1 , d2 )\top  \in  \{ d \in  P\scrF  (\=
+x) |  f \prime  (\=
+x; d) = 0\}  = \BbbR 2 with d2 =  - d1 \not = 0. Hence (0, 0)\top  is
+not a second-order d-stationary point, and thus not a local minimizer.
+In contrast, at x
+\= := ( - 1, 1)\top  , f \prime  (\=
+x; d) = (d1  -  d2 )  -  0.2(d1  -  d2 ) \geq  0 for all
+\top 
+d \in  \scrT \scrF  (\=
+x) = \{ (d1 , d2 ) |  d1 \geq  0, d2 \leq  0\} , and f (2) (\=
+x; d) = 0 \geq  0 for any d \in  \{ d \in  P\scrF  (\=
+x) | 
+f \prime  (\=
+x; d) = 0\}  = \{ d \in  \scrT \scrF  (\=
+x) |  f \prime  (\=
+x; d) = 0\}  = \{ 0\} . Hence ( - 1, 1)\top  is a second-order
+d-stationary point. Similarly, we can verify that (1,  - 1)\top  is also a second-order dstationary point. From the boundedness of the feasible set \scrF  and the continuity of
+the objective function f , the optimal solution set of this example is nonempty. Since
+f (( - 1, 1)\top  ) = f ((1,  - 1)\top  ), the two points are optimal solutions.
+Since the local Lipschitz continuity of \Psi , F and \Theta  naturally holds under Assumption 1, the corresponding d-stationary points can be defined once we have checked their
+directional differentiability.
+Proposition 3.4. Under Assumption 1, \Psi  is directionally differentiable on \BbbR n ,
+and the directional derivative of the objective function of (P) along any d\theta  \in  \BbbR n is
+(3.1)
+
+g \prime  (u1 , . . . , uL ; du1 , . . . , duL ) + 2\lambda \theta \top  d\theta  ,
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2352
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+where u\ell  := \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ) for all \ell  \in  [L], and du\ell  := \psi \ell \prime   - 1 (\theta , u1 , . . . , u\ell  - 1 ;
+\=
+d\theta  , du1 , . . . , du\ell  - 1 ) for all \ell  \in  [L]; F and \Theta  are directionally differentiable on \BbbR N , and
+\=
+for any direction d \in  \BbbR N defined in (2.10),
+(3.2)
+(3.3)
+
+F \prime  (z; d) = g \prime  (u; du ) + 2\lambda \theta \top  d\theta  ,
+\left( 
+L
+\sum 
+\sum 
+\Theta \prime  (z; d) = F \prime  (z; d) +
+\beta \ell 
+[du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i
+\ell =1
+
+ - 
+
+\sum 
+
+\ell  (z)
+i\in I+
+
+[du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i
+
+\ell  (z)
+i\in I - 
+
+\right) 
+\sum  \bigm| 
+\bigm| 
+\bigm| [du  -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du )]i \bigm| 
++
+\ell 
+\ell  - 1
+
+,
+
+i\in I0\ell  (z)
+
+where for all \ell  \in  [L],
+\ell 
+I+
+(z) := \{ i \in  [N\ell  ] |  [u\ell   -  \psi \ell  - 1 (\theta , u\ell  - 1 )]i > 0\} ,
+\ell 
+I - 
+(z) := \{ i \in  [N\ell  ] |  [u\ell   -  \psi \ell  - 1 (\theta , u\ell  - 1 )]i < 0\} ,
+\bigl(  \ell 
+\bigr) 
+\ell 
+\ell 
+I0 (z) := [N\ell  ]\setminus  I+
+(z) \cup  I - 
+(z) .
+
+Proof. Firstly, applying [10, Proposition 4.1.2] sequentially on \psi 1 (\cdot , \psi 0 (\cdot )), . . . ,
+\psi L - 1 (\cdot , \psi 0 (\cdot ), \psi 1 (\cdot , \psi 0 (\cdot )), \cdot  \cdot  \cdot  ) and \Psi  with directionally differentiable and locally Lipschitz continuous \{ \psi \ell  - 1 , \ell  \in  [L]\}  and g, we can obtain
+\Psi \prime  (\theta ; d\theta  ) =g \prime  (\psi 0 (\theta ),
+
+\psi 1 (\theta , \psi 0 (\theta )), . . . ;
+\prime 
+\psi 0 (\theta ; d\theta  ), \psi 1\prime  (\theta , \psi 0 (\theta ); d\theta  , \psi 0\prime  (\theta ; d\theta  )), . . . ) ,
+
+which can be reorganized as (3.1) with \{ u\ell  , du\ell  , \ell  \in  [L]\}  defined as above. Then the
+result about F can be directly obtained from Assumption 1 and Definition 2.3. And
+for \Theta , it is sufficient to show the directional differentiability of each penalty term
+according to Definition 2.3, which can be obtained by the directional differentiability
+and local Lipschitz continuity of \|  \cdot  \| 1 and \{ \psi \ell  - 1 , \ell  \in  [L]\}  [10, Proposition 4.1.2].
+Together with the nonemptiness of optimal solution sets \scrS , \scrS 0 , and \scrS 1 and Definition 3.2, it implies that under Assumption 1,
+\bullet  \scrD  := \{ \theta  \in  \BbbR n |  [\Psi (\cdot ) + \lambda \|  \cdot  \| 2 ]\prime  (\theta ; d\theta  ) \geq  0 for all d\theta  \in  \BbbR n \}  is the set of dstationary points of (P);
+\=
+\bullet  \scrD 0 := \{ z \in  \BbbR N |  z \in  \scrF 0 and F \prime  (z; d) \geq  0 for all d \in  \scrT \scrF 0 (z)\}  is the set of
+d-stationary points of (P0);
+\=
+\=
+\bullet  \scrD 1 := \{ z \in  \BbbR N |  \Theta \prime  (z; d) \geq  0 for all d \in  \BbbR N \}  is the set of d-stationary points
+of (P1).
+Although the d-stationary point of (P) can be defined as above, the complicated
+nested structure in \Psi \prime  makes it challenging to compute. Notably, through (P0), we
+can express its d-stationarity more clearly and further establish (P)'s relationship with
+(P1) in sections 3.1 and 3.2, which facilitates computation.
+And for the second-order necessary conditions of (P0) and (P1), the twice directional differentiability of F and \Theta  can be verified under Assumptions 1 and 2.
+Proposition 3.5. Under Assumptions 1 and 2, F and \Theta  are twice directionally
+\=
+\=
+differentiable on \BbbR N and for any direction d \in  \BbbR N defined in (2.10),
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+F (2) (z; d) = g (2) (u; du ) + 2\lambda \| d\theta  \| 2 ,
+\left( 
+L
+\sum 
+\Theta (2) (z; d) = F (2) (z; d) +
+\beta \ell   - 
+\ell =1
+
+\sum 
+
+2353
+
+(2)
+
+[\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i
+
+\ell  (z)\cup I \ell 
+i\in I+
+0,+ (z;d)
+
+(2)
++
+[\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i
+\ell  (z)\cup I \ell 
+i\in I - 
+0, -  (z;d)
+
+\sum 
+
++
+
+\sum 
+
+\right) 
+\bigm| 
+\bigm| 
+\bigm| 
+\bigm|  (2)
+\bigm| [\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i \bigm|  ,
+
+\ell  (z;d)
+i\in I0,0
+
+\ell 
+\ell 
+where for all \ell  \in  [L], I+
+(z), I - 
+(z), and I0\ell  (z) are defined as in Proposition 3.4 and
+\ell 
+I0,+
+(z; d) := \{ i \in  I0\ell  (z) |  [du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i > 0\} ,
+\ell 
+I0, - 
+(z; d) := \{ i \in  I0\ell  (z) |  [du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i < 0\} ,
+\bigl(  \ell 
+\bigr) 
+\ell 
+\ell 
+(z; d) \cup  I0, - 
+(z; d) .
+I0,0
+(z; d) := I0\ell  (z)\setminus  I0,+
+
+Proof. The result about F can be directly obtained from Assumptions 1, 2 and
+Definition 2.3. And for \Theta , it is sufficient to show the twice directional differentiability
+of each penalty term according to Definition 2.3, which can be obtained by the twice
+directional differentiability and local Lipschitz continuity of \{ \psi \ell  - 1 , \ell  \in  [L]\}  and the
+max-structure of |  \cdot  |  (i.e., for any x \in  \BbbR , | x|  = max\{ x,  - x\} ) [10, Example 4.2.1].
+Together with Proposition 3.4, it implies that under Assumptions 1 and 2,
+\bullet  \scrS \scrD 0 := \{ z \in  \scrD 0 |  F (2) (z; d) \geq  0 for all d \in  P\scrF 0 (z) satisfying F \prime  (z; d) = 0\}  is
+the set of second-order d-stationary points of (P0);
+\=
+\bullet  \scrS \scrD 1 := \{ z \in  \scrD 1 |  \Theta (2) (z; d) \geq  0 for all d \in  \BbbR N satisfying \Theta \prime  (z; d) = 0\}  is the
+set of second-order d-stationary points of (P1).
+Although it seems immature to define the second-order d-stationary point of (P)
+under Assumptions 1 and 2, we could next see how the sets \scrS \scrD 0 , \scrS \scrD 1 help to provide
+second-order necessary conditions for (P).
+3.1. Closed-form of \scrT \scrF 0 . Here we give the closed-form of the tangent cone of
+\scrF 0 in (1.3) based on directional derivatives of constraints of (P0), which plays an
+important role in the following subsections.
+Theorem 3.6. Under Assumption 1, it holds that
+\=
+
+\scrT \scrF 0 (z) = \{ d \in  \BbbR N |  du\ell  = \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ), \ell  \in  [L]\} ,
+for any feasible point z \in  \scrF 0 .
+Proof. We firstly prove the one-sided inclusion
+\=
+
+\scrT \scrF 0 (z) \subseteq  \{ d \in  \BbbR N |  du\ell  = \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ), \ell  \in  [L]\} .
+According to Definition 2.6, for any d \in  \scrT \scrF 0 (z), there exists a sequence \{ z k \in  \scrF 0 , k \in 
+k
+\BbbZ ++ \}  converging to z and a sequence \tau k \downarrow  0 such that d = limk\rightarrow \infty  z \tau  - z
+. Denoting
+k
+z k  - z
+k
+k
+k
+k
+d := \tau k , we have z = z + \tau k d for all k and d \rightarrow  d as k \rightarrow  \infty . For \ell  = 1, it follows
+from the definition of \psi 0\prime  , \tau k \downarrow  0, local Lipschitz continuity of \psi 0 and dk\theta  \rightarrow  d\theta  that
+\biggl[  k
+\biggr] 
+u1  -  u1 \psi 0 (\theta  + \tau k dk\theta  )  -  \psi 0 (\theta )
+\prime 
+du1  -  \psi 0 (\theta ; d\theta  ) = lim
+ - 
+k\rightarrow \infty 
+\tau k
+\tau k
+[uk1  -  \psi 0 (\theta k )]  -  [u1  -  \psi 0 (\theta )]
+= lim
+= 0,
+k\rightarrow \infty 
+\tau k
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2354
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+where the second equality uses \theta k = \theta  + \tau k dk\theta  , the last equality comes from z k , z \in  \scrF 0 .
+For \ell  = 2, . . . , L, it follows from the definition of \psi \ell \prime   - 1 , \tau k \downarrow  0, local Lipschitz continuity
+of \psi \ell  - 1 and (dk\theta  , dku\ell  - 1 ) \rightarrow  (d\theta  , du\ell  - 1 ) that
+du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )
+\Biggl[ 
+\Biggr] 
+k
+k
+uk\ell   -  u\ell  \psi \ell  - 1 (\theta  + \tau k d\theta  , u\ell  - 1 + \tau k du\ell  - 1 )  -  \psi \ell  - 1 (\theta , u\ell  - 1 )
+= lim
+ - 
+k\rightarrow \infty 
+\tau k
+\tau k
+[uk\ell   -  \psi \ell  - 1 (\theta k , uk\ell  - 1 )]  -  [u\ell   -  \psi \ell  - 1 (\theta , u\ell  - 1 )]
+= 0,
+k\rightarrow \infty 
+\tau k
+
+= lim
+
+where the second equality holds due to z k = z + \tau k dk , the last equality comes from
+z k , z \in  \scrF 0 .
+Next we deduce the reverse inclusion
+\Bigl\{ 
+\Bigr\} 
+\=
+\scrT \scrF 0 (z) \supseteq  d \in  \BbbR N |  du\ell  = \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ), \ell  \in  [L] .
+\=
+
+By Definition 2.6, it is equivalent to show, for any d \in  \BbbR N satisfying
+du\ell  = \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ), \ell  \in  [L],
+
+(3.4)
+
+there exist sequences \{ \tau k \downarrow  0\}  and \{ dk \rightarrow  d\}  such that \{ z + \tau k dk \}  \subseteq  \scrF 0 . For any d
+satisfying (3.4) and any decreasing sequence \{ \tau k \downarrow  0\} , define
+\psi 0 (\theta  + \tau k dk\theta  )  -  \psi 0 (\theta )
+, and
+\tau k
+\psi \ell  - 1 (\theta  + \tau k dk\theta  , u\ell  - 1 + \tau k dku\ell  - 1 )  -  \psi \ell  - 1 (\theta , u\ell  - 1 )
+
+dk\theta  := d\theta  , dku1 :=
+dku\ell  :=
+
+\tau k
+
+in the order of \ell  = 2, . . . , L,
+
+for all k. We prove that dk \rightarrow  d and z k := (z + \tau k dk ) \in  \scrF 0 for all k. Firstly,
+limk\rightarrow \infty  dk\theta  = d\theta  . Then it follows from the definition of dku1 , dk\theta  = d\theta  , \tau k \downarrow  0 and the
+directional differentiability of \psi 0 that limk\rightarrow \infty  dku1 = \psi 0\prime  (\theta ; d\theta  ) = du1 , where the last
+equality holds due to (3.4). For any \ell  = 2, . . . , L, assume that dku\ell  - 1 \rightarrow  du\ell  - 1 has been
+verified. Then it follows from the definition of dku\ell  and local Lipschitz continuity of
+\psi \ell  - 1 that
+lim dku\ell  = lim
+
+k\rightarrow \infty 
+
+\psi \ell  - 1 (\theta  + \tau k d\theta  , u\ell  - 1 + \tau k du\ell  - 1 )  -  \psi \ell  - 1 (\theta , u\ell  - 1 )
+
+k\rightarrow \infty 
+\tau k
+= \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ) = du\ell  ,
+
+where the second equality comes from \tau k \downarrow  0 and directional differentiability of \psi \ell  - 1 ,
+the last equality holds due to (3.4). By induction and (2.10), we obtain that dk \rightarrow  d.
+From z k := (z + \tau k dk ) and (1.2), (2.10), we first have
+(3.5)
+
+\theta k := \theta  + \tau k dk\theta  , and uk\ell  = u\ell  + \tau k dku\ell  , \forall \ell  \in  [L].
+
+For \ell  = 1, (3.5) and the definition of dku1 imply that uk1 = u1 +\psi 0 (\theta k ) - \psi 0 (\theta ) = \psi 0 (\theta k ),
+where the last equality follows from z \in  \scrF 0 . For \ell  = 2, . . . , L, (3.5) and the definition
+of dku\ell  imply that uk\ell  = u\ell  + \psi \ell  - 1 (\theta k , uk\ell  - 1 )  -  \psi \ell  - 1 (\theta , u\ell  - 1 ) = \psi \ell  - 1 (\theta k , uk\ell  - 1 ), where
+the last equality follows from z \in  \scrF 0 . Combining the results for all \ell  \in  [L], we obtain
+that z k \in  \scrF 0 for all k.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2355
+
+It is noteworthy that Theorem 3.6 provides the expression for \scrT \scrF 0 (z), where \scrF 0
+is defined by nonsmooth constraints. In general, such an expression for the tangent
+cone of the feasible region is only achievable for smooth constraints under the linear
+independence constraint qualification (LICQ) [24, Lemma 12.2]. The one-sided inclusion for \scrT \scrF 0 (z) can only guarantee one-sided implication between (P0) and (P1) [10,
+Theorem 9.2.1 and Remark 9.2.1], while the closed-form in Theorem 3.6 can guarantee
+the equivalence (see Theorem 3.9). If we use constraint qualifications for nonsmooth
+constraints named NNAMCQ [22] and relations between tangent and normal cones
+[25, Theorems 6.26 and 6.28], we can only obtain a subset of \scrT \scrF 0 (z) presented by
+\{ \psi \ell \prime   - 1 , \ell  \in  [L]\} , which fails to imply the full characterization of \scrT \scrF 0 (z) in certain cases
+such as \scrT \scrF 0RN N (z) in section 4. Noting that P\scrF 0 (z) \subseteq  \scrT \scrF 0 (z) for any z \in  \scrF 0 , Theorem 3.6 also provides the expression of a superset of P\scrF 0 (z), which helps to obtain its
+closed-form in certain cases (see section 4).
+3.2. Equivalence in optimality and d-stationarity. Here we show the equivalence of (P), (P0), and (P1) in global optimality and d-stationarity. Firstly, (P) and
+(P0) are equivalent in global optimality as we discussed after Lemma 2.1. Similarly, according to Proposition 3.4 and Theorem 3.6, (P) and (P0) are equivalent in
+d-stationarity when neglecting dimension lifting.
+\top  \top 
+Lemma 3.7. If \theta  \in  \scrD , then z := (\theta \top  , u\top 
+\in  \scrD 0 , where u\ell  := \psi \ell  - 1
+1 , . . . , uL )
+\top  \top  \top 
+(\theta , u1 , . . . , u\ell  - 1 ) for all \ell  \in  [L]. Conversely, if z := (\theta  , u ) \in  \scrD 0 , then \theta  \in  \scrD .
+\top  \top 
+with u\ell  := \psi \ell  - 1
+Proof. For any \theta  \in  \scrD , it follows from z := (\theta \top  , u\top 
+1 , . . . , uL )
+(\theta , u1 , . . . , u\ell  - 1 ) for all \ell  \in  [L] that z \in  \scrF 0 . Then for any d \in  \scrT \scrF 0 (z), we have du\ell  =
+\psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ) for all \ell  \in  [L] by Theorem 3.6. Together with Proposition 3.4,
+it implies that for any d \in  \scrT \scrF 0 (z),
+
+F \prime  (z; d) = \Psi \prime  (\theta ; d\theta  ) + 2\lambda \theta \top  d\theta  \geq  0,
+where the inequality comes from \theta  \in  \scrD . On the other hand, if z := (\theta \top  , u\top  )\top  \in  \scrD 0 ,
+then z \in  \scrF 0 , i.e., u\ell  := \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ) for all \ell  \in  [L]. Then for any d\theta  \in  \BbbR n , it
+\top 
+\top  \top 
+follows from Proposition 3.4 that under the setting of d := (d\top 
+with
+\theta  , du1 , . . . , duL )
+\prime 
+du\ell  := \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ; d\theta  , du1 , . . . , du\ell  - 1 ) for all \ell  \in  [L],
+\Psi \prime  (\theta ; d\theta  ) + 2\lambda \theta \top  d\theta  = F \prime  (z; d) \geq  0,
+where the inequality uses d \in  \scrT \scrF 0 (z) from Theorem 3.6 and z \in  \scrD 0 .
+To establish the equivalence between (P0) and (P1), inspired by Theorem 2.1 (a)
+of [9], we first show that under proper setting of \{ \beta \ell  > 0, \ell  \in  [L]\}  restricted by Kg
+and \{ K\ell  > 0, \ell  \in  [L  -  1]\} , the d-stationary point of (P1) in lev\leq \=\gamma  \Theta  must be feasible
+to (P0), where \gamma \= is defined in (2.1).
+Lemma 3.8. Under Assumption 1, let z be a d-stationary point of (P1) with
+\Theta (z) \leq  \gamma \= and \{ \beta \ell  > 0, \ell  \in  [L]\}  satisfying
+(3.6)
+
+\beta \ell  > Kg
+
+L
+\prod 
+
+(1 + Kj - 1 ), for all \ell  \in  [L].
+
+j=\ell +1
+
+Then z \in  \scrF 0 .
+Proof. To show z \in  \scrF 0 , we are going to prove u\ell  = \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ) in the
+order of \ell  = L, . . . , 1 separately.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2356
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+L
+L
+To show uL = \psi L - 1 (\theta , u1 , . . . , uL - 1 ) by contradiction, we use I+
+(z), I - 
+(z), and
+L
+L
+I0 (z) defined in Proposition 3.4. Suppose uL \not = \psi L - 1 (\theta , u1 , . . . , uL - 1 ), then I+
+(z) \cup 
+L
+\top 
+\top 
+\top 
+\top 
+I -  (z) \not = \emptyset . Let z\= := (\theta \= , u
+\=1 , . . . , u
+\=L ) with
+
+\theta \= := \theta , u
+\=1 := u1 , . . . , u
+\=L - 1 := uL - 1 ,
+u
+\=L := \psi L - 1 (\theta , u1 , . . . , uL - 1 ) \not = uL ,
+and d := z\=  -  z = (0, . . . , 0, duL ) \not = 0. Then it follows from Proposition 3.4 that
+\right) 
+\left( 
+\sum 
+\sum 
+\sum 
+| [duL ]i | 
+[duL ]i +
+[duL ]i  - 
+\Theta \prime  (z; d) = F \prime  (u; du ) + \beta L
+L (z)
+i\in I+
+
+(3.7)
+
+i\in I0L (z)
+
+L (z)
+i\in I - 
+
+= g \prime  (u; du )  -  \beta L \| duL \| 1
+\leq  (Kg  -  \beta L )\| duL \| 1 < 0,
+
+L
+L
+(z), I - 
+(z), I0L (z), the first
+where the two equalities use the definitions of d and I+
+\=
+inequality holds due to (2.11) at d = 0 and \|  \cdot  \|  \leq  \|  \cdot  \| 1 , and the last inequality follows
+\=
+from (3.6) and duL \not = 0. However, it contradicts \Theta \prime  (z; d) \geq  0 for all d \in  \BbbR N . Hence
+uL = \psi L - 1 (\theta , u1 , . . . , uL - 1 ).
+\ell 
+\ell 
+For any \ell  = L - 1, . . . , 1, we next show u\ell  = \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ) using I+
+(z), I - 
+(z)
+\ell 
+\ell 
+\ell 
+and I0 (z) in Proposition 3.4. Suppose u\ell  \not = \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ), then I+ (z) \cup  I -  (z) \not =
+\top 
+\emptyset . Let z\= := (\theta \=\top  , u
+\=\top 
+\=\top 
+1 ,...,u
+L ) with
+
+\theta \= := \theta , u
+\=1 := u1 , . . . , u
+\=\ell  - 1 := u\ell  - 1 ,
+u
+\=\ell  = \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ) \not = u\ell  ,
+u
+\=\ell +1 := u\ell +1 + \psi \ell \prime  (\theta , u1 , . . . , u\ell  ; 0, . . . , 0, u
+\=\ell   -  u\ell  ),
+..
+.
+\prime 
+u
+\=L := uL + \psi L - 1
+(\theta , u1 , . . . , uL - 1 ; 0, . . . , 0, u
+\=\ell   -  u\ell  , . . . , u
+\=L - 1  -  uL - 1 ),
+
+and d := z\=  -  z = (0, . . . , 0, du\ell  , . . . , duL ) \not = 0. Then it can be checked that
+(3.8)
+
+\prime 
+du\ell +1 = \psi \ell \prime  (\theta , u\ell  ; d\theta  , du\ell  ), . . . , duL = \psi L - 1
+(\theta , uL - 1 ; d\theta  , duL - 1 ).
+
+Together with Proposition 3.4, it implies that
+\left( 
+\right) 
+\sum 
+\sum 
+\sum 
+\Theta \prime  (z; d) = F \prime  (u; du ) + \beta \ell 
+[du\ell  ]i  - 
+[du\ell  ]i +
+| [du\ell  ]i | 
+\ell  (z)
+i\in I+
+
+\ell  (z)
+i\in I - 
+
+i\in I0\ell  (z)
+
+\prime 
+
+= g (u; du )  -  \beta \ell  \| du\ell  \| 1
+(3.9)
+
+\leq  Kg \| du \|   -  \beta \ell  \| du\ell  \| 1 ,
+
+\ell 
+\ell 
+where the two equalities use the definitions of d and I+
+(z), I - 
+(z), I0\ell  (z), the inequality
+\=
+holds due to (2.11) at d = 0. Next we give an upper bound of \| du \|  by estimating
+\{ duj , j \in  [L]\} . Since du1 = 0, . . . , du\ell  - 1 = 0, we only need to analyze \{ duj , j = \ell , . . . , L\} .
+For j = \ell , it follows from the definitions of du\ell  and u
+\=\ell  that
+
+(3.10)
+
+\| du\ell  \|  = \| u\ell   -  \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 )\|  \not = 0.
+
+For j = \ell  + 1, it follows from (3.8) that
+(3.11)
+
+\| du\ell +1 \|  = \| \psi \ell \prime  (\theta , u\ell  ; d\theta  , du\ell  )\|  \leq  K\ell  (\| du1 \|  + \cdot  \cdot  \cdot  + \| du\ell  \| ) = K\ell  \| du\ell  \| ,
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2357
+
+where the inequality holds due to (2.11) at d\= = 0, d\theta  = 0, the last equality uses
+du1 = 0, . . . , du\ell  - 1 = 0. And for j \geq  \ell  + 2, assume that
+\Biggl( 
+\Biggr) 
+k - 1
+\prod 
+\| dk \|  \leq  Kk - 1
+(1 + Ki - 1 ) \| du\ell  \| 
+(3.12)
+i=\ell +1
+
+for all k = \ell  + 1, . . . , j  -  1. Then we can obtain that (3.12) also holds at k = j:
+\prime 
+\| duj \|  = \| \psi j - 1
+(\theta , uj - 1 ; d\theta  , duj - 1 )\| 
+
+\leq  Kj - 1 (\| du1 \|  + \cdot  \cdot  \cdot  + \| duj - 1 \| )
+
+(3.13)
+
+= Kj - 1 (\| du\ell  \|  + \| du\ell +1 \|  + \cdot  \cdot  \cdot  + \| duj - 1 \| )
+\Biggl( 
+\Biggr) 
+j - 1
+\prod 
+\leq  Kj - 1
+(1 + Ki - 1 ) \| du\ell  \| ,
+i=\ell +1
+
+where the first inequality holds due to (2.11) at d\= = 0, d\theta  = 0, the second equality uses
+du1 = 0, . . . , du\ell  - 1 = 0, and the second inequality uses (3.12) at k = \ell  + 1, . . . , j  -  1.
+By induction and (3.11), it implies that (3.12) holds for all k = \ell  + 1, . . . , L. Plugging
+these upper bounds for \{ \| duj \| , j \in  [L]\}  into (3.9), we have
+\Theta \prime  (z; d) \leq  Kg (\| du\ell  \|  + \| du\ell +1 \|  + \cdot  \cdot  \cdot  + \| duL \| )  -  \beta \ell  \| du\ell  \| 
+\Biggl(  \Biggl( 
+\Biggr) 
+\Biggr) 
+L - 1
+\prod 
+\leq  Kg 1 + K\ell  + \cdot  \cdot  \cdot  + KL - 1
+(1 + Ki - 1 )  -  \beta \ell  \| du\ell  \| 
+i=\ell +1
+
+\Biggl( 
+\leq  Kg
+
+L
+\prod 
+
+\Biggr) 
+(1 + Ki - 1 )  -  \beta \ell  \| du\ell  \| 
+
+i=\ell +1
+
+< 0,
+where the last inequality uses (3.6) and (3.10). However, it contradicts \Theta \prime  (z; d) \geq  0
+\=
+for all d \in  \BbbR N . Hence, u\ell  = \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ), which yields the result due to the
+arbitrariness of \ell .
+In general, condition (3.6) can be satisfied under \beta 1 = \cdot  \cdot  \cdot  = \beta L = \beta  with sufficiently
+large \beta  > 0, since Kg and \{ K\ell  , \ell  \in  [L  -  1]\}  defined in (2.8) and (2.9) are nonincreasing
+when \beta  is increasing. For certain applications in machine learning, such as training
+process of RNNs to be shown in section 4, Lipschitz moduli Kg and \{ K\ell  , \ell  \in  [L  -  1]\} 
+satisfying (2.11) on lev\leq \=\gamma  \Theta  are easy to estimate (see (4.5)--(4.9)), which provides
+computable thresholds for \{ \beta \ell  , \ell  \in  [L]\} . Based on Lemma 3.8, we could show the
+equivalence of (P0) and (P1) in terms of global optimality and d-stationarity.
+Theorem 3.9. Under Assumption 1, set \{ \beta \ell  > 0, \ell  \in  [L]\}  satisfying (3.6). Then
+(a) \scrS 0 = \scrS 1 ;
+(b) for any z \in  lev\leq \=\gamma  \Theta  with \gamma \= defined in (2.1), z is a d-stationary point of (P0)
+if and only if it is a d-stationary point of (P1).
+Proof. (a). For any z \in  \scrS 1 , it follows from Lemma 3.1 that \Theta \prime  (z; d) \geq  0 for
+\=
+all d \in  \BbbR N , i.e., z is a d-stationary point of (P1). Together with Lemma 3.8 and
+\Theta (z) \leq  \Theta (z 0 ) = \gamma \= from the global optimality of z, it implies that z \in  \scrF 0 . Hence,
+\scrS 1 \subseteq  \scrF 0 . Since \scrS 1 \not = \emptyset , we further have
+\scrS 1 = argmin \Theta (z) = argmin \Theta (z) = argmin F (z) = \scrS 0 .
+\=
+z\in \BbbR N
+
+z\in \scrF 0
+
+z\in \scrF 0
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2358
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+(b). We first show that any d-stationary point of (P1) in lev\leq \=\gamma  \Theta  must be a dstationary point for (P0). Firstly, it follows from Lemma 3.8 that z \in  \scrF 0 . Hence, it
+follows from Proposition 3.4 and Theorem 3.6 that for any d \in  \scrT \scrF 0 (z),
+F \prime  (z; d) = \Theta \prime  (z; d) \geq  0,
+where the inequality comes from \Theta \prime  (z; d) \geq  0 for all d.
+Next we will show the reverse implication: any d-stationary point z of (P0) with
+\Theta (z) \leq  \gamma \= is also a d-stationary point of (P1). Firstly, it follows from z \in  \scrF 0 that
+\ell 
+\ell 
+I+
+(z) = I - 
+(z) = \emptyset  for all \ell  \in  [L], which are defined in Proposition 3.4. It simplifies
+(3.3) as
+(3.14)
+
+\Theta \prime  (z; d) = F \prime  (z; d) +
+
+L
+\sum 
+
+\beta \ell  \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| 1 .
+
+\ell =1
+
+Together with Theorem 3.6, it further implies that for any d \in  \scrT \scrF 0 (z),
+\Theta \prime  (z; d) = F \prime  (z; d) \geq  0,
+
+(3.15)
+
+where the inequality holds since z is the d-stationary point of (P0). For any d \in 
+/ \scrT \scrF 0 (z),
+we can construct a direction d\= as follows: set d\=\theta  := d\theta  and d\=u\ell  := \psi \ell \prime   - 1 (\theta , u1 , . . . , u\ell  - 1 ;
+d\=\theta  , d\=u1 , . . . , d\=u\ell  - 1 ) in the order of \ell  = 1, . . . , L. Then by Theorem 3.6, we have d\= \in 
+\scrT \scrF 0 (z). Hence, it follows from (3.14) and (3.15) that
+\= + \Theta \prime  (z; d)
+\=
+\Theta \prime  (z; d) = \Theta \prime  (z; d)  -  \Theta \prime  (z; d)
+\prime 
+\prime 
+\=
+\geq  \Theta  (z; d)  -  \Theta  (z; d)
+(3.16)
+
+\= +
+= F \prime  (z; d)  -  F \prime  (z; d)
+
+L
+\sum 
+
+\beta \ell  \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| 1 .
+
+\ell =1
+
+Next we will show that the right-hand side of (3.16) is nonnegative. Note that
+(3.17)
+
+\= = g \prime  (u; du )  -  g \prime  (u; d\=u ) \geq   - Kg
+F \prime  (z; d)  -  F \prime  (z; d)
+
+L
+\sum 
+
+\| du\ell   -  d\=u\ell  \| ,
+
+\ell =1
+
+where the equality follows from d\=\theta  = d\theta  and (3.2), and the inequality uses (2.11). We
+only need to estimate \{ \| du\ell   -  d\=u\ell  \| , \ell  \in  [L]\}  by induction in the following. For \ell  = 1,
+it follows from the definition of d\=u1 and d\=\theta  = d\theta  that
+\| du1  -  d\=u1 \|  = \| du1  -  \psi 0\prime  (\theta ; d\theta  )\| .
+
+(3.18)
+
+For \ell  = 2, . . . , L, assume that
+(3.19)
+
+\| duj  -  d\=uj \| 
+\prime 
+\leq  \| duj  -  \psi j - 1
+(\theta , uj - 1 ; d\theta  , duj - 1 )\| 
+\Biggl[ 
+\Biggr] 
+j - 1
+\sum  j - 1
+\prod 
+\prime 
++ Kj - 1
+(1 + Ki - 1 ) \| duk  -  \psi k - 1
+(\theta , uk - 1 ; d\theta  , duk - 1 )\| 
+k=1
+
+i=k+1
+
+holds for all j = 1, . . . , \ell   -  1. Then we can deduce that (3.19) also holds at j = \ell :
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2359
+
+\| du\ell   -  d\=u\ell  \| 
+= \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\=\theta  , d\=u\ell  - 1 )\| 
+(3.20)
+
+\leq  \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| 
++ K\ell  - 1 (\| du  -  d\=u \|  + \cdot  \cdot  \cdot  + \| du
+
+\=
+
+ -  du\ell  - 1 \| )
+1
+1
+\ell  - 1
+\leq  \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| 
+\biggl( 
+\biggr) 
+\prod \ell  - 2
+\| du1  -  \psi 0\prime  (\theta ; d\theta  )\|  \cdot  [1 + K1 + \cdot  \cdot  \cdot  + K\ell  - 2 i=2 (1 + Ki - 1 )]
++ K\ell  - 1
++ \cdot  \cdot  \cdot  + \| du\ell  - 1  -  \psi \ell \prime   - 2 (\theta , u\ell  - 2 ; d\theta  , du\ell  - 2 )\| 
+= \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| 
+\biggl( 
+\biggr) 
+\prod \ell  - 1
+\| du1  -  \psi 0\prime  (\theta ; d\theta  )\|  \cdot  i=2 (1 + Ki - 1 ) + . . .
++ K\ell  - 1 \cdot 
+,
++\| du\ell  - 1  -  \psi \ell \prime   - 2 (\theta , u\ell  - 2 ; d\theta  , du\ell  - 2 )\| 
+
+where the first equality comes from the definition of d\=u\ell  , the first inequality uses
+d\theta  = d\=\theta  and (2.11), the last inequality follows from (3.19) at j = 1, . . . , \ell   -  1. Together
+with (3.18), it implies that (3.19) holds for all \ell  \in  [L]. Plugging these upper bounds
+for \{ \| du\ell   -  d\=u\ell  \| , \ell  \in  [L]\}  into (3.17), we have
+\=
+F \prime  (z; d)  -  F \prime  (z; d)
+\biggl( 
+\biggr) 
+\prod L - 1
+\| du1  -  \psi 0\prime  (\theta ; d\theta  )\|  \cdot  [1 + K1 + \cdot  \cdot  \cdot  + KL - 1 i=2 (1 + Ki - 1 )]
+\geq   - Kg
+\prime 
++ \cdot  \cdot  \cdot  + \| duL  -  \psi L - 1
+(\theta , uL - 1 ; d\theta  , duL - 1 )\| 
+\left[ 
+\right] 
+L
+L
+\sum 
+\prod 
+=  - Kg
+(1 + Kj - 1 ) \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| .
+\ell =1
+
+j=\ell +1
+
+Together with (3.16), it implies that
+\left( 
+\left[ 
+\right] \right) 
+L
+L
+\sum 
+\prod 
+\Theta \prime  (z; d) \geq 
+\beta \ell   -  Kg
+(1 + Kj - 1 )
+\cdot  \| du\ell   -  \psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| 
+\ell =1
+
+(3.21)
+
+j=\ell +1
+
+> 0,
+
+where the last inequality uses (3.6), d \in 
+/ \scrT \scrF 0 (z) and Theorem 3.6. Therefore, it yields
+that \Theta \prime  (z; d) \geq  0 for all d, meaning that z is a d-stationary point of (P1).
+Remark 3.10. Theorem 3.9 is different from Theorem 2.1 of [9] in two aspects.
+(i) Theorem 2.1 of [9] only obtains one-sided implication that a d-stationary point
+of the penalty problem must be a d-stationary point of the original problem,
+while we have the equivalence. As a consequence, the penalization preserves
+all the d-stationary points of (P) and (P0). And when g, \{ \psi \ell  - 1 , \ell  \in  [L]\}  are
+smooth or have DC structures of the pointwise max type [11, Condition C2],
+d-stationary points of (P1) can be obtained by trust region methods [30] or
+majorization minimization frameworks [11].
+(ii) Motivated by [21, Theorem 2.5] and [22, Lemma 9], we replace the boundedness requirement of z with \Theta (z) \leq  \Theta (z 0 ), which is easier to check since \Theta (z 0 )
+is easy to calculate. And the condition \Theta (z) \leq  \Theta (z 0 ) also helps to obtain
+the threshold-like conditions expressed by \{ K\ell  , \ell  \in  [L  -  1]\}  and Kg , which
+provides the relations between penalty thresholds and the number of layers L.
+3.3. Second-order d-stationarity. Here we compare the sets of second-order
+d-stationary points \scrS \scrD 0 and \scrS \scrD 1 of (P0) and (P1) to exhibit their differences in
+depicting second-order necessary conditions for (P).
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2360
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+First of all, the idea of using second-order conditions of reformulated problems
+to characterize optimality conditions of the original problem is motivated by [10,
+Proposition 9.4.2] for (P) and (P1) with L = 1, i.e., min\theta  h(G(\theta )) with G(\theta ) :=
+(\psi 0 (\theta )\top  , \lambda \| \theta \| 2 )\top  and h(y) := g([y]1:N1 ) + [y](N1 +1) . The second-order necessary conditions in (9.41) of [10, Proposition 9.4.2] can be reorganized as if \theta  is a local minimizer
+of (P), then for all \rho  > max\{ K g , 1\}  where K g > 0 is a Lipschitz constant of g near
+u1 := \psi 0 (\theta ),
+\bigl( 
+\bigr) 
+\top  \top 
+g \prime  (u1 ; du1 ) + 2\lambda \theta \top  d\theta  \geq  0 for all d = d\top 
+with du1 = \psi 0\prime  (\theta ; d\theta  ),
+\theta  , du1
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+and g (2) (u1 ; du1 ) + 2\lambda \rho \| d\theta  \| 2 + \rho  \bigm\| \psi 0 (\theta ; d\theta  )\bigm\|  \geq  0,
+1
+
+\top  \top 
+\prime 
+\prime 
+\top 
+for all d = (d\top 
+\theta  , du1 ) with du1 = \psi 0 (\theta  ; d\theta  ), g (u1 ; du1 ) + 2\lambda \theta  d\theta  = 0,
+
+which is actually covered by our second-order necessary conditions in constructing
+\top 
+\scrS \scrD 1 since for any z = (\theta \top  , u\top 
+1 ) with u1 = \psi 0 (\theta  ),
+\top  \top 
+\bullet  for any d = (d\top 
+,
+d
+)
+with du1 = \psi 0\prime  (\theta ; d\theta  ), it follows from Proposition 3.4
+u1
+\theta 
+that \Theta \prime  (z; d) = g \prime  (u1 ; du1 ) + 2\lambda \theta \top  d\theta  ;
+\bullet  it follows from Proposition 3.4 that
+\{ d |  du1 = \psi 0\prime  (\theta ; d\theta  ), g \prime  (u1 ; du1 ) + 2\lambda \theta \top  d\theta  = 0\}  \subseteq  \{ d |  \Theta \prime  (z; d) = 0\} ;
+\bullet  for any d with du1 = \psi 0\prime  (\theta ; d\theta  ) and g \prime  (u1 ; du1 ) + 2\lambda \theta \top  d\theta  = 0, it follows from
+Proposition 3.5 with the setting of \beta 1 = \rho  and \rho  > max\{ K g , 1\}  that
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+\Theta (2) (z; d) = g (2) (u1 ; du1 ) + 2\lambda \| d\theta  \| 2 + \rho  \bigm\| \psi 0 (\theta ; d\theta  )\bigm\| 
+1
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+(2)
+2
+< g (u1 ; du1 ) + 2\lambda \rho \| d\theta  \|  + \rho  \bigm\| \psi 0 (\theta ; d\theta  )\bigm\|  .
+1
+
+Hence, we will focus on our second-order necessary conditions for (P0) and (P1) rather
+than generalizing (9.41) of [10, Proposition 9.4.2] to the case of (P).
+By the results in sections 3.1 and 3.2, the second-order necessary conditions of
+(P0) and (P1) specified in Definition 3.2 are both able to characterize solutions of
+(P). It follows from Lemma 3.1 and Theorem 3.9 that
+\scrS 0
+| | 
+\scrS 1
+
+\subseteq  \scrS \scrD 0 \cap  lev\leq \=\gamma  \Theta  \subseteq 
+\subseteq  \scrS \scrD 1 \cap  lev\leq \=\gamma  \Theta  \subseteq 
+
+\scrD 0 \cap  lev\leq \=\gamma  \Theta 
+| | 
+\scrD 1 \cap  lev\leq \=\gamma  \Theta .
+
+Together with the bijection between \scrS  and \scrS 0 (discussed after Lemma 2.1), it implies
+\top  \top 
+that for any \theta  \in  \scrS , the point z = (\theta \top  , u\top 
+\gamma  \Theta  and
+1 , . . . , uL ) must belong to \scrS \scrD  0 \cap  lev\leq \=
+\scrS \scrD 1 \cap  lev\leq \=\gamma  \Theta  where u\ell  := \psi \ell  - 1 (\theta , u1 , . . . , u\ell  - 1 ) for all \ell  \in  [L]. Furthermore, we could
+find the latter condition z \in  \scrS \scrD 1 \cap  lev\leq \=\gamma  \Theta  is stronger by the following observation.
+Theorem 3.11. Under Assumptions 1, 2 and (3.6), \scrS \scrD 0 \cap  lev\leq \=\gamma  \Theta  \supseteq  \scrS \scrD 1 \cap 
+lev\leq \=\gamma  \Theta .
+Proof. By the definitions of \scrS \scrD 0 and \scrS \scrD 1 ,
+\Bigl\{ 
+\Bigr\} 
+\scrS \scrD 0 \cap  lev\leq \=\gamma  \Theta  = z |  F (2) (z; d) \geq  0, \forall d \in  P\scrF 0 (z) with F \prime  (z; d) = 0 \cap  (\scrD 0 \cap  lev\leq \=\gamma  \Theta ),
+\Bigl\{ 
+\Bigr\} 
+\scrS \scrD 1 \cap  lev\leq \=\gamma  \Theta  = z |  \Theta (2) (z; d) \geq  0, \forall d with \Theta \prime  (z; d) = 0 \cap  (\scrD 1 \cap  lev\leq \=\gamma  \Theta ).
+Together with \scrD 0 \cap  lev\leq \=\gamma  \Theta  = \scrD 1 \cap  lev\leq \=\gamma  \Theta  from Theorem 3.9, we only need to prove
+that for any z \in  \scrD 1 \cap  lev\leq \=\gamma  \Theta  satisfying \Theta (2) (z; d) \geq  0 for all d with \Theta \prime  (z; d) = 0, the
+inequality F (2) (z; d) \geq  0 holds for all d \in  P\scrF 0 (z) with F \prime  (z; d) = 0.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2361
+
+First we show
+(2)
+
+\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ) = 0, \ell  \in  [L] for all z \in  \scrF 0 , d \in  P\scrF 0 (z)
+
+(3.22)
+
+(2)
+
+by contradiction. If there exists \ell  \in  [L] and i \in  [N\ell  ], such that [\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  ,
+du\ell  - 1 )]i > 0, then it follows from the definition of second-order directional derivatives
+that for any sufficiently small positive number \tau  ,
+0 < [\psi \ell  - 1 (\theta  + \tau  d\theta  , u\ell  - 1 + \tau  du\ell  - 1 )]i  -  [\psi \ell  - 1 (\theta , u\ell  - 1 )]i  -  \tau  [\psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i .
+Together with z \in  \scrF 0 , d \in  P\scrF 0 (z) \subseteq  \scrT \scrF 0 (z), it implies that
+[u\ell  + \tau  du\ell  ]i  -  [\psi \ell  - 1 (\theta  + \tau  d\theta  , u\ell  - 1 + \tau  du\ell  - 1 )]i
+= [\psi \ell  - 1 (\theta , u\ell  - 1 )]i + \tau  [\psi \ell \prime   - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i  -  [\psi \ell  - 1 (\theta  + \tau  d\theta  , u\ell  - 1 + \tau  du\ell  - 1 )]i
+<0
+for any sufficiently small positive \tau  , which contradicts with d \in  P\scrF 0 (z). Similar contra(2)
+diction appears if there exists \ell  \in  [L] and i \in  [N\ell  ], such that [\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]i
+< 0, which yields (3.22).
+Hence, for any z \in  \scrS \scrD 1 \cap  lev\leq \=\gamma  \Theta , we have
+0 \leq  \Theta (2) (z; d) = F (2) (z; d) +
+
+L
+\sum 
+
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+\beta \ell  \bigm\| \psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\bigm\|  = F (2) (z; d)
+1
+
+\ell =1
+
+for all d \in  P\scrF 0 (z) with F \prime  (z; d) = 0, where the inequality is derived by
+\{ d \in  P\scrF 0 (z) |  F \prime  (z; d) = 0\}  \subseteq  \{ d \in  \scrT \scrF 0 (z) |  F \prime  (z; d) = 0\}  \subseteq  \{ d |  \Theta \prime  (z; d) = 0\} 
+from z \in  \scrF 0 , Theorem 3.6 and Proposition 3.4, the first equality uses z \in  \scrF 0 , Theorem 3.6 and Proposition 3.5, and the last equality uses (3.22).
+Remark 3.12. Here we discuss the conditions under which the equality in Theorem 3.11 holds. Under the premises of Theorem 3.11, it follows from (3.21) that
+\Theta \prime  (z; d) > 0 for any z \in  \scrD 0 \cap  lev\leq \=\gamma  \Theta  = \scrD 1 \cap  lev\leq \=\gamma  \Theta  and any d \in 
+/ \scrT \scrF 0 (z). Hence, for
+any z \in  \scrD 0 \cap  lev\leq \=\gamma  \Theta  = \scrD 1 \cap  lev\leq \=\gamma  \Theta ,
+(3.23)
+
+\{ d |  \Theta \prime  (z; d) = 0\}  = \{ d \in  \scrT \scrF 0 (z) |  \Theta \prime  (z; d) = 0\}  = \{ d \in  \scrT \scrF 0 (z) |  F \prime  (z; d) = 0\} ,
+
+where the last equality uses z \in  \scrF 0 , Theorem 3.6 and Proposition 3.4. Together with
+Proposition 3.5 and Theorem 3.6, it implies that for any d with \Theta \prime  (z; d) = 0,
+\Theta (2) (z; d) = F (2) (z; d) +
+
+L
+\sum 
+
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+\beta \ell  \bigm\| \psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\bigm\|  ,
+1
+
+\ell =1
+
+which indicates that z \in  \scrS \scrD 1 \cap  lev\leq \=\gamma  \Theta  if and only if z \in  \scrD 1 \cap  lev\leq \=\gamma  \Theta  and
+(3.24)
+
+F (2) (z; d) +
+
+L
+\sum 
+
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+\beta \ell  \bigm\| \psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\bigm\|  \geq  0
+1
+
+\ell =1
+
+for all d \in  \scrT \scrF 0 (z) satisfying F \prime  (z; d) = 0. Then it follows from (3.22) and P\scrF 0 (z) \subseteq 
+\scrT \scrF 0 (z) that the equality in Theorem 3.11 holds if and only if
+(3.25)
+
+F (2) (z; d) +
+
+L
+\sum 
+
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+\beta \ell  \bigm\| \psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\bigm\|  \geq  0,
+1
+
+\ell =1
+\prime 
+
+for all d \in  \scrT \scrF 0 (z)\setminus P\scrF 0 (z) satisfying F (z; d) = 0.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2362
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+Sufficient conditions for (3.25) include the following two conditions.
+\bullet  P\scrF 0 (z) = \scrT \scrF 0 (z). If \scrF 0 is a polyhedron or a union of finite number of polyhedrons, then P\scrF 0 (z) = \scrT \scrF 0 (z) holds for any z \in  \scrF 0 . For example, under the
+setting of \psi 0 (\theta ) := a\top  \theta , \psi 1 (\theta , u1 ) := [u1 ]+ for a vector a \in  \BbbR n ,
+\bigl\{ 
+\bigr\} 
+\scrF 0 = z = (\theta \top  , u1 , u2 )\top  |  u1 = a\top  \theta , u2 = [u1 ]+
+\bigl\{ 
+\bigr\}  \bigl\{ 
+\bigr\} 
+= z |  u1 = a\top  \theta , u1 \geq  0, u2 = u1 \cup  z |  u1 = a\top  \theta , u1 \leq  0, u2 = 0
+is a union of two polyhedrons.
+\bullet  F is convex and twice directionally differentiable. Since F (z) = g(u) +
+\lambda \| \theta \| 2 , F is convex and twice directionally differentiable when g is convex
+and twice directionally differentiable. In this case, (3.25) naturally holds
+(z) - F \prime  (z;\tau  d)
+\geq  0 for all d.
+since F (2) (z; d) = lim\tau  \downarrow 0 F (z+\tau  d) - F
+\tau  2 /2
+Inspired by Remark 3.12, we can provide an example where \scrS \scrD 0 \cap  lev\leq \=\gamma  \Theta  \supsetneq  \scrS \scrD 1 \cap 
+lev\leq \=\gamma  \Theta  under the premises of Theorem 3.11.
+Example 3.13. Consider (P) with L = 2, n = N1 = N2 = 1, and \lambda  = 0.01,
+\bigl[ 
+\bigr] 
+\psi 0 (\theta ) := \theta , \psi 1 (\theta , u1 ) := u21 , g(u1 , u2 ) :=  - u21 + 0.5u2 + 0.0001 + .
+On the one hand, it can be verified that z 0 = (0, \psi 0 (0), \psi 1 (0, \psi 0 (0)))\top  = 0 is a secondorder d-stationary point of (P0). Firstly, it follows from Theorem 3.6, the definition of
+P\scrF 0 (\cdot ), and (3.22) that \scrT \scrF 0 (0) = \{ (d\theta  , du1 , du2 )\top  |  du1 = d\theta  , du2 = 0\}  and P\scrF 0 (0) = \{ 0\} 
+since \{ 0\}  \subseteq  P\scrF 0 (0) \subseteq  \{ d \in  \scrT \scrF 0 (0) |  2d2u1 = 0\}  = \{ 0\} . Then it can be verified that
+F \prime  (0; d) = 0.5du2 = 0 \geq  0 for all d \in  \scrT \scrF 0 (0), and F (2) (0; d) =  - 2d2u1 +0.02d2\theta  = 0 \geq  0 for
+all d \in  P\scrF 0 (0) \cap  \{ d |  F \prime  (0; d) = 0\}  = \{ 0\} . On the other hand, z 0 is not a second-order
+d-stationary point of (P1) with \beta 1 = 1, \beta 2 = 0.6 where (3.6) holds. First we can verify
+ - 4
+(3.6) holds, i.e., \beta 1 > Kg (1 + K1 ) and \beta 2 > Kg . Since \gamma \= = F (z 0 ) =
+\sqrt{}  10 , for all
+\top 
+ - 4
+(\theta , u1 , u2 ) \in  lev\leq \=\gamma  \Theta , it can be calculated that | u1 |  \leq  | \theta |  + | u1  -  \theta |  \leq  10 /10 - 2 +
+10 - 4 = 0.1001. It implies that for all (\theta , u1 , u2 )\top  , (\theta , u
+\=1 , u
+\=2 )\top  \in  lev\leq \=\gamma  \Theta ,
+\sqrt{} 
+| g(u)  -  g(\=
+u)|  \leq  (u1 + u
+\=1 )2 + 0.25\| u  -  u\| 
+\= < 0.5386\| u  -  u\| ,
+\=
+| \psi 1 (\theta , u1 )  -  \psi 1 (\theta , u
+\=1 )|  \leq  | u1 + u
+\=1 |  \cdot  | u1  -  u
+\=1 |  < 0.21| u1  -  u
+\=1 | .
+Hence, there exist Kg \in  (0, 0.5386] and K1 \in  (0, 0.21] satisfying (2.8)--(2.9), which
+guarantees (3.6). Then, it follows from Theorem 3.9 and z 0 \in  \scrD 0 \cap  lev\leq \=\gamma  \Theta  that
+z 0 \in  \scrD 1 \cap  lev\leq \=\gamma  \Theta . Together with Remark 3.12, it implies that z 0 \in  \scrS \scrD 1 if and
+only if (3.24) holds at z 0 for all d \in  \scrT \scrF 0 (z 0 ) with F \prime  (z 0 ; d) = 0. However, for any
+d = (d\theta  , du1 , du2 )\top  with du2 = 0 and d\theta  = du1 \not = 0, we have d \in  \scrT \scrF 0 (z 0 ), F \prime  (z 0 ; d) = 0
+\sum L
+(2)
+and F (2) (z 0 ; d) + \ell =1 \beta \ell  \| \psi \ell  - 1 (\theta 0 , u0\ell  - 1 ; d\theta  , du\ell  - 1 )\| 1 =  - 2d2u1 + 0.02d2\theta  + 1.2d2u1 =
+ - 0.78d2\theta  < 0, which violates (3.24).
+In section 4, we will provide an application of (P) where the second-order dstationary points of corresponding (P0) and (P1) are computable by certain algorithms.
+3.4. Second-order sufficient condition. Inspired by [10, Proposition 9.4.2
+(b)], we provide second-order sufficient conditions for strong local minimizers [10,
+section 6.4] of (P) in this subsection. For a function f : \scrF  \subseteq  \BbbR m \rightarrow  \BbbR , we say
+x \in  \scrF  is a strong local minimizer of f on \scrF  if there exist \epsilon 1 , \epsilon 2 > 0 such that f (\=
+x) \geq 
+f (x) + \epsilon 1 \| \=
+x  -  x\| 2 for all x
+\= \in  \scrF  satisfying \| \=
+x  -  x\|  \leq  \epsilon 2 . To this end, we need the
+following assumption about twice semidifferentiability [25, Definition 13.6].
+Assumption 3. Function g and each component of vector functions \{ \psi \ell  - 1 , \ell  \in  [L]\} 
+\=
+\=
+are twice semidifferentiable on \BbbR NL and \BbbR n+N\ell  - 1 , \ell  \in  [L], respectively.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2363
+
+Assumption 3 is stronger than Assumption 2. As shown\prime  in Lemma 3.1, As) - \Theta (z)
+sumption 2 provides an upper bound of lim inf \tau  \downarrow 0,d\prime  \rightarrow d \Theta (z+\tau \tau d2 /2
+along certain
+directions, whereas (3.29)--(3.31) indicate that Assumption 3 can simultaneously offer
+a lower bound for it in all directions.
+For any twice semidifferentiable function f , we
+\prime 
+have df (x)(d) := lim\tau  \downarrow 0,d\prime  \rightarrow d f (x+\tau  d\tau  ) - f (x) = f \prime  (x; d) for any x, d, and
+f (x + \tau  d\prime  )  -  f (x)  -  \tau  df (x)(d\prime  )
+f (x + \tau  d\prime  )  -  f (x)  -  \tau  f \prime  (x; d\prime  )
+= lim
+2
+\tau  \downarrow 0
+\tau  \downarrow 0
+\tau  /2
+\tau  2 /2
+\prime 
+\prime 
+
+lim
+
+d \rightarrow d
+
+d \rightarrow d
+
+f (x + \tau  d)  -  f (x)  -  \tau  f \prime  (x; d)
+\tau  \downarrow 0
+\tau  2 /2
+(2)
+= f (x; d),
+
+(3.26)
+
+= lim
+
+for any x, d. For any twice semidifferentiable functions f1 , f2 on \BbbR n and any a1 , a2 \in  \BbbR ,
+the combination a1 f1 +a2 f2 is twice semidifferentiable on \BbbR n . Then based on previous
+subsections, we have the following second-order sufficient conditions for (P).
+Theorem 3.14. Under Assumptions 1, 3 and (3.6), for any z = (\theta \top  , u\top  )\top  \in 
+lev\leq \=\gamma  \Theta , if
+\Theta \prime  (z; d) \geq  0 for all d,
+(3.27)
+
+and F
+
+(2)
+
+(z; d)  - 
+
+L
+\sum 
+
+\bigm\| 
+\bigm\| 
+\bigm\|  (2)
+\bigm\| 
+\beta \ell  \bigm\| \psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\bigm\|  > 0,
+1
+
+\ell =1
+
+for all d \not = 0 with \Theta \prime  (z; d) = 0,
+then z is a strong local minimizer of (P1) and \theta  is a strong local minimizer of (P).
+Proof. We first prove that z is a strong local minimizer of (P1). According to [25,
+Theorem 13.24 (c)], it is equivalent to prove that 0 \in  \partial \Theta (z) and
+(3.28)
+
+lim inf
+\tau  \downarrow 0
+d\prime  \rightarrow d
+
+\Theta (z + \tau  d\prime  )  -  \Theta (z)
+> 0 for all d \not = 0.
+\tau  2 /2
+
+\^
+Since 0 \in  \partial \Theta (z) can be obtained by \partial \Theta (z)
+\subseteq  \partial \Theta (z) from [25, Theorem 8.6] and
+\prime 
+\^
+0 \in  \partial \Theta (z) from \Theta  (z; d) \geq  0 for all d and [25, Exercise 8.4], we only need to prove
+(3.28). For any d \not = 0 satisfying \Theta \prime  (z; d) > 0, it follows from Assumption 1 that
+lim\tau  \downarrow 0,d\prime  \rightarrow d [\Theta (z + \tau  d\prime  )  -  \Theta (z)]/\tau  exists and equals to \Theta \prime  (z; d), which implies that
+lim inf
+\tau  \downarrow 0
+d\prime  \rightarrow d
+
+\Theta (z + \tau  d\prime  )  -  \Theta (z)
+[\Theta (z + \tau  d\prime  )  -  \Theta (z)]/\tau 
+=
+lim
+inf
+= +\infty  > 0.
+\tau  \downarrow 0
+\tau  2 /2
+\tau  /2
+\prime 
+d \rightarrow d
+
+\prime 
+
+For any d \not = 0 satisfying \Theta  (z; d) = 0, it follows from \Theta \prime  (z; d\prime  ) \geq  0 for all d\prime  that
+lim inf
+\tau  \downarrow 0
+d\prime  \rightarrow d
+
+\Theta (z + \tau  d\prime  )  -  \Theta (z)
+\tau  2 /2
+
+\geq  lim inf
+
+\Theta (z + \tau  d\prime  )  -  \Theta (z)  -  \tau  \Theta \prime  (z; d\prime  )
+\tau  2 /2
+
+\geq  lim inf
+
+F (z + \tau  d\prime  )  -  F (z)  -  \tau  F \prime  (z; d\prime  )
+\tau  2 /2
+
+\tau  \downarrow 0
+d\prime  \rightarrow d
+
+(3.29)
+
+\tau  \downarrow 0
+d\prime  \rightarrow d
+L
+\sum 
+
++
+
+\ell =1
+
+\beta \ell 
+
+\sum 
+
+lim inf
+
+\tau  \downarrow 0
+j\in [N\ell  ] d\prime  \rightarrow d
+
+f\ell ,j (z + \tau  d\prime  )  -  f\ell ,j (z)  -  \tau  f\ell \prime ,j (z; d\prime  )
+,
+\tau  2 /2
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2364
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+where f\ell ,j (z) := | [u\ell  ]j  -  [\psi \ell  - 1 ]j (\theta , u\ell  - 1 )|  for all \ell  \in  [L], j \in  [N\ell  ]. By the twice semidifferentiability of g and \lambda \|  \cdot  \| 2 , it follows from (3.26) that
+(3.30)
+
+lim inf
+\tau  \downarrow 0
+d\prime  \rightarrow d
+
+F (z + \tau  d\prime  )  -  F (z)  -  \tau  F \prime  (z; d\prime  )
+= F (2) (z; d).
+\tau  2 /2
+
+And for all \ell  \in  [L], j \in  [N\ell  ], it follows from twice semidifferentiability of [\psi \ell  - 1 ]j and
+[10, (4.15)] that
+lim inf
+\tau  \downarrow 0
+d\prime  \rightarrow d
+
+\left\{ 
+\geq 
+
+f\ell ,j (z + \tau  d\prime  )  -  f\ell ,j (z)  -  \tau  f\ell \prime ,j (z; d\prime  )
+\tau  2 /2
+(2)
+
+\ell 
+\ell 
+ - [\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]j , if j \in  I+
+(z) \cup  I0,+
+(z; d),
+(2)
+\ell 
+\ell 
+[\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]j ,
+if j \in  I -  (z) \cup  I0, -  (z; d),
+(2)
+\ell 
+ - | [\psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )]j | ,
+if j \in  I0,0
+(z; d),
+
+\ell 
+\ell 
+\ell 
+\ell 
+(z), I0\ell  (z) are defined as in Proposition 3.4, I0,+
+(z; d), I0, - 
+(z; d),
+(z), I - 
+where I+
+\ell 
+\ell 
+\ell 
+I0,0 (z; d) are defined as in Proposition 3.5. In fact, I+ (z) = I -  (z) = \emptyset  for all \ell 
+since z \in  \scrF 0 according to Lemma 3.8, and furthermore it follows from (3.23) that
+\ell 
+\ell 
+I0,+
+(z; d) = I0, - 
+(z; d) = \emptyset  for all \ell . Thus, the inequality can be simplified as
+\bigm| \Bigl[ 
+\Bigr]  \bigm| \bigm| 
+\bigm|  (2)
+f\ell ,j (z + \tau  d\prime  )  -  f\ell ,j (z)  -  \tau  f\ell \prime ,j (z; d\prime  )
+\bigm| 
+(3.31) lim inf
+\geq   -  \bigm|  \psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 ) \bigm| \bigm|  .
+2 /2
+\tau  \downarrow 0
+\tau 
+j
+\prime 
+d \rightarrow d
+
+Plugging (3.30) and (3.31) into (3.29), we have
+lim inf
+\tau  \downarrow 0
+d\prime  \rightarrow d
+
+L
+\bigm\| 
+\bigm\| 
+\sum 
+\Theta (z + \tau  d\prime  )  -  \Theta (z)
+\bigm\|  (2)
+\bigm\| 
+(2)
+\geq 
+F
+(z;
+d)
+ - 
+\beta 
+\psi 
+(\theta 
+,
+u
+;
+d
+,
+d
+)
+> 0,
+\bigm\| 
+\ell 
+\ell 
+ - 
+1
+\theta 
+u
+\ell  - 1 \bigm\| 
+\ell  - 1
+\tau  2 /2
+1
+\ell =1
+
+where the last inequality comes from (3.27). Thus, (3.28) holds and z is a strong local
+minimizer of (P1).
+Next we prove \theta , the component of z, is a strong local minimizer of (P) by
+contradiction. If \theta  is not a strong local minimizer of (P), then there exists a sequence
+\{ \theta k , k \geq  1\}  converging to \theta  such that
+1
+\Psi (\theta k ) + \lambda \| \theta k \| 2 < \Psi (\theta ) + \lambda \| \theta \| 2 + \| \theta k  -  \theta \| 2 .
+k
+Based on \{ \theta k , k \geq  1\} , we can construct \{ z k , k \geq  1\}  \subseteq  \scrF 0 by setting z k = ((\theta k )\top  , (uk1 )\top 
+, . . . , (ukL )\top  )\top  with uk\ell  := \psi \ell  - 1 (\theta k , uk1 , . . . , uk\ell  - 1 ) for all \ell  \in  [L]. Together with z \in  \scrF 0
+from Lemma 3.8, it implies that
+1
+1
+\Theta (z k ) = \Psi (\theta k ) + \lambda \| \theta k \| 2 < \Psi (\theta ) + \lambda \| \theta \| 2 + \| \theta k  -  \theta \| 2 = \Theta (z) + \| \theta k  -  \theta \| 2
+k
+k
+1
+(3.32)
+\leq  \Theta (z) + \| z k  -  z\| 2 .
+k
+Meanwhile, it follows from the continuity of \{ \psi \ell  - 1 , \ell  \in  [L]\}  and \theta k \rightarrow  \theta  that z k \rightarrow  z.
+Together with the strict inequality in (3.32), it contradicts the fact that z is a strong
+local minimizer of (P1). Hence, \theta  is a strong local minimizer of (P).
+Remark 3.15. According to (3.23), the sufficient condition (3.27) is equivalent to
+\sum L
+(2)
+\Theta \prime  (z; d) \geq  0 for all d and F (2) (z; d)  -  \ell =1 \beta \ell  \| \psi \ell  - 1 (\theta , u\ell  - 1 ; d\theta  , du\ell  - 1 )\| 1 > 0 for all
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2365
+
+d \not = 0 with d \in  \scrT \scrF 0 (z) and F \prime  (z; d) = 0. Hence, it can be observed that for the case
+L = 1, (3.27) is milder than [10, (9.42)] for min\theta  h(G(\theta )) with G(\theta ) := (\psi 0 (\theta )\top  , \lambda \| \theta \| 2 )\top 
+and h(y) := g([y]1:N1 ) + [y](N1 +1) , since under \rho  := \beta 1 and J+ := \{ j \in  [N1 ] | 
+(2)
+[\psi 0 (\theta ; d\theta  )]j \leq  0\} , J -  := \{ N1 + 1\}  \cup  ([N1 ]\setminus J+ ),
+\right] 
+\left[ 
+\sum  (2)
+\sum  (2)
+Gj (\theta ; d\theta  )
+h(2) (G(\theta ); G\prime  (\theta ; d\theta  )) + \rho 
+Gj (\theta ; d\theta  )  - 
+j\in J+
+
+j\in J - 
+
+\bigm\| 
+
+\bigm\| 
+
+\bigm\| 
+\bigm\|  (2)
+= g (\psi 0 (\theta ); \psi 0\prime  (\theta ; d\theta  ))  -  2\lambda \beta 1 \| d\theta  \| 2  -  \beta 1 \bigm\| \psi 0 (\theta ; d\theta  )\bigm\| 
+1
+(2)
+(2)
+< F (z; d)  -  \beta 1 \| \psi 0 (\theta ; d\theta  )\| 1 ,
+(2)
+
+where the inequality uses F (2) (z; d) = g (2) (\psi 0 (\theta ); \psi 0\prime  (\theta ; d\theta  )) + 2\lambda \| d\theta  \| 2 and d\theta  \not = 0 for
+all d \in  \scrT \scrF 0 (z) with d \not = 0.
+Theorem 3.14 enables us to determine whether a d-stationary point of (P1) is a
+strong local minimizer for (P).
+4. Application: RNNs. The recurrent neural network (RNN) is a kind of
+feedforward neural networks for sequential processing. Different RNN variants, such as
+Elman networks [12], Jordan networks [17], and LSTM [15], have been widely applied
+on language modelling like ChatGPT and protein secondary structure prediction [13].
+Due to the universal approximation property and the fundamental significance for the
+other RNN variants [14], we focus on the training of the Elman RNN with a single
+unidirectional hidden layer in this section. Without loss of generality, we consider the
+case where the number of sequences is N = 1 and the number of time steps in the
+sequence is T = 3. Given a sequence of inputs \{ xt \in  \BbbR N0 , t \in  [3]\}  and an associated
+sequence of labels \{ yt \in  \BbbR N2 , t \in  [3]\} , the model can be formulated as the following
+constrained optimization problem
+2
+
+\Bigl( 
+\Bigr) 
+\| r  -  y\| 
+2
+2
+2
+2
+2
++ \lambda  \| A\| F + \| V \| F + \| W \| F + \| b\|  + \| c\|  ,
+A,V,W,b,c,
+6
+min
+
+(P0-RNN)
+
+s,w,r,v
+
+subject to wt = W st - 1 + Axt + b, st = \sigma  (wt ) ,
+vt = V st + c, rt = \sigma  (vt ) , t \in  [3],
+where s0 = 0 \in  \BbbR N1 and other notations are defined as follows.
+1. Vector y refers to y = (y1\top  , y2\top  , y3\top  )\top  \in  \BbbR 3N2 .
+2. Vectors st \in  \BbbR N1 and rt \in  \BbbR N2 refer to the hidden value and output at
+3N1
+\top  \top  \top 
+, r=
+time t, respectively. For brevity, we denote s = (s\top 
+1 , s2 , s3 ) \in  \BbbR 
+3N2
+\top  \top  \top  \top 
+(r1 , r2 , r3 ) \in  \BbbR  .
+3. Vectors wt \in  \BbbR N1 and vt \in  \BbbR N2 refer to the auxiliary hidden value and
+auxiliary output at time t, respectively. We denote w = (w1\top  , w2\top  , w3\top  )\top  \in 
+\BbbR 3N1 , v = (v1\top  , v2\top  , v3\top  )\top  \in  \BbbR 3N2 .
+4. Matrices W \in  \BbbR N1 \times N1 , A \in  \BbbR N1 \times N0 , V \in  \BbbR N2 \times N1 and vectors b \in  \BbbR N1 , c \in  \BbbR N2
+are network parameters independent of t. And we aggregate those parameters
+as
+\bigl( 
+\bigr) \top 
+(4.1)
+\theta  := vec(A)\top  , vec(V )\top  , vec(W )\top  , b\top  , c\top  \in  \BbbR n ,
+\top  \top 
+where vec(A) := (a\top 
+for any matrix A = (a1 , . . . , aq ) \in  \BbbR p\times q with
+1 , . . . , aq )
+p
+\{ aj \in  \BbbR  , j \in  [q]\} , and n := N0 N1 + N1 N2 + N12 + N1 + N2 in this case.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2366
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+5. Function \sigma (u) := max\{ u, \alpha u\}  for all u \in  \BbbR  is (leaky) ReLU activator with
+\alpha  \in  [0, 1). For brevity, we will not distinguish whether \sigma (\cdot ) applies on a scalar
+or on a vector componentwisely when there is no ambiguity.
+To reconcile the notations in (P0-RNN) with those in (P0), we could first define
+L := 8 and
+u2t - 1 := wt , u2t := st , t \in  [3], u7 := v, u8 := r;
+\top  \top 
+then define u0 to be an empty placeholder, u\ell  := (u\top 
+for all \ell  \in  [8] as in
+1 , . . . , u\ell  )
+(1.1). Thereby, we have
+\bigr) 
+\bigl( 
+\top  \top 
+\top  \top  \top  \top  \top 
+u := uL = w1\top  , s\top 
+\in  \BbbR 6(N1 +N2 ) ,
+1 , w2 , s2 , w3 , s3 , v , r
+
+which aggregates all the auxiliary variables s, w, r, v in (P0-RNN). Together with (4.1),
+we have
+\=
+\= := n + 6(N2 + N1 ),
+z := (\theta \top  , u\top  )\top  \in  \BbbR N , where N
+
+(4.2)
+
+so that the objective function of (P0-RNN) can be denoted as
+2
+
+2
+
+F (z) := g(u) + \lambda  \| \theta \|  , where g(u) := \| r  -  y\|  /6.
+And for the constraints of (P0-RNN), using Kronecker product \otimes , we denote
+\psi 2t - 2 (\theta , u2t - 2 ) := (x\top 
+t \otimes  IN1
+
+0 s\top 
+t - 1 \otimes  IN1
+
+IN1
+
+0) \theta , \psi 2t - 1 (\theta , u2t - 1 ) := \sigma (wt )
+
+for all t \in  [3], and
+\left( 
+\psi 6 (\theta , u6 ) :=
+
+0 s\top 
+1 \otimes  IN2
+0 s\top 
+2 \otimes  IN2
+0 s\top 
+3 \otimes  IN2
+
+0 0 IN2
+0 0 IN2
+0 0 IN2
+
+\right) 
+\theta , \psi 7 (\theta , u7 ) := \sigma (v).
+
+Then it can be checked that
+\Biggl\{ 
+u\ell  = \psi \ell  - 1 (\theta , u\ell  - 1 ), \ell  \in  [8] \leftrightarrow 
+
+wt = W st - 1 + Axt + b, st = \sigma  (wt ) ,
+vt = V st + c, rt = \sigma  (vt ) , t \in  [3],
+
+and the above functions g and \{ \psi \ell  - 1 , \ell  \in  [8]\}  are continuous. Hence, (P0-RNN) is
+an application of (P0). Naturally, (P0-RNN) has a reformulation corresponding to
+(P). As noted at the beginning of section 3.2, they are equivalent when neglecting
+dimension lifting.
+Remark 4.1. (P0-RNN) provides an example illustrating the differences between
+(P) and (2.1)--(2.2) of [9]. Firstly, unifying A, V, W, b, c as \theta  makes it convenient to
+sharing parameters A, W, b in \psi 0 , \psi 2 , and \psi 4 . Secondly, \psi 6 not only depends on \theta  and
+u6 (i.e., s3 ) but also depends on u2 , u4 (i.e., s1 , s2 ), which transmits the information
+across multiple layers. In contrast, DNNs in [9] demand distinct parameters in different layers, which lacks a mechanism to maintain parameter consistency among the
+layers sharing parameters during the training process. Figure 1 shows the architectures of RNN in (P0-RNN) and DNN in (1.1) of [9].
+Next, we will explore the benefits of results in section 3 for RNN training based on
+(P0-RNN). For simplicity, we merge penalty parameters \{ \beta \ell  , \ell  \in  [L]\}  into (\beta 1 , \beta 2 ) > 0
+in the \ell 1 -penalized form of (P0-RNN):
+(P1-RNN)
+
+min \Theta (z),
+
+\=
+z\in \BbbR N
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2367
+
+(a) RNN
+
+(b) DNN
+Fig. 1. Architectures of RNN in (P0-RNN) and DNN in [9].
+
+where
+\Theta (z) := F (z) + \beta 1
+= F (z) + \beta 1
+
+6
+\sum 
+\ell =1
+3
+\sum 
+
+\| u\ell   -  \psi \ell  - 1 (\theta , u\ell  - 1 )\| 1 + \beta 2
+
+8
+\sum 
+
+\| u\ell   -  \psi \ell  - 1 (\theta , u\ell  - 1 )\| 1
+
+\ell =7
+
+(\| wt  -  W st - 1  -  Axt  -  b\| 1 + \| st  -  \sigma (wt )\| 1 )
+
+t=1
+
++ \beta 2
+
+3
+\sum 
+
+(\| vt  -  V st  -  c\| 1 + \| rt  -  \sigma (vt )\| 1 ) .
+
+t=1
+
+For (P0-RNN) and (P1-RNN), denote
+\Biggl\{  \bigm| 
+\Biggr\} 
+\bigm| 
+\bigm| wt = W st - 1 + Axt + b, st = \sigma  (wt ) ,
+RN N
+\scrF 0
+:= z \bigm| 
+,
+\bigm|  vt = V st + c, rt = \sigma  (vt ) , t \in  [3]
+\scrS 0RN N := argmin F (z), \scrS 1RN N := argmin \Theta (z),
+\=
+z\in \BbbR N
+
+z\in \scrF 0RN N
+\=
+
+and break the direction d \in  \BbbR N according to the blocks of variable z defined in (4.2):
+\bigl( 
+\bigr) 
+\top  \top 
+d = d\top 
+, with
+\theta  , du
+\bigl(  \top  \top  \top  \top  \top  \bigr) \top 
+(4.3)
+d\theta  = dA , dV , dW , db , dc
+,
+\bigl(  \top 
+\bigr) 
+\bigl( 
+\bigr) 
+\top 
+\top 
+\top 
+\top 
+\top 
+\top 
+\top  \top  \top 
+du = du1 , . . . , d\top 
+= d\top 
+,
+u8
+w1 , ds1 , dw2 , ds2 , dw3 , ds3 , dv , dr
+where all dimensions are consistent with the corresponding variables. And for any
+\=
+\top  \top 
+\top  \top 
+\top 
+\top 
+\top 
+\top 
+\top  \top 
+\top 
+d \in  \BbbR N , we define dr := (d\top 
+r1 , dr2 , dr3 ) , dv := (dv1 , dv2 , dv3 ) , ds := (ds1 , ds2 , ds3 ) ,
+\top 
+\top 
+\top  \top 
+N1
+pq
+dw := (dw1 , dw2 , dw3 ) , and ds0 := 0 \in  \BbbR  . For any vector a \in  \BbbR  , denote
+\left( 
+\right) 
+a1 ap+1 \cdot  \cdot  \cdot  ap(q - 1)+1
+..
+..
+..
+matp,q (a) := ...
+.
+.
+.
+.
+ap
+
+a2p
+
+\cdot  \cdot  \cdot 
+
+apq
+
+Applying the results in sections 2 and 3 on (P0-RNN) and (P1-RNN), we obtain the
+following corollary.
+Corollary 4.2. (i) The optimal solution sets \scrS 0RN N and \scrS 1RN N are nonempty
+and compact for all (\beta 1 , \beta 2 ) > 0. (ii) Any local minimizer z of (P0-RNN) is a secondorder d-stationary point of (P0-RNN), that is
+z \in  \scrF 0RN N and [\nabla F (z)]\top  d \geq  0, \forall d \in  \scrT \scrF 0RN N (z)
+and d\top  \nabla 2 F (z)d \geq  0, \forall d \in  P\scrF 0RN N (z) with [\nabla F (z)]\top  d = 0,
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2368
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+and for all (\beta 1 , \beta 2 ) > 0, any local minimizer z of (P1-RNN) is a second-order dstationary point of (P1-RNN), that is
+\=
+
+\Theta \prime  (z; d) \geq  0, \forall d \in  \BbbR N and \Theta (2) (z; d) \geq  0, \forall d with \Theta \prime  (z; d) = 0,
+where for any z \in  \scrF 0RN N ,
+\left\{ 
+\scrT \scrF 0RN N (z) =
+
+\right\} 
+\bigm| 
+\bigm| dvt = DV st + V dst + dc , drt = \sigma  \prime  (vt ; dvt ),
+d \in  \BbbR  \bigm|  dwt = DW st - 1 + W dst - 1 + DA xt + db ,
+,
+\bigm| 
+dst = \sigma  \prime  (wt ; dwt ), t \in  [3]
+\= \bigm| 
+N
+
+P\scrF 0RN N (z) = \{ d \in  \scrT \scrF 0RN N (z) |  DV dst = 0, DW dst - 1 = 0, t \in  [3]\} 
+with DA := matN1 ,N0 (dA ), DV := matN2 ,N1 (dV ), DW := matN1 ,N1 (dW ).
+(iii) Under the setting of
+\sqrt{} 
+\sqrt{} 
+(4.4)
+\beta 1 > \gamma 1 \gamma y 2/(3\lambda ), \beta 2 > 2\gamma y /3,
+\sum 2 \sqrt{} 
+where \gamma y := \Theta (0) = \| y\| 2 /6, \gamma 1 := i=0 ( \gamma y /\lambda )i , we have that
+(a) \scrS 0RN N = \scrS 1RN N ; and
+(b) for any z \in  lev\leq \gamma y \Theta , z is d-stationary point of (P0-RNN) if and only if it is
+a d-stationary point of (P1-RNN).
+Proof. (i). The nonemptiness and compactness of \scrS 0RN N and \scrS 1RN N come from
+Lemmas 2.1 and 2.2.
+(ii). Since g and \{ \psi \ell  - 1 , \ell  \in  [8]\}  satisfy Assumptions 1 and 2, we attain the necessity of second-order d-stationarity from Lemma 3.1, and the expression of \scrT \scrF 0RN N (z)
+from Theorem 3.6. The expression of P\scrF 0RN N (z) is further derived by its definition,
+P\scrF 0RN N (z) \subseteq  \scrT \scrF 0RN N (z) and (3.22).
+(iii). The thresholds (4.4) can be obtained by refining the proof of Lemma 3.8
+and Theorem 3.9 as follows. Note that
+\sqrt{} 
+\sqrt{} 
+\sqrt{} 
+\| r  -  y\|  \leq  6\gamma y , \| V \|  \leq  \gamma y /\lambda , \| W \|  \leq  \gamma y /\lambda ,
+for all z \in  lev\leq \gamma y \Theta . Next, we will estimate the constants Kg > 0 and \{ K\ell  > 0, \ell  \in 
+[L  -  1]\}  satisfying (2.11). By the definition of g(u) in (P0-RNN) and (P1-RNN), it
+implies that
+\bigm| 
+\bigm| 
+\top 
+\= \bigm| 
+\bigm|  \prime 
+\bigm|  \bigm| 
+\bigm| g (u; du )  -  g \prime  (u; d\=u )\bigm|  = \bigm|  (r  -  y) (dr  -  dr ) \bigm|  \leq  \| r  -  y\|  \| dr  -  d\=r \| 
+\bigm| 
+\bigm| 
+3
+3
+\sqrt{} 
+2\gamma y
+(4.5)
+\leq 
+\| dr  -  d\=r \| 
+3
+\=
+for any z \in  lev\leq \gamma y \Theta  and any d, d\= \in  \BbbR N . Then for \{ \psi \ell  ,\sqrt{} 
+\ell  \in  [7]\} , we divide them into four
+groups. For \{ \psi 2t - 2 , t = 2, 3\} , it follows from \| W \|  \leq  \gamma y /\lambda  for all z \in  lev\leq \gamma y \Theta  that
+
+(4.6)
+
+\prime 
+\prime 
+\| \psi 2t - 2
+(\theta , u2t - 2 ; d\theta  , du2t - 2 )  -  \psi 2t - 2
+(\theta , u2t - 2 ; d\=\theta  , d\=u2t - 2 )\| 
+\bigm\| 
+\bigm\|  \sqrt{} 
+= \bigm\| W (dst - 1  -  d\=st - 1 )\bigm\|  \leq  \gamma y /\lambda \| dst - 1  -  d\=st - 1 \| 
+\=
+
+for all d, d\= \in  \BbbR N with d\theta  = d\=\theta  . For \{ \psi 2t - 1 , t \in  [3]\} , it follows from the definition of \sigma 
+that
+\prime 
+\prime 
+\| \psi 2t - 1
+(\theta , u2t - 1 ; d\theta  , du2t - 1 )  -  \psi 2t - 1
+(\theta , u2t - 1 ; d\=\theta  , d\=u2t - 1 )\| 
+(4.7)
+\prime 
+\prime 
+\=
+= \| \sigma  (wt ; dwt )  -  \sigma  (wt ; dwt )\|  \leq  \| dwt  -  d\=wt \| 
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+\=
+
+for all d, d\= \in  \BbbR N . For \psi 6 , it follows from \| V \|  \leq 
+\=
+for all d, d\= \in  \BbbR N with d\theta  = d\=\theta  ,
+
+(4.8)
+
+\sqrt{} 
+
+2369
+
+\gamma y /\lambda  that for all z \in  lev\leq \gamma y \Theta  and
+
+\| \psi 6\prime  (\theta , u6 ; d\theta  , du6 )  -  \psi 6\prime  (\theta , u6 ; d\=\theta  , d\=u6 )\| 
+\bigm\| \left( 
+\right) \bigm\| 
+\bigm\|  V (ds1  -  d\=s1 ) \bigm\|  \sqrt{} 
+\sum 
+\bigm\| 
+\bigm\| 
+\=
+\bigm\| 
+\| dst  -  d\=st \| .
+= \bigm\| 
+\bigm\|  V (ds2  -  ds2 ) \bigm\|  \leq  \gamma y /\lambda 
+\bigm\|  V (ds3  -  d\=s3 ) \bigm\| 
+t\in [3]
+
+For \psi 7 , it follows from the definition of \sigma  that
+(4.9)
+
+\| \psi 7\prime  (\theta , u7 ; d\theta  , du7 )  -  \psi 7\prime  (\theta , u7 ; d\=\theta  , d\=u7 )\|  = \| \sigma  \prime  (v; dv )  -  \sigma  \prime  (v; d\=v )\|  \leq  \| dv  -  d\=v \| 
+
+\=
+for all d, d\= \in  \BbbR N . Then we can yield (a) and (b) under the thresholds (4.4) by replacing
+(2.11) used in Lemma 3.8 and Theorem 3.9 with (4.5)--(4.9) as follows.
+\bullet  For Lemma 3.8, prove u\ell  = \psi \ell  - 1 (\theta , u\ell  - 1 ) in the order of \ell  = 8, . . . , 1 by
+contradiction, but without the use of induction (3.12), under same definitions
+of z.
+\= During the process, plug (4.5) with d\= = 0 into (3.7) and (3.9); in (3.11)
+and (3.13), use
+-- (4.6) with d\theta  = 0, d\= = 0, t = 2, 3,
+-- (4.7) with d\theta  = 0, d\= = 0, t = 1, 2, 3,
+-- (4.8) with d\theta  = 0, d\= = 0,
+-- (4.9) with d\theta  = 0, d\= = 0.
+\bullet  For Theorem 3.9, keep the analysis before (3.19) unchanged except for plugging (4.5) into (3.17). Then repeat (3.20) for \ell  = 2, . . . , 8 instead of using
+the induction (3.19). During the process, we use (4.6), (4.7), (4.8), and (4.9)
+when the subscript of \psi  belongs to \{ 2, 4\} , \{ 1, 3, 5\} , \{ 6\} . and \{ 7\}  in (3.20),
+respectively. The calculations after (3.20) are also kept without changes.
+
+The results in Corollary 4.2 can be easily extended to the case where N > 1, T > 3
+and st , wt , rt , vt aggregate corresponding components for all samples at tth time step
+with thresholds
+\sqrt{} 
+\sqrt{} 
+(4.10)
+\beta 2 > 2\gamma y /(N T ),
+\beta 1 > \gamma 1 \gamma y 2/(\lambda N T ),
+\sum T  - 1 \sqrt{} 
+under \gamma y := \Theta (0) = \| y\| 2 /(2N T ), \gamma 1 := i=0 ( \gamma y /\lambda )i . And the exact penalty in
+d-stationarity can be generalized to more scenarios including but not limited to more
+complicated variants in RNNs (such as LSTM and GRU) with any locally Lipschitz
+continuous and directionally differentiable activator (such as tanh and ELU).
+Besides, it follows from the convexity of F in (P0-RNN) and (P1-RNN) that for all
+z \in  \scrF 0RN N , d\top  \nabla 2 F (z)d \geq  0 for all d \in  P\scrF 0RN N (z) \cap  \{ d |  [\nabla F (z)]\top  d = 0\} . Hence, every
+d-stationary point of (P0-RNN) is a second-order d-stationary point for (P0-RNN).
+Similarly, according to (3.24), every d-stationary point of (P1-RNN) in lev\leq \gamma y \Theta  is a
+second-order d-stationary point for (P1-RNN) under (4.10). In fact, it follows from
+Remark 3.12 that \scrS \scrD 0 \cap  lev\leq \gamma y \Theta  = \scrS \scrD 1 \cap  lev\leq \gamma y \Theta  = \scrD 0 \cap  lev\leq \gamma y \Theta  = \scrD 1 \cap  lev\leq \gamma y \Theta  in
+this case. As a consequence, one can obtain a second-order d-stationary point of (P0RNN) and (P1-RNN) by applying the algorithms in [9, 11] on (P1-RNN) with (4.10).
+5. Conclusions. The paper investigates a class of nonconvex nonsmooth multicomposite optimization problems (P) with an objective function comprised of a
+regularization term and a multilayer composite function with twice directionally differentiable and locally Lipschitz continuous components. The d-stationarity of (P)
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+2370
+
+LINGZI JIN, XIAO WANG, AND XIAOJUN CHEN
+
+is hard to attain directly, and its second-order d-stationarity is vague without additional assumptions on the objective function. Based on the closed-form expression
+of the tangent cone \scrT \scrF 0 (\cdot ), we prove the equivalence between (P), the constrained
+form (P0), and the \ell 1 -penalty formulation (P1) in terms of global optimality and
+d-stationarity. The equivalence offers an indirect way to compute the d-stationary
+points of (P). Furthermore, it provides second-order necessary and sufficient conditions for (P) through (P0) and (P1). The theoretical results are also applied to the
+training process of recurrent neural networks.
+Acknowledgments. We would like to thank two referees for their constructive
+and helpful comments.
+REFERENCES
+[1] J. H. Alcantara, C. pei Lee, and A. Takeda, A four-operator splitting algorithm for nonconvex and nonsmooth optimization, to appear in SIAM J. Optim., (2025).
+[2] P. I. Barton, K. A. Khan, P. Stechlinski, and H. A. Watson, Computationally relevant
+generalized derivatives: Theory, evaluation and applications, Optim. Methods Softw., 33
+(2018), pp. 1030--1072, https://doi.org/10.1080/10556788.2017.1374385.
+[3] J. Bolte, T. Le, E. Pauwels, and T. Silveti-Falls, Nonsmooth implicit differentiation for
+machine-learning and optimization, in Advances in Neural Information Processing Systems, Vol. 34, Curran Associates, 2021, pp. 13537--13549, https://proceedings.neurips.cc/
+paper files/paper/2021.
+[4] J. Bolte and E. Pauwels, Conservative set valued fields, automatic differentiation, stochastic
+gradient methods and deep learning, Math. Program., 188 (2021), pp. 19--51, https://
+doi.org/10.1007/s10107-020-01501-5.
+[5] J. Borwein, Necessary and sufficient conditions for quadratic minimality, Numer. Funct. Anal.
+Optim., 5 (1982), pp. 127--140, https://doi.org/10.1080/01630568208816135.
+[6] M. Carreira-Perpinan and W. Wang, Distributed optimization of deeply nested systems,
+in Proceedings of the Seventeenth International Conference on Artificial Intelligence and
+Statistics, Vol. 33, PMLR, 2014, pp. 10--19, https://proceedings.mlr.press/v33/carreiraperpinan14.html.
+[7] X. Chen, Smoothing methods for nonsmooth, nonconvex minimization, Math. Program., 134
+(2012), pp. 71--99, https://doi.org/10.1007/s10107-012-0569-0.
+[8] Y. Cui, T.-H. Chang, M. Hong, and J.-S. Pang, A study of piecewise linear-quadratic programs, J. Optim. Theory Appl., 186 (2020), pp. 523--553, https://doi.org/10.1007/s10957020-01716-8.
+[9] Y. Cui, Z. He, and J.-S. Pang, Multicomposite nonconvex optimization for training deep
+neural networks, SIAM J. Optim., 30 (2020), pp. 1693--1723, https://doi.org/10.1137/
+18M1231559.
+[10] Y. Cui and J.-S. Pang, Modern Nonconvex Nondifferentiable Optimization, Society for
+Industrial and Applied Mathematics, Philadelphia, PA, 2021, https://doi.org/10.1137/
+1.9781611976748.
+[11] Y. Cui, J.-S. Pang, and B. Sen, Composite difference-max programs for modern statistical
+estimation problems, SIAM J. Optim., 28 (2018), pp. 3344--3374, https://doi.org/10.1137/
+18M117337X.
+[12] J. L. Elman, Finding structure in time, Cogn. Sci., 14 (1990), pp. 179--211, https://doi.
+org/10.1207/s15516709cog1402 1.
+[13] A. Graves, Supervised sequence labelling with recurrent neural networks, in Studies in Computational Intelligence, 2012, https://api.semanticscholar.org/CorpusID:2118350.
+[14] B. Hammer, On the approximation capability of recurrent neural networks, Neurocomputing,
+31 (2000), pp. 107--123, https://doi.org/10.1016/S0925-2312(99)00174-5.
+[15] S. Hochreiter and J. Schmidhuber, Long short-term memory, Neural Comput., 9 (1997),
+pp. 1735--1780, https://doi.org/10.1162/neco.1997.9.8.1735.
+[16] J. Jiang and X. Chen, Optimality conditions for nonsmooth nonconvex-nonconcave minmax problems and generative adversarial networks, SIAM J. Math. Data Sci., 5 (2023),
+pp. 693--722, https://doi.org/10.1137/22M1482238.
+[17] M. I. Jordan, Attractor Dynamics and Parallelism in a Connectionist Sequential Machine,
+IEEE Press, Concept Learning, Artificial Neural Networks: Concept Learning, 1990, pp.
+112--127.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 10/05/26 to 77.80.107.196 . Redistribution subject to SIAM license or copyright; see https://epubs.siam.org/terms-privacy
+
+D-STATIONARITY OF NONSMOOTH MULTICOMPOSITE OPTIMIZATION
+
+2371
+
+[18] K. A. Khan and P. I. Barton, A vector forward mode of automatic differentiation for generalized derivative evaluation, Optim. Methods Softw., 30 (2015), pp. 1185--1212, https://
+doi.org/10.1080/10556788.2015.1025400.
+[19] J. Liang, R. D. C. Monteiro, and H. Zhang, Proximal Bundle Methods for Hybrid Weakly
+Convex Composite Optimization Problems, arXiv:2303.14896, 2024.
+[20] T. Lin, Z. Zheng, and M. Jordan, Gradient-free methods for deterministic and stochastic
+nonsmooth nonconvex optimization, in Advances in Neural Information Processing Systems, Vol. 35, Curran Associates, 2022, pp. 26160--26175, https://proceedings.neurips.cc/
+paper files/paper/2022.
+[21] W. Liu, X. Liu, and X. Chen, Linearly constrained nonsmooth optimization for training autoencoders, SIAM J. Optim., 32 (2022), pp. 1931--1957, https://doi.org/10.1137/
+21M1408713.
+[22] W. Liu, X. Liu, and X. Chen, An inexact augmented Lagrangian algorithm for training leaky
+ReLU neural network with group sparsity, J. Mach. Learn. Res., 24 (2023), pp. 1--43,
+http://jmlr.org/papers/v24/22-0491.html.
+[23] Y. Nesterov, Lexicographic differentiation of nonsmooth functions, Math. Program., 104
+(2005), pp. 669--700, https://doi.org/10.1007/s10107-005-0633-0.
+[24] J. Nocedal and S. Wright, Numerical Optimization, Springer, New York, 2006.
+[25] R. T. Rockafellar and R. J.-B Wets, Variational Analysis, Springer Science \& Business
+Media, Berlin, 2009.
+[26] K. Wang and L. T. Biegler, MPCC strategies for nonsmooth nonlinear programs, Optim.
+Eng., 24 (2023), pp. 1883--1929, https://doi.org/10.1007/s11081-022-09755-y.
+[27] Y. Wang, C. Zhang, and X. Chen, An augmented Lagrangian method for training recurrent
+neural networks, SIAM J. Sci. Comput., 47 (2025), pp. C22--C51, https://doi.org/10.1137/
+23M1627614.
+[28] N. Xiao, X. Hu, X. Liu, and K.-C. Toh, Adam-family methods for nonsmooth optimization with convergence guarantees, J. Mach. Learn. Res., 25 (2024), pp. 1--53, http://
+jmlr.org/papers/v25/23-0576.html.
+[29] J. J. Ye, Multiplier rules under mixed assumptions of differentiability and Lipschitz continuity, SIAM J. Control Optim., 39 (2000), pp. 1441--1460, https://doi.org/10.1137/
+S0363012999358476.
+[30] Y. Yuan, Conditions for convergence of trust region algorithms for nonsmooth optimization,
+Math. Program., 31 (1985), pp. 220--228, https://doi.org/10.1007/BF02591750.
+[31] J. Zhang, H. Lin, S. Jegelka, S. Sra, and A. Jadbabaie, Complexity of finding stationary points of nonsmooth nonconvex functions, in Proceedings of the 37th International
+Conference on Machine Learning, Vol. 119, PMLR, 2020, pp. 11173--11182.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+

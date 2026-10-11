@@ -28,13 +28,21 @@ We consider deep supervised pairwise hashing in our experiments, which aims to l
 
 
 \paragraph{Network Architecture}  
-A CNN extracts features from $\ba_i$, followed by a fully connected hash layer producing $d$-dimensional outputs $\bC(\bx; \ba_i)$, which are passed through $\tanh$ to yield the continuous codes $\bD_i(\bx)$.
+A CNN extracts features from $\ba_i$, followed by a fully connected hash layer and a $\tanh$ activation that produce the continuous code $\bD_i(\bx)\in\RR^d$.
 
 
 \paragraph{Loss Function}  
-For hash codes in $\{-1,1\}^d$, the Hamming distance is $d_{ij}^h = \tfrac{1}{2}(d - \langle \bh_i, \bh_j \rangle)$. Following \cite{xiaSupervisedHashingImage2014,laiSimultaneousFeatureLearning2015}, similarity $s^o_{ij} = 1$ if samples share labels, else $0$. The likelihood is:
+For post-training binary codes $\operatorname{sgn}(\bD_i(\bx))\in\{-1,1\}^d$, the Hamming distance is
+\begin{equation*}
+ d_{ij}^h = \tfrac{1}{2}\left(d - \left\langle \operatorname{sgn}(\bD_i(\bx)), \operatorname{sgn}(\bD_j(\bx)) \right\rangle\right).
+\end{equation*}
+Following \cite{xiaSupervisedHashingImage2014,laiSimultaneousFeatureLearning2015}, similarity $s^o_{ij} = 1$ if samples share labels, else $0$. The likelihood is:
 \[
-P(s^o_{ij} \mid \bh_i, \bh_j) = \blue{\operatorname{sig}_{\kappa}}(\langle \bh_i, \bh_j \rangle)^{s^o_{ij}} \left(1 - \blue{\operatorname{sig}_{\kappa}}(\langle \bh_i, \bh_j \rangle)\right)^{1 - s^o_{ij}},
+\begin{aligned}
+P\bigl(s^o_{ij} \mid \operatorname{sgn}(\bD_i(\bx)),\operatorname{sgn}(\bD_j(\bx))\bigr)
+={}&\ \blue{\operatorname{sig}_{\kappa}}\!\left(\left\langle \operatorname{sgn}(\bD_i(\bx)),\operatorname{sgn}(\bD_j(\bx)) \right\rangle\right)^{s^o_{ij}}\\
+&\times\left(1 - \blue{\operatorname{sig}_{\kappa}}\!\left(\left\langle \operatorname{sgn}(\bD_i(\bx)),\operatorname{sgn}(\bD_j(\bx)) \right\rangle\right)\right)^{1 - s^o_{ij}}.
+\end{aligned}
 \]
 where $\blue{\operatorname{sig}_{\kappa}(t) = (1 + \exp(-\kappa t))^{-1}}$, $\blue{\kappa} < 1$. Using continuous codes $\blue{\bD_i(\bx)}$ and $s^h_{ij} = \tfrac{1}{2} \langle \blue{\bD_i(\bx), \bD_j(\bx)} \rangle$, the loss becomes:
 \begin{align}
@@ -45,7 +53,7 @@ where $\blue{\operatorname{sig}_{\kappa}(t) = (1 + \exp(-\kappa t))^{-1}}$, $\bl
 We use the W-type regularization:
 \begin{align}
 \label{Eq: the W-type regularization}
-h(\bZ) = \sum_{i=1}^n h(\bz_i), \quad h(\bz) = \lambda \|\,|\bz| - \bm{1}\,\|_1,
+h(\bB) = \sum_{i=1}^n h(\bb_i), \quad h(\bz) = \lambda \|\,|\bz| - \bm{1}\,\|_1,
 \end{align}
 where $\lambda > 0$ controls regularization strength.
 
@@ -62,7 +70,7 @@ Combining \eqref{Eq: the pairwise CE loss} and \eqref{Eq: the W-type regularizat
 \paragraph{Out-of-sample Extension}  
 For an unseen query $\blue{\ba^{\mathrm{qry}}} \notin \bA$, its binary code is predicted as:
 \[
-\blue{\bh^{\mathrm{qry}}} = \operatorname{sgn}(\bC(\bx; \blue{\ba^{\mathrm{qry}}})).
+\blue{\operatorname{sgn}\!\bigl(\bD(\bx; \blue{\ba^{\mathrm{qry}}})\bigr)}.
 \]
 
 \subsection{Implementation Details}
@@ -83,10 +91,9 @@ For an unseen query $\blue{\ba^{\mathrm{qry}}} \notin \bA$, its binary code is p
                                    & Hamming space \\
         $d_{ij}^{o}$, $d_{ij}^{h}$ & Distance in input space and \\
                                    & Hamming space \\
-        $\bC(\bx; \ba_{i})$ & Network output before activation \\
-        $\blue{\bh_{i}}\in \{-1, 1\}^{d}$ & Binary hash code for $i$-th sample \\
+        $\operatorname{sgn}(\bD_i(\bx))\in \{-1, 1\}^{d}$ & Binary hash code for $i$-th sample \\
         \blue{$\bb_{i}\in \RR^{d}$} & \blue{Continuous auxiliary variable ($i$-th row of $\bB$)} \\
-        $\blue{\bD_{i}(\bx)}= \tanh(\bC(\bx; \ba_{i}))$ & Continuous code after activation \\
+        $\blue{\bD_{i}(\bx)}$ & Continuous code after activation \\
         $n$, $d$ & Number of samples and hash \\
                  & code length \\
         $\bx$ & Network parameters \\

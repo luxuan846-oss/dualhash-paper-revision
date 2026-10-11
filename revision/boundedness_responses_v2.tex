@@ -1,0 +1,51 @@
+% Draft replacement for \subsubsection{Boundedness and lower bounds} in response_letter.tex
+% Not yet merged. Items marked VERIFY must hold in the manuscript before the letter is compiled.
+
+\subsubsection{Boundedness and lower bounds}
+
+\begin{itemize}\itshape
+\item (Lemma 5.1/proof) [reviewer text unchanged]
+\par\smallskip
+\normalfont\upshape\textbf{Response:}
+We thank the reviewer for identifying this gap. The original proof of Lemma~5.1 inferred the boundedness of $(\bx^k,\bB^k)$ from the coercivity of $J$ and the bound $J(\bx^k,\bB^k)\ge J^*$. A lower bound alone does not place the iterates in a bounded sublevel set; that step requires a uniform upper bound on $J(\bx^k,\bB^k)$, which the proof did not provide. Coercivity of $J$ was also missing from Assumption~5.1.
+
+The complexity analysis does not use boundedness of the primal iterates; it uses finite lower bounds of the Lyapunov potentials. We have therefore removed the bounded-iterate claim and replaced Lemma~5.1 by the following statement, in which coercivity is derived from Assumption~5.1(i), see \green{Section~5 (Page XX, lines XX--XX)}:
+\begin{bluequote}
+\textbf{Assumption~5.1(i).} The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_s(\bx)>-\infty$, where $\bar{\ell}_s(\bx):=n^{-1}\sum_{i=1}^n\ell_{s,i}(\bx)$.
+
+\textbf{Lemma~5.1.} Under Assumption~5.1(i): (a) $J(\bx,\bB)\ge\underline{\ell}+\frac{\mu}{2}\|\bx\|^2+\lambda\|\bB\|_1-\lambda nd$ for all $(\bx,\bB)$, so $J$ is bounded below by $\underline{\ell}-\lambda nd$ and coercive; (b) $\bLmbd^k\in[-\lambda,\lambda]^{n\times d}$ for all $k\ge2$.
+\end{bluequote}
+The lower bounds of the Lyapunov potentials are now proved in Proposition~\ref{prop:lyapunov-lower-bound} from $F\ge\underline{\ell}$, the $L_F$-smoothness of $F$, the box constraint on $\bLmbd^k$, and the output condition of Appendix~B. They hold under the smallness conditions \eqref{eq:P1}--\eqref{eq:P2} for Algorithm~4.1 and \eqref{eq:P1s}--\eqref{eq:P2s} for Algorithm~4.2, which we have added to Theorems~5.2 and~5.3, and for $\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$, which is now part of the initialization. % VERIFY: conditions compatible with the parameter ranges of Thms 5.2/5.3; complexity orders unchanged
+Boundedness of $(\bx^k,\bB^k)$ is not used anywhere in the revised analysis.
+
+\item (Lemma 5.7) [reviewer text unchanged]
+\par\smallskip
+\normalfont\upshape\textbf{Response:}
+We thank the reviewer for these suggestions and have adopted all four.
+
+\emph{Index set.} The shift $R\in\{2,\ldots,T+1\}$ was unnecessary, because the averaged estimate in the proof runs over $k=1,\ldots,T$. We now use $R$ uniformly distributed on $\{1,\ldots,T\}$ and independent of the iterates in Lemma~5.7, Theorem~5.2 and Algorithm~4.1, and likewise in Lemma~5.10, Theorem~5.3 and Algorithm~4.2.
+
+\emph{Metric.} Following the reviewer's preference, the primary statement of Lemma~5.7 is now the averaged quadratic measure, see \green{Section~5 (Page XX, lines XX--XX)}:
+\begin{bluequote}
+\[
+\frac1T\sum_{k=1}^{T}\mathbb{E}\bigl[\operatorname{dist}^2\bigl(0,\partial\calL(\bx^k,\bB^k,\bLmbd^k)\bigr)\bigr]\ \le\ \frac{L_\Delta\Delta_1}{T}+\frac{C_\sigma\sigma^2}{T}\sum_{k=1}^{T}\frac1{b_k}.
+\]
+If $R$ is uniformly distributed on $\{1,\ldots,T\}$ and independent of the iterates, the left-hand side equals $\mathbb{E}\bigl[\operatorname{dist}^2\bigl(0,\partial\calL(\bx^R,\bB^R,\bLmbd^R)\bigr)\bigr]$.
+\end{bluequote}
+The random-iterate form is kept only to state the output guarantee of Algorithm~4.1.
+
+\emph{Lower bound $\Psi_m^*$.} The lower-boundedness of $\{\Psi_m(\calQ^k)\}$ is now proved in Proposition~\ref{prop:lyapunov-lower-bound}(i): for every $k\ge1$, $\mathbb{E}[\Psi_m(\calQ^k)]\ge\Psi_m^*:=\underline{\ell}-c_1$ with $c_1$ independent of $T$. The proof uses $F\ge\underline{\ell}$, the $L_F$-smoothness of $F$, the box constraint on $\bLmbd^k$, the output condition of Appendix~B and the conditions \eqref{eq:P1}--\eqref{eq:P2}; it does not use boundedness of the iterates.
+
+\emph{Constants.} $L_\Delta$ is now defined first in the ``where'' clause of Lemma~5.7, and $S_1,\ldots,S_4$ appear only inside its definition.
+
+\item (Lemma 5.10) [reviewer text unchanged]
+\par\smallskip
+\normalfont\upshape\textbf{Response:}
+We thank the reviewer. We agree that Lemma~5.10 invoked $\Psi_r^*$ without establishing that the potential is bounded below. In DualHash-StoRM the descent inequality carries the gradient-error term $\|\be^k\|^2$, so the quantity that telescopes is the augmented potential $W_k:=\mathbb{E}[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\mathbb{E}\|\be^k\|^2$ (together with the nonnegative term $d_0\,\mathbb{E}H_k$ in $\widehat W_k$ of Appendix~D). Proposition~\ref{prop:lyapunov-lower-bound}(ii) proves $W_k\ge\underline{\ell}-c_1'$ for all $k\ge1$ with $c_1'$ independent of $T$, under \eqref{eq:P1s}--\eqref{eq:P2s}. It does not assert a lower bound for $\Psi_r(\calQ^k)$ alone, and the analysis does not need one.
+
+To remove this ambiguity, we have renamed the constant. The lower bound is now denoted $W^*:=\underline{\ell}-c_1'$, and the initial gap is $\tilde\Delta_1:=\calL(\bx^1,\bB^1,\bLmbd^1)-W^*$ in Lemma~5.10, Theorem~5.3 and Appendix~D, see \green{Section~5 and Appendix~D (Page XX, lines XX--XX)}:
+\begin{bluequote}
+Let $W^*$ be a lower bound, independent of $T$, of $\mathbb{E}[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\mathbb{E}\|\be^k\|^2$ for all $k\ge1$; by Proposition~\ref{prop:lyapunov-lower-bound}(ii) one may take $W^*=\underline{\ell}-c_1'$. Then $\tilde\Delta_1:=\calL(\bx^1,\bB^1,\bLmbd^1)-W^*$.
+\end{bluequote}
+Since $H_k\ge0$, we have $\widehat W_k\ge W_k\ge W^*$, so the quantity summed in the telescoping argument is bounded below by exactly the constant that enters $\tilde\Delta_1$.
+\end{itemize}

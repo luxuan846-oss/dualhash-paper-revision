@@ -40,20 +40,20 @@
 \label{Subsec: proof transfer}
 \begingroup\color{blue}
 \begin{proof}
-    Since $h^{*}$ is proper, lower semicontinuous, and convex, its conjugate is $h^{**}(\bB)=\lambda\sum_{i,j}(|b_{ij}|-1)_{+}$, and the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
+    Since \(h^{*}\) is proper, lower semicontinuous, and convex, the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
     \begin{align}
         \label{Eq: inversion rule of the conjugate}
         \tilde{\bB}\in\partial h^{*}(\tilde{\bLmbd})
         \iff \tilde{\bLmbd}\in\partial h^{**}(\tilde{\bB})
         \iff h^{**}(\tilde{\bB})+h^{*}(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle.
     \end{align}
-    Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies \eqref{Eq: KKT conditions}, all three statements in \eqref{Eq: inversion rule of the conjugate} hold, and $\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})$ together with $\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0}$ shows that (a) holds if and only if $\tilde{\bLmbd}\in\partial h(\tilde{\bB})$.
+    The KKT conditions and \(\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})\), \(\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0}\), show that (a) holds if and only if \(\tilde{\bLmbd}\in\partial h(\tilde{\bB})\).
 
-    (b)$\iff$(c). By the last equality in \eqref{Eq: inversion rule of the conjugate}, (b) holds if and only if $h(\tilde{\bB})=h^{**}(\tilde{\bB})$. Since $h$ and $h^{**}$ are separable and $\lambda\big||b|-1\big|=\lambda(|b|-1)_{+}$ if and only if $|b|\ge1$, this is equivalent to $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
+    (b)$\iff$(c). By Lemma~\ref{lem:wtype-conj}, the last equality in \eqref{Eq: inversion rule of the conjugate} is equivalent to \(h(\tilde{\bB})=h^{**}(\tilde{\bB})\), which holds if and only if \(|\tilde b_{ij}|\ge1\) for all \(i,j\).
 
-    (b)$\Rightarrow$(a). By the definition of $h^{*}$, (b) means that $\tilde{\bB}$ is a global minimizer of $h(\cdot)-\langle\tilde{\bLmbd},\cdot\rangle$. Fermat's rule~\cite[Theorem~10.1]{Rockafellar1998VariationalA} and \cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} then give $\bm{0}\in\partial h(\tilde{\bB})-\tilde{\bLmbd}$, i.e., $\tilde{\bLmbd}\in\partial h(\tilde{\bB})$, which is (a).
+    (b)$\Rightarrow$(a). By the definition of \(h^{*}\), (b) means that \(\tilde{\bB}\) minimizes \(h(\cdot)-\langle\tilde{\bLmbd},\cdot\rangle\) globally. Fermat's rule~\cite[Theorem~10.1]{Rockafellar1998VariationalA} and \cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} give \(\tilde{\bLmbd}\in\partial h(\tilde{\bB})\).
 
-    (a)$\Rightarrow$(c). By \eqref{Eq: inversion rule of the conjugate} and (a), $\tilde{\bLmbd}\in\partial h(\tilde{\bB})\cap\partial h^{**}(\tilde{\bB})$. Since $h$ and $h^{**}$ are separable~\cite[Proposition~10.5]{Rockafellar1998VariationalA}, it suffices to consider a scalar entry $b=\tilde{b}_{ij}$. If $|b|<1$, then $\partial h^{**}(b)=\{0\}$, whereas $\partial h(b)=\{-\lambda\operatorname{sgn}(b)\}$ for $b\neq0$ and $\partial h(0)=\{-\lambda,\lambda\}$; hence $0\notin\partial h(b)$ and the intersection is empty. Therefore $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
+    (a)$\Rightarrow$(c). By separability~\cite[Proposition~10.5]{Rockafellar1998VariationalA}, each entry satisfies \(\tilde\Lambda_{ij}\in\partial\phi(\tilde b_{ij})\cap\partial\phi^{**}(\tilde b_{ij})\). If \(|\tilde b_{ij}|<1\), Lemma~\ref{lem:wtype-conj} gives \(\partial\phi^{**}(\tilde b_{ij})=\{0\}\), so \(0\in\partial\phi(\tilde b_{ij})\), contradicting \ref{W3}. Hence \(|\tilde b_{ij}|\ge1\) for all \(i,j\).
 \end{proof}
 \endgroup
 
@@ -221,7 +221,7 @@ c_1':=c_0+\frac{3}{2}C_1\tau^2M^2.
 \end{proposition}
 
 \begin{proof}
-Since $f_i=\ell_{s,i}+\frac{\mu}{2}\|\cdot\|^2$ and
+Since $f_i(\bx)=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^2$ and
 $P(\bx,\bB)=\frac{m}{2}\|\bB-\mathcal{D}(\bx)\|_F^2$, Assumption~\ref{Ass: main assumptions}(i) gives
 \begin{equation}
 \label{eq:F-lower}
@@ -232,8 +232,7 @@ Because $F$ is $L_F$-smooth and bounded below by $\underline{\ell}$,
 \[
 \|\nabla F(\bx,\bB)\|^2\le2L_F\bigl(F(\bx,\bB)-\underline{\ell}\bigr).
 \]
-Moreover, $\operatorname{dom}h^*=[-\lambda,\lambda]^{n\times d}$ and
-$0\le h^*(\bLmbd)\le\lambda nd$ on this box. Since $\bLmbd^1$ lies in this box and the closed-form proximal mapping \eqref{Eq: the proximal mapping of conjugate function} maps into it, $\|\bLmbd^k\|_F\le M$ for all $k\ge1$.
+Moreover, for the regularizer used by the algorithm, \(\operatorname{dom}h^*=[-\lambda,\lambda]^{n\times d}\) and \(0\le h^*(\bLmbd)\le\lambda nd\) on this box. Since \(\bLmbd^1\) lies in this box and the proximal mapping in Table~\ref{tab:wtype-conjugates}(a) maps into it, \(\|\bLmbd^k\|_F\le M\) for all \(k\ge1\).
 
 Since $\|\bB^k\|_F\le\|\bm r_k\|_F+C_{\mathcal{D}}$, Young's inequality gives
 \[

@@ -231,15 +231,12 @@ where
 \end{aligned}
 \end{equation} where the equivalence follows from the subgradient inversion and sum rules~\cite[Theorems~23.5 and~23.8]{rockafellar1970convex}.} In the following, we denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$.  
 
-In general, the strong duality means zero duality gap. While many nonconvex problem has  strong duality fails but zero gap holds, But for our W-regularizatin, 两边都可达，零间隙和强对偶就是同一个条件，; 
-We then 
-We prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ ()\blue{with zero duality gap/srong } satisfies the first-order necessary optimality condition of the Lagrangian~\eqref{Eq: simplified_lagrangian}, i.e., it is a \blue{KKT point} of $\calL$.
+Here and below, strong duality means that both the primal and dual optima are attained and that the duality gap is zero.
+We then prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} is a \blue{KKT point} of $\calL$. \blue{The proof is provided in \Cref{Subsec: proof zerogap}.}
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
 \end{proposition}
-\blue{The proof is provided in \Cref{Subsec: proof zerogap}.}
 
-Nonconvexity of $h$ does not by itself rule out strong duality, but it provides no general strong-duality guarantee for Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem}. The following example shows that a positive duality gap can occur.
 
 \begin{example}\label{ex:gap}
 Consider Problem~\eqref{Prop: block-wise regularized problem} with $n=d=1$ and without the $\bx$-block, and let $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal value is

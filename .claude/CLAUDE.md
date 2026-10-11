@@ -188,7 +188,7 @@ Am 20.09.2026 um 02:09 schrieb Chunfeng Cui:
 - 能执行的任务直接执行，不只在口头上提议；系统模式禁止执行时除外。
 - 歧义低风险时做出合理假设并说明；歧义影响正确性时只提一个简洁澄清问题。
 - 复杂任务不一定非得需要调用很多子agents
-- 读取或修改仓库文件前先 `git fetch origin`；用 `git log HEAD..origin/<分支>` 和 `git diff HEAD origin/<分支>` 确认差异，再 `git merge`，然后动手。
+- 本地改动先提交，再 `git fetch origin`；用 `git log HEAD..origin/<分支>` 和 `git diff HEAD origin/<分支>` 确认差异，再 `git merge`，然后动手。本地与 GitHub 双向同步都按此顺序。
 - 每次响应先进入精简执行模式；只有用户明确要求详细推导、完整回顾、教学说明或逐步解释时，才扩展正文。
 
 ## 7. 指令优先级

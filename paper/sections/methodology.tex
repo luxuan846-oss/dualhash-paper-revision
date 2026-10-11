@@ -178,35 +178,37 @@
 % \end{remark}
 \section{Stochastic Primal-Dual Hashing Algorithms}
 \label{Section: Methodology}
-\blue{In this section, we first reformulate the nonconvex composite problem as a min--max problem, characterize its first-order conditions, and then use them to derive the algorithms.}
-\subsection{\blue{MinMax-Reformulation Problem}}
-Let us consider the equivalent constrained formulation of Problem \eqref{Prop: block-wise regularized problem}:
-\begin{align} 
-\min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
-\text{s.t. } &\quad \bY = \bB \nonumber ,
-\end{align} whose corresponding dual problem is 
+\blue{This section reformulates Problem~\eqref{Prop: block-wise regularized problem} as a min--max problem, characterizes the first-order conditions of the reformulation, and develops stochastic algorithms that compute points satisfying them.}
+
+\subsection{\blue{Min--Max Reformulation}}
+Let us consider the equivalent constrained formulation of Problem~\eqref{Prop: block-wise regularized problem}:
+\begin{align}
+\min_{\bx \in \RR^{\blue{q}},\, \bB \in \RR^{n\times d},\, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
+\text{s.t. } &\quad \bY = \bB, \notag
+\end{align}
+whose dual problem is
 \begin{align}
 \label{Prop: the dual problem}
-\max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
-\end{align} 
-
-\blue{Recalling the definition of the conjugate function $h^*$} and observing that the minimization with respect to $\bY$ in Problem \eqref{Prop: the dual problem} can be performed independently, we then simplify the Lagrangian function in the problem \eqref{Prop: the dual problem} to 
+\max_{\bLmbd \in \RR^{n\times d}}\ \min_{\bx \in \RR^{\blue{q}},\, \bB \in \RR^{n\times d},\, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + \langle \bLmbd, \bB - \bY \rangle + h(\bY). \tag{D}
+\end{align}
+\blue{The variable $\bY$ enters \eqref{Prop: the dual problem} only through $h(\bY)-\langle\bLmbd,\bY\rangle$, so the minimization over $\bY$ can be carried out independently. By the definition of the conjugate $h^*$, this reduces the Lagrangian in \eqref{Prop: the dual problem} to}
 \begin{equation}\label{Eq: simplified_lagrangian}
 \calL(\bx,\bB,\bLmbd):=\Phi(\bx,\bB,\bLmbd)-h^*(\bLmbd),
 \qquad\text{where}\quad
 \Phi(\bx,\bB,\bLmbd):=F(\bx,\bB)+\langle\bB,\bLmbd\rangle.
 \end{equation}
-\blue{The function $\calL$ is generally nonconvex in $\bx$, convex in $\bB$, and concave in $\bLmbd$. We therefore use its KKT system as the first-order stationarity notion for this saddle-point formulation.}
+\blue{Exchanging the order of optimization in \eqref{Prop: the dual problem} gives the min--max problem associated with $\calL$. Since $\sup_{\bLmbd}\{\langle\bB,\bLmbd\rangle-h^*(\bLmbd)\}=h^{**}(\bB)$ for every $\bB$, this problem satisfies}
+\begin{equation}\label{Eq: minmax problem}
+\min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd)
+=\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB),
+\end{equation}
+\blue{that is, it is Problem~\eqref{Prop: block-wise regularized problem} with $h$ replaced by its convex envelope $h^{**}$.}
 
-The corresponding minmax problem is 
-\[
-\min\max{\calL}.
-\]
-In next section, we give the xx.
+\blue{The function $\calL$ is concave in $\bLmbd$, but the term $\mathcal{D}$ makes it nonconvex in $(\bx,\bB)$ jointly. Consequently, a saddle point of $\calL$ may fail to exist and is hard to compute even when it exists. Moreover, even verifying whether a given point is a local minimizer of a nonconvex problem is NP-hard in general~\cite{Murty1987NP}. We therefore target first-order stationarity of the min--max problem~\eqref{Eq: minmax problem}, namely the KKT system of $\calL$. \Cref{Sec: first-order optimality conditions} introduces this system and relates its solutions to the stationary points of Problem~\eqref{Prop: block-wise regularized problem}.}
 %  need to revise the name
 \subsection{\blue{First-Order Optimality Conditions}}
 \label{Sec: first-order optimality conditions}
-Since even checking whether a point is a local minimizer of a nonconvex problem is NP-hard in general, we target first-order stationarity of the saddle-point reformulation~\eqref{Eq: simplified_lagrangian}, namely the KKT condition of $\calL$.
+
 We say that $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$, that is,
 \begin{equation}\label{Eq: KKT conditions}
 \nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0},\qquad

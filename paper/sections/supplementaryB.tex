@@ -39,6 +39,20 @@
 \subsection{\blue{Proof of \Cref{prop:transfer}}}
 \label{Subsec: proof transfer}
 \begingroup\color{blue}
+\begin{lemma}\label{lem:wtype-conj}
+Let \(h\) be a W-type regularizer. Then \(\phi^*\) is proper, lower semicontinuous, convex, and even, \(\phi^*(y)\ge|y|\) for all \(y\), and \(\operatorname{dom}\phi^*\) has nonempty interior. Moreover,
+\[
+  \phi^{**}(t)=\phi\bigl(\max\{|t|,1\}\bigr),\qquad
+  \phi^{**}(t)=\phi(t)\iff |t|\ge1.
+\]
+Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
+\end{lemma}
+\begin{proof}
+Let \(\psi(t):=\phi(\max\{|t|,1\})\). By \ref{W1}--\ref{W2}, \(\phi\) is convex and nonnegative on \([1,+\infty)\), with \(\phi(1)=0\); hence it is nondecreasing there. Thus \(s\mapsto\phi(\max\{s,1\})\) is convex and nondecreasing on \([0,+\infty)\), so \(\psi\) is convex and satisfies \(\psi\le\phi\). Conversely, any convex \(q\le\phi\) satisfies \(q(\pm1)\le0\), hence \(q\le0=\psi\) on \([-1,1]\), while \(q\le\phi=\psi\) on \(|t|\ge1\). Therefore \(\phi^{**}=\psi\), the largest lower semicontinuous convex minorant of \(\phi\)~\cite[Theorem~12.2]{rockafellar1970convex}. For \(|t|<1\), \ref{W1} gives \(\phi(t)>0=\psi(t)\), proving the contact-set formula.
+
+Evaluating the definition of \(\phi^*\) at \(t=\pm1\) gives \(\phi^*(y)\ge|y|\). Since \(\phi(t_0)>0\) for any \(t_0>1\), convexity on \([1,+\infty)\) implies at least linear growth for large \(t\); evenness gives the same for negative \(t\). Hence \(\operatorname{dom}\phi^*\) contains an open interval around zero. The separable formulas follow from~\cite[Theorem~16.4]{rockafellar1970convex}.
+\end{proof}
+
 \begin{lemma}\label{lem:no-inner-stationary}
 If \(\phi\) satisfies \ref{W1} and \ref{W3}, then \(0\notin\partial\phi(t)\) for every \(t\in(-1,1)\).
 \end{lemma}

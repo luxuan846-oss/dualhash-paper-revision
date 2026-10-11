@@ -32,8 +32,39 @@ Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that ge
 \label{Eq:direct_deep_hashing_problem}
 \blue{\min_{\bx \in \RR^{q}}\ \frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}\!\big(\operatorname{sgn}(\mathcal{D}(\bx))\big),}
 \end{align}
-where \(n\) is the number of training samples, \blue{\(\bD_i:\RR^q\to\RR^d\) is the continuous network output mapping for sample \(i\), and \(\ell_{s,i}:\RR^{n\times d}\to\RR\) is a similarity-preserving loss} (e.g., pairwise cross-entropy \cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere. \blue{To address this issue, a W-type regularizer \(h\) as specified in Definition~\ref{def:wtype} is introduced to drive continuous outputs toward \(\{-1,1\}^d\).} 
+where \(n\) is the number of training samples, \blue{\(\bD_i:\RR^q\to\RR^d\) is the continuous network output mapping for sample \(i\), and \(\ell_{s,i}:\RR^{n\times d}\to\RR\) is a similarity-preserving loss} (e.g., pairwise cross-entropy \cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere. 
 
+\blue{To address this issue, penalties whose graphs are W-shaped, vanishing exactly at
+$\pm1$, are added to drive continuous outputs toward $\{-1,1\}^d$. They are standard in
+deep hashing~\cite{liuDeepSupervisedHashing,wang2016DTSH,zhuDeepHashingNetwork2016,
+yuanCentralSimilarityQuantization2020,he2025mambahash,yin2026ccdh} and are also used to
+train binary and quantized networks~\cite{yin2018binaryrelax,bai2019proxquant}. Their
+formulas differ, but our analysis depends only on the common shape, which we formalize
+as the W-type class in \Cref{def:wtype}.}
+
+\begin{table}[t]
+\centering
+\caption{Representative W-type regularizers.}
+\label{tab:wtype}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{ll cccc}
+\toprule
+$\phi(t)$ & Hashing & $\partial\phi(0)$ & smooth at $\pm1$ & $\phi^*(y)$ & $\operatorname{dom}\phi^*$\\
+\midrule
+\multirow{2}{*}{$\lambda\bigl||t|-1\bigr|^{p}$}
+ & $p=1$: \cite{liuDeepSupervisedHashing,wang2023deep}
+ & $\{\pm\lambda\}$ & no & $\lambda u,\quad u:=|y|/\lambda$ & $[-\lambda,\lambda]$\\
+ & $p=2$: \cite{wang2016DTSH,he2025mambahash,yin2026ccdh}
+ & $\{\pm2\lambda\}$ & yes & $|y|+\frac{y^2}{4\lambda}$ & $\mathbb{R}$\\
+\midrule
+$\lambda\log\cosh(|t|-1)$
+ & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020,chen2025shc}
+ & $\{\pm\lambda\tanh 1\}$ & yes
+ & $|y|+\lambda\bigl[\tfrac{1+u}{2}\log(1+u)+\tfrac{1-u}{2}\log(1-u)\bigr]$
+ & $[-\lambda,\lambda]$\\
+\bottomrule
+\end{tabular}}
+\end{table}
 \begingroup
 \color{blue}
 \begin{definition}[W-type regularizer]\label{def:wtype}
@@ -45,12 +76,13 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in
 \end{enumerate}
 \end{definition}
 
-\begin{lemma}\label{lem:no-inner-stationary}
-If \(\phi\) satisfies \ref{W1} and \ref{W3}, then \(0\notin\partial\phi(t)\) for every \(t\in(-1,1)\).
-\end{lemma}
-\begin{proof}
-Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+h\), \(h\downarrow0\), gives \(v\le-c_b\). At \(t'=0\), evenness gives \(\phi(h)\le\phi(0)-c_b|h|\) for \(h<0\), hence also \(v\ge c_b\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-b,0)\) are at least \(c_b\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-c_b]\cup[c_b,\infty)\) for \(|t|<b\).
-\end{proof}
+
+% \begin{lemma}\label{lem:no-inner-stationary}
+% If \(\phi\) satisfies \ref{W1} and \ref{W3}, then \(0\notin\partial\phi(t)\) for every \(t\in(-1,1)\).
+% \end{lemma}
+% \begin{proof}
+% Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+h\), \(h\downarrow0\), gives \(v\le-c_b\). At \(t'=0\), evenness gives \(\phi(h)\le\phi(0)-c_b|h|\) for \(h<0\), hence also \(v\ge c_b\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-b,0)\) are at least \(c_b\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-c_b]\cup[c_b,\infty)\) for \(|t|<b\).
+% \end{proof}
 
 Condition~\ref{W1} makes the zero set of (h) exactly the set of binary codes. Condition~\ref{W2} constrains only the tails \(\lvert t\rvert\ge1\), which are retained by the dual reformulation. Condition~\ref{W3} imposes a uniform negative slope on every compact subinterval of \([0,1)\); Lemma~\ref{lem:no-inner-stationary} shows that, together with evenness, this excludes limiting-stationary points in \((-1,1)\). This property is used in the stationarity-to-contact implication of Proposition~\ref{prop:transfer}.
 
@@ -106,13 +138,11 @@ Specifically, the model is trained to produce the \(i\)-th continuous network ou
 \end{align}\blue{where
 \(f_i(\bx):=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^2\) with \(\mu>0\) ensures coercivity.}
 
-We then employ variable splitting by introducing \blue{continuous auxiliary variables \(\bb_i\in\RR^d\) and \(\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\RR^{n\times d}\), subject to} \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\), \blue{which yields the following equivalent nonlinearly constrained problem:
+We then employ variable splitting by introducing \blue{continuous auxiliary variables \(\bb_i\in\RR^d\) and \(\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\RR^{n\times d}\), subject to \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\),} which yields the following equivalent nonlinearly constrained problem:
 \begin{align}
-    % \label{Eq: constrained_dlh}
-    \min_{\bx \in \RR^{q}, \bB \in \RR^{n\times d}} \quad & \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
-    \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n\blue{,} \notag
-\end{align}}
-and then \blue{relax these constraints by} the quadratic penalty method \cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
+    \blue{\min_{\bx \in \RR^{q},\ \bB \in \RR^{n\times d}}\quad \frac{1}{n}\sum_{i=1}^{n} f_i(\bx)+\sum_{i=1}^{n}h(\bb_i)\quad \text{s.t.}\quad \bb_i=\bD_i(\bx),\ \forall i=1,\dots,n.} \notag
+\end{align}
+We then \blue{relax these constraints by} the quadratic penalty method \cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
 \begin{align}
     \label{Prop: block-wise regularized problem}
     \blue{\min_{\bx \in \RR^{q},\,\bB \in \RR^{n\times d}}\ J(\bx,\bB):=F(\bx,\bB)+h(\bB),} \tag{P}

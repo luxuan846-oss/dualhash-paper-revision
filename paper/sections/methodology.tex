@@ -198,10 +198,14 @@ Let us consider the equivalent constrained formulation of Problem \eqref{Prop: b
 \end{equation}
 \blue{The function $\calL$ is generally nonconvex in $\bx$, convex in $\bB$, and concave in $\bLmbd$. We therefore use its KKT system as the first-order stationarity notion for this saddle-point formulation.}
 
+The corresponding minmax problem is 
+\[
+\min\max{\calL}.
+\]
+%  need to revise the name
 \subsection{\blue{First-Order Optimality Conditions}}
 \label{Sec: first-order optimality conditions}
-
-
+Since even checking whether a point is a local minimizer of a nonconvex problem is NP-hard in general, we target first-order stationarity of the saddle-point reformulation~\eqref{Eq: simplified_lagrangian}, namely the KKT condition of $\calL$.
 We say that $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$, that is,
 \begin{equation}\label{Eq: KKT conditions}
 \nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0},\qquad

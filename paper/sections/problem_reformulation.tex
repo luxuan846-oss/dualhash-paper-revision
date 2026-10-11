@@ -42,29 +42,6 @@ Related distance-based regularizers are also used to train binary and quantized
 networks~\cite{yin2018binaryrelax,bai2019proxquant}. We formalize the scalar penalties
 considered here as the W-type class in \Cref{def:wtype}.}
 
-\begin{table}[t]
-\centering
-\caption{Representative W-type regularizers.}
-\label{tab:wtype}
-\resizebox{\linewidth}{!}{
-\begin{tabular}{ll cccc}
-\toprule
-$\phi(t)$ & Hashing & $\partial\phi(0)$ & smooth at $\pm1$ & $\phi^*(y)$ & $\operatorname{dom}\phi^*$\\
-\midrule
-\multirow{2}{*}{$\lambda\bigl||t|-1\bigr|^{p}$}
- & $p=1$: \cite{liuDeepSupervisedHashing,wang2023deep}
- & $\{\pm\lambda\}$ & no & $\lambda u,\quad u:=|y|/\lambda$ & $[-\lambda,\lambda]$\\
- & $p=2$: \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh}
- & $\{\pm2\lambda\}$ & yes & $|y|+\frac{y^2}{4\lambda}$ & $\mathbb{R}$\\
-\midrule
-$\lambda\log\cosh(|t|-1)$
- & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
- & $\{\pm\lambda\tanh 1\}$ & yes
- & $|y|+\lambda\bigl[\tfrac{1+u}{2}\log(1+u)+\tfrac{1-u}{2}\log(1-u)\bigr]$
- & $[-\lambda,\lambda]$\\
-\bottomrule
-\end{tabular}}
-\end{table}
 \begingroup
 \color{blue}
 \begin{definition}[W-type regularizer]\label{def:wtype}
@@ -77,34 +54,39 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in
 \end{definition}
 
 
-% \begin{lemma}\label{lem:no-inner-stationary}
-% If \(\phi\) satisfies \ref{W1} and \ref{W3}, then \(0\notin\partial\phi(t)\) for every \(t\in(-1,1)\).
-% \end{lemma}
-% \begin{proof}
-% Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+h\), \(h\downarrow0\), gives \(v\le-c_b\). At \(t'=0\), evenness gives \(\phi(h)\le\phi(0)-c_b|h|\) for \(h<0\), hence also \(v\ge c_b\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-b,0)\) are at least \(c_b\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-c_b]\cup[c_b,\infty)\) for \(|t|<b\).
-% \end{proof}
 
-Condition~\ref{W1} makes the zero set of (h) exactly the set of binary codes. Condition~\ref{W2} constrains only the tails \(\lvert t\rvert\ge1\), which are retained by the dual reformulation. Condition~\ref{W3} imposes a uniform negative slope on every compact subinterval of \([0,1)\); Lemma~\ref{lem:no-inner-stationary} shows that, together with evenness, this excludes limiting-stationary points in \((-1,1)\). This property is used in the stationarity-to-contact implication of Proposition~\ref{prop:transfer}.
+Each condition is used once: \ref{W1} makes the zero set of \(h\) exactly \(\{-1,1\}^{n\times d}\); \ref{W2} yields the envelope formula of Lemma~\ref{lem:wtype-conj}, so that the dual reformulation leaves \(h\) unchanged on \(|t|\ge1\); and \ref{W3} excludes stationary points in \((-1,1)\) (Lemma~\ref{lem:no-inner-stationary}), which gives the stationarity-to-contact implication of Proposition~\ref{prop:transfer}.
 
-\begin{example}[Representative W-type regularizers]\label{ex:wtype}
-Let \(\lambda>0\) and \(\delta>0\), and define
-\[
-\operatorname{Hub}_{\delta}(s):=
-\begin{cases}
-s^2/(2\delta), & |s|\le\delta,\\
-|s|-\delta/2, & |s|>\delta.
-\end{cases}
-\]
-The following scalar penalties satisfy \ref{W1}--\ref{W3}:
-\begin{enumerate}[label=\textup{(\alph*)}]
-  \item \(\phi(t)=\lambda\bigl||t|-1\bigr|\), used in \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant};
-  \item \(\phi(t)=\lambda(|t|-1)^2\), used in \cite{wang2016DTSH,bai2019proxquant,he2025mambahash,yin2026crh};
-  \item \(\phi(t)=\lambda\,\operatorname{Hub}_{\delta}(|t|-1)\), which we include to separate local smoothness from tail growth.
-\end{enumerate}
-All three satisfy \ref{W1} because they are even and continuous and vanish exactly at \(t=\pm1\). Condition~\ref{W2} holds because each restriction to \([1,+\infty)\) is convex. For \ref{W3}, the derivatives are nonzero on \((-1,0)\cup(0,1)\); at \(t=0\), their limiting subdifferentials are respectively \(\{-\lambda,\lambda\}\), \(\{-2\lambda,2\lambda\}\), and \(\{-\lambda a,\lambda a\}\), where \(a=\min\{1,1/\delta\}\).
+\begin{table}[t]
+\centering
+\color{blue}
+\caption{Representative W-type regularizers, with \(\lambda,\delta>0\), \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\), and \(\operatorname{Hub}_{\delta}(s):=s^2/(2\delta)\) if \(|s|\le\delta\), \(|s|-\delta/2\) otherwise. Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\); \(\operatorname{clip}\) denotes projection onto \([-\lambda,\lambda]\); ``---'' means that no closed form is available.}
+\label{tab:wtype}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lllcccc}
+\toprule
+\multicolumn{2}{l}{\(\phi(t)\)} & Used in & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\)\\
+\midrule
+\multirow{2}{*}{\(\lambda\bigl||t|-1\bigr|^{p}\)}
+ & \(p=1\) & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
+ & \(\{\pm\lambda\}\) & \(|y|\) & \([-\lambda,\lambda]\)
+ & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\sigma)_+\bigr)\)\\
+ & \(p=2\) & \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh,bai2019proxquant}
+ & \(\{\pm2\lambda\}\) & \(|y|+\frac{y^2}{4\lambda}\) & \(\mathbb{R}\)
+ & \(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma/(2\lambda)}\)\\
+\midrule
+\multicolumn{2}{l}{\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
+ & \(\{\pm\lambda\tanh1\}\)
+ & \(|y|+\lambda\psi(|y|/\lambda)\)
+ & \([-\lambda,\lambda]\) & ---\\
+\multicolumn{2}{l}{\(\lambda\operatorname{Hub}_{\delta}(|t|-1)\)} & ---
+ & \(\{\pm\lambda\min\{1,\frac1\delta\}\}\) & \(|y|+\frac{\delta y^2}{2\lambda}\) & \([-\lambda,\lambda]\)
+ & \(\operatorname{clip}\Bigl(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma\delta/\lambda}\Bigr)\)\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
-Penalty (a) is nonsmooth at \(\pm1\), whereas (b) is smooth there and has quadratic growth. Penalty (c) equals \(\frac{\lambda}{2\delta}(|t|-1)^2\) when \(\bigl||t|-1\bigr|\le\delta\) and grows linearly outside this region; it approaches (a) as \(\delta\to0\). Thus (c) is smooth near \(\pm1\) but has the linear tails of (a), separating the local smoothness and asymptotic growth properties.
-\end{example}
+All rows of Table~\ref{tab:wtype} satisfy \ref{W1}--\ref{W3}, and none is differentiable at \(0\): its subdifferential there is \(\{\pm c\}\) with \(c>0\). This is forced by the class itself, since an even \(\phi\) that is differentiable at \(0\) has \(\phi'(0)=0\), contradicting \ref{W3}. The rows differ in where else they are nonsmooth and how fast they grow. For \(p=1\) the kinks also lie at \(\pm1\), where the binary codes are. The other three rows are smooth at \(\pm1\), but the kink at \(0\) still rules out \(L\)-smoothness and weak convexity, so standard complexity guarantees for gradient methods do not apply to them either. Tail growth determines \(\operatorname{dom}\phi^*\): smoothing \(p=1\) by squaring gives \(\operatorname{dom}\phi^*=\mathbb{R}\), whereas smoothing it by \(\log\cosh\) or \(\operatorname{Hub}_\delta\) keeps \(\operatorname{dom}\phi^*=[-\lambda,\lambda]\).
 
 \setcounter{lemma}{1}
 \begin{lemma}\label{lem:wtype-conj}
@@ -124,10 +106,10 @@ Evaluating the definition of \(\phi^*\) at \(t=\pm1\) gives \(\phi^*(y)\ge|y|\).
 \begin{remark}[Scope of Definition~\ref{def:wtype}]\label{rem:wtype-scope}
 Conditions \ref{W2} and \ref{W3} cannot be dropped.
 \begin{enumerate}[label=\textup{(\roman*)}]
-  \item \emph{Without \ref{W3}.} The function \(\phi(t)=|t^2-1|\) satisfies \ref{W1}--\ref{W2}, but \(\partial\phi(0)=\{0\}\). In the setting of Example~\ref{ex:gap}, its convex envelope is \(\phi^{**}(t)=(t^2-1)_+\), and \((b,\Lambda)=(0,0)\) satisfies the KKT conditions. It is also stationary for Problem~(P), but \(J(b)=1-\tfrac12b^2\) near zero, so it is a local maximizer. Here \(|b|<1\) and \(h(0)\ne h^{**}(0)\), showing why \ref{W3} is needed for Proposition~\ref{prop:transfer}.
+  \item \emph{Without \ref{W3}.} The function \(\phi(t)=|t^2-1|\) satisfies \ref{W1}--\ref{W2} but violates \ref{W3}, because its slope vanishes at \(0\); indeed \(\partial\phi(0)=\{0\}\). In the setting of Example~\ref{ex:gap}, its convex envelope is \(\phi^{**}(t)=(t^2-1)_+\), and \((b,\Lambda)=(0,0)\) satisfies the KKT conditions. It is also stationary for Problem~(P), but \(J(b)=1-\tfrac12b^2\) near zero, so it is a local maximizer. Here \(|b|<1\) and \(h(0)\ne h^{**}(0)\), showing why \ref{W3} is needed for Proposition~\ref{prop:transfer}.
   \item \emph{Without \ref{W2}.} The function \(\phi(t)=\lambda\log\bigl(1+\bigl||t|-1\bigr|\bigr)\) satisfies \ref{W1} and \ref{W3}, but its tails are concave. Its sublinear growth gives \(\operatorname{dom}\phi^*=\{0\}\) and \(h^{**}\equiv0\), so the dual reformulation forces \(\bLmbd=\zero\) and removes the regularizer.
 \end{enumerate}
-Finally, penalty (b) in Example~\ref{ex:wtype} satisfies \ref{W1}--\ref{W3}, so the structural optimality propositions remain valid for it. Its conjugate has full domain, however, and the current complexity analysis, which uses boundedness of the dual domain, does not cover this quadratic-growth case. Condition~\ref{W1} specifies the binary-code zero set and is therefore part of the model definition.
+Finally, the row \(p=2\) of Table~\ref{tab:wtype} satisfies \ref{W1}--\ref{W3}, so the structural optimality propositions remain valid for it. Its conjugate has full domain, however, and the current complexity analysis, which uses boundedness of the dual domain, does not cover this quadratic-growth case. Condition~\ref{W1} specifies the binary-code zero set and is therefore part of the model definition.
 \end{remark}
 \endgroup
 Specifically, the model is trained to produce the \(i\)-th continuous network output \(\bD_i(\bx)\) with W-type regularization \(h\), and binary codes are obtained post-training via \(\operatorname{sgn}(\bD_i(\bx))\blue{\in\{-1,1\}^d}\). \blue{Consequently, we formulate the following core optimization problem for W-type regularized deep hashing methods, which serves as a continuous surrogate of Problem~\eqref{Eq:direct_deep_hashing_problem}:}

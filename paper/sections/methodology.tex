@@ -201,29 +201,7 @@ For a W-type regularizer, the conjugate and proximal mappings are separable entr
 [\operatorname{prox}_{\sigma h^*}(\bY)]_{ij}
 =\operatorname{prox}_{\sigma\phi^*}(Y_{ij}),\qquad \sigma>0.
 \end{equation}
-For the three examples in Example~\ref{ex:wtype}, the scalar conjugates and proximal mappings are summarized in Table~\ref{tab:wtype-conjugates}.
-\begin{table}[t]
-\centering
-\small
-\caption{Scalar conjugates and proximal mappings for the W-type examples.}
-\label{tab:wtype-conjugates}
-\begin{tabular}{c|p{0.34\linewidth}|p{0.42\linewidth}}
-\toprule
-Example & \(\phi^*(y)\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\)\\
-\midrule
-(a) & \(\lvert y\rvert\) for \(\lvert y\rvert\le\lambda\), and \(+\infty\) otherwise
-& \(\displaystyle \operatorname{clip}_{[-\lambda,\lambda]}\!\left(
-\operatorname{sgn}(v)(\lvert v\rvert-\sigma)_+\right)\)\\
-(b) & \(\lvert y\rvert+\dfrac{y^2}{4\lambda}\), \(y\in\mathbb{R}\)
-& \(\displaystyle \operatorname{sgn}(v)\,
-\frac{(\lvert v\rvert-\sigma)_+}{1+\sigma/(2\lambda)}\)\\
-(c) & \(\lvert y\rvert+\dfrac{\delta y^2}{2\lambda}\) for \(\lvert y\rvert\le\lambda\), and \(+\infty\) otherwise
-& \(\displaystyle \operatorname{clip}_{[-\lambda,\lambda]}\!\left(
-\operatorname{sgn}(v)\frac{(\lvert v\rvert-\sigma)_+}{1+\sigma\delta/\lambda}\right)\)\\
-\bottomrule
-\end{tabular}
-\end{table}
-Here \(\operatorname{clip}_{[-\lambda,\lambda]}\) denotes projection onto \([-\lambda,\lambda]\); this clipping is redundant for example (b), whose conjugate has full domain.
+Table~\ref{tab:wtype} lists the scalar conjugates and proximal mappings of representative W-type regularizers.
 This motivates us to perform a proximal step to update \(\bLmbd\).
 \begin{figure}[tbp]
 \centering

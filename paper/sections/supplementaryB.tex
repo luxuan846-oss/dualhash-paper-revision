@@ -39,6 +39,13 @@
 \subsection{\blue{Proof of \Cref{prop:transfer}}}
 \label{Subsec: proof transfer}
 \begingroup\color{blue}
+\begin{lemma}\label{lem:no-inner-stationary}
+If \(\phi\) satisfies \ref{W1} and \ref{W3}, then \(0\notin\partial\phi(t)\) for every \(t\in(-1,1)\).
+\end{lemma}
+\begin{proof}
+Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+h\), \(h\downarrow0\), gives \(v\le-c_b\). At \(t'=0\), evenness gives \(\phi(h)\le\phi(0)-c_b|h|\) for \(h<0\), hence also \(v\ge c_b\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-b,0)\) are at least \(c_b\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-c_b]\cup[c_b,\infty)\) for \(|t|<b\).
+\end{proof}
+
 \begin{proof}
     Since \(h^{*}\) is proper, lower semicontinuous, and convex, the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
     \begin{align}
@@ -232,7 +239,7 @@ Because $F$ is $L_F$-smooth and bounded below by $\underline{\ell}$,
 \[
 \|\nabla F(\bx,\bB)\|^2\le2L_F\bigl(F(\bx,\bB)-\underline{\ell}\bigr).
 \]
-Moreover, for the regularizer used by the algorithm, \(\operatorname{dom}h^*=[-\lambda,\lambda]^{n\times d}\) and \(0\le h^*(\bLmbd)\le\lambda nd\) on this box. Since \(\bLmbd^1\) lies in this box and the proximal mapping in Table~\ref{tab:wtype-conjugates}(a) maps into it, \(\|\bLmbd^k\|_F\le M\) for all \(k\ge1\).
+Moreover, for the regularizer used by the algorithm, \(\operatorname{dom}h^*=[-\lambda,\lambda]^{n\times d}\) and \(0\le h^*(\bLmbd)\le\lambda nd\) on this box. Since \(\bLmbd^1\) lies in this box and the proximal mapping in the row \(p=1\) of Table~\ref{tab:wtype} maps into it, \(\|\bLmbd^k\|_F\le M\) for all \(k\ge1\).
 
 Since $\|\bB^k\|_F\le\|\bm r_k\|_F+C_{\mathcal{D}}$, Young's inequality gives
 \[

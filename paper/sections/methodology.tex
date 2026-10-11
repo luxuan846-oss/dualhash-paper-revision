@@ -289,70 +289,6 @@ For a W-type regularizer, the conjugate and proximal mappings are separable entr
 \end{equation}
 Table~\ref{tab:wtype} lists the scalar conjugates and proximal mappings of representative W-type regularizers.
 This motivates us to perform a proximal step to update \(\bLmbd\).
-\begin{figure}[tbp]
-\centering
-\resizebox{0.98\columnwidth}{!}{
-\begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth,line cap=round,line join=round]
-    % (a) W-type function
-    \begin{scope}[shift={(0,0)}]
-        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$z$};
-        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
-        \draw[line width=0.9pt] (-2.6,1.6) -- (-1,0) -- (0,1) -- (1,0) -- (2.6,1.6);
-
-        % break-point labels
-        \node at (-1,-0.42) {$-\lambda$};
-        \node at ( 1,-0.42) {$\lambda$};
-
-        \node at (0,-2) {$\text{(a)}\ \phi(z)=\lambda\bigl||z|-1\bigr|, \ \lambda=1$};
-    \end{scope}
-
-    % (b) Conjugate function h^*(x), eta=1
-    \begin{scope}[shift={(8.0,0)}]
-        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$x$};
-        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
-        \draw[line width=0.9pt] (-1,1) -- (0,0) -- (1,1);
-        \draw[densely dotted,thin] (-1,0) -- (-1,1.5);
-        \draw[densely dotted,thin] ( 1,0) -- ( 1,1.5);
-        \draw[line width=0.9pt,fill=white] (-1,1) circle (0.07);
-        \draw[line width=0.9pt,fill=white] ( 1,1) circle (0.07);
-
-        % break-point labels
-        \node at (-1,-0.42) {$-\lambda$};
-        \node at ( 1,-0.42) {$\lambda$};
-
-        \node at (0,-2) {$\text{(b)}\ \phi^*(x), \ \lambda=1$};
-    \end{scope}
-
-    % (c) Proximal mapping of h^*(x), lambda=eta=1
-    \begin{scope}[shift={(16.0,0)}]
-        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$x$};
-        \draw[-{Stealth},thin] (0,-1.35) -- (0,1.35);
-
-        \draw[line width=0.9pt] (-2.8,-1) -- (-2,-1) -- (-1,0) -- (1,0) -- (2,1) -- (2.8,1);
-
-        \draw[densely dotted,thin] (-2,0)--(-2,-1);
-        \draw[densely dotted,thin] (-1,0)--(-1,-1);
-        \draw[densely dotted,thin] ( 1,0)--( 1, 1);
-        \draw[densely dotted,thin] ( 2,0)--( 2, 1);
-        \draw[densely dotted,thin] (-2,-1)--(0,-1);
-        \draw[densely dotted,thin] (0,1)--(2,1);
-
-        \node[above] at (-2,0.10) {$-(\tau+\lambda)$};
-        % \node[above] at (-1,0.10) {$-\lambda$};
-        \node at (-1,-0.42) {$-\lambda$};
-        \node at ( 1,-0.42) {$\lambda$};
-        \node at ( 2,-0.42) {$(\tau+\lambda)$};
-        \node[left] at (0, 1) {$\tau$};
-        \node[left] at (0,-1) {$-\tau$};
-
-        \node at (0,-2) {$\text{(c)}\ \operatorname{prox}_{\tau\phi^*}(x),\ \lambda=\tau=1$};
-    \end{scope}
-\end{tikzpicture}
-}
-\caption{A scalar W-type function, its conjugate, and the proximal mapping of $\phi^*$.}
-\label{fig:w-conj-prox}
-\vspace{-4ex}
-\end{figure}
 
 We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and $\bm{\Lambda}$ alternately. The resulting algorithm can be viewed as a first-order multiblock primal--dual method. First, we update $\bx$ by a stochastic first-order step, as is standard in training neural networks. \blue{At iteration $k$, the $\bx$-update takes the form
 \begin{equation}
@@ -367,6 +303,73 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 \bLmbd^{k+1} &= \operatorname*{arg\,min}_{\bLmbd}\Big\{h^*(\bLmbd)-\langle\bLmbd,2\bB^{k+1}-\bB^k\rangle+\frac{\tau}{2}\|\bLmbd-\bLmbd^k\|^2\Big\} \notag\\
 &= \operatorname{prox}_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \label{Eq: the update of lambda}
 \end{align}
+\blue{By~\eqref{Eq: the proximal mapping of conjugate function}, this step acts entrywise through $\operatorname{prox}_{\sigma\phi^*}$ with $\sigma=\tau^{-1}$; for the row $p=1$ of Table~\ref{tab:wtype}, it is a soft-thresholding followed by clipping to $[-\lambda,\lambda]$, see \Cref{fig:w-conj-prox}.}
+\begin{figure}[tbp]
+\centering
+\resizebox{0.98\columnwidth}{!}{
+\begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth,line cap=round,line join=round]
+    % (a) W-type function
+    \begin{scope}[shift={(0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$t$};
+        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
+        \draw[line width=0.9pt] (-2.6,1.6) -- (-1,0) -- (0,1) -- (1,0) -- (2.6,1.6);
+
+        % break-point labels
+        \node at (-1,-0.42) {$-1$};
+        \node at ( 1,-0.42) {$1$};
+        \node[left] at (0,1) {$\lambda$};
+
+        \node at (0,-2) {$\text{(a)}\ \phi(t)=\lambda\bigl||t|-1\bigr|$};
+    \end{scope}
+
+    % (b) Conjugate function phi^*(y)
+    \begin{scope}[shift={(8.0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$y$};
+        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
+        \draw[line width=0.9pt] (-1,1) -- (0,0) -- (1,1);
+        \draw[densely dotted,thin] (-1,0) -- (-1,1.5);
+        \draw[densely dotted,thin] ( 1,0) -- ( 1,1.5);
+        \fill (-1,1) circle (0.07);
+        \fill ( 1,1) circle (0.07);
+
+        % break-point labels
+        \node at (-1,-0.42) {$-\lambda$};
+        \node at ( 1,-0.42) {$\lambda$};
+
+        \node[left] at (0,1) {$\lambda$};
+
+        \node at (0,-2) {$\text{(b)}\ \phi^*(y)$};
+    \end{scope}
+
+    % (c) Proximal mapping of phi^*(v)
+    \begin{scope}[shift={(16.0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$v$};
+        \draw[-{Stealth},thin] (0,-1.35) -- (0,1.35);
+
+        \draw[line width=0.9pt] (-2.8,-1) -- (-2,-1) -- (-1,0) -- (1,0) -- (2,1) -- (2.8,1);
+
+        \draw[densely dotted,thin] (-2,0)--(-2,-1);
+        \draw[densely dotted,thin] (-1,0)--(-1,-1);
+        \draw[densely dotted,thin] ( 1,0)--( 1, 1);
+        \draw[densely dotted,thin] ( 2,0)--( 2, 1);
+        \draw[densely dotted,thin] (-2,-1)--(0,-1);
+        \draw[densely dotted,thin] (0,1)--(2,1);
+
+        \node[above] at (-2,0.10) {$-(\lambda+\sigma)$};
+        \node at (-1,-0.42) {$-\sigma$};
+        \node at ( 1,-0.42) {$\sigma$};
+        \node at ( 2,-0.42) {$\lambda+\sigma$};
+        \node[left] at (0, 1) {$\lambda$};
+        \node[left] at (0,-1) {$-\lambda$};
+
+        \node at (0,-2) {$\text{(c)}\ \operatorname{prox}_{\sigma\phi^*}(v)$};
+    \end{scope}
+\end{tikzpicture}
+}
+\caption{\blue{The row $p=1$ of Table~\ref{tab:wtype}, drawn with $\lambda=\sigma=1$: (a) the W-type function $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\sigma$ and clips to $[-\lambda,\lambda]$. The $\bLmbd$-update~\eqref{Eq: the update of lambda} applies (c) entrywise with $\sigma=\tau^{-1}$.}}
+\label{fig:w-conj-prox}
+\vspace{-4ex}
+\end{figure}
 \subsubsection{DualHash with Momentum Acceleration}
 We first present a momentum-based instance. At iteration $k$, we form two extrapolated points
 \begin{equation}

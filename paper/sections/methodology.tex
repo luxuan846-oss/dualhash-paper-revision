@@ -230,7 +230,7 @@ where
 -\partial_{\bLmbd}(-\calL)(\bx,\bB,\bLmbd)
 \end{pmatrix}.
 \end{equation}
-Moreover, the KKT condition is implied by stationarity in the sense of the limiting subdifferential, i.e., $\bm{0}\in\partial\calL(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$. Indeed, for every $(\bx,\bB,\bLmbd)$ with $\bLmbd\in\operatorname{dom}(h^*)$, it is routine to show that
+\blue{Moreover, $\mathcal{K}$ contains the limiting subdifferential of $\calL$: for every $(\bx,\bB,\bLmbd)$ with $\bLmbd\in\operatorname{dom}h^*$,}
 \begin{equation}
 \begin{aligned}
 \partial\calL(\bx,\bB,\bLmbd)
@@ -239,7 +239,7 @@ Moreover, the KKT condition is implied by stationarity in the sense of the limit
 =\mathcal{K}(\bx,\bB,\bLmbd),
 \end{aligned}
 \end{equation}
-where the equality follows from~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}. The inclusion is the general relation \(\partial(-h^*)(\bLmbd)\subseteq-\partial h^*(\bLmbd)\) for a proper, lower semicontinuous, convex \(h^*\): every element of \(\partial(-h^*)(\bLmbd)\) is obtained as a limit of \(-\nabla h^*(\bLmbd^r)\) at differentiability points with \(\bLmbd^r\to\bLmbd\) and \(h^*(\bLmbd^r)\to h^*(\bLmbd)\), and the closedness of the graph of \(\partial h^*\) gives the claimed inclusion.
+\blue{where the equality follows from~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}. The inclusion holds because every element of $\partial(-h^*)(\bLmbd)$ is a limit of $-\nabla h^*(\bLmbd^r)$ with $\bLmbd^r\to\bLmbd$ and $h^*(\bLmbd^r)\to h^*(\bLmbd)$, and the graph of $\partial h^*$ is closed. Following the first-order conditions used for nonconvex--concave min--max problems with a convex term in the maximization variable~\cite[(2.1)]{clasonAccelerationGlobalConvergence2019},~\cite[Section~1]{botBohm2023alternating}, we define stationarity through the convex subdifferential $\partial h^*$, i.e., by $\bm{0}\in\mathcal{K}$. If $h^*$ is continuously differentiable near $\bLmbd$, the inclusion holds as an equality; it is strict in general: for the row $p=1$ of Table~\ref{tab:wtype} and $\Lambda_{ij}=0$, one has $\partial(-\phi^*)(0)=\{-1,1\}\subsetneq[-1,1]=-\partial\phi^*(0)$.}
 We denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$. We prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} satisfies the first-order necessary optimality condition of the Lagrangian~\eqref{Eq: simplified_lagrangian}, i.e., it is a \blue{KKT point} of $\calL$.
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.

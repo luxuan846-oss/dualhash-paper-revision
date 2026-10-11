@@ -234,7 +234,7 @@ where
 We then prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} is a \blue{KKT point} of $\calL$. \blue{The proof is provided in \Cref{Subsec: proof zerogap}.}
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
-\\end{proposition}
+\end{proposition}
 
 \blue{Let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of the right-hand side of~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
 \[
@@ -250,6 +250,7 @@ The second term may be positive because $\calL$ is nonconvex in $(\bx,\bB)$. The
 \{\bB:h(\bB)=h^{**}(\bB)\}=\{\bB:|b_{ij}|\ge1\ \forall i,j\}
 \]
 by Lemma~\ref{lem:wtype-conj}. Hence nonconvexity of $h$ alone does not rule out strong duality: for $n=d=1$, $F(b)=\tfrac12(b-2)^2$, and $\lambda=1$, one has $p^*=d^*=\tfrac12$. The following example shows that the first term can be positive even when $F$ is convex.}
+
 \begin{example}\label{ex:gap}
 Consider Problem~\eqref{Prop: block-wise regularized problem} with $n=d=1$ and without the $\bx$-block, and let $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal value is
 $p^*=\min_{b\in\RR}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}=\tfrac12$, attained at $b^*=\pm1$.

@@ -231,12 +231,25 @@ where
 \end{aligned}
 \end{equation} where the equivalence follows from the subgradient inversion and sum rules~\cite[Theorems~23.5 and~23.8]{rockafellar1970convex}.} In the following, we denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$.  
 
-Here and below, strong duality means that both the primal and dual optima are attained and that the duality gap is zero.
 We then prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} is a \blue{KKT point} of $\calL$. \blue{The proof is provided in \Cref{Subsec: proof zerogap}.}
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
 \end{proposition}
 
+\blue{Let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of the right-hand side of~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
+\[
+p^*-d^*=(p^*-p^{**})+(p^{**}-d^*),
+\]
+where both terms are nonnegative since $h^{**}\le h$ and
+\[
+d^*=\max_{\bLmbd}\min_{\bx,\bB}\calL
+\le\min_{\bx,\bB}\max_{\bLmbd}\calL=p^{**}.
+\]
+The second term may be positive because $\calL$ is nonconvex in $(\bx,\bB)$. The first term vanishes if and only if some minimizer of $F+h^{**}$ lies in the contact set
+\[
+\{\bB:h(\bB)=h^{**}(\bB)\}=\{\bB:|b_{ij}|\ge1\ \forall i,j\}
+\]
+by Lemma~\ref{lem:wtype-conj}. Hence nonconvexity of $h$ alone does not rule out strong duality: for $n=d=1$, $F(b)=\tfrac12(b-2)^2$, and $\lambda=1$, one has $p^*=d^*=\tfrac12$. The following example shows that the first term can be positive even when $F$ is convex.}
 
 \begin{example}\label{ex:gap}
 Consider Problem~\eqref{Prop: block-wise regularized problem} with $n=d=1$ and without the $\bx$-block, and let $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal value is

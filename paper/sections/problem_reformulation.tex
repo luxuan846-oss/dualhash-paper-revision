@@ -96,6 +96,15 @@ satisfies \ref{W1} and \ref{W3} but grows sublinearly; then
 \(\operatorname{dom}\phi^*=\{0\}\) and \(h^{**}\equiv0\), so the dual reformulation removes
 the regularizer. Neither condition is needed to define the W shape itself; both are needed for our analysis.
 \end{remark}
+\begin{lemma}[Conjugate and convex envelope]\label{lem:wtype-conj}
+Let \(h\) be a W-type regularizer. Then \(\phi^*\) is proper, lower semicontinuous, convex, and even, \(\phi^*(y)\ge|y|\) for all \(y\), and \(\operatorname{dom}\phi^*\) has nonempty interior. Moreover,
+\[
+  \phi^{**}(t)=\phi\bigl(\max\{|t|,1\}\bigr),\qquad
+  \phi^{**}(t)=\phi(t)\iff |t|\ge1.
+\]
+Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
+\end{lemma}
+The proof is provided in \Cref{Subsec: proof transfer}.
 \endgroup
 
 \subsection{W-type Regularized Deep Hashing Model}

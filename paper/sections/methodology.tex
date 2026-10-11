@@ -273,14 +273,9 @@ $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
 \blue{The proof is provided in \Cref{Subsec: proof transfer}.}
 \blue{Thus, a KKT point of \(\calL\) is stationary for Problem~(P) exactly when its auxiliary variable lies in the contact set \(\{\,\bB:h(\bB)=h^{**}(\bB)\,\}=\{\bB:|b_{ij}|\ge1\ \forall i,j\}\).}
 
-\subsection{\blue{Instantiating the Stochastic Update}}
-\label{Sec: Algorithm implementations}
-\blue{We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. In both instances, the batch size is constant: $b_k\equiv b$ for DualHash-StoM, and $b_1$ followed by $b_k\equiv b$ for $k\ge2$ for DualHash-StoRM; their values are specified in \Cref{Section: Convergence analysis}. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
-\begin{equation}
-\label{Eq: minibatch oracle}
-\tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
-\end{equation}}
-Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
+\subsection{\blue{DualHash Framework}}
+\label{Sec: DualHash framework}
+\blue{Through the reformulation~\eqref{Eq: simplified_lagrangian},} we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
 For a W-type regularizer, the conjugate and proximal mappings are separable entrywise:
 \begin{equation}
 \label{Eq: the proximal mapping of conjugate function}
@@ -370,6 +365,13 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 \label{fig:w-conj-prox}
 \vspace{-4ex}
 \end{figure}
+\subsection{\blue{Instantiating the Stochastic Update}}
+\label{Sec: Algorithm implementations}
+\blue{We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. In both instances, the batch size is constant: $b_k\equiv b$ for DualHash-StoM, and $b_1$ followed by $b_k\equiv b$ for $k\ge2$ for DualHash-StoRM; their values are specified in \Cref{Section: Convergence analysis}. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
+\begin{equation}
+\label{Eq: minibatch oracle}
+\tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
+\end{equation}}
 \subsubsection{DualHash with Momentum Acceleration}
 We first present a momentum-based instance. At iteration $k$, we form two extrapolated points
 \begin{equation}

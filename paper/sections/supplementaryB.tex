@@ -1,19 +1,5 @@
-\section{Proofs of \blue{the Results} in \Cref{Sec: first-order optimality conditions}}
+\section{Proofs of Propositions in \Cref{Sec: first-order optimality conditions}}
 \label{Appendix: optimality properties}
-\subsection{\blue{Proof of \Cref{lem:kkt-structure}}}
-\label{Subsec: proof kkt-structure}
-\begin{proof}
-\blue{(i) Since $\Phi$ is continuously differentiable and $-h^*$ is finite at $\bLmbd$, \cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} gives
-\[
-\partial\calL(\bx,\bB,\bLmbd)=\nabla\Phi(\bx,\bB,\bLmbd)+\{\bm{0}\}\times\{\bm{0}\}\times\partial(-h^*)(\bLmbd).
-\]
-Comparing with~\eqref{Eq: KKT mapping}, it suffices to show $\partial(-h^*)(\bLmbd)\subseteq-\partial h^*(\bLmbd)$. First, let $\bV$ be a regular subgradient of $-h^*$ at some $\bLmbd'\in\operatorname{dom}h^*$. Then $h^*(\bLmbd'+t\bm{U})\le h^*(\bLmbd')-t\langle\bV,\bm{U}\rangle+o(t)$ as $t\downarrow0$ for every $\bm{U}$, so the directional derivative of $h^*$ satisfies $(h^*)'(\bLmbd';\bm{U})\le-\langle\bV,\bm{U}\rangle$ for all $\bm{U}$. Since $(h^*)'(\bLmbd';\cdot)$ is sublinear, $(h^*)'(\bLmbd';\bm{U})\ge-(h^*)'(\bLmbd';-\bm{U})\ge-\langle\bV,\bm{U}\rangle$. Hence $(h^*)'(\bLmbd';\cdot)=-\langle\bV,\cdot\rangle$, i.e., $h^*$ is differentiable at $\bLmbd'$ with $\nabla h^*(\bLmbd')=-\bV$. Now let $\bV\in\partial(-h^*)(\bLmbd)$. By definition, there exist $\bLmbd^r\to\bLmbd$ with $h^*(\bLmbd^r)\to h^*(\bLmbd)$ and regular subgradients $\bV^r$ of $-h^*$ at $\bLmbd^r$ with $\bV^r\to\bV$. By the first step, $-\bV^r=\nabla h^*(\bLmbd^r)\in\partial h^*(\bLmbd^r)$. Since $h^*$ is proper, lower semicontinuous, and convex, the graph of $\partial h^*$ is closed~\cite[Theorem~24.4]{rockafellar1970convex}, and therefore $-\bV\in\partial h^*(\bLmbd)$.
-
-(ii) The function $-\calL(\bx,\bB,\cdot)=h^*-\langle\bB,\cdot\rangle-F(\bx,\bB)$ is convex, so $\bLmbd$ minimizes it if and only if $\bm{0}\in\partial h^*(\bLmbd)-\bB$.
-
-(iii) Since $h\ge0$ is proper, $h^{**}$ is proper, lower semicontinuous, and convex with $(h^{**})^*=h^*$. By the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex}, $\bB\in\partial h^*(\bLmbd)$ if and only if $\bLmbd\in\partial h^{**}(\bB)$. Substituting $\bLmbd=-\nabla_{\bB}F(\bx,\bB)$ from the second condition in~\eqref{Eq: KKT conditions} gives the claim.}
-\end{proof}
-
 \subsection{Proof of \Cref{prop:zerogap}}
 \label{app-toc-zerogap}
 \label{Subsec: proof zerogap}

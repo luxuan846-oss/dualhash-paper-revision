@@ -230,19 +230,16 @@ where
 -\partial_{\bLmbd}(-\calL)(\bx,\bB,\bLmbd)
 \end{pmatrix}.
 \end{equation}
-\blue{The next lemma relates $\mathcal{K}$ to the limiting subdifferential $\partial\calL$ and explains what a KKT point is.}
-\begin{lemma}\label{lem:kkt-structure}
-\blue{Let $(\bx,\bB,\bLmbd)\in\RR^{q}\times\RR^{n\times d}\times\operatorname{dom}h^*$.
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item $\partial\calL(\bx,\bB,\bLmbd)\subseteq\mathcal{K}(\bx,\bB,\bLmbd)$. In particular, $\bm{0}\in\partial\calL(\bx,\bB,\bLmbd)$ implies that $(\bx,\bB,\bLmbd)$ is a KKT point of $\calL$.
-\item $\bB\in\partial h^*(\bLmbd)$ if and only if $\bLmbd$ maximizes the concave function $\calL(\bx,\bB,\cdot)$.
-\item $(\bx,\bB,\bLmbd)$ is a KKT point of $\calL$ if and only if $\bLmbd=-\nabla_{\bB}F(\bx,\bB)$ and $\bm{0}\in\nabla F(\bx,\bB)+\{\bm{0}\}\times\partial h^{**}(\bB)$, i.e., $(\bx,\bB)$ is a stationary point of the problem on the right-hand side of~\eqref{Eq: minmax problem}.
-\end{enumerate}}
-\end{lemma}
-\blue{The proof is provided in \Cref{Subsec: proof kkt-structure}.}
-\begin{remark}[Inclusion versus equality]\label{rem:kkt-vs-limiting}
-\blue{The inclusion in Lemma~\ref{lem:kkt-structure}(i) is strict in general, because $-h^*$ is concave. Take the row $p=1$ of Table~\ref{tab:wtype}, so that $\phi^*(y)=|y|$ on $[-\lambda,\lambda]$, and let $\Lambda_{ij}=0$. Then $\partial(-\phi^*)(0)=\{-1,1\}$, whereas $-\partial\phi^*(0)=[-1,1]$. Hence the $(i,j)$-entry of the $\bLmbd$-block of $\partial\calL$ contains $0$ only if $b_{ij}\in\{-1,1\}$, while that of $\mathcal{K}$ contains $0$ whenever $|b_{ij}|\le1$. For $|b_{ij}|<1$, $\Lambda_{ij}=0$ is the unique maximizer of $\Lambda\mapsto b_{ij}\Lambda-|\Lambda|$ over $[-\lambda,\lambda]$, so the condition $\bm{0}\in\partial\calL$ excludes a maximizer of $\calL$ in $\bLmbd$. By Lemma~\ref{lem:kkt-structure}(ii)--(iii), $\bm{0}\in\mathcal{K}$ states exactly that $\bLmbd$ maximizes $\calL(\bx,\bB,\cdot)$ and that $(\bx,\bB)$ is stationary for the problem on the right-hand side of~\eqref{Eq: minmax problem}; \Cref{prop:transfer} below characterizes when such a point is also stationary for Problem~\eqref{Prop: block-wise regularized problem}. We therefore use $\mathcal{K}$ as the stationarity notion for $\calL$, and \Cref{Section: Convergence analysis} measures stationarity by $\operatorname{dist}(\bm{0},\mathcal{K})$. By Lemma~\ref{lem:kkt-structure}(i), $\operatorname{dist}(\bm{0},\mathcal{K})\le\operatorname{dist}(\bm{0},\partial\calL)$, and the example above shows that this inequality can be strict.}
-\end{remark}
+Moreover, the KKT condition is implied by stationarity in the sense of the limiting subdifferential, i.e., $\bm{0}\in\partial\calL(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$. Indeed, for every $(\bx,\bB,\bLmbd)$ with $\bLmbd\in\operatorname{dom}(h^*)$, it is routine to show that
+\begin{equation}
+\begin{aligned}
+\partial\calL(\bx,\bB,\bLmbd)
+&=\nabla\Phi(\bx,\bB,\bLmbd)+\{\bm{0}\}\times\{\bm{0}\}\times\partial(-h^*)(\bLmbd)\\
+&\subseteq\nabla\Phi(\bx,\bB,\bLmbd)+\{\bm{0}\}\times\{\bm{0}\}\times\big(-\partial h^*(\bLmbd)\big)
+=\mathcal{K}(\bx,\bB,\bLmbd),
+\end{aligned}
+\end{equation}
+where the equality follows from~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}. The inclusion is the general relation \(\partial(-h^*)(\bLmbd)\subseteq-\partial h^*(\bLmbd)\) for a proper, lower semicontinuous, convex \(h^*\): every element of \(\partial(-h^*)(\bLmbd)\) is obtained as a limit of \(-\nabla h^*(\bLmbd^r)\) at differentiability points with \(\bLmbd^r\to\bLmbd\) and \(h^*(\bLmbd^r)\to h^*(\bLmbd)\), and the closedness of the graph of \(\partial h^*\) gives the claimed inclusion.
 We denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$. We prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} satisfies the first-order necessary optimality condition of the Lagrangian~\eqref{Eq: simplified_lagrangian}, i.e., it is a \blue{KKT point} of $\calL$.
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.

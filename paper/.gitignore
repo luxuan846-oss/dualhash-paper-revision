@@ -11,3 +11,4 @@
 *.pdf
 .DS_Store
 REVIEW_*.md
+!DualHash(2).pdf

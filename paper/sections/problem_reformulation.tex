@@ -37,10 +37,10 @@ where \(n\) is the number of training samples, \blue{\(\bD_i:\RR^q\to\RR^d\) is 
 \blue{To address this issue, penalties whose graphs are W-shaped, vanishing exactly at
 $\pm1$, are added to drive continuous outputs toward $\{-1,1\}^d$. They are standard in
 deep hashing~\cite{liuDeepSupervisedHashing,wang2016DTSH,zhuDeepHashingNetwork2016,
-yuanCentralSimilarityQuantization2020,he2025mambahash,yin2026ccdh} and are also used to
-train binary and quantized networks~\cite{yin2018binaryrelax,bai2019proxquant}. Their
-formulas differ, but our analysis depends only on the common shape, which we formalize
-as the W-type class in \Cref{def:wtype}.}
+yuanCentralSimilarityQuantization2020,he2025mambahash,yin2026crh}.
+Related distance-based regularizers are also used to train binary and quantized
+networks~\cite{yin2018binaryrelax,bai2019proxquant}. We formalize the scalar penalties
+considered here as the W-type class in \Cref{def:wtype}.}
 
 \begin{table}[t]
 \centering
@@ -54,11 +54,11 @@ $\phi(t)$ & Hashing & $\partial\phi(0)$ & smooth at $\pm1$ & $\phi^*(y)$ & $\ope
 \multirow{2}{*}{$\lambda\bigl||t|-1\bigr|^{p}$}
  & $p=1$: \cite{liuDeepSupervisedHashing,wang2023deep}
  & $\{\pm\lambda\}$ & no & $\lambda u,\quad u:=|y|/\lambda$ & $[-\lambda,\lambda]$\\
- & $p=2$: \cite{wang2016DTSH,he2025mambahash,yin2026ccdh}
+ & $p=2$: \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh}
  & $\{\pm2\lambda\}$ & yes & $|y|+\frac{y^2}{4\lambda}$ & $\mathbb{R}$\\
 \midrule
 $\lambda\log\cosh(|t|-1)$
- & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020,chen2025shc}
+ & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
  & $\{\pm\lambda\tanh 1\}$ & yes
  & $|y|+\lambda\bigl[\tfrac{1+u}{2}\log(1+u)+\tfrac{1-u}{2}\log(1-u)\bigr]$
  & $[-\lambda,\lambda]$\\
@@ -98,7 +98,7 @@ s^2/(2\delta), & |s|\le\delta,\\
 The following scalar penalties satisfy \ref{W1}--\ref{W3}:
 \begin{enumerate}[label=\textup{(\alph*)}]
   \item \(\phi(t)=\lambda\bigl||t|-1\bigr|\), used in \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant};
-  \item \(\phi(t)=\lambda(|t|-1)^2\), used in \cite{wang2016DTSH,bai2019proxquant,he2025mambahash};
+  \item \(\phi(t)=\lambda(|t|-1)^2\), used in \cite{wang2016DTSH,bai2019proxquant,he2025mambahash,yin2026crh};
   \item \(\phi(t)=\lambda\,\operatorname{Hub}_{\delta}(|t|-1)\), which we include to separate local smoothness from tail growth.
 \end{enumerate}
 All three satisfy \ref{W1} because they are even and continuous and vanish exactly at \(t=\pm1\). Condition~\ref{W2} holds because each restriction to \([1,+\infty)\) is convex. For \ref{W3}, the derivatives are nonzero on \((-1,0)\cup(0,1)\); at \(t=0\), their limiting subdifferentials are respectively \(\{-\lambda,\lambda\}\), \(\{-2\lambda,2\lambda\}\), and \(\{-\lambda a,\lambda a\}\), where \(a=\min\{1,1/\delta\}\).

@@ -17,14 +17,17 @@
     & DPSH \cite{liFeatureLearningBased2016} & &  & DCC &  \\ 
     & DSARH \cite{zhang2026dsarh} & & & DCC + PGD-based AT &  \\
     \cmidrule(lr){1-5}
-    \multirow{10}{*}{\centering Continuous}
-    & DCH \cite{caoDeepCauchyHashing2018} &\multirow{4}{*}{\centering $\min L_s(\bu) + h(\bu)$} & $\log \left( 1 + \frac{\text{dist}_{\text{h}}(|\bu|, \mathbf{1})}{\gamma} \right)$ & \multirow{4}{*}{\centering SGDM} &  \\
+    \multirow{12}{*}{\centering Continuous}
+    & DCH \cite{caoDeepCauchyHashing2018} &\multirow{5}{*}{\centering $\min L_s(\bu) + h(\bu)$} & $\log \left( 1 + \frac{\text{dist}_{\text{h}}(|\bu|, \mathbf{1})}{\gamma} \right)$ & \multirow{5}{*}{\centering SGDM} &  \\
     & DNNH \cite{laiSimultaneousFeatureLearning2015} & & $\mathcal{I}_{[-1,1]^d}(\bu)$ & &  \\
     & DSH \cite{liuDeepSupervisedHashing} & & $\| | \bu| - \mathbf{1}\|_1$ &  &  \\ 
     & DTSH \cite{wang2016DTSH} & & $\| | \bu| - \mathbf{1}\|_2^2$ &  &  \\ 
     & DHN \cite{zhuDeepHashingNetwork2016} & & $\sum_i\log(\cosh(|u_i|-1))$&  &  \\ 
     \cmidrule(lr){2-5}
     & MDSHC \cite{wang2023deep} & \scriptsize $\min L_c(\bu) + L_s (\bu)+ h(\bu)$ & $\| | \bu| - \mathbf{1}\|_1$ & RMSProp &  \\ 
+    \cmidrule(lr){2-5}
+    & \blue{MambaHash \cite{he2025mambahash}} & \blue{$\min L_s(\bu)+h(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{RMSProp} &  \\
+    & \blue{CRH \cite{yin2026crh}} & \blue{$\min L_C(\bu)+\lambda L_Q(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{Adam + center reassignment} &  \\
     \cmidrule(lr){2-5}
     & HashNet \cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering $\min L_s(\bu)$} & \multirow{2}{*}{\centering -} & SGDM &  \\     
     & OrthoHash \cite{hoeOneLossAll2021} & & & Adam &  \\
@@ -40,6 +43,7 @@
     \parbox{\linewidth}{\scriptsize
     \textbf{Notes}: 
     The \textbf{Type} column indicates whether binary codes are explicitly updated; DSARH is grouped with Discrete because its unified-hashing branch uses DCC updates.
+    \blue{CRH reassigns class centers; its quantization penalty is disabled in the reported multi-label experiments.}
     The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{Quantization Loss} column specifies the loss (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)) for quantization error, with `-' indicating no explicit loss. 
     % The \textbf{Optimization} column describes the training strategy, with discrete methods focusing on binary code updates. 
     DCC stands for Discrete Cyclic Coordinate, PGD-based AT for projected-gradient adversarial training, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `-' indicating no such analysis.
@@ -57,13 +61,18 @@ wang2023deep,zhuDeepHashingNetwork2016}.
 Alternative strategies either introduce auxiliary hash codes with a 
 smoother surrogate $\|\cdot\|_2^2$~\cite{liDeepSupervisedHashing,
 li2017deep,liFeatureLearningBased2016}, or refine the discretization 
-objective via central similarity targets~\cite{yuanCentralSimilarityQuantization2020}. Nevertheless, even recent architectures continue to rely on W-type regularization to mitigate quantization error. For instance,
-He and Wei~\cite{he2025mambahash} employ \blue{$\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$}
-as a smooth surrogate for \blue{$\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$} to ease
-gradient-based optimization, highlighting that the core difficulty of
-developing theoretically grounded methods for nonsmooth W-type
-regularization under nonlinear network mappings has not been resolved.
-This is precisely the gap this work aims to fill.
+objective via central similarity targets~\cite{yuanCentralSimilarityQuantization2020}.
+\blue{Recent architectures retain squared W-type penalties: MambaHash~\cite{he2025mambahash}
+and CRH~\cite{yin2026crh} use $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$
+to reduce quantization error.
+Related regularization-based approaches also arise in neural-network weight quantization:
+BinaryRelax penalizes squared distances to quantized weight sets~\cite{yin2018binaryrelax},
+while ProxQuant uses W-shaped penalties with explicit proximal updates~\cite{bai2019proxquant}.
+More recently, PARQ develops convex piecewise-affine regularization for
+quantization-aware training~\cite{jin2025parq}.
+These methods regularize weights directly; our focus is stochastic optimization
+with nonsmooth W-type penalties composed with nonlinear network outputs,
+with non-asymptotic complexity guarantees.}
 
 \paragraph{Primal-Dual and Stochastic Splitting Methods} Primal-dual methods, such as PDHG~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and its unified extensions~\cite{esserZhangChan2010}, are foundational tools for composite optimization with broad applications in imaging sciences. These methods enjoy ergodic $\mathcal{O}(1/k)$ convergence and remain stable under adjoint mismatch~\cite{chouzenouxAdjointMismatch}. For convex nonlinear saddle-point models, Gao and Zhang~\cite{gao2023alternative} proposed an alternative extrapolation scheme with provable convergence guarantees. Stochastic counterparts, notably SPDHG~\cite{chambolleSPDHG2018} \blue{and stochastic majorization-minimization subspace methods~\cite{chouzenouxStochasticMM2017}}, handle structured finite-sum objectives with almost-sure and ergodic convergence. In the nonconvex setting, Clason et al.~\cite{clasonAccelerationGlobalConvergence2019} established global convergence under the Kurdyka--{\L}ojasiewicz (KL) condition, while Guo et al.~\cite{guo2023preconditioned} further addressed nonconvex stochastic composite problems. More recently, Shumaylov et al.~\cite{shumaylovweakly} incorporated weakly convex neural-network regularizers into a primal-dual framework and proved convergence of PDHGM to critical points under the KL condition. When the problem admits a block-separable structure, splitting methods such as ADMM with its stochastic variants~\cite{ADMMNolinear2024,chen2025convergence} and stochastic alternating minimization~\cite{driggs2021stochastic,InertialProximalAlternating,bian2026stochastic} provide promising approaches for nonconvex multi-block optimization.
 

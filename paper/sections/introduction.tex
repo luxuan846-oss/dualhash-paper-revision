@@ -28,7 +28,7 @@ continuous values and the final binary codes~\cite{weissSpectralHashing2008}.
         \draw[-{Stealth},thin] (-2.8,0) -- (2.8,0) node[below right] {$x$};
         \draw[-{Stealth},thin] (0,-0.7) -- (0,2.9);
         \draw[line width=0.9pt] (-2.6,2.6) -- (0,0) -- (2.6,2.6);
-        \node at (0,-1.15) {$\text{(a)}\ h(\bz)=\|\bz\|_1$};
+        \node at (0,-1.15) {$\text{(a)}\ \phi(x)=|x|$};
     \end{scope}
 
     % (b)
@@ -38,7 +38,7 @@ continuous values and the final binary codes~\cite{weissSpectralHashing2008}.
         \draw[line width=0.9pt] (-2.6,1.9) -- (-1,0) -- (0,2.1) -- (1,0) -- (2.6,1.9);
         \node at (-1,-0.42) {$-1$};
         \node at (1,-0.42) {$+1$};
-        \node at (0,-1.15) {$\text{(b)}\ h(\bz)=\||\bz|-1\|_1$};
+        \node at (0,-1.15) {$\text{(b)}\ \phi(x)=\bigl||x|-1\bigr|$};
     \end{scope}
 \end{tikzpicture}}
 \caption{The V-type (left) versus W-type (right) regularizations.}
@@ -64,7 +64,7 @@ and computer vision, including sparse recovery~\cite{yin2015minimization},
 chambolleFirstOrderPrimalDualAlgorithm2011,
 repetti2021variable,shumaylovweakly,li2023spherical}, }
 low-rank and robust matrix factorization~\cite{chen2025convergence}, 
-and structured neural network training~\cite{bian2026stochastic}. For the special case $\bD_i(\bx) = \bx$, stochastic proximal gradient methods (SPGD) and their variance-reduced or momentum-based variants have been extensively studied~\cite{xu2023momentum}. However, these methods require regularizers with tractable proximal operators (e.g., $\ell_1$ soft-thresholding). Although the W-type regularizer admits a closed-form proximal operator~\cite{bai2019proxquant} (\Cref{Fig: the W and V regularizations}), its composition with neural network outputs $h(\bD_i(\bx))$ renders the proximal subproblem intractable, making SPGD inapplicable to Problem~\eqref{Eq: the general nonlinear composite problem in intro}. Moreover, unlike standard deep learning tasks, where regularization is typically imposed on model parameters, deep hashing requires regularization directly on the network output to enforce binary codes, as illustrated in \Cref{Fig:comparison_classification_vs_hash}. This makes the nonsmooth composite form \(h(\bD_i(\bx))\) intrinsic to deep hashing and therefore necessary to handle explicitly.
+and structured neural network training~\cite{bian2026stochastic}. For the special case $\bD_i(\bx) = \bx$, stochastic proximal gradient methods (SPGD) and their variance-reduced or momentum-based variants have been extensively studied~\cite{xu2023momentum}. However, these methods require regularizers with tractable proximal operators (e.g., $\ell_1$ soft-thresholding). Although the scalar W-type penalty $\phi$ admits a closed-form proximal operator~\cite{bai2019proxquant} (\Cref{Fig: the W and V regularizations}), the separable regularizer $h$ inherits this mapping entrywise, while its composition with neural network outputs $h(\bD_i(\bx))$ renders the proximal subproblem intractable, making SPGD inapplicable to Problem~\eqref{Eq: the general nonlinear composite problem in intro}. Moreover, unlike standard deep learning tasks, where regularization is typically imposed on model parameters, deep hashing requires regularization directly on the network output to enforce binary codes, as illustrated in \Cref{Fig:comparison_classification_vs_hash}. This makes the nonsmooth composite form \(h(\bD_i(\bx))\) intrinsic to deep hashing and therefore necessary to handle explicitly.
 % Problem~\eqref{Eq: the general nonlinear composite problem in intro} reduces to a standard regularized finite-sum minimization, for which stochastic proximal gradient methods (SPGD) and their variance-reduced or momentum-based variants have been extensively studied, yielding optimal oracle complexities of \(\mathcal{O}(n + \sqrt{n}\,\varepsilon^{-2})\) in the finite-sum setting and \(\mathcal{O}(\varepsilon^{-3})\) in the online setting~\cite{li2022simple,tran2022hybrid,xu2023momentum,gaoNonConvexStochasticComposite2024}. 
 % However, these excellent methods crucially rely on regularizers with tractable proximal solutions, such as the well-known soft-thresholding operator of the \(\ell_1\) norm (\Cref{Fig: the W and V regularizations}(a)). While the W-type regularization (\Cref{Fig: the W and V regularizations}(b)) admits a closed-form proximal operator~\cite{bai2019proxquant}, its composition with neural network outputs, i.e., \(h(\bD_i(\bx))\), which is typically highly nonconvex, creates a computationally intractable subproblem. 
 % In fact, unlike standard deep learning tasks, where regularization is typically imposed on model parameters (e.g., weight decay), deep hashing requires regularization directly on the network output to enforce binary code, aas illustrated in \Cref{Fig:comparison_classification_vs_hash}. 

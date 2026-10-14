@@ -29,7 +29,7 @@
     & \blue{MambaHash \cite{he2025mambahash}} & \blue{$\min L_s(\bu)+h(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{RMSProp} &  \\
     & \blue{CRH \cite{yin2026crh}} & \blue{$\min L_C(\bu)+\lambda L_Q(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{Adam + center reassignment} &  \\
     \cmidrule(lr){2-5}
-    & HashNet \cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering $\min L_s(\bu)$} & \multirow{2}{*}{\centering -} & SGDM &  \\     
+    & HashNet \cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering $\min L_s(\bu)$} & \multirow{2}{*}{\centering \blue{---}} & SGDM &  \\     
     & OrthoHash \cite{hoeOneLossAll2021} & & & Adam &  \\
     % \cmidrule(lr){2-5}
     % & SBPG \cite{wang2024bregman} & \scriptsize $\min L_s(\bu) + h(\bu)$ & Weakly convex $h$ & SBregman PG & $\mathcal{O}(\varepsilon^{-4})$ \\
@@ -44,9 +44,9 @@
     \textbf{Notes}: 
     The \textbf{Type} column indicates whether binary codes are explicitly updated; DSARH is grouped with Discrete because its unified-hashing branch uses DCC updates.
     \blue{CRH reassigns class centers; its quantization penalty is disabled in the reported multi-label experiments.}
-    The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{Quantization Loss} column specifies the loss (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)) for quantization error, with `-' indicating no explicit loss. 
+    The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{Quantization Loss} column specifies the loss (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)) for quantization error, with `\blue{---}' indicating no explicit loss. 
     % The \textbf{Optimization} column describes the training strategy, with discrete methods focusing on binary code updates. 
-    DCC stands for Discrete Cyclic Coordinate, PGD-based AT for projected-gradient adversarial training, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `-' indicating no such analysis.
+    DCC stands for Discrete Cyclic Coordinate, PGD-based AT for projected-gradient adversarial training, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `\blue{---}' indicating no such analysis.
     }
      \vspace{-2ex}
 \end{table}

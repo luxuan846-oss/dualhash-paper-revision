@@ -1,8 +1,7 @@
 \section{Proofs of Propositions in \Cref{Sec: first-order optimality conditions}}
-\label{Appendix: optimality properties}
+\label{app:optimality-properties}
 \subsection{Proof of \Cref{prop:zerogap}}
-\label{app-toc-zerogap}
-\label{Subsec: proof zerogap}
+\label{app:zero-gap-proof}
 \begin{proof}
     According to \cite[Theorem 2.158]{temporary-citekey-11039},
     $(\bx^{*}, \bB^{*}, \bLmbd^{*})$ are optimal solutions to the
@@ -37,7 +36,7 @@
 \end{proof}
 
 \subsection{\blue{Proof of \Cref{prop:transfer}}}
-\label{Subsec: proof transfer}
+\label{app:transfer-proof}
 \begingroup\color{blue}
 \begin{proof}[Proof of Lemma~\ref{lem:wtype-conj}]
 Let \(\psi(t):=\phi(\max\{|t|,1\})\). By \ref{W1}--\ref{W2}, \(\phi\) is convex and nonnegative on \([1,+\infty)\), with \(\phi(1)=0\); hence it is nondecreasing there. Thus \(s\mapsto\phi(\max\{s,1\})\) is convex and nondecreasing on \([0,+\infty)\), so \(\psi\) is convex and satisfies \(\psi\le\phi\). Conversely, any convex \(q\le\phi\) satisfies \(q(\pm1)\le0\), hence \(q\le0=\psi\) on \([-1,1]\), while \(q\le\phi=\psi\) on \(|t|\ge1\). Therefore \(\phi^{**}=\psi\), the largest lower semicontinuous convex minorant of \(\phi\)~\cite[Theorem~12.2]{rockafellar1970convex}. For \(|t|<1\), \ref{W1} gives \(\phi(t)>0=\psi(t)\), proving the contact-set formula.
@@ -82,14 +81,13 @@ where $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\p
 \end{align}}
 
 \section{Auxiliary Results for the Complexity Analysis}
-\label{app-toc-1}
+\label{app:complexity-auxiliary-results}
 
 \subsection{Bounds Used in the Complexity Analysis}
-\label{Subsec: bounds for complexity analysis}
+\label{app:complexity-bounds}
 
 \subsubsection{Discussions on \Cref{Ass: main assumptions}(ii) in \Cref{Section: Convergence analysis}}
-\label{app-toc-2}
-\label{Appendix: discussion on assumptions} 
+\label{app:smoothness-discussion} 
 \blue{This section shows that the smoothness constant $L_F$ in \Cref{Ass: main assumptions}(ii) is bounded by a constant independent of the sample size $n$, which is essential for our convergence analysis.}
 
 For the smooth properties of mappings in our problem, we consider the nonlinear mapping
@@ -158,13 +156,12 @@ of $n$.}
 % \end{align}} for any $\bx \in \calX$.
 
 \subsubsection{Lower bounds for the Lyapunov functions}
-\label{app-toc-3}
-\label{sec:lowerbounds}
+\label{app:lyapunov-lower-bounds}
 Throughout this section, let $m:=\gamma/n$, $M:=\lambda\sqrt{nd}$, and
 $\mathcal{D}(\bx):=(\bD_1(\bx),\ldots,\bD_n(\bx))$. We use the convention
-$\bx^0:=\bx^1$ and write $\bm{r}_k:=\bB^k-\mathcal{D}(\bx^k)$,
+$\bx^0:=\bx^1$ and \blue{$\bB^0:=\bB^1$,} and write $\bm{r}_k:=\bB^k-\mathcal{D}(\bx^k)$,
 $\bm{p}_k:=\bx^k-\bx^{k-1}$, and $\bm{u}_k:=\bx^{k+1}-\bx^k$.
-The output condition in Appendix~\ref{Appendix: discussion on assumptions} gives
+The output condition in Appendix~\ref{app:smoothness-discussion} gives
 $\|\mathcal{D}(\bx)\|_F\le C_{\mathcal{D}}$, and $\mathcal{D}$ is
 $L_{\mathcal{D}}$-Lipschitz. The constants $C_1,\ldots,C_4$ are those in the
 Lyapunov functions $\Psi_m$ and $\Psi_r$.
@@ -172,8 +169,7 @@ Lyapunov functions $\Psi_m$ and $\Psi_r$.
 \begin{proposition}
 \label{prop:lyapunov-lower-bound}
 Let \Cref{Ass: main assumptions} hold and let
-$\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$, as required by the initialization
-of both algorithms. Define
+$\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$. \blue{Assume that $\mathcal{D}$ is bounded and Lipschitz as stated above, and that $\operatorname{dom}h^*=[-\lambda,\lambda]^{n\times d}$ with $0\le h^*(\bLmbd)\le\lambda nd$ on this box, as holds for the regularizer used by the algorithms.} Define
 \[
 c_0:=\frac{4M^2}{m}+MC_{\mathcal{D}}+\lambda nd,
 \qquad
@@ -232,6 +228,9 @@ c_1':=c_0+\frac{3}{2}C_1\tau^2M^2.
 \]
 \end{enumerate}
 \end{proposition}
+
+\blue{For DualHash-StoM, the conditions \eqref{eq:P1}--\eqref{eq:P2} are feasible: with $\delta=1/6$ and admissible $\alpha,\beta,\nu$ held constant, as $\tau\downarrow0$, $A_B,H_m,\Theta\to0$, while
+$C_4\to(2L_F+2L_F\beta^2/\alpha)/(1-2\alpha-\nu)>0$ and $Q$ remains bounded. Hence sufficiently small $\tau>0$ satisfies both conditions and the descent requirements in \Cref{lem:lyapunov-coef-positivity}.}
 
 \begin{proof}
 Since $f_i(\bx)=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^2$ and
@@ -304,11 +303,10 @@ This proves both lower bounds.
 \end{proof}
 
 \subsection{Estimates for the Common Updates}
-\label{Subsec: estimates for common updates}
+\label{app:common-update-estimates}
 
 \subsubsection{Proof of \Cref{Lemma: dual boundedness}}
-\label{app-toc-5}
-\label{Subsec: proof dual boundedness}
+\label{app:dual-difference-proof}
 \begin{proof}
     Applying the $\bB$-update~\eqref{Eq: the update of B} at iterations $k+1$ and $k+2$ gives
     \begin{align*}
@@ -337,8 +335,7 @@ This proves both lower bounds.
 \end{proof}
 
 \subsubsection{Proof of \Cref{Lemma: One-iteration progress of B and Lambda}}
-\label{app-toc-7}
-\label{Subsec: proof lemma 5.4}
+\label{app:primal-dual-progress-proof}
 \begin{proof}
     \blue{By the descent lemma~\eqref{Eq: the descent lemma} for $F(\bx^{k+1},\cdot)$,
     \[
@@ -381,11 +378,10 @@ This proves both lower bounds.
     and rearranging the inequality yields \eqref{item: B and Lambda}.
 \end{proof}
 
-Before proceeding, throughout Appendices~\ref{Appendix: the complexity analysis of DualHash-StoM} and~\ref{Appendix: the complexity analysis of DualHash-StoRM}, we adopt the notation, \blue{the probabilistic setting} and intermediate results from \Cref{Section: Convergence analysis}. 
+Before proceeding, throughout Appendices~\ref{app:stom-complexity} and~\ref{app:storm-complexity}, we adopt the notation, \blue{the probabilistic setting} and intermediate results from \Cref{Section: Convergence analysis}. 
 
 \section{Complexity Analysis of DualHash-StoM (\texorpdfstring{\Cref{alg:our_algorithm_sgdm}}{Algorithm 1})}
-\label{app-toc-8}
-\label{Appendix: the complexity analysis of DualHash-StoM}
+\label{app:stom-complexity}
 
 \blue{This appendix proves the complexity results for DualHash-StoM stated in \Cref{Section: complexity of StoM}.}
 We first present a lemma on continuously differentiable functions with Lipschitz continuous gradients. Since the analysis also requires the relations among the extrapolated iterates, we next establish the key relationships among the iterates generated by \eqref{Eq: the update of x in SGDM} and \eqref{Eq: extrapolated points in SGDM}.
@@ -431,8 +427,7 @@ We first present a lemma on continuously differentiable functions with Lipschitz
 \end{proof}
 
 \subsection{Proof of \Cref{Lemma: One-iteration progress of x in SGDM}}
-\label{app-toc-9}
-\label{Subsubsec: proof x progress SGDM}
+\label{app:stom-primal-progress-proof}
 
 \begin{proof}
     Recalling the equivalent relation:
@@ -469,8 +464,7 @@ We first present a lemma on continuously differentiable functions with Lipschitz
     % \end{align} 
 \end{proof}
 \subsection{Proof of \Cref{Lemma: approximate sufficient descent property in SGDM}}
-\label{app-toc-10}
-\label{Subsubsec: proof descent SGDM}
+\label{app:stom-descent-proof}
 \begin{proof}
     Substituting one-iteration progress \eqref{Eq: One-iteration progress of x in SGDM}
     and \eqref{item: B and Lambda} into \eqref{Eq: One-iteration progress decomposition}
@@ -542,11 +536,7 @@ The technical proof that the coefficients of $\Psi_m$ in \eqref{Eq: the coeffici
     \]
     \blue{The quadratic $1 - 2t - \frac{13}{2}t^{2}$ is positive if and only if $0 < t < \frac{\sqrt{30}-2}{13}$. Hence selecting
     $\tau \in \left(0, \frac{\sqrt{30}-2}{13L_{F}}\right)$ ensures $C_{\bB}> 0$. Consequently, $C_{1}= K_{1}= 3\delta\tau^{-1}> 0$ and $C_{2}= \frac{1}{2}(K_{2}- K_{1}+ K_{3}) = C_{\bB}+ K_{3}> 0$, since $K_{3}= \frac{\tau L_{F}^{2}}{\delta}> 0$.}
-    Therefore, \blue{with $\delta = \frac{1}{6}$}, setting
-    $\tilde{\delta}= c_{\delta}\delta^{2}$ \blue{with $0 < c_{\delta}< 36\left(\frac{\sqrt{30}-2}{13}\right)^{2}$} and ensuring
-    $\tau^{2}L_{F}^{2}\leq \tilde{\delta}$ guarantee positive coefficients for
-    $\Psi_m$ in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
-    and $C_{\bB}, \, C_{\bx}>0$. 
+    \blue{Finally, $C_3=K_4>0$ and $C_{\bx}=\nu C_4>0$. Thus all the stated coefficients are positive under \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}.}
 \end{proof}
 We then bound the three terms on the right-hand side of \eqref{Eq: the stationarity error bound in proof}.
 
@@ -661,8 +651,7 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
 %     \end{align}
 % \end{lemma}
 \subsection{Proof of \Cref{lemma: convergence rate sgdm}}
-\label{app-toc-11}
-\label{Subsubsec: convergence rate SGDM}
+\label{app:stom-rate-proof}
 \begin{proof}
     From \eqref{Eq: the stationarity error bound in SGDM Lemma}, we obtain
     {\small
@@ -689,14 +678,14 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
         ^{k}, \bB^{k}, \bLmbd^{k}))] \leq \frac{L_{\Delta}}{T}\sumT
         \left(\EE [\Psi_m(\mathcal{Q}^{k})] - \EE [\Psi_m
         (\mathcal{Q}^{k+1})] \right) + \blue{\left( 3 + \frac{L_{\Delta}}{L_F}\right) \frac{\sigma^{2}}{T}\sumT\frac{1}{b_{k}}},
-    \]which yields the conclusion. Denoting
+    \]\blue{Since $\bx^0=\bx^1$ and $\bB^0=\bB^1$, the negative increment terms give $\Psi_m(\calQ^1)\le\calL(\bx^1,\bB^1,\bLmbd^1)$, so $\EE[\Psi_m(\calQ^1)]-\Psi_m^*\le\Delta_1$.} Denoting
     $a_{k}= \mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB
     ^{k}, \bLmbd^{k}))]$, we have
     \[
         \frac{1}{T}\sumT a_{k}\leq \frac{L_{\Delta}\Delta_{1}}{T}+ \blue{\left( 3 + \frac{L_{\Delta}}{L_F}
         \right) \frac{\sigma^{2}}{T}\sumT\frac{1}{b_{k}}}.
     \]
-    \blue{By selecting $R$ uniformly from $\{1, \ldots, T\}$, independently of the iterates,}
+    \blue{By selecting $R$ uniformly from $\{1, \ldots, T\}$, independently of the iterates, and applying the law of total expectation,}
     we obtain
     \[
         \mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}
@@ -709,8 +698,7 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
 % $b_{k}= b = c_{b}T$ for all $k \geq 1$ in this way and establish the complexity
 % results of \Cref{alg:our_algorithm_sgdm} with the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}.
 \subsection{Proof of \Cref{Theorem: the oracle complexity in SGDM}}
-\label{app-toc-12}
-\label{Subsec: proof theorem SGDM}
+\label{app:stom-oracle-proof}
 % \setcounter{proof}{0}
 \begin{proof}
     When $b_{k}= b = c_{b}T$, \blue{we have $\frac{1}{T}\sumT\frac{1}{b_{k}}=\frac{1}{c_{b}T}$, and hence \Cref{lemma: convergence rate sgdm} gives}
@@ -729,12 +717,10 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
     \]
 \end{proof}
 \section{Complexity Analysis of DualHash-StoRM (\texorpdfstring{\Cref{alg:our_algorithm_storm}}{Algorithm 2})}
-\label{app-toc-13}
-\label{Appendix: the complexity analysis of DualHash-StoRM}
-We adopt the same notation as in \Cref{Appendix: the complexity analysis of DualHash-StoM}. 
+\label{app:storm-complexity}
+We adopt the same notation as in \Cref{app:stom-complexity}. 
 \subsection{\blue{Proof of \Cref{Lemma: One-iteration progress of x in STORM}}}
-\label{app-toc-14}
-\label{Subsec: proof x progress STORM}
+\label{app:storm-primal-progress-proof}
 \begin{proof}
     \blue{Recalling the equivalent relation:}
     \blue{\begin{align}
@@ -766,8 +752,7 @@ We adopt the same notation as in \Cref{Appendix: the complexity analysis of Dual
 \end{proof}
 
 \subsection{Proof of \Cref{Lemma: approximate sufficient descent property storm}}
-\label{app-toc-15}
-\label{Subsubsec: proof descent STORM}
+\label{app:storm-descent-proof}
 \begin{proof}
     Substituting the one-iteration progress \eqref{Eq: the recursive relation of L on x}
     and \eqref{Eq: the recursive relation of L on B and Lambda} into \eqref{Eq: One-iteration progress decomposition},
@@ -922,7 +907,7 @@ We derive an upper stationarity error bound for the iterates generated by \Cref{
 \end{lemma}
 \begin{proof}
     This proof follows a similar approach to that of \Cref{Lemma: Stationarity error bound in SGDM} 
-in \Cref{Appendix: the complexity analysis of DualHash-StoM}. The key difference lies in 
+in \Cref{app:stom-complexity}. The key difference lies in 
 the estimation of $\| \bd_{\bx}^{k}\|^{2}$. To estimate $\| \bd_{\bx}^{k}\|^{2}$, we use 
 the optimality condition of $\bx^{k+1}$ from \eqref{Eq: the update of x in STORM} to obtain
     \begin{align}
@@ -963,8 +948,7 @@ the optimality condition of $\bx^{k+1}$ from \eqref{Eq: the update of x in STORM
 
 Selecting appropriate parameters is crucial as the ultimate oracle complexities depend on these choices.
 \subsection{Proof of the Averaged Stationarity Error Bound for DualHash-StoRM}
-\label{app-toc-16}
-\label{subsubsec:proof-avg-stationarity-storm}
+\label{app:storm-stationarity-proof}
 We now take $\eta_{k}\equiv \eta_{T}$ and $\rho_{k}\equiv \rho_{T}$. The first result estimates the averaged expected stationarity error.
 \begin{lemma}
     \label{lemma: the averaged stationarity error bound} 
@@ -988,8 +972,7 @@ We now take $\eta_{k}\equiv \eta_{T}$ and $\rho_{k}\equiv \rho_{T}$. The first r
 \end{proof}
 
 \subsection{Proof of \Cref{Lemma: convergence rate of storm}}
-\label{app-toc-17}
-\label{Subsubsec: convergence rate STORM}
+\label{app:storm-rate-proof}
 \begin{proof}
     \blue{Insert $\eta_T=\eta/(\tilde L_FT^{1/3})$, $\rho_T=8\rho\eta^2/T^{2/3}$, $b_1\ge c_bT^{1/3}$ and $b_k=b$ into \eqref{Eq: the averaged stationarity error bound in lemma}. Then $\eta_T/(\rho_Tb_1)\le1/(8\rho\eta\tilde L_Fc_b)$ and $2\eta_T\rho_T=16\rho\eta^3/(\tilde L_FT)$. Moreover $N_T\le\bar N\,T^{1/3}$: indeed $S_1,S_2,C_{\bB}$ do not depend on $T$, $4/\eta_T=4\tilde L_FT^{1/3}/\eta$, and $4\eta_TS_3=48\eta_T^{-1}+16\eta_TL_F^2(1+3\tau^2)\le\bigl(\frac{48\tilde L_F}{\eta}+\frac{16\eta L_F^2(1+3\tau^2)}{\tilde L_F}\bigr)T^{1/3}$. Consequently the right-hand side of \eqref{Eq: the averaged stationarity error bound in lemma} is at most
     \[
@@ -999,8 +982,7 @@ We now take $\eta_{k}\equiv \eta_{T}$ and $\rho_{k}\equiv \rho_{T}$. The first r
 \end{proof}
 With this parameter choice, we proceed to analyze the oracle complexity of \Cref{alg:our_algorithm_storm}.
 \subsection{Proof of \Cref{Theorem: the oracle complexity in STORM}}
-\label{app-toc-18}
-\label{Subsubsec: proof theorem STORM}
+\label{app:storm-oracle-proof}
 \begin{proof}
     \blue{By \Cref{Lemma: convergence rate of storm}, $\EE\,\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))\le\bar N\Theta\,T^{-2/3}$, which is at most $\varepsilon^2$ for the $T$ in \eqref{Eq: the iterate number upper bound of algorithm VR}. With $b_1=\calO(T^{1/3})$ and $b_k=b$ for $k\ge2$, the number of stochastic gradient calls is
     \[
@@ -1013,7 +995,7 @@ With this parameter choice, we proceed to analyze the oracle complexity of \Cref
 % \] where \(\rho\) and \(\eta\) are independent of \(T\).
 % Let us \(l = \frac{1}{3}\) and \(q = \frac{2}{3}\),
 % we want \(\frac{1}{T}\sum_{k=1}^T\text{dist}^2(\bm{0}, \partial \calL^k) = \mathcal{O}(T^{-\frac{2}{3}})\)
-% We denoteare constant independent of \(T\) and \(\Delta_1 = \Psi_r(\calQ^1) - \Psi_r^* \) and the definitions of the \(\Psi_r\) and \(\calQ\) are detailed in Appendix \ref{Appendix: the complexity analysis of DualHash-StoRM}.
+% We denoteare constant independent of \(T\) and \(\Delta_1 = \Psi_r(\calQ^1) - \Psi_r^* \) and the definitions of the \(\Psi_r\) and \(\calQ\) are detailed in Appendix \ref{app:storm-complexity}.
 
 % Let us discuss how to select appropriate parameters.  To ensure the parameter setting \eqref{Eq: the parameters conditions in dualhash-storm}, we set the parameters as follows
 % \[

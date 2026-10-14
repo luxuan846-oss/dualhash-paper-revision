@@ -50,48 +50,46 @@ lossy compression under extreme bit-rate constraints.} A fundamental challenge i
 \section*{\textbf{Appendix}}
 \blue{This appendix contains the proofs of the theoretical results in \Cref{Section: Convergence analysis} and additional experimental material. 
 
-\Cref{Appendix: optimality properties} proves the two propositions in \Cref{Sec: first-order optimality conditions} and defines the stationarity measure $\bd^k$ used in the subsequent analysis. 
+\Cref{app:optimality-properties} proves the two propositions in \Cref{Sec: first-order optimality conditions} and defines the stationarity measure $\bd^k$ used in the subsequent analysis. 
 
-\Cref{app-toc-1} collects the bounds and estimates shared by both algorithms. 
+\Cref{app:complexity-auxiliary-results} collects the bounds and estimates shared by both algorithms. 
 
-\Cref{app-toc-8,app-toc-13} contain the complexity analyses of DualHash-StoM and DualHash-StoRM, respectively. 
+\Cref{app:stom-complexity,app:storm-complexity} contain the complexity analyses of DualHash-StoM and DualHash-StoRM, respectively. 
 
-\Cref{app-toc-19,app-toc-22} provide the experimental details and additional experimental results.}
+\Cref{app:experiments} provides the experimental formulation, implementation details, and additional results.}
 
 \begingroup
 \section*{Contents of Appendices}
 \leavevmode\par
 \hypersetup{hidelinks}
 \setlength{\parskip}{0.5em}
-\noindent \hyperref[Appendix: optimality properties]{\textbf{Appendix \ref*{Appendix: optimality properties}}\quad Proofs of Propositions in \Cref{Sec: first-order optimality conditions}} \dotfill \pageref{Appendix: optimality properties}\par
-\noindent \hspace*{2em} \hyperref[app-toc-zerogap]{\textbf{\ref*{app-toc-zerogap}}\quad Proof of \Cref{prop:zerogap}} \dotfill \pageref{app-toc-zerogap}\par
-\noindent \hspace*{2em} \hyperref[Subsec: proof transfer]{\textbf{\ref*{Subsec: proof transfer}}\quad Proof of \Cref{prop:transfer}} \dotfill \pageref{Subsec: proof transfer}\par
-\noindent \hyperref[app-toc-1]{\textbf{Appendix \ref*{app-toc-1}}\quad Auxiliary Results for the Complexity Analysis} \dotfill \pageref{app-toc-1}\par
-\noindent \hspace*{2em} \hyperref[Subsec: bounds for complexity analysis]{\textbf{\ref*{Subsec: bounds for complexity analysis}}\quad Bounds Used in the Complexity Analysis} \dotfill \pageref{Subsec: bounds for complexity analysis}\par
-\noindent \hspace*{2em} \hyperref[Subsec: estimates for common updates]{\textbf{\ref*{Subsec: estimates for common updates}}\quad Estimates for the Common Updates} \dotfill \pageref{Subsec: estimates for common updates}\par
-\noindent \hyperref[app-toc-8]{\textbf{Appendix \ref*{app-toc-8}}\quad Complexity Analysis of DualHash-StoM (\Cref{alg:our_algorithm_sgdm})} \dotfill \pageref{app-toc-8}\par
-\noindent \hspace*{2em} \hyperref[app-toc-9]{\textbf{\ref*{app-toc-9}}\quad Proof of \Cref{Lemma: One-iteration progress of x in SGDM}} \dotfill \pageref{app-toc-9}\par
-\noindent \hspace*{2em} \hyperref[app-toc-10]{\textbf{\ref*{app-toc-10}}\quad Proof of \Cref{Lemma: approximate sufficient descent property in SGDM}} \dotfill \pageref{app-toc-10}\par
-\noindent \hspace*{2em} \hyperref[app-toc-11]{\textbf{\ref*{app-toc-11}}\quad Proof of \Cref{lemma: convergence rate sgdm}} \dotfill \pageref{app-toc-11}\par
-\noindent \hspace*{2em} \hyperref[app-toc-12]{\textbf{\ref*{app-toc-12}}\quad Proof of \Cref{Theorem: the oracle complexity in SGDM}} \dotfill \pageref{app-toc-12}\par
-\noindent \hyperref[app-toc-13]{\textbf{Appendix \ref*{app-toc-13}}\quad Complexity Analysis of DualHash-StoRM (\Cref{alg:our_algorithm_storm})} \dotfill \pageref{app-toc-13}\par
-\noindent \hspace*{2em} \hyperref[app-toc-14]{\textbf{\ref*{app-toc-14}}\quad Proof of \Cref{Lemma: One-iteration progress of x in STORM}} \dotfill \pageref{app-toc-14}\par
-\noindent \hspace*{2em} \hyperref[app-toc-15]{\textbf{\ref*{app-toc-15}}\quad Proof of \Cref{Lemma: approximate sufficient descent property storm}} \dotfill \pageref{app-toc-15}\par
-\noindent \hspace*{2em} \hyperref[app-toc-16]{\textbf{\ref*{app-toc-16}}\quad Proof of the Averaged Stationarity Error Bound for DualHash-StoRM} \dotfill \pageref{app-toc-16}\par
-\noindent \hspace*{2em} \hyperref[app-toc-17]{\textbf{\ref*{app-toc-17}}\quad Proof of \Cref{Lemma: convergence rate of storm}} \dotfill \pageref{app-toc-17}\par
-\noindent \hspace*{2em} \hyperref[app-toc-18]{\textbf{\ref*{app-toc-18}}\quad Proof of \Cref{Theorem: the oracle complexity in STORM}} \dotfill \pageref{app-toc-18}\par
-\noindent \hyperref[app-toc-19]{\textbf{Appendix \ref*{app-toc-19}}\quad Experiment Details} \dotfill \pageref{app-toc-19}\par
-\noindent \hspace*{2em} \hyperref[app-toc-20]{\textbf{\ref*{app-toc-20}}\quad Deep Pairwise Supervised Hashing Formulation} \dotfill \pageref{app-toc-20}\par
-\noindent \hspace*{2em} \hyperref[app-toc-21]{\textbf{\ref*{app-toc-21}}\quad Implementation Details} \dotfill \pageref{app-toc-21}\par
-\noindent \hyperref[app-toc-22]{\textbf{Appendix \ref*{app-toc-22}}\quad Additional Experimental Results} \dotfill \pageref{app-toc-22}\par
-\noindent \hspace*{2em} \hyperref[app-toc-23]{\textbf{\ref*{app-toc-23}}\quad Comparison of Optimization Algorithms with Different W-Type Regularizations} \dotfill \pageref{app-toc-23}\par
+\noindent \hyperref[app:optimality-properties]{\textbf{Appendix \ref*{app:optimality-properties}}\quad Proofs of Propositions in \Cref{Sec: first-order optimality conditions}} \dotfill \pageref{app:optimality-properties}\par
+\noindent \hspace*{2em} \hyperref[app:zero-gap-proof]{\textbf{\ref*{app:zero-gap-proof}}\quad Proof of \Cref{prop:zerogap}} \dotfill \pageref{app:zero-gap-proof}\par
+\noindent \hspace*{2em} \hyperref[app:transfer-proof]{\textbf{\ref*{app:transfer-proof}}\quad Proof of \Cref{prop:transfer}} \dotfill \pageref{app:transfer-proof}\par
+\noindent \hyperref[app:complexity-auxiliary-results]{\textbf{Appendix \ref*{app:complexity-auxiliary-results}}\quad Auxiliary Results for the Complexity Analysis} \dotfill \pageref{app:complexity-auxiliary-results}\par
+\noindent \hspace*{2em} \hyperref[app:complexity-bounds]{\textbf{\ref*{app:complexity-bounds}}\quad Bounds Used in the Complexity Analysis} \dotfill \pageref{app:complexity-bounds}\par
+\noindent \hspace*{2em} \hyperref[app:common-update-estimates]{\textbf{\ref*{app:common-update-estimates}}\quad Estimates for the Common Updates} \dotfill \pageref{app:common-update-estimates}\par
+\noindent \hyperref[app:stom-complexity]{\textbf{Appendix \ref*{app:stom-complexity}}\quad Complexity Analysis of DualHash-StoM (\Cref{alg:our_algorithm_sgdm})} \dotfill \pageref{app:stom-complexity}\par
+\noindent \hspace*{2em} \hyperref[app:stom-primal-progress-proof]{\textbf{\ref*{app:stom-primal-progress-proof}}\quad Proof of \Cref{Lemma: One-iteration progress of x in SGDM}} \dotfill \pageref{app:stom-primal-progress-proof}\par
+\noindent \hspace*{2em} \hyperref[app:stom-descent-proof]{\textbf{\ref*{app:stom-descent-proof}}\quad Proof of \Cref{Lemma: approximate sufficient descent property in SGDM}} \dotfill \pageref{app:stom-descent-proof}\par
+\noindent \hspace*{2em} \hyperref[app:stom-rate-proof]{\textbf{\ref*{app:stom-rate-proof}}\quad Proof of \Cref{lemma: convergence rate sgdm}} \dotfill \pageref{app:stom-rate-proof}\par
+\noindent \hspace*{2em} \hyperref[app:stom-oracle-proof]{\textbf{\ref*{app:stom-oracle-proof}}\quad Proof of \Cref{Theorem: the oracle complexity in SGDM}} \dotfill \pageref{app:stom-oracle-proof}\par
+\noindent \hyperref[app:storm-complexity]{\textbf{Appendix \ref*{app:storm-complexity}}\quad Complexity Analysis of DualHash-StoRM (\Cref{alg:our_algorithm_storm})} \dotfill \pageref{app:storm-complexity}\par
+\noindent \hspace*{2em} \hyperref[app:storm-primal-progress-proof]{\textbf{\ref*{app:storm-primal-progress-proof}}\quad Proof of \Cref{Lemma: One-iteration progress of x in STORM}} \dotfill \pageref{app:storm-primal-progress-proof}\par
+\noindent \hspace*{2em} \hyperref[app:storm-descent-proof]{\textbf{\ref*{app:storm-descent-proof}}\quad Proof of \Cref{Lemma: approximate sufficient descent property storm}} \dotfill \pageref{app:storm-descent-proof}\par
+\noindent \hspace*{2em} \hyperref[app:storm-stationarity-proof]{\textbf{\ref*{app:storm-stationarity-proof}}\quad Proof of the Averaged Stationarity Error Bound for DualHash-StoRM} \dotfill \pageref{app:storm-stationarity-proof}\par
+\noindent \hspace*{2em} \hyperref[app:storm-rate-proof]{\textbf{\ref*{app:storm-rate-proof}}\quad Proof of \Cref{Lemma: convergence rate of storm}} \dotfill \pageref{app:storm-rate-proof}\par
+\noindent \hspace*{2em} \hyperref[app:storm-oracle-proof]{\textbf{\ref*{app:storm-oracle-proof}}\quad Proof of \Cref{Theorem: the oracle complexity in STORM}} \dotfill \pageref{app:storm-oracle-proof}\par
+\noindent \hyperref[app:experiments]{\textbf{Appendix \ref*{app:experiments}}\quad Experimental Details and Additional Results} \dotfill \pageref{app:experiments}\par
+\noindent \hspace*{2em} \hyperref[app:hashing-formulation]{\textbf{\ref*{app:hashing-formulation}}\quad Deep Pairwise Supervised Hashing Formulation} \dotfill \pageref{app:hashing-formulation}\par
+\noindent \hspace*{2em} \hyperref[app:implementation-details]{\textbf{\ref*{app:implementation-details}}\quad Implementation Details} \dotfill \pageref{app:implementation-details}\par
+\noindent \hspace*{2em} \hyperref[app:additional-experiments]{\textbf{\ref*{app:additional-experiments}}\quad Additional Experimental Results} \dotfill \pageref{app:additional-experiments}\par
 \noindent\hrulefill
 \endgroup
 \newpage
 \input{sections/supplementaryB}   % → A, B, C, D
 % Appendix: Experiments  
 % \newpage
-\section*{\textbf{Experimental Appendix}}
-\input{sections/supplementaryA}   % → E, F
+\input{sections/supplementaryA}   % → E
 
 \end{document}

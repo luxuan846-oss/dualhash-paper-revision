@@ -31,7 +31,7 @@ In the remainder of this paper, we impose the following assumptions.
 \begin{remark}
 \label{Remark: main assumptions}
 \begin{enumerate}[label=(\roman*), leftmargin=2em]
-\item The smoothness constant $L_F$ is bounded by a constant independent of the sample size $n$. A rigorous analysis is in Appendix~\ref{Appendix: discussion on assumptions}.
+\item The smoothness constant $L_F$ is bounded by a constant independent of the sample size $n$. A rigorous analysis is in Appendix~\ref{app:smoothness-discussion}.
 \item \blue{By \Cref{Ass: main assumptions}(i) and $f_i(\bx)=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^{2}$, for all $(\bx,\bB)$,
 \begin{equation}
 \label{Eq: quadratic growth of F}
@@ -40,8 +40,7 @@ F(\bx,\bB)-\underline{\ell}\ge\frac{\mu}{2}\|\bx\|^{2}+\frac{\gamma}{2n}\|\bB-\m
 Since $\mathcal{D}$ is continuous, $F$ is coercive; adding $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ shows that $J$ is also bounded below and coercive. Since $J$ is continuous, Problem~\eqref{Prop: block-wise regularized problem} admits an optimal solution.}
 \end{enumerate}
 \end{remark}
-We limit the maximum number of iterations to a fixed integer,
-denoted by $T$ with a little abuse of notation. \blue{Under the mini-batch sampling scheme
+\blue{Let $T$ denote the maximum number of iterations.} \blue{Under the mini-batch sampling scheme
 introduced in Section~\ref{Sec: Algorithm implementations}, let $(\Omega,\mathcal F,\mathbb P)$
 be the underlying probability space. For $k\geq1$, define
 $\mathcal F_k:=\sigma(\mathcal J_1,\ldots,\mathcal J_{k-1})$ with $\mathcal F_1$ trivial, as
@@ -52,7 +51,7 @@ inequalities involving $\mathbb E_k[\cdot]$ are understood to hold almost surely
 explicitly indicate ``a.s.'' whenever such conditional relations are stated.}
 
 The presence of dual variables $\bLmbd$ \blue{makes it difficult to establish a descent property for the Lagrangian $\calL$ in \eqref{Eq: simplified_lagrangian}: the dual update can increase $\calL$, so $\calL$ need not decrease along the iterates, which precludes} the direct use of standard methods \cite{xu2023momentum,zhang2022stochastic}.
-To this end, we construct suitable Lyapunov functions (see \eqref{Eq: the Lyapunov function in SGDM} and \eqref{Eq: the Lyapunov function in STORM}) to obtain the approximate descent property.  We first analyze the dual dynamics by establishing bounds on $\|\bLmbd^{k+1}-\bLmbd^k\|^2$ in terms of the primal residuals, enabling the Lyapunov construction.
+To this end, we construct suitable Lyapunov functions (see \eqref{Eq: the Lyapunov function in SGDM} and \eqref{Eq: the Lyapunov function in STORM}) to obtain the approximate descent property.  We first analyze the dual dynamics by establishing bounds on $\|\bLmbd^{k+1}-\bLmbd^k\|^2$ in terms of the primal residuals, enabling the Lyapunov construction. \blue{The proof is provided in \Cref{app:dual-difference-proof}}.
 \begin{lemma}[Dual increment bound]
 \label{Lemma: dual boundedness}
 Under \Cref{Ass: main assumptions}, for any $k \geq 1$, it holds that
@@ -62,12 +61,11 @@ Under \Cref{Ass: main assumptions}, for any $k \geq 1$, it holds that
          \label{Eq: dual boundedness}
 \end{align}
 \end{lemma}
-\blue{The proof is provided in \Cref{Subsec: proof dual boundedness}}.
 
 Next, we analyze how the Lagrangian function \eqref{Eq: simplified_lagrangian} changes
 during the updates of primal and dual variables in one iteration. The total change can be decomposed as:
 \begin{align}
-    \label{Eq: One-iteration progress decomposition} & \calL(\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL(\bx^{k}, \bB^{k}, \bLmbd^{k}) \notag                                                                                                                                                                                             \\
+    \label{Eq: One-iteration progress decomposition} & \calL(\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL(\bx^{k}, \bB^{k}, \bLmbd^{k}) \notag                                                                                                                                                                                       \\
     =                                                & \,\underbrace{\calL(\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL(\bx^{k+1}, \bB^k, \bLmbd^k)}_{\text{one-iteration progress on $\bB$ and $\bLmbd$}}+ \underbrace{\calL(\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL(\bx^{k}, \bB^k, \bLmbd^k)}_{\text{one-iteration progress on $\bx$}}.
 \end{align}
 Since the updates of $\bB$ and $\bLmbd$ are common to Algorithms~\ref{alg:our_algorithm_sgdm} and~\ref{alg:our_algorithm_storm}, the following lemma bounds their one-step change.  For notational simplicity, we define
@@ -85,14 +83,13 @@ Since the updates of $\bB$ and $\bLmbd$ are common to Algorithms~\ref{alg:our_al
 &\calL(\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL(\bx^{k+1}, \bB^{k}, \bLmbd^{k}) \notag \\
 \le& K_1 \Delta_{\bB}^{k+2} - K_2 \Delta_{\bB}^{k+1} + K_3 \Delta_{\bB}^{k} 
 + K_4 \Delta_{\bx}^{k+2} + K_3 \Delta_{\bx}^{k+1}, 
-\end{align} where \(K_1 = 3\delta\tau^{-1}\), \(K_2 = 2\tau^{-1} - L_F - 3\delta\tau(\tau^{-1} + L_F)^2\), \(K_3 = \frac{\tau L_{F}^{2}}{\delta}\), and \(K_4 = 3\delta\tau L_F^2\).
+\end{align} where \blue{$\delta=1/6$,} \(K_1 = 3\delta\tau^{-1}\), \(K_2 = 2\tau^{-1} - L_F - 3\delta\tau(\tau^{-1} + L_F)^2\), \(K_3 = \frac{\tau L_{F}^{2}}{\delta}\), and \(K_4 = 3\delta\tau L_F^2\).
 \end{lemma}
-\blue{The proof is provided in \Cref{Subsec: proof lemma 5.4}.}
+\blue{The proof is provided in \Cref{app:primal-dual-progress-proof}.}
 
 We now analyze the stochastic $\bx$-updates, which introduces algorithm-specific challenges:
-as \eqref{Eq: dual boundedness} and \eqref{Eq: the inner product in the recursive relation of L on B and Lambda} show,
-randomness in the $\bx$-updates propagates to the $\bB$- and $\bLmbd$-updates, necessitating careful parameter tuning and the construction of Lyapunov functions. We present the key lemmas and complexity results of both algorithms below\footnote{Detailed proofs of all lemmas and theorems, along with complete parameter derivations,
-are given in Appendices~\ref{Appendix: the complexity analysis of DualHash-StoM} and~\ref{Appendix: the complexity analysis of DualHash-StoRM}.}
+as \eqref{Eq: dual boundedness} and \blue{\eqref{item: B and Lambda}} show, randomness in the $\bx$-updates propagates to the $\bB$- and $\bLmbd$-updates, necessitating careful parameter tuning and the construction of Lyapunov functions. We present the key lemmas and complexity results of both algorithms below. Detailed proofs of all lemmas and theorems, along with complete parameter derivations,
+are given in Appendices~\ref{app:stom-complexity} and~\ref{app:storm-complexity}.
 \subsection{Oracle Complexity of DualHash-StoM}
 \label{Section: complexity of StoM}
 Let us denote the gradient error in the $k$-th iteration as
@@ -103,10 +100,10 @@ Let us denote the gradient error in the $k$-th iteration as
     \label{eq: the gradient error in SGDM}
     \mathbb{E}\!\left[\|\be^k\|^2\right]
     \leq \frac{\sigma^2}{b_k}.
-\end{align}}The one-iteration progress on $\bx$ is estimated as follows, with the proof provided in \Cref{Subsubsec: proof x progress SGDM}.
+\end{align}}The one-iteration progress on $\bx$ is estimated as follows, with the proof provided in \Cref{app:stom-primal-progress-proof}.
 \begin{lemma}[One-iteration progress on $\bx$]
     \label{Lemma: One-iteration progress of x in SGDM}
-    Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_sgdm}. Under \Cref{Ass: main assumptions}(ii) and the parameters in \eqref{Eq: the parameters conditions of dualhash-sgdm}, for any $k \geq 1$, it holds that
+    Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_sgdm}. Under \Cref{Ass: main assumptions}(ii), \blue{with $\eta_k>0$ and $\alpha_k,\beta_k\in[0,1)$,} for any $k \geq 1$, it holds that
     \begin{align}
         \label{Eq: One-iteration progress of x in SGDM}
         \calL (\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k})
@@ -114,7 +111,17 @@ Let us denote the gradient error in the $k$-th iteration as
     \end{align}
     where \(K_5 = \frac{1 - \alpha_{k}}{\eta_{k}}- 2L_F\) and \(K_6 = \frac{\alpha_{k}}{\eta_{k}}+ 2L_F\beta_k^2\).
 \end{lemma}
-To handle the \blue{oscillations of the Lagrangian function $\calL$ in} \eqref{Eq: simplified_lagrangian}, we introduce the following Lyapunov function and sequence for \Cref{alg:our_algorithm_sgdm}. \blue{A rate then follows from two properties of $\Psi_m$: an in-expectation approximate sufficient descent property (\Cref{Lemma: approximate sufficient descent property in SGDM}) and a lower bound independent of $T$ (\Cref{prop:lyapunov-lower-bound}).} The Lyapunov function is defined as:
+
+\blue{To handle the oscillations of the Lagrangian function in \eqref{Eq: simplified_lagrangian}, we construct a Lyapunov function for \Cref{alg:our_algorithm_sgdm}. We choose constant algorithm parameters as follows:
+\begin{align}
+    \label{Eq: the parameters conditions of dualhash-sgdm in suppl}\eta_{k}= \frac{\eta}{L_{F}},\quad \alpha_{k}= \alpha, \quad \beta_{k}= \beta,\quad 0<\tau<\frac{\sqrt{30}-2}{13L_F},
+\end{align} 
+where $\bar{L}_F:=2L_F+K_3+K_4$, 
+$\eta =\frac{(1 - 2\alpha - \nu)/2}{\frac{\bar{L}_{F}}{L_{F}} +
+\frac{(1 + \nu)\beta^{2}}{(1 - \alpha)\alpha}}$,
+$0<\nu<1$, $0<\alpha<(1-\nu)/2$, and $0<\beta<1$.
+These parameters are independent of $T$.}
+\blue{With these constant parameters, we define the Lyapunov function and its associated sequence as follows:}
 \begin{align}
     \Psi_m(\mathcal{Q}^{k}) &= \mathcal{L}(\bx^{k}, \bm{B}^{k}, \bLmbd^{k}) 
         - C_{1}\Delta_{\bB}^{k+1} + C_{2}\Delta_{\bB}^{k} 
@@ -124,33 +131,19 @@ To handle the \blue{oscillations of the Lagrangian function $\calL$ in} \eqref{E
         \bB^{k+1}, \bB^{k-1}, \bx^{k+1}, \bx^{k-1}\}, 
         \quad \{\mathcal{Q}^{k}\}_{k \in \mathbb{N}}, \notag
         % \label{Eq: the Lyapunov sequence in SGDM}
-\end{align}where the positive coefficients $C_1, C_2, C_3, C_4$ \blue{(independent of $k$, since $\alpha_k\equiv\alpha$, $\beta_k\equiv\beta$, and $\tau$ is a constant; see \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} below)} are chosen as:
+\end{align}\blue{where the positive coefficients $C_1,C_2,C_3,C_4$ are independent of $k$ under \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and are chosen as follows:}
 \begin{align}
     \label{Eq: the coefficients of the Lyapunov function in SGDM}
     \begin{cases}
         C_{1} &= K_{1},\\
         C_{2} &= \frac{1}{2}(K_{2} - K_{1} + K_{3}),\\
         C_{3} &= K_{4},\\
-        C_{4} &= \frac{\bar{L}_F + \frac{2L_F \beta^2}{\alpha}}{1 - 2\alpha - \nu}, 
-            \quad \text{where } \bar{L}_{F} = 2L_{F} + K_{3} + K_{4}.
+        C_{4} &= \frac{\bar{L}_F + \frac{2L_F \beta^2}{\alpha}}{1 - 2\alpha - \nu}.
     \end{cases}
 \end{align}
-We also assume the parameters $\{\eta_{k}\}$, $\{\alpha_{k}, \beta_{k}\}$, $\tau$
-in \Cref{alg:our_algorithm_sgdm} are set as follows:
-\begin{align}
-    \label{Eq: the parameters conditions of dualhash-sgdm in suppl}\eta_{k}= \frac{\eta}{L_{F}},\quad \alpha_{k}= \alpha, \quad \beta_{k}= \beta,\quad \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_{F}},
-\end{align}
-where
-$\eta =\frac{(1 - 2\alpha - \nu)/2}{\frac{\bar{L}_{F}}{L_{F}} +
-\frac{(1 + \nu)\beta^{2}}{(1 - \alpha)\alpha}}$, $\alpha \in ( 0, \frac{1 - \nu}{2}
-)$, $\beta \in (0,1)$, $\tilde{\delta}= c_{\delta}\delta^{2}$ are given constants
-independent of $T$ with some $\nu$, $\delta$, $c_{\delta}> 0$.
+
 The construction yields the following in-expectation approximate sufficient
-descent property of \blue{$\{\Psi_m(\mathcal{Q}^{k})\}$}. The proof is provided in
-\Cref{Subsubsec: proof descent SGDM}, and the positivity of the coefficients in
-\eqref{Eq: the coefficients of the Lyapunov function in SGDM} and the descent
-constants in \eqref{Eq: the descent coefficients of potential function in SGDM}
-\blue{are} established in \Cref{lem:lyapunov-coef-positivity}.
+descent property of \blue{$\{\Psi_m(\mathcal{Q}^{k})\}$}.
 \begin{lemma}
     \label{Lemma: approximate sufficient descent property in SGDM} Under \Cref{Ass: main assumptions} and the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, for any $k \geq 1$, it holds that
     \begin{align}
@@ -161,14 +154,22 @@ constants in \eqref{Eq: the descent coefficients of potential function in SGDM}
         \label{Eq: the descent coefficients of potential function in SGDM}\begin{cases}C_{\bB}&= C_{2}- K_{3}= \frac{K_2 - K_3 -K_1}{2}>0, \\ C_{\bx}&= \nu C_{4}>0.\end{cases}
     \end{align}
 \end{lemma}
+The proof is provided in
+\Cref{app:stom-descent-proof}, and the positivity of the coefficients in
+\eqref{Eq: the coefficients of the Lyapunov function in SGDM} and the descent
+constants in \eqref{Eq: the descent coefficients of potential function in SGDM}
+\blue{are} established in \Cref{lem:lyapunov-coef-positivity}.
 
-\blue{From \Cref{Lemma: approximate sufficient descent property in SGDM}, summing \eqref{Eq: the descent property of Lyapunov func in SGDM} over $k=1,\ldots,T$ bounds the accumulated residuals by $\Psi_m(\calQ^{1})-\EE[\Psi_m(\calQ^{T+1})]$, so a rate follows once $\{\EE[\Psi_m(\calQ^{k})]\}$ is bounded below. 
-However, this lower bound follows neither from that of $J$, since the Fenchel--Young inequality $\langle\bB,\bLmbd\rangle-h^*(\bLmbd)\le h(\bB)$ gives only $\calL\le J$, nor from the coercivity of $F$ alone. We therefore establish this lower bound explicitly in \Cref{prop:lyapunov-lower-bound}(i).}
+\blue{Before deriving the convergence rate, we establish a lower bound for the Lyapunov sequence. Under the conditions of \Cref{prop:lyapunov-lower-bound}(i), there exists $\Psi_m^*>-\infty$, independent of $T$, such that
+\[
+\EE[\Psi_m(\calQ^k)]\ge\Psi_m^*,\qquad k\ge1.
+\]
+The proof is given in \Cref{app:lyapunov-lower-bounds}. For a deterministic initial point, define $\Delta_1:=\calL(\bx^1,\bB^1,\bLmbd^1)-\Psi_m^*$ as an upper bound on the initial potential gap.}
 
-We now present the convergence rate of \Cref{alg:our_algorithm_sgdm} under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, which guides the selection of the batch size $b_k$.
+We now present the convergence rate of \Cref{alg:our_algorithm_sgdm} under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, which guides the selection of the batch size $b_k$. 
 \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_sgdm}]
 \label{lemma: convergence rate sgdm} Under the conditions of \Cref{Lemma:
-    approximate sufficient descent property in SGDM} and \eqref{eq:P1}--\eqref{eq:P2}, for any $T \geq 1$, there exists
+    approximate sufficient descent property in SGDM} and \blue{\Cref{prop:lyapunov-lower-bound}(i)}, for any $T \geq 1$, there exists
     \blue{$R$ uniformly selected from $\{1,\ldots,T\}$} such that $(\bx^{R}, \bB
     ^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
     \begin{align}
@@ -176,22 +177,18 @@ We now present the convergence rate of \Cref{alg:our_algorithm_sgdm} under the p
     \end{align}where \blue{$L_{\Delta} := \frac{\max\{S_{1}, S_{2}\} + 
     \max\{S_{3}, S_{4}\}}{\min\{C_{\bB}, C_{\bx}\}}$ with $S_1, S_2, S_3, S_4$ defined in 
     \eqref{Eq: the coefficients of stationarity error bound in SGDM}}, 
-    $C_{\sigma} := \frac{L_{\Delta}}{L_{F}} + 3$, and $\Delta_{1} := \Psi_m^1 - \Psi_m^{*}$ denotes the initial objective gap with $\Psi_m^{1}= \Psi_m(\calQ^{1})$ and the lower bound $\Psi_m^{*}$. Here $L_{\Delta}$ and  $C_{\sigma}$ are constants independent of $T$.
+    \blue{and $C_{\sigma} := \frac{L_{\Delta}}{L_{F}} + 3$.} Here $L_{\Delta}$ and  $C_{\sigma}$ are constants independent of $T$.
 \end{lemma}
-From \eqref{Eq: the convergence rate of sgdm}, to achieve the $\mathcal{O}(T^{-1/2})$ 
-convergence rate, we need to set $b_k = \Theta(T)$. Therefore, combining 
-\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} with $b_k = b = c_b T$, the complete parameter setting in \Cref{alg:our_algorithm_sgdm} is 
+\blue{With the constant parameters in \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, we choose the batch size according to \eqref{Eq: the convergence rate of sgdm} as
 \begin{align}
 \label{Eq: the parameters conditions of dualhash-sgdm}
-    \eta_k = \frac{\eta}{L_F}, \quad \alpha_k = \alpha, \quad \beta_k = \beta, \quad 
-    \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_F}, \quad b_k = b = c_b T,
+    b_k=b=c_bT,
 \end{align}
-where $\eta$, $\alpha$, $\beta$, $\tau$, $\tilde{\delta}$, $c_b$ are given constants 
-independent of $T$, and $\nu$, $\delta$, $c_{\delta} > 0$ are positive constants. The complexity result is established in \Cref{Theorem: the oracle complexity in SGDM}, with the proof in  \Cref{Subsec: proof theorem SGDM}.
+where $c_b>0$ is a constant independent of $T$.} The complexity result is established in \Cref{Theorem: the oracle complexity in SGDM}, with the proof in  \Cref{app:stom-oracle-proof}.
 \begin{theorem}
 % [Oracle complexity of \Cref{alg:our_algorithm_sgdm}]
     \label{Theorem: the oracle complexity in SGDM} 
-Under \Cref{Ass: main assumptions} and \eqref{eq:P1}--\eqref{eq:P2}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \eqref{Eq: the parameters conditions of dualhash-sgdm}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} provided that \(T\) satisfies
+Under \Cref{Ass: main assumptions} and \blue{the conditions of \Cref{prop:lyapunov-lower-bound}(i)}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \blue{\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} provided that \(T\) satisfies
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm SGDM}
         T = \left\lceil \frac{L_{\Delta} \Delta_1+ C_{\sigma}\frac{\sigma^2}{c_b}}{\varepsilon^2} \right\rceil.
@@ -215,9 +212,9 @@ assumption, widely used in variance reduction methods \cite{arjevani2023lower,dr
 
 Let us denote the gradient error \[\be^{k} = \blue{\bg_s^{k}} - \nabla_{\bx}F(\bx^{k}, \bB^{k})
 ,\]where $\blue{\bg_s^k}$ is defined in \eqref{Eq: the stochastic approximate in STORM}. Similarly, the following lemma estimates the one-iteration progress
-of the Lagrangian function \eqref{Eq: simplified_lagrangian} via the $\bx$-update \eqref{Eq: the update of x in STORM}. \blue{Its proof follows from \cite[Lemma~2.1]{xu2023momentum} and is given in \Cref{Subsec: proof x progress STORM}.}
+of the Lagrangian function \eqref{Eq: simplified_lagrangian} via the $\bx$-update \eqref{Eq: the update of x in STORM}. \blue{Its proof follows from \cite[Lemma~2.1]{xu2023momentum} and is given in \Cref{app:storm-primal-progress-proof}.}
 \begin{lemma}[One-iteration progress on $\bx$ \cite{xu2023momentum}]
-    \label{Lemma: One-iteration progress of x in STORM} Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_storm}. Under \Cref{Ass: main assumptions}(i)-(ii), for any $k \geq 1$, it holds that
+    \label{Lemma: One-iteration progress of x in STORM} Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_storm}. Under \Cref{Ass: main assumptions}(i)\blue{--}(ii), for any $k \geq 1$, it holds that
     \begin{align}
         \label{Eq: the recursive relation of L on x}\calL (\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k}) \leq \frac{\eta_{k}}{2}\| \be^{k}\|^{2}- (\eta_{k}^{-1}- L_{F})\Delta_{\bx}^{k+1}.
     \end{align}
@@ -235,10 +232,10 @@ We introduce the following Lyapunov function of \Cref{alg:our_algorithm_storm}:
 \end{align}where $C_1, C_2, C_3$, independent of $k$, are chosen as in 
 \eqref{Eq: the coefficients of the Lyapunov function in SGDM}.
 In the next lemma, we establish an approximate sufficient descent property 
-of $\Psi_r$, with the proof provided in \Cref{Subsubsec: proof descent STORM}.
+of $\Psi_r$, with the proof provided in \Cref{app:storm-descent-proof}.
 \begin{lemma}
 \label{Lemma: approximate sufficient descent property storm}
-    Under \Cref{Ass: main assumptions}(i)-(ii) and \Cref{Ass: the mean squared smoothness of F}, with $\tau$ satisfying \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, for any $k \geq 1$, it holds that
+    Under \Cref{Ass: main assumptions}(i)\blue{--}(ii) and \Cref{Ass: the mean squared smoothness of F}, with $\tau$ satisfying \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, for any $k \geq 1$, it holds that
     \begin{align}
         \label{Eq: the descent property of Lyapunov func in storm}\Psi_r(\mathcal{Q}^{k+1}) - \Psi_r(\mathcal{Q}^{k}) \leq -C_{\bB}\left( \Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}\right)- C_{\bx}^{k}\Delta_{\bm{x}}^{k+1}+ \frac{\eta_{k}}{2}\| \be^{k}\|^{2},
     \end{align}
@@ -269,7 +266,7 @@ independent of $T$, and $\tilde{\delta}= c_{\delta}\delta^{2}$ with $\delta, c_{
 \rho\ \ge\ \max\Bigl\{1,\ \frac{2L_F^{2}(1+G)}{b\tilde{L}_F^{2}}\Bigr\},\qquad
 0<\eta\ \le\ \min\Bigl\{\frac12,\ \frac{1}{4\sqrt{\rho}}\Bigr\},\qquad G:=1753L_{\mathcal{D}}^{2},
 \end{equation}
-where $L_{\mathcal{D}}$ is the Lipschitz constant of $\mathcal{D}$ from Appendix~\ref{Appendix: discussion on assumptions}, and the initialization of \Cref{alg:our_algorithm_storm} is the block-stationary one described in \Cref{Sec: Algorithm implementations}.}
+where $L_{\mathcal{D}}$ is the Lipschitz constant of $\mathcal{D}$ from Appendix~\ref{app:smoothness-discussion}, and the initialization of \Cref{alg:our_algorithm_storm} is the block-stationary one described in \Cref{Sec: Algorithm implementations}.}
 \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_storm}]
     \label{Lemma: convergence rate of storm} Under \Cref{Ass: main assumptions}(i)--(iii), \Cref{Ass: the mean squared smoothness of F}, the parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}, and \eqref{eq:P1s}--\eqref{eq:P2s}, for any $T \geq 1$, there exists \blue{$R$ uniformly selected from $\{1,\ldots,T\}$} such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
     \begin{align}
@@ -291,7 +288,7 @@ with $\bar{N}$ and $\Theta$ from \Cref{Lemma: convergence rate of storm}. Moreov
 \begin{remark}
 \begin{enumerate}[label=(\roman*), leftmargin=2em]
 \item The results in Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM} are novel for stochastic, non-convex, multi-block primal-dual optimization, a challenging area where existing work has largely focused on one-block \cite{xu2023momentum,shi2025momentum} or deterministic settings \cite{ADMMNolinear2024}.  
-    \item  \Cref{alg:our_algorithm_sgdm} with constant parameters from \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. This matches the best-known lower bound \cite{arjevani2023lower} and the complexity of variance-reduced SFOMs for single-block problems \cite{shi2025momentum,xu2023momentum}. Notably, despite tackling a multi-block problem, our primal-dual framework preserves this efficiency without degrading the dependence on $\varepsilon$.
+    \item  \Cref{alg:our_algorithm_sgdm} \blue{with constant parameters from \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and batch size from} \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. This matches the best-known lower bound \cite{arjevani2023lower} and the complexity of variance-reduced SFOMs for single-block problems \cite{shi2025momentum,xu2023momentum}. Notably, despite tackling a multi-block problem, our primal-dual framework preserves this efficiency without degrading the dependence on $\varepsilon$.
 %    \item  While DualHash-StoRM with parameters in \eqref{Eq: the parameters conditions in dualhash-storm} achieves better theoretical complexity than DualHash-StoM under \eqref{Eq: the parameters conditions of dualhash-sgdm}, the latter relies on a weaker assumption (\Cref{Ass: main assumptions} [ii]). In our experiments, while DualHash-StoRM enjoys faster training convergence, DualHash-StoM enerally delivers better final retrieval performance.
 \end{enumerate}
 \end{remark}

@@ -1,30 +1,9 @@
-% % !TEX root = main.tex
-% \documentclass[journal]{IEEEtran}
-% \input{tip_shared}
-% \allowdisplaybreaks[2]
-
-% % 跨文档引用配置
-% \usepackage{xr-hyper}  % 推荐使用 xr-hyper（支持hyperref）
-% \usepackage{hyperref}  % 如果需要超链接支持
-
-% \externaldocument{main}  
-
-This supplementary material provides detailed experimental settings and additional results.
-
-% In \Cref{Appendix: optimality properties}, we discuss the optimality properties used in the analysis.
-
-% In \Cref{Appendix: main proofs}, we discuss the main assumptions.
-
-% In \Cref{Appendix: Experiment details}, we provide the experimental details and additional experiments.
-
-\section{Experiment Details}
-\label{app-toc-19}
-\label{Appendix: Experiment details} 
+\section{\blue{Experimental Details and Additional Results}}
+\label{app:experiments} 
 \subsection{Deep Pairwise Supervised Hashing Formulation}
-\label{app-toc-20}
-\label{Appendix: hashing formulation}
+\label{app:hashing-formulation}
 
-We consider deep supervised pairwise hashing in our experiments, which aims to learn binary codes that minimize Hamming distances for similar pairs and maximize them for dissimilar pairs. Let $\bA = \{\ba_i \in \RR^{d_a} : i = 1, \ldots, n\}$ be the training set with labels $\calY = \{\by_i \in \{0,1\}^C\}$ (one-hot for single-label, multi-hot for multi-label). Key notations are in \Cref{Table:notations_for_deep_hashing}.
+We consider deep supervised pairwise hashing in our experiments, which aims to learn binary codes that minimize Hamming distances for similar pairs and maximize them for dissimilar pairs. \blue{Let $\bA = \{\ba_i \in \RR^{d_a} : i = 1, \ldots, n\}$ be the training set with label vectors $\by_i \in \{0,1\}^C$, where $d_a$ is the input dimension and $C$ is the number of classes. The label vectors are one-hot for single-label datasets and multi-hot for multi-label datasets.}
 
 
 \paragraph{Network Architecture}  
@@ -74,55 +53,7 @@ For an unseen query $\blue{\ba^{\mathrm{qry}}} \notin \bA$, its binary code is p
 \]
 
 \subsection{Implementation Details}
-\label{app-toc-21}
-\label{Appendix: Details of experiment implementation}
-\begin{table}[thbp]
-    \centering
-    \caption{Summary of symbols and notations.}
-    \label{Table:notations_for_deep_hashing}
-    \small
-    \begin{tabular}{ll}
-        \toprule 
-        \textbf{Symbol} & \textbf{Description} \\
-        \midrule 
-        $\ba_{i}$, $\by_{i}$ & Input feature and label vector for \\
-                             & $i$-th sample \\
-        $s_{ij}^{o}$, $s_{ij}^{h}$ & Similarity in input space and \\
-                                   & Hamming space \\
-        $d_{ij}^{o}$, $d_{ij}^{h}$ & Distance in input space and \\
-                                   & Hamming space \\
-        $\operatorname{sgn}(\bD_i(\bx))\in \{-1, 1\}^{d}$ & Binary hash code for $i$-th sample \\
-        \blue{$\bb_{i}\in \RR^{d}$} & \blue{Continuous auxiliary variable ($i$-th row of $\bB$)} \\
-        $\blue{\bD_{i}(\bx)}$ & Continuous code after activation \\
-        $n$, $d$ & Number of samples and hash \\
-                 & code length \\
-        $\bx$ & Network parameters \\
-        $d_{\ba}$, $\blue{q}$ & Dimension of input feature and \\
-                           & parameters \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-\paragraph{Baseline methods}
-We compare our method with eight baseline approaches, including one traditional discrete hashing method and seven deep supervised hashing methods:
-\begin{enumerate}[label=(\roman{*}),leftmargin=2em]
-    \item \textbf{SDH}~\cite{shenSupervisedDiscreteHashing2015}: A pointwise supervised hashing method using hand-crafted features. It employs discrete cyclic coordinate descent to directly optimize binary codes.
-    
-    \item \textbf{DHN}~\cite{zhuDeepHashingNetwork2016}: A Bayesian framework that minimizes pairwise cross-entropy loss and quantization error using $\tanh$ relaxation and $\sum_i\log(\cosh(|z_i|-1))$ regularization.
-    
-    \item \textbf{DSH}~\cite{liuDeepSupervisedHashing}: Uses max-min pairwise loss with $\||\bz|-\bm{1}\|_1$ regularization to minimize quantization error.
-    
-    \item \textbf{DTSH}~\cite{wang2016DTSH}: Learns hash codes by maximizing triplet likelihood with negative log-triplet loss, using  $\||\bz|-\bm{1}\|^2_2$  quantization regularization and a positive margin $\alpha$ to accelerate training and normalize Hamming distance gaps.
-    
-    \item \textbf{HashNet}~\cite{Cao2017HashNetDL}: Progressively increases $\beta$ in $\tanh(\beta x)$ to approximate the $\text{sgn}$ function, addressing nonconvex optimization challenges.
-    
-    \item \textbf{DSDH}~\cite{li2017deep}: Integrates pairwise labels and classification information using alternating minimization to learn features and binary codes with the $\text{sgn}$ function.
-    
-    \item \textbf{OrthoHash}~\cite{hoeOneLossAll2021}: Uses a single cosine similarity loss to maximize alignment between continuous codes and binary orthogonal codes, ensuring discriminativeness with minimal quantization error.
-    
-    \item \textbf{MDSHC}~\cite{wang2023deep}: A two-stage method that first generates hash centers with minimal Hamming distance constraints, then uses three-part losses with $\||\bz|-\bm{1}\|_1$ regularization to reduce quantization error.
-\end{enumerate}
-
-
+\label{app:implementation-details}
 \paragraph{Evaluation Protocols}
 Following \cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
 
@@ -143,10 +74,8 @@ Following \cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
         of different algorithms.
 \end{enumerate}
 
-\section{Additional Experimental Results}
-\label{app-toc-22}
-\subsection{Comparison of Optimization Algorithms with Different W-Type Regularizations}
-\label{app-toc-23}
+\subsection{\blue{Additional Experimental Results}}
+\label{app:additional-experiments}
 To validate the effectiveness of our primal-dual framework, we compare DualHash-StoM
 against optimization algorithms with different W-type regularizations. \Cref{tab:4_algorithms_for_hash_regularization_and_update}
 summarizes the configurations of different regularization functions and their corresponding optimization approaches. For StoMHash-WCR, we employ the regularization $\lambda \| \bz^{2}- \mathbf{1}\|_1$

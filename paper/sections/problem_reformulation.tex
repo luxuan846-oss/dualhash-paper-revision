@@ -42,7 +42,7 @@ shape, which we formalize in \Cref{Section: W-regularizer}.}
 \label{Section: W-regularizer}
 \begingroup
 \color{blue}
-We now define the W-type class and list representative examples, summarized in \Cref{tab:wtype} in this section.
+We now define the W-type class.
 \begin{definition}[W-type regularizer]\label{def:wtype}
 Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in\mathbb{R}^{n\times d}\), define \(h(\bz):=\sum_{j=1}^{d}\phi(z_j)\) and \(h(\bZ):=\sum_{i=1}^{n}\sum_{j=1}^{d}\phi(z_{ij})\). We call \(h\) a \emph{W-type regularizer} if \(\phi\) satisfies:
 \begin{enumerate}[label=\textup{(W\arabic*)}]
@@ -52,9 +52,34 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in
 \end{enumerate}
 \end{definition}
 
-Each condition is used once: \ref{W1} makes the zero set of \(h\) exactly \(\{-1,1\}^{n\times d}\); \ref{W2} yields the envelope formula of Lemma~\ref{lem:wtype-conj}, so that the dual reformulation leaves \(h\) unchanged on \(|t|\ge1\); and \ref{W3} excludes stationary points in \((-1,1)\) (Lemma~\ref{lem:no-inner-stationary}), which gives the stationarity-to-contact implication of Proposition~\ref{prop:transfer}.
+% Each condition is used once: \ref{W1} makes the zero set of \(h\) exactly \(\{-1,1\}^{n\times d}\); \ref{W2} yields the envelope formula of Lemma~\ref{lem:wtype-conj}, so that the dual reformulation leaves \(h\) unchanged on \(|t|\ge1\); and \ref{W3} excludes stationary points in \((-1,1)\) (Lemma~\ref{lem:no-inner-stationary}), which gives the stationarity-to-contact implication of Proposition~\ref{prop:transfer}.
 
-\begin{table}[t]
+
+% Every row of Table~\ref{tab:wtype} is nondifferentiable at \(0\), where \(\partial\phi(0)=\{\pm c\}\) for some \(c>0\), and the row \(p=1\) is also nondifferentiable at the binary codes \(\pm1\); hence none of these penalties is \(L\)-smooth or weakly convex, and standard complexity guarantees for gradient methods do not apply. Tail growth determines \(\operatorname{dom}\phi^*\): the complexity analysis in Section~\ref{Section: Convergence analysis} covers the rows with \(\operatorname{dom}\phi^*=[-\lambda,\lambda]\), while Proposition~\ref{prop:transfer} also covers \(p=2\).
+% \begin{remark}[Role of \ref{W2} and \ref{W3}]\label{rem:wtype-scope}
+% Neither condition can be dropped from our analysis. Without \ref{W3}, take
+% \(\phi(t)=|t^2-1|\), which satisfies \ref{W1}--\ref{W2} but has \(\partial\phi(0)=\{0\}\):
+% with \(n=d=1\), no \(\bx\)-block and \(F(b)=\tfrac12 b^2\), the point \(b=0\) is stationary
+% for Problem~\eqref{Prop: block-wise regularized problem}, since \(J(b)=1-\tfrac12 b^2\)
+% near \(b=0\), yet \(|b|<1\); hence the conclusion of Proposition~\ref{prop:transfer} fails.
+% Without \ref{W2}, take \(\phi(t)=\lambda\log\bigl(1+\bigl||t|-1\bigr|\bigr)\), which
+% satisfies \ref{W1} and \ref{W3} but grows sublinearly; then
+% \(\operatorname{dom}\phi^*=\{0\}\) and \(h^{**}\equiv0\), so the dual reformulation removes
+% the regularizer. Neither condition is needed to define the W shape itself; both are needed for our analysis.
+% \end{remark}
+\begin{lemma}[Conjugate and convex envelope]\label{lem:wtype-conj}
+Let \(h\) be a W-type regularizer. Then \(\phi^*\) is proper, lower semicontinuous, convex, and even, \(\phi^*(y)\ge|y|\) for all \(y\), and \(\operatorname{dom}\phi^*\) has nonempty interior. Moreover,
+\[
+  \phi^{**}(t)=\phi\bigl(\max\{|t|,1\}\bigr),\qquad
+  \phi^{**}(t)=\phi(t)\iff |t|\ge1.
+\]
+Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
+\end{lemma}
+The proof is provided in \Cref{app:transfer-proof}.
+
+\Cref{tab:wtype} summarizes representative W-type regularizers, their scalar conjugates, and their proximal mappings.
+
+\begin{table}[htbp]
 \centering
 \color{blue}
 \caption{Representative W-type regularizers, with \(\lambda,\delta>0\), \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\), and \(\operatorname{Hub}_{\delta}(s):=s^2/(2\delta)\) if \(|s|\le\delta\), \(|s|-\delta/2\) otherwise. Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\); \(\operatorname{clip}\) denotes projection onto \([-\lambda,\lambda]\).}
@@ -63,7 +88,7 @@ Each condition is used once: \ref{W1} makes the zero set of \(h\) exactly \(\{-1
 \resizebox{\linewidth}{!}{
 \begin{tabular}{lllcccc}
 \toprule
-\multicolumn{2}{l}{\(\phi(t)\)} & Used in & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\)\\
+\multicolumn{2}{l}{\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\)\\
 \midrule
 \multirow{2}{*}{\(\lambda\bigl||t|-1\bigr|^{p}\)}
  & \(p=1\) & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
@@ -84,27 +109,80 @@ Each condition is used once: \ref{W1} makes the zero set of \(h\) exactly \(\{-1
 \end{tabular}}
 \end{table}
 
-Every row of Table~\ref{tab:wtype} is nondifferentiable at \(0\), where \(\partial\phi(0)=\{\pm c\}\) for some \(c>0\), and the row \(p=1\) is also nondifferentiable at the binary codes \(\pm1\); hence none of these penalties is \(L\)-smooth or weakly convex, and standard complexity guarantees for gradient methods do not apply. Tail growth determines \(\operatorname{dom}\phi^*\): the complexity analysis in Section~\ref{Section: Convergence analysis} covers the rows with \(\operatorname{dom}\phi^*=[-\lambda,\lambda]\), while Proposition~\ref{prop:transfer} also covers \(p=2\).
-\begin{remark}[Role of \ref{W2} and \ref{W3}]\label{rem:wtype-scope}
-Neither condition can be dropped from our analysis. Without \ref{W3}, take
-\(\phi(t)=|t^2-1|\), which satisfies \ref{W1}--\ref{W2} but has \(\partial\phi(0)=\{0\}\):
-with \(n=d=1\), no \(\bx\)-block and \(F(b)=\tfrac12 b^2\), the point \(b=0\) is stationary
-for Problem~\eqref{Prop: block-wise regularized problem}, since \(J(b)=1-\tfrac12 b^2\)
-near \(b=0\), yet \(|b|<1\); hence the conclusion of Proposition~\ref{prop:transfer} fails.
-Without \ref{W2}, take \(\phi(t)=\lambda\log\bigl(1+\bigl||t|-1\bigr|\bigr)\), which
-satisfies \ref{W1} and \ref{W3} but grows sublinearly; then
-\(\operatorname{dom}\phi^*=\{0\}\) and \(h^{**}\equiv0\), so the dual reformulation removes
-the regularizer. Neither condition is needed to define the W shape itself; both are needed for our analysis.
-\end{remark}
-\begin{lemma}[Conjugate and convex envelope]\label{lem:wtype-conj}
-Let \(h\) be a W-type regularizer. Then \(\phi^*\) is proper, lower semicontinuous, convex, and even, \(\phi^*(y)\ge|y|\) for all \(y\), and \(\operatorname{dom}\phi^*\) has nonempty interior. Moreover,
-\[
-  \phi^{**}(t)=\phi\bigl(\max\{|t|,1\}\bigr),\qquad
-  \phi^{**}(t)=\phi(t)\iff |t|\ge1.
-\]
-Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
-\end{lemma}
-The proof is provided in \Cref{Subsec: proof transfer}.
+For a W-type regularizer, the conjugate and proximal mappings are separable entrywise:
+\begin{equation}
+\label{Eq: the proximal mapping of conjugate function}
+[\operatorname{prox}_{\sigma h^*}(\bY)]_{ij}
+=\operatorname{prox}_{\sigma\phi^*}(Y_{ij}),\qquad \sigma>0.
+\end{equation}
+\Cref{fig:w-conj-prox} illustrates the case $p=1$, including the W-type function, its conjugate, and the proximal mapping of the conjugate.
+
+\begin{figure}[htbp]
+\centering
+\resizebox{0.98\columnwidth}{!}{
+\begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth,line cap=round,line join=round]
+    % (a) W-type function
+    \begin{scope}[shift={(0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$t$};
+        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
+        \draw[line width=0.9pt] (-2.6,1.6) -- (-1,0) -- (0,1) -- (1,0) -- (2.6,1.6);
+
+        % break-point labels
+        \node at (-1,-0.42) {$-1$};
+        \node at ( 1,-0.42) {$1$};
+        \node[left] at (0,1) {$\lambda$};
+
+        \node at (0,-2) {$\text{(a)}\ \phi(t)=\lambda\bigl||t|-1\bigr|$};
+    \end{scope}
+
+    % (b) Conjugate function phi^*(y)
+    \begin{scope}[shift={(8.0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$y$};
+        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
+        \draw[line width=0.9pt] (-1,1) -- (0,0) -- (1,1);
+        \draw[densely dotted,thin] (-1,0) -- (-1,1.5);
+        \draw[densely dotted,thin] ( 1,0) -- ( 1,1.5);
+        \fill (-1,1) circle (0.07);
+        \fill ( 1,1) circle (0.07);
+
+        % break-point labels
+        \node at (-1,-0.42) {$-\lambda$};
+        \node at ( 1,-0.42) {$\lambda$};
+
+        \node[left] at (0,1) {$\lambda$};
+
+        \node at (0,-2) {$\text{(b)}\ \phi^*(y)$};
+    \end{scope}
+
+    % (c) Proximal mapping of phi^*(v)
+    \begin{scope}[shift={(16.0,0)}]
+        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$v$};
+        \draw[-{Stealth},thin] (0,-1.35) -- (0,1.35);
+
+        \draw[line width=0.9pt] (-2.8,-1) -- (-2,-1) -- (-1,0) -- (1,0) -- (2,1) -- (2.8,1);
+
+        \draw[densely dotted,thin] (-2,0)--(-2,-1);
+        \draw[densely dotted,thin] (-1,0)--(-1,-1);
+        \draw[densely dotted,thin] ( 1,0)--( 1, 1);
+        \draw[densely dotted,thin] ( 2,0)--( 2, 1);
+        \draw[densely dotted,thin] (-2,-1)--(0,-1);
+        \draw[densely dotted,thin] (0,1)--(2,1);
+
+        \node[above] at (-2,0.10) {$-(\lambda+\sigma)$};
+        \node at (-1,-0.42) {$-\sigma$};
+        \node at ( 1,-0.42) {$\sigma$};
+        \node at ( 2,-0.42) {$\lambda+\sigma$};
+        \node[left] at (0, 1) {$\lambda$};
+        \node[left] at (0,-1) {$-\lambda$};
+
+        \node at (0,-2) {$\text{(c)}\ \operatorname{prox}_{\sigma\phi^*}(v)$};
+    \end{scope}
+\end{tikzpicture}
+}
+\caption{\blue{The row $p=1$ of Table~\ref{tab:wtype}, drawn with $\lambda=\sigma=1$: (a) the W-type function $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\sigma$ and clips to $[-\lambda,\lambda]$.}}
+\label{fig:w-conj-prox}
+\vspace{-4ex}
+\end{figure}
 \endgroup
 
 \subsection{W-type Regularized Deep Hashing Model}

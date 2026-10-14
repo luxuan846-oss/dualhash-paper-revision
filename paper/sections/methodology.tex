@@ -230,27 +230,16 @@ where
 \tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})\ \text{ and }\ \bm{0}\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\bm{0}\}\times\partial h^{**}(\tilde{\bB}), 
 \end{aligned}
 \end{equation} where the equivalence follows from the subgradient inversion and sum rules~\cite[Theorems~23.5 and~23.8]{rockafellar1970convex}.} In the following, we denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$.  
-
-We then prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} is a \blue{KKT point} of $\calL$. \blue{The proof is provided in \Cref{Subsec: proof zerogap}.}
+We then prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \blue{with zero duality gap} is a \blue{KKT point} of $\calL$. \blue{The proof is provided in \Cref{app:zero-gap-proof}.}
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
 \end{proposition}
 
-\blue{Let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of the right-hand side of~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
+\blue{Recall that strong duality holds for Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem} if their optimal values coincide (zero duality gap) and both are attained. Here, \red{by the coercivity of $J$} and $\phi^*(y)\ge|y|$ for a W-type regularizer (Lemma~\ref{lem:wtype-conj}), both problems always admit optimal solutions, so zero duality gap and strong duality are equivalent and hold or fail together. Let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of the right-hand side of~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
 \[
 p^*-d^*=(p^*-p^{**})+(p^{**}-d^*),
 \]
-where both terms are nonnegative since $h^{**}\le h$ and
-\[
-d^*=\max_{\bLmbd}\min_{\bx,\bB}\calL
-\le\min_{\bx,\bB}\max_{\bLmbd}\calL=p^{**}.
-\]
-The second term may be positive because $\calL$ is nonconvex in $(\bx,\bB)$. The first term vanishes if and only if some minimizer of $F+h^{**}$ lies in the contact set
-\[
-\{\bB:h(\bB)=h^{**}(\bB)\}=\{\bB:|b_{ij}|\ge1\ \forall i,j\}
-\]
-by Lemma~\ref{lem:wtype-conj}. Hence nonconvexity of $h$ alone does not rule out strong duality: for $n=d=1$, $F(b)=\tfrac12(b-2)^2$, and $\lambda=1$, one has $p^*=d^*=\tfrac12$. The following example shows that the first term can be positive even when $F$ is convex.}
-
+where the first term is the loss caused by replacing $h$ with $h^{**}$, and the second term stems from the nonconvexity of $\calL$ in $(\bx,\bB)$. The following example shows that, even when $F$ is convex so that $p^{**}=d^*$, the first term can be positive, which motivates relating KKT points of $\calL$ directly to Problem~\eqref{Prop: block-wise regularized problem}}
 \begin{example}\label{ex:gap}
 Consider Problem~\eqref{Prop: block-wise regularized problem} with $n=d=1$ and without the $\bx$-block, and let $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal value is
 $p^*=\min_{b\in\RR}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}=\tfrac12$, attained at $b^*=\pm1$.
@@ -261,8 +250,18 @@ d^*=\sup_{|\Lambda|\le1}\Bigl\{-\tfrac12\Lambda^2-|\Lambda|\Bigr\}=0,
 attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$, and no zero-gap primal--dual pair exists.
 \end{example}
 
-Because a zero-gap pair need not exist, we relate KKT points of $\calL$ directly to Problem~\eqref{Prop: block-wise regularized problem}. The next proposition characterizes exactly when a KKT point of $\calL$ is a stationary point of this problem.
+\begin{remark}[On the choice of $\mathcal{K}$]\label{rem:kkt-choice}
+\blue{(i) The condition $\bm{0}\in\mathcal{K}$ applies the convex subdifferential $\partial h^*$ to the maximization variable $\bLmbd$. This is the standard first-order condition for min--max problems with a nonsmooth convex term in the maximization variable, in both convex--concave~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and nonconvex~\cite[(2.1)]{clasonAccelerationGlobalConvergence2019},~\cite[Section~1]{botBohm2023alternating} settings.
 
+(ii) Lagrangian-based methods such as ADMM~\cite{wangGlobalConvergenceADMM2018,li2015global} use $\bm{0}\in\partial\calL$, which is equivalent to the KKT system there because the Lagrangian is affine in the multiplier. In~\eqref{Eq: simplified_lagrangian}, the conjugation places the nonsmooth term $-h^*$ on $\bLmbd$, and the two conditions differ. For $\bLmbd\in\dom h^*$, the sum rule~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} and the closedness of the graph of $\partial h^*$ give
+\[
+\partial\calL(\bx,\bB,\bLmbd)=\nabla\Phi+\{\bm{0}\}\times\{\bm{0}\}\times\partial(-h^*)(\bLmbd)
+\subseteq\nabla\Phi+\{\bm{0}\}\times\{\bm{0}\}\times\big(-\partial h^*(\bLmbd)\big)=\mathcal{K}(\bx,\bB,\bLmbd),
+\]
+so $\bm{0}\in\partial\calL$ implies the KKT condition, but not conversely. In Example~\ref{ex:gap}, $\calL(b,\Lambda)=\tfrac12 b^2+b\Lambda-|\Lambda|$ on $\RR\times[-1,1]$ is convex--concave, and its saddle point $(0,0)$ is a KKT point. Yet the $\Lambda$-component of $\partial\calL(0,0)$ is $\partial(-|\cdot|)(0)=\{-1,1\}$, which excludes $0$. Hence $\bm{0}\in\partial\calL$ is not a necessary condition for a saddle point, and we use $\mathcal{K}$ instead.}
+\end{remark}
+
+The next proposition characterizes exactly when a KKT point of $\calL$ is a stationary point of this problem. \blue{The proof is provided in \Cref{app:transfer-proof}.}
 \begin{proposition}\label{prop:transfer}
 Let \(h\) be a W-type regularizer, and let $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ be a KKT point of $\calL$, i.e., it satisfies~\eqref{Eq: KKT conditions}. Then the following statements are equivalent:
 \begin{enumerate}[label=\textup{(\alph*)}]
@@ -273,20 +272,11 @@ $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
 \item $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
 \end{enumerate}
 \end{proposition}
-\blue{The proof is provided in \Cref{Subsec: proof transfer}.}
-\blue{Thus, a KKT point of \(\calL\) is stationary for Problem~(P) exactly when its auxiliary variable lies in the contact set \(\{\,\bB:h(\bB)=h^{**}(\bB)\,\}=\{\bB:|b_{ij}|\ge1\ \forall i,j\}\).}
 
-\subsection{\blue{DualHash Framework}}
+\subsection{\blue{Algorithmic Framework}}
 \label{Sec: DualHash framework}
-\blue{Through the reformulation~\eqref{Eq: simplified_lagrangian},} we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
-For a W-type regularizer, the conjugate and proximal mappings are separable entrywise:
-\begin{equation}
-\label{Eq: the proximal mapping of conjugate function}
-[\operatorname{prox}_{\sigma h^*}(\bY)]_{ij}
-=\operatorname{prox}_{\sigma\phi^*}(Y_{ij}),\qquad \sigma>0.
-\end{equation}
-Table~\ref{tab:wtype} lists the scalar conjugates and proximal mappings of representative W-type regularizers.
-This motivates us to perform a proximal step to update \(\bLmbd\).
+\blue{Through the Problem~\eqref{Eq: simplified_lagrangian},} we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
+\blue{By~\eqref{Eq: the proximal mapping of conjugate function}, this proximal mapping acts entrywise. This motivates a proximal step for $\bLmbd$.}
 
 We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and $\bm{\Lambda}$ alternately. The resulting algorithm can be viewed as a first-order multiblock primal--dual method. First, we update $\bx$ by a stochastic first-order step, as is standard in training neural networks. \blue{At iteration $k$, the $\bx$-update takes the form
 \begin{equation}
@@ -294,83 +284,16 @@ We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and 
     \bx^{k+1} = \by^k - \eta_k \bg^k,
 \end{equation}
 where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
-The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: Algorithm implementations}.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\mathcal{D}(\bx^{k+1})$ is available, this step is evaluated from the closed-form expression of $\nabla_{\bB}F$.} Finally, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
+The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: Algorithm implementations}.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$.} Finally, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
 \begin{align}
 \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1},\bB^k,\bLmbd^k) \notag\\
 &= \bB^k - \tau\big(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\big), \label{Eq: the update of B}\\
 \bLmbd^{k+1} &= \operatorname*{arg\,min}_{\bLmbd}\Big\{h^*(\bLmbd)-\langle\bLmbd,2\bB^{k+1}-\bB^k\rangle+\frac{\tau}{2}\|\bLmbd-\bLmbd^k\|^2\Big\} \notag\\
 &= \operatorname{prox}_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \label{Eq: the update of lambda}
 \end{align}
-\blue{By~\eqref{Eq: the proximal mapping of conjugate function}, this step acts entrywise through $\operatorname{prox}_{\sigma\phi^*}$ with $\sigma=\tau^{-1}$; for the row $p=1$ of Table~\ref{tab:wtype}, it is a soft-thresholding followed by clipping to $[-\lambda,\lambda]$, see \Cref{fig:w-conj-prox}.}
-\begin{figure}[tbp]
-\centering
-\resizebox{0.98\columnwidth}{!}{
-\begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth,line cap=round,line join=round]
-    % (a) W-type function
-    \begin{scope}[shift={(0,0)}]
-        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$t$};
-        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
-        \draw[line width=0.9pt] (-2.6,1.6) -- (-1,0) -- (0,1) -- (1,0) -- (2.6,1.6);
-
-        % break-point labels
-        \node at (-1,-0.42) {$-1$};
-        \node at ( 1,-0.42) {$1$};
-        \node[left] at (0,1) {$\lambda$};
-
-        \node at (0,-2) {$\text{(a)}\ \phi(t)=\lambda\bigl||t|-1\bigr|$};
-    \end{scope}
-
-    % (b) Conjugate function phi^*(y)
-    \begin{scope}[shift={(8.0,0)}]
-        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$y$};
-        \draw[-{Stealth},thin] (0,-0.65) -- (0,1.55);
-        \draw[line width=0.9pt] (-1,1) -- (0,0) -- (1,1);
-        \draw[densely dotted,thin] (-1,0) -- (-1,1.5);
-        \draw[densely dotted,thin] ( 1,0) -- ( 1,1.5);
-        \fill (-1,1) circle (0.07);
-        \fill ( 1,1) circle (0.07);
-
-        % break-point labels
-        \node at (-1,-0.42) {$-\lambda$};
-        \node at ( 1,-0.42) {$\lambda$};
-
-        \node[left] at (0,1) {$\lambda$};
-
-        \node at (0,-2) {$\text{(b)}\ \phi^*(y)$};
-    \end{scope}
-
-    % (c) Proximal mapping of phi^*(v)
-    \begin{scope}[shift={(16.0,0)}]
-        \draw[-{Stealth},thin] (-2.9,0) -- (2.9,0) node[below right] {$v$};
-        \draw[-{Stealth},thin] (0,-1.35) -- (0,1.35);
-
-        \draw[line width=0.9pt] (-2.8,-1) -- (-2,-1) -- (-1,0) -- (1,0) -- (2,1) -- (2.8,1);
-
-        \draw[densely dotted,thin] (-2,0)--(-2,-1);
-        \draw[densely dotted,thin] (-1,0)--(-1,-1);
-        \draw[densely dotted,thin] ( 1,0)--( 1, 1);
-        \draw[densely dotted,thin] ( 2,0)--( 2, 1);
-        \draw[densely dotted,thin] (-2,-1)--(0,-1);
-        \draw[densely dotted,thin] (0,1)--(2,1);
-
-        \node[above] at (-2,0.10) {$-(\lambda+\sigma)$};
-        \node at (-1,-0.42) {$-\sigma$};
-        \node at ( 1,-0.42) {$\sigma$};
-        \node at ( 2,-0.42) {$\lambda+\sigma$};
-        \node[left] at (0, 1) {$\lambda$};
-        \node[left] at (0,-1) {$-\lambda$};
-
-        \node at (0,-2) {$\text{(c)}\ \operatorname{prox}_{\sigma\phi^*}(v)$};
-    \end{scope}
-\end{tikzpicture}
-}
-\caption{\blue{The row $p=1$ of Table~\ref{tab:wtype}, drawn with $\lambda=\sigma=1$: (a) the W-type function $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\sigma$ and clips to $[-\lambda,\lambda]$. The $\bLmbd$-update~\eqref{Eq: the update of lambda} applies (c) entrywise with $\sigma=\tau^{-1}$.}}
-\label{fig:w-conj-prox}
-\vspace{-4ex}
-\end{figure}
 \subsection{\blue{Instantiating the Stochastic Update}}
 \label{Sec: Algorithm implementations}
-\blue{We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. In both instances, the batch size is constant: $b_k\equiv b$ for DualHash-StoM, and $b_1$ followed by $b_k\equiv b$ for $k\ge2$ for DualHash-StoRM; their values are specified in \Cref{Section: Convergence analysis}. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
+\blue{Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. In both instances, the batch size is constant: $b_k\equiv b$ for DualHash-StoM, and $b_1$ followed by $b_k\equiv b$ for $k\ge2$ for DualHash-StoRM; their values are specified in \Cref{Section: Convergence analysis}. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
 \begin{equation}
 \label{Eq: minibatch oracle}
 \tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),

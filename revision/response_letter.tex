@@ -126,9 +126,14 @@ We have carefully considered every comment and revised the manuscript accordingl
 \par\smallskip
 \normalfont\upshape\responseLabel
 {
-We thank the reviewer for this key question. Nonconvexity of $h$ does not by itself rule out strong duality, but it provides no general strong-duality guarantee for Problems~(P) and~(D). After stating Example~5.1, we establish the relationship in Section~5.1 in two steps.
+We thank the reviewer for this key question. Since $h$ is nonconvex, strong duality between Problems~(P) and~(D) may fail, and we do not claim it. \red{why, many nonconvex problem has strong duality. I suggest to move it after stating  Example 5.1.}
+We now establish the relationship in Section~5.1 in two steps. 
+\red{To me the response is too straight. Please be more elegant.}
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=2.2em]
-\item \textbf{Zero duality gap.} Proposition~5.1 shows that a zero-gap primal--dual optimal pair, whenever it exists, is a KKT point of $\calL$. Example~5.1 shows that such a pair need not exist: for a one-dimensional instance, the duality gap equals $\tfrac12$.
+\item \textbf{Zero duality gap.} Proposition~5.1 shows that a zero-gap primal--dual optimal pair, whenever it exists, is a KKT point of $\calL$. Example~5.1 shows that such a pair need not exist: for a one-dimensional instance, the duality gap equals $\tfrac12$. 
+\red{For your convenience, we repeat Proposition 5.2 below.}
+
+
 \item \textbf{Stationarity relationship.} Proposition~5.2 characterizes exactly when a KKT point of $\calL$ yields a stationary point of Problem~(P): this holds if and only if the Fenchel--Young equality holds for $h$, which is equivalent to $|\tilde b_{ij}|\ge1$ for all $i,j$.
 \end{enumerate}
 % Proposition~5.2 is stated in Section~5.1, and its proof is given in Appendix~A.2, with a pointer after the statement \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.2, Page XX, lines XX--XX)}:
@@ -342,7 +347,7 @@ Under the refined Assumption~5.1(i) and the appropriate parameter conditions, th
 \item (Lemma 5.7) Why $R\in 2,...,T+1$ instead of $R\in 1,...,T$ ? Furthermore, I am not particularly in favour of using uniform sampling to present a rate; I would prefer to use the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[dist^2(...)]$. Finally, to use $\Psi_m^*$ you need at least to justify the lower-boundedness of $\{\Psi_m(\calQ^k)\}$ which doesn't seem straightforward.
 \par I would first introduce $L_\Delta$ before mentioning $S_1,S_2,S_3,S_4$ (these constant actually don't appear in (5.17) as such).
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the iterates, in Lemma~5.7 (now Lemma~5.5), Theorem~5.2 (now Theorem~5.4), and the output step of Algorithm 4.1; the same correction is made in Lemma~5.10 (now Lemma~5.8), Theorem~5.3 (now Theorem~5.5), and Algorithm 4.2. Following the reviewer's preference, Lemma~5.5 now also states the bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\partial\calL(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\partial\calL(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, the lower bound of $\{\Psi_m(\calQ^k)\}$ is established in Proposition~\ref{prop:lyapunov-lower-bound}(i); it uses only the global $L_F$-smoothness, $F\ge\underline{\ell}$, the box constraint on $\bLmbd^k$, and the output condition of Appendix~B, and it does not require the iterates to be bounded. We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~5.5, before $S_1,\ldots,S_4$ are mentioned.
+\normalfont\upshape\responseLabel We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the iterates, in Lemma~5.7 (now Lemma~5.5), Theorem~5.2 (now Theorem~5.4), and the output step of Algorithm 4.1; the same correction is made in Lemma~5.10 (now Lemma~5.8), Theorem~5.3 (now Theorem~5.5), and Algorithm 4.2. Following the reviewer's preference, the proof of Lemma~5.5 now states the averaged bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\calK(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, the lower bound of $\{\Psi_m(\calQ^k)\}$ is established in Proposition~\ref{prop:lyapunov-lower-bound}(i); it uses only the global $L_F$-smoothness, $F\ge\underline{\ell}$, the box constraint on $\bLmbd^k$, and the output condition of Appendix~B, and it does not require the iterates to be bounded. We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~5.5, before $S_1,\ldots,S_4$ are mentioned.
 \item (Lemma 5.10) Similar comment as for Lemma 5.7, especially the fact you need to justify the lower-boundedness of $\{\Psi_r(\calQ^k)\}$ to be able to invoke $\Psi_r^*$.
 \par\smallskip
 \normalfont\upshape\responseLabel We thank the reviewer. As for Lemma~5.7 (now Lemma~5.5), the lower bound needed to define $\Psi_r^*$ is given in Proposition~\ref{prop:lyapunov-lower-bound}(ii). It bounds from below the augmented potential $W_k=\EE[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\EE\|\be^k\|^2$, which contains the estimation-error term that the descent inequality produces, and $\Psi_r^*$ is defined from this bound.
@@ -370,7 +375,7 @@ Regarding the range of $\tau$: with $\delta=1/6$ and $t=\tau L_F$, the general e
 \[
 \frac{2}{L_F}C_{\bB}=\frac{1}{t}-\frac{13}{2}t-2=\frac{1}{t}\Big(1-2t-\frac{13}{2}t^2\Big).
 \]
-The first term was misprinted as $\frac{2}{t}$ in the submitted manuscript. The value $\frac{\sqrt{56}-2}{13}$ found by the reviewer is exactly what the misprinted coefficient produces, whereas the corrected coefficient gives $C_{\bB}>0$ if and only if $0<\tau<\frac{\sqrt{30}-2}{13L_F}$, which is the range stated in the manuscript. We have corrected the coefficient and written the range as an open interval. We have also added the requested justification: $C_1=K_1=3\delta\tau^{-1}>0$ and $C_2=\frac{1}{2}(K_2-K_1+K_3)=C_{\bB}+K_3>0$, because $K_3=\tau L_F^2/\delta>0$. Finally, we state explicitly that $\tilde\delta=c_\delta\delta^2$ with $0<c_\delta<36\big(\frac{\sqrt{30}-2}{13}\big)^2$, so that $\tau\le\sqrt{\tilde\delta}/L_F$ implies the above range.
+The first term was misprinted as $\frac{2}{t}$ in the submitted manuscript. The value $\frac{\sqrt{56}-2}{13}$ found by the reviewer is exactly what the misprinted coefficient produces, whereas the corrected coefficient gives $C_{\bB}>0$ if and only if $0<\tau<\frac{\sqrt{30}-2}{13L_F}$, which is the range stated in the manuscript. We have corrected the coefficient and written the range as an open interval. We have also added the requested justification: $C_1=K_1=3\delta\tau^{-1}>0$ and $C_2=\frac{1}{2}(K_2-K_1+K_3)=C_{\bB}+K_3>0$, because $K_3=\tau L_F^2/\delta>0$. We now specify $\delta=1/6$ where the coefficients $K_1,\ldots,K_4$ are first defined, and state this range of $\tau$ directly in the DualHash-StoM parameter setting, removing the intermediate constants $\tilde\delta$ and $c_\delta$ from that setting.
 \item (Lemma C.3) In (C.10), I think the correct expression is $S_4^k=6(L_F^2\beta_k^2+\underline{2}\eta_k^{-1}\alpha_k^2)$. To maintain consistency in the structure of your terms, I would rewrite $S_1=4(\tau^{-2}+3)$.
 \par\smallskip
 \normalfont\upshape\responseLabel We thank the reviewer. The coefficient $6$ in front of $\eta_k^{-2}\alpha_k^2$ was indeed a typo: the proof (estimate of $\|\bd_{\bx}^k\|^2$) gives $6\eta_k^{-2}\|\bx^k-\by^k\|^2=12\eta_k^{-2}\alpha_k^2\Delta_{\bx}^k$, so that $S_4^k=6(L_F^2\beta_k^2+2\eta_k^{-2}\alpha_k^2)$, which we have corrected. We note that the exponent of $\eta_k$ is $-2$, since the term arises from $\eta_k^{-2}\|\bx^k-\by^k\|^2$. We have also rewritten $S_1=4(\tau^{-2}+3)$ as suggested.
@@ -380,12 +385,12 @@ The first term was misprinted as $\frac{2}{t}$ in the submitted manuscript. The 
 \par\smallskip
 \normalfont\upshape\responseLabel We thank the reviewer for identifying this error and agree that, for varying batch sizes, the averaged bound must retain $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}$. Tracing this term back also revealed an inconsistency in Lemma C.3: its proof yields the noise term $3\|\be^k\|^2$, whose expectation is bounded by $3\sigma^2/b_k$, so the factor $1/L_F$ in the statement was a typo. We have removed it. Combining the corrected Lemma C.3 with the Lyapunov descent inequality, whose noise term $\sigma^2/(b_kL_F)$ is unchanged, gives the corrected bound (5.17) (now (5.18)):
 \[
-\frac{1}{T}\sum_{k=1}^{T}\EE\big[\dist^2(0,\partial\calL(\bx^k,\bB^k,\bLmbd^k))\big]\le\frac{L_\Delta\Delta_1}{T}+\frac{C_\sigma\sigma^2}{T}\sum_{k=1}^{T}\frac{1}{b_k},\qquad C_\sigma=3+\frac{L_\Delta}{L_F}.
+\frac{1}{T}\sum_{k=1}^{T}\EE\big[\dist^2(0,\calK(\bx^k,\bB^k,\bLmbd^k))\big]\le\frac{L_\Delta\Delta_1}{T}+\frac{C_\sigma\sigma^2}{T}\sum_{k=1}^{T}\frac{1}{b_k},\qquad C_\sigma=3+\frac{L_\Delta}{L_F}.
 \]
 The constant differs from the reviewer's $(3+L_\Delta)/L_F$ only because of the corrected Lemma C.3; the reviewer's expression is what the uncorrected statement gives. The corresponding steps in the proof of Lemma~5.7 (now Lemma~5.5) have been revised.
 \item (Theorem 5.2/proof) The previous mistake propagates into the proof of Theorem 5.2.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer. With the constant batch size $b_k=b=c_bT$ used in Theorem~5.2 (now Theorem~5.4), we have $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}=\frac{1}{c_bT}$, so the corrected (5.17) (now (5.18)) gives $\EE[\dist^2(0,\partial\calL(\bx^R,\bB^R,\bLmbd^R))]\le\frac{1}{T}\big(L_\Delta\Delta_1+C_\sigma\frac{\sigma^2}{c_b}\big)$. This is the bound used in the proof of Theorem~5.4, which we have updated to state this substitution explicitly. Hence the iteration bound and the $\calO(\varepsilon^{-4})$ SFO complexity in Theorem~5.4 remain unchanged.
+\normalfont\upshape\responseLabel We thank the reviewer. With the constant batch size $b_k=b=c_bT$ used in Theorem~5.2 (now Theorem~5.4), we have $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}=\frac{1}{c_bT}$, so the corrected (5.17) (now (5.18)) gives $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]\le\frac{1}{T}\big(L_\Delta\Delta_1+C_\sigma\frac{\sigma^2}{c_b}\big)$. This is the bound used in the proof of Theorem~5.4, which we have updated to state this substitution explicitly. Hence the iteration bound and the $\calO(\varepsilon^{-4})$ SFO complexity in Theorem~5.4 remain unchanged.
 \end{itemize}
 
 \subsection{\red{Errors in Appendix D (DualHash-StoRM)}}
@@ -773,14 +778,20 @@ We have reformulated Assumption~5.1(ii) as suggested, explicitly stating the smo
 \item (page 13) For better consistency and since you state that $C_1,C_2,C_3,C_4$ are independent of $k$, you should introduce (5.14) setup before (5.12) and (5.13).
 \par\smallskip
 \normalfont\upshape\responseLabel
-\red{We agree that the independence of $C_1,C_2,C_3,C_4$ from $k$ should be visible where these coefficients are introduced.} We have made this explicit at the definition, and we explain below why the parameter conditions remain after it.
-\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item We have stated the constant-parameter conditions under which $C_1,C_2,C_3,C_4$ are independent of $k$ in the Lyapunov-function definition \green{(Page XX, lines XX--XX):}
+We thank the reviewer for this suggestion. We have moved the constant-parameter setting before the Lyapunov function and its coefficients in \green{Section~5.2 (Page XX, lines XX--XX)}:
 \begin{bluequote}
-where the positive coefficients $C_1,C_2,C_3,C_4$ (independent of $k$, since $\alpha_k\equiv\alpha$, $\beta_k\equiv\beta$, and $\tau$ is a constant; see (5.15) below) are chosen as:
+We choose constant algorithm parameters as follows, with $\bar{L}_F:=2L_F+K_3+K_4$:
+\begin{align*}
+\eta_k=\frac{\eta}{L_F},\quad \alpha_k=\alpha,\quad \beta_k=\beta,\quad
+0<\tau<\frac{\sqrt{30}-2}{13L_F},
+\end{align*}
+where
+$\eta =\frac{(1 - 2\alpha - \nu)/2}{\frac{\bar{L}_{F}}{L_{F}} +
+\frac{(1 + \nu)\beta^{2}}{(1 - \alpha)\alpha}}$,
+$0<\nu<1$, $0<\alpha<(1-\nu)/2$, and $0<\beta<1$.
+These parameters are independent of $T$.
 \end{bluequote}
-\item We keep the parameter conditions (5.15) after the Lyapunov function, since $\Psi_m$ and its coefficients (5.14) are defined for general parameters, whereas (5.15) is a sufficient condition derived from requiring the descent coefficients in (5.17) to be positive; stating it afterwards shows where it comes from.
-\end{enumerate}
+This order makes the independence of $C_1,C_2,C_3,C_4$ from $k$ explicit when they are introduced. Before the complexity theorem, we now give only the batch-size choice $b_k=b=c_bT$ and refer to the constant-parameter setting above.
 \item (Lemma C.1) I would replace $\nabla f(\bz)$ by a generic direction $\bd\in\RR^q$, this doesn't change the proof. The reason is that, in the proof of Lemma 5.5, you apply (C.1) by considering $\bG^k$, which is not a gradient strictly speaking (but merely an oracle).
 \par\smallskip
 \normalfont\upshape\responseLabel We thank the reviewer for this remark. We have restated Lemma~C.1 for an arbitrary direction; since $\bd^k$ already denotes the element of the KKT mapping in (A.5), we denote this direction by $\bg$ \green{(Page XX, lines XX--XX)}:
@@ -1145,7 +1156,7 @@ Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\calD(\bx^
 
 % \stopcontents[reviewertwo]
 % \endgroup
-% \section{Lower bounds for the Lyapunov functions}\label{sec:lowerbounds}
+% \section{Lower bounds for the Lyapunov functions}\label{app:lyapunov-lower-bounds}
 % % CHECK before moving into the manuscript: (a) DONE (retuned constants + explicit eta-conditions in the Remark): conditions (P1),(P2),(P1'),(P2') are smallness conditions on delta and eta,
 % %      verify they are compatible with tau < (sqrt(30)-2)/(13 L_F) of Lemma C.2 and the eta of (5.14);
 % %      (b) DONE: Lambda^1 in [-lambda,lambda]^{n x d} is now part of the initialization of Algorithms 4.1 and 4.2 (methodology.tex);

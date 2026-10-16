@@ -24,7 +24,7 @@
 
 ## 下一步
 
-1. 独立评议当前论文，确定最有价值的贡献与一项核心深化任务。方法入口为 `notes/skills/booming/SKILL.md` 和 `notes/skills/sparkling/SKILL.md`。
+1. 独立评议当前论文，确定最有价值的贡献与一项核心深化任务。完整任务指令见 `notes/prompts/gptpro-review-prompt.md`，方法入口为 `notes/skills/booming/SKILL.md` 和 `notes/skills/sparkling/SKILL.md`。
 2. 对评议中发现的实质缺口，定位到具体命题、假设或证明步骤后处理；重点关联原问题、KKT 目标、有限精度保证与实验主张。
 3. 正文内容稳定后，更新对应审稿回复、主要变化摘要与修订摘录，编译并核对最终编号、页码和标色。
 
@@ -40,5 +40,5 @@
 
 - `AGENTS.md` 维护共用项目指令；`.claude/CLAUDE.md` 导入共用指令，避免两套正文重复维护。
 - `notes/skills/` 来自用户指定的 `3_DDLALM/overleaf/notes/skills/`，保留参考材料、许可证和来源说明。
-- GitHub 主分支为 `origin/master`；`paper-overleaf/` 和 `.claude/worktrees/` 是本地独立工作副本，已加入主仓库忽略规则。
-- 文件用途与精简建议见 `file-inventory.md`。本次只记录清理候选，保留现有文件。
+- GitHub 主分支为 `origin/master`；保留 `paper-overleaf/` 用于 Overleaf 同步，主仓库忽略本地独立工作副本。
+- 2026-10-16 按用户指示删除重复图片、临时截图、编译辅助文件和无独有修改的 Claude 工作副本；两张旧图与旧网页幻灯片归档到 `archive/`。详情见 `file-inventory.md`。编译辅助文件将在下次编译时生成。

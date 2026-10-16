@@ -2,6 +2,7 @@
 \label{Section: Convergence analysis}
 
 We analyze the proposed algorithms in terms of the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-KKT point of the Lagrangian function~\eqref{Eq: simplified_lagrangian}. 
+\blue{Throughout this section, the W-type regularizer satisfies $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$, and $\phi^*$ is bounded on its domain; by Table~\ref{tab:wtype}, this holds for every row except $p=2$.}
 Given $\varepsilon>0$, we say that a random point $(\bx,\bB,\bLmbd)$ is an \emph{$\varepsilon$-KKT point} of $\calL$ if
 \begin{equation}
 \label{equ:esp}
@@ -13,10 +14,16 @@ Given $\varepsilon>0$, we say that a random point $(\bx,\bB,\bLmbd)$ is an \emph
 In the remainder of this paper, we impose the following assumptions.
 \begin{assumption}
 \label{Ass: main assumptions}
-\begin{itemize}[leftmargin=2em]
-    \blue{\item[{(i)}] The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}\!\left(\mathcal{D}(\bx)\right)>-\infty$, where $\bar{\ell}_{s}\!\left(\mathcal{D}(\bx)\right):=n^{-1}\sum_{i=1}^{n}\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)$; the set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.}
-    \item[{(ii)}] $F$ is $L_F$-smooth, with $L_F\in(0,+\infty)$, over $\RR^{q}\times\RR^{n\times d}$;
-    \item[{(iii)}] \blue{There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$,}
+\leavevmode
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2em,font=\color{blue}]
+    \item \blue{The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}\!\left(\mathcal{D}(\bx)\right)>-\infty$; the set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.}
+    \item \blue{The function $f:=n^{-1}\sum_{i=1}^{n}f_i$ is $L_f$-smooth on $\RR^q$, and $\nabla\mathcal{D}$ is $L_{\nabla\mathcal{D}}$-Lipschitz on $\RR^q$, with $L_f,L_{\nabla\mathcal{D}}>0$. There exist constants $C_{\mathcal{D}},G_{\mathcal{D}}>0$ such that
+    \[
+        \|\mathcal{D}(\bx)\|_F\le C_{\mathcal{D}},\qquad
+        \|\nabla\mathcal{D}(\bx)\|\le G_{\mathcal{D}},\qquad
+        \forall\,\bx\in\RR^q.
+    \]}
+    \item \blue{There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$,}
     \begin{align}
         \label{Eq: finite-sum sampling identities}
         &\frac{1}{n}\sum_{i=1}^{n}\nabla_{\bx} F_i(\bx, \bb_i)
@@ -26,20 +33,26 @@ In the remainder of this paper, we impose the following assumptions.
         - \nabla_{\bx} F(\bx, \bB)\right\|^2
         \leq \sigma^2.
     \end{align}
-\end{itemize}
-\end{assumption}
-\begin{remark}
-\label{Remark: main assumptions}
-\begin{enumerate}[label=(\roman*), leftmargin=2em]
-\item The smoothness constant $L_F$ is bounded by a constant independent of the sample size $n$. A rigorous analysis is in Appendix~\ref{app:smoothness-discussion}.
-\item \blue{By \Cref{Ass: main assumptions}(i) and $f_i(\bx)=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^{2}$, for all $(\bx,\bB)$,
-\begin{equation}
-\label{Eq: quadratic growth of F}
-F(\bx,\bB)-\underline{\ell}\ge\frac{\mu}{2}\|\bx\|^{2}+\frac{\gamma}{2n}\|\bB-\mathcal{D}(\bx)\|^{2}\ge0 .
-\end{equation}
-Since $\mathcal{D}$ is continuous, $F$ is coercive; adding $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ shows that $J$ is also bounded below and coercive. Since $J$ is continuous, Problem~\eqref{Prop: block-wise regularized problem} admits an optimal solution.}
 \end{enumerate}
+\end{assumption}
+\begin{remark}[Coercivity of $J$]\label{rem:coercivity}
+\blue{Assumption~\ref{Ass: main assumptions}(i) yields the coercivity of $J$ assumed in Section~\ref{Sec: first-order optimality conditions}. Indeed, since $P\ge0$,
+\[
+J(\bx,\bB)\ge\underline{\ell}+\frac{\mu}{2}\|\bx\|^2+h(\bB),
+\]
+and $h$ grows at least linearly in each entry because $\phi^*$ is even and $\operatorname{dom}\phi^*$ has nonempty interior (Lemma~\ref{lem:wtype-conj}).}
 \end{remark}
+\blue{Under Assumption~\ref{Ass: main assumptions}(ii), $F$ is $L_F$-smooth on $\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$, and by the initialization and the $\bB$-update this set contains all primal iterates; $L_F$ and $R_B$ are given in Appendix~\ref{app:smoothness-discussion}.}
+\begin{remark}
+    \red{Both algorithms initialize $\bB^0=\bB^1=\mathcal{D}(\bx^1)\in[-1,1]^{n\times d}$ and $\bLmbd^1=\bm{0}$. Since $h^{**}$ vanishes on $[-1,1]^{n\times d}$, this gives
+\[
+\nabla_{\bB}F(\bx^1,\bB^1)+\bLmbd^1=\bm{0},\qquad
+\bB^1\in\partial h^*(\bLmbd^1),
+\]  
+so the common one-step estimates apply from the first iteration.}
+
+\end{remark}
+
 \blue{Let $T$ denote the maximum number of iterations.} \blue{Under the mini-batch sampling scheme
 introduced in Section~\ref{Sec: Algorithm implementations}, let $(\Omega,\mathcal F,\mathbb P)$
 be the underlying probability space. For $k\geq1$, define
@@ -47,10 +60,9 @@ $\mathcal F_k:=\sigma(\mathcal J_1,\ldots,\mathcal J_{k-1})$ with $\mathcal F_1$
 the filtration generated by the past mini-batches. We write
 $\mathbb E_k[\cdot]:=\mathbb E[\cdot\mid\mathcal F_k]$ for the conditional expectation
 given the past and $\mathbb E[\cdot]$ for the total expectation. All equalities and
-inequalities involving $\mathbb E_k[\cdot]$ are understood to hold almost surely, and we
-explicitly indicate ``a.s.'' whenever such conditional relations are stated.}
+inequalities involving $\mathbb E_k[\cdot]$ are understood to hold almost surely.}
 
-The presence of dual variables $\bLmbd$ \blue{makes it difficult to establish a descent property for the Lagrangian $\calL$ in \eqref{Eq: simplified_lagrangian}: the dual update can increase $\calL$, so $\calL$ need not decrease along the iterates, which precludes} the direct use of standard methods \cite{xu2023momentum,zhang2022stochastic}.
+\blue{The dual update can increase $\calL$, so $\calL$ need not decrease along the iterates and standard descent arguments do not apply directly} \cite{xu2023momentum,zhang2022stochastic}.
 To this end, we construct suitable Lyapunov functions (see \eqref{Eq: the Lyapunov function in SGDM} and \eqref{Eq: the Lyapunov function in STORM}) to obtain the approximate descent property.  We first analyze the dual dynamics by establishing bounds on $\|\bLmbd^{k+1}-\bLmbd^k\|^2$ in terms of the primal residuals, enabling the Lyapunov construction. \blue{The proof is provided in \Cref{app:dual-difference-proof}}.
 \begin{lemma}[Dual increment bound]
 \label{Lemma: dual boundedness}
@@ -72,7 +84,7 @@ Since the updates of $\bB$ and $\bLmbd$ are common to Algorithms~\ref{alg:our_al
 \[
     \Delta_{\bx}^{k}= \frac{\|\bx^{k}- \bx^{k-1}\|^{2}}{2},\quad \Delta_{\bm{B}}^{k}
     = \frac{\|\bm{B}^{k}- \bm{B}^{k-1}\|^{2}}{2}.
-\] 
+\]  
 \begin{lemma}[One-iteration progress on $\bB$ and $\bLmbd$]
     \label{Lemma: One-iteration progress of B and Lambda}
     Consider the sequence $\{
@@ -83,13 +95,12 @@ Since the updates of $\bB$ and $\bLmbd$ are common to Algorithms~\ref{alg:our_al
 &\calL(\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL(\bx^{k+1}, \bB^{k}, \bLmbd^{k}) \notag \\
 \le& K_1 \Delta_{\bB}^{k+2} - K_2 \Delta_{\bB}^{k+1} + K_3 \Delta_{\bB}^{k} 
 + K_4 \Delta_{\bx}^{k+2} + K_3 \Delta_{\bx}^{k+1}, 
-\end{align} where \blue{$\delta=1/6$,} \(K_1 = 3\delta\tau^{-1}\), \(K_2 = 2\tau^{-1} - L_F - 3\delta\tau(\tau^{-1} + L_F)^2\), \(K_3 = \frac{\tau L_{F}^{2}}{\delta}\), and \(K_4 = 3\delta\tau L_F^2\).
+\end{align}{where $K_1=\frac{1}{2\tau}$, $K_2=\frac{3}{2\tau}-2L_F-\frac{\tau L_F^2}{2}$, $K_3=6\tau L_F^2$, and $K_4=\frac{\tau L_F^2}{2}$.}
 \end{lemma}
 \blue{The proof is provided in \Cref{app:primal-dual-progress-proof}.}
 
-We now analyze the stochastic $\bx$-updates, which introduces algorithm-specific challenges:
-as \eqref{Eq: dual boundedness} and \blue{\eqref{item: B and Lambda}} show, randomness in the $\bx$-updates propagates to the $\bB$- and $\bLmbd$-updates, necessitating careful parameter tuning and the construction of Lyapunov functions. We present the key lemmas and complexity results of both algorithms below. Detailed proofs of all lemmas and theorems, along with complete parameter derivations,
-are given in Appendices~\ref{app:stom-complexity} and~\ref{app:storm-complexity}.
+We now analyze the stochastic $\bx$-updates, which \blue{introduce} algorithm-specific challenges:
+as \eqref{Eq: dual boundedness} and \blue{\eqref{item: B and Lambda}} show, randomness in the $\bx$-updates propagates to the $\bB$- and $\bLmbd$-updates, necessitating careful parameter tuning and the construction of Lyapunov functions.
 \subsection{Oracle Complexity of DualHash-StoM}
 \label{Section: complexity of StoM}
 Let us denote the gradient error in the $k$-th iteration as
@@ -113,12 +124,11 @@ Let us denote the gradient error in the $k$-th iteration as
 \end{lemma}
 
 \blue{To handle the oscillations of the Lagrangian function in \eqref{Eq: simplified_lagrangian}, we construct a Lyapunov function for \Cref{alg:our_algorithm_sgdm}. We choose constant algorithm parameters as follows:
-\begin{align}
-    \label{Eq: the parameters conditions of dualhash-sgdm in suppl}\eta_{k}= \frac{\eta}{L_{F}},\quad \alpha_{k}= \alpha, \quad \beta_{k}= \beta,\quad 0<\tau<\frac{\sqrt{30}-2}{13L_F},
-\end{align} 
-where $\bar{L}_F:=2L_F+K_3+K_4$, 
-$\eta =\frac{(1 - 2\alpha - \nu)/2}{\frac{\bar{L}_{F}}{L_{F}} +
-\frac{(1 + \nu)\beta^{2}}{(1 - \alpha)\alpha}}$,
+\begin{equation}
+    \label{Eq: the parameters conditions of dualhash-sgdm in suppl}
+    \eta_{k}= \frac{\eta}{L_{F}},\quad \alpha_{k}= \alpha,\quad \beta_{k}= \beta,\quad 0<\tau<\frac{\sqrt{30}-2}{13L_F},\quad \eta=\frac{(1 - 2\alpha - \nu)/2}{\frac{\bar{L}_{F}}{L_{F}} + \frac{(1 + \nu)\beta^{2}}{(1 - \alpha)\alpha}},
+\end{equation}
+where $\bar{L}_F:=2L_F+K_3+K_4$,
 $0<\nu<1$, $0<\alpha<(1-\nu)/2$, and $0<\beta<1$.
 These parameters are independent of $T$.}
 \blue{With these constant parameters, we define the Lyapunov function and its associated sequence as follows:}
@@ -128,8 +138,7 @@ These parameters are independent of $T$.}
         - C_{3}\Delta_{\bm{x}}^{k+1} + C_{4}\Delta_{\bm{x}}^{k}, 
         \label{Eq: the Lyapunov function in SGDM} \\
     \mathcal{Q}^{k} &:= \{\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}, 
-        \bB^{k+1}, \bB^{k-1}, \bx^{k+1}, \bx^{k-1}\}, 
-        \quad \{\mathcal{Q}^{k}\}_{k \in \mathbb{N}}, \notag
+        \bB^{k+1}, \bB^{k-1}, \bx^{k+1}, \bx^{k-1}\}, \notag
         % \label{Eq: the Lyapunov sequence in SGDM}
 \end{align}\blue{where the positive coefficients $C_1,C_2,C_3,C_4$ are independent of $k$ under \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and are chosen as follows:}
 \begin{align}
@@ -160,26 +169,24 @@ The proof is provided in
 constants in \eqref{Eq: the descent coefficients of potential function in SGDM}
 \blue{are} established in \Cref{lem:lyapunov-coef-positivity}.
 
-\blue{Before deriving the convergence rate, we establish a lower bound for the Lyapunov sequence. Under the conditions of \Cref{prop:lyapunov-lower-bound}(i), there exists $\Psi_m^*>-\infty$, independent of $T$, such that
+\blue{Before deriving the convergence rate, we establish a lower bound for the Lyapunov function. Unlike $F$, the potential $\Psi_m$ contains the coupling term $\langle\bB^k,\bLmbd^k\rangle$ and the negative increments $-C_1\Delta_{\bB}^{k+1}$ and $-C_3\Delta_{\bx}^{k+1}$, so it is not trivially bounded below. However, under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, these terms are dominated by $F-\underline{\ell}$. Consequently, under \Cref{Ass: main assumptions}, there exists $\Psi_m^*>-\infty$, independent of $T$, such that
 \[
 \EE[\Psi_m(\calQ^k)]\ge\Psi_m^*,\qquad k\ge1.
 \]
-The proof is given in \Cref{app:lyapunov-lower-bounds}. For a deterministic initial point, define $\Delta_1:=\calL(\bx^1,\bB^1,\bLmbd^1)-\Psi_m^*$ as an upper bound on the initial potential gap.}
+The proof and the explicit value of $\Psi_m^*$ are given in \Cref{Lemma: lower bound of Psi_m}. For a deterministic initial point, define $\Delta_1:=\calL(\bx^1,\bB^1,\bLmbd^1)-\Psi_m^*$ as an upper bound on the initial potential gap.}
 
 We now present the convergence rate of \Cref{alg:our_algorithm_sgdm} under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, which guides the selection of the batch size $b_k$. 
 \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_sgdm}]
 \label{lemma: convergence rate sgdm} Under the conditions of \Cref{Lemma:
-    approximate sufficient descent property in SGDM} and \blue{\Cref{prop:lyapunov-lower-bound}(i)}, for any $T \geq 1$, there exists
+    approximate sufficient descent property in SGDM}, for any $T \geq 1$, there exists
     \blue{$R$ uniformly selected from $\{1,\ldots,T\}$} such that $(\bx^{R}, \bB
     ^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
     \begin{align}
         \label{Eq: the convergence rate of sgdm}\mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bLmbd^{R}))] \leq \frac{L_{\Delta}\Delta_{1}}{T}+ \blue{\frac{C_{\sigma}\sigma^{2}}{T}\sum_{k=1}^{T}\frac{1}{b_{k}}},
-    \end{align}where \blue{$L_{\Delta} := \frac{\max\{S_{1}, S_{2}\} + 
-    \max\{S_{3}, S_{4}\}}{\min\{C_{\bB}, C_{\bx}\}}$ with $S_1, S_2, S_3, S_4$ defined in 
-    \eqref{Eq: the coefficients of stationarity error bound in SGDM}}, 
-    \blue{and $C_{\sigma} := \frac{L_{\Delta}}{L_{F}} + 3$.} Here $L_{\Delta}$ and  $C_{\sigma}$ are constants independent of $T$.
+    \end{align}\blue{where $L_{\Delta}:=\frac{\max\{S_1,S_2,S_3,S_4\}}{\min\{C_{\bB},C_{\bx}\}}$ and $C_{\sigma}:=\frac{L_{\Delta}}{L_F}+3$ are constants independent of $T$, with $S_1,\ldots,S_4$ defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}.}
 \end{lemma}
-\blue{With the constant parameters in \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, we choose the batch size according to \eqref{Eq: the convergence rate of sgdm} as
+
+\blue{To achieve the desired oracle complexity, we choose the batch size according to \eqref{Eq: the convergence rate of sgdm} as
 \begin{align}
 \label{Eq: the parameters conditions of dualhash-sgdm}
     b_k=b=c_bT,
@@ -188,12 +195,12 @@ where $c_b>0$ is a constant independent of $T$.} The complexity result is establ
 \begin{theorem}
 % [Oracle complexity of \Cref{alg:our_algorithm_sgdm}]
     \label{Theorem: the oracle complexity in SGDM} 
-Under \Cref{Ass: main assumptions} and \blue{the conditions of \Cref{prop:lyapunov-lower-bound}(i)}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \blue{\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} provided that \(T\) satisfies
+Under \Cref{Ass: main assumptions}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \blue{\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} \blue{with}
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm SGDM}
         T = \left\lceil \frac{L_{\Delta} \Delta_1+ C_{\sigma}\frac{\sigma^2}{c_b}}{\varepsilon^2} \right\rceil.
 \end{align}
-Moreover, the total number of SFO calls is of order \(\calO(\varepsilon^{-4})\).
+Consequently, the total number of SFO calls is of order \(\calO(\varepsilon^{-4})\).
 \end{theorem}
 \subsection{Oracle Complexity of DualHash-StoRM} 
 Before proceeding, we introduce an additional assumption, also known as the mean-squared smoothness
@@ -208,7 +215,7 @@ assumption, widely used in variance reduction methods \cite{arjevani2023lower,dr
     \left\| \nabla_{\bx} F_{i}(\bx,\bb_i) - \nabla_{\bx} F_{i}(\bx',\bb_i')\right\|^{2}
     \leq L^{2}_F \left[ \|\bx - \bx'\|^{2} + \|\bB - \bB'\|^{2} \right]. 
 \end{align}
-\end{assumption}}The condition \eqref{eq:mss} is slightly stronger than the \(L_F\)-smoothness of the finite-sum function \(F\) in \Cref{Ass: main assumptions}(ii). In particular, this assumption implies \Cref{Ass: main assumptions}(ii) by Jensen's inequality, but not conversely.
+\end{assumption}}\blue{By Jensen's inequality, \eqref{eq:mss} implies that $\nabla_{\bx}F$ is $L_F$-Lipschitz in $(\bx,\bB)$. The converse need not hold.}
 
 Let us denote the gradient error \[\be^{k} = \blue{\bg_s^{k}} - \nabla_{\bx}F(\bx^{k}, \bB^{k})
 ,\]where $\blue{\bg_s^k}$ is defined in \eqref{Eq: the stochastic approximate in STORM}. Similarly, the following lemma estimates the one-iteration progress
@@ -219,7 +226,8 @@ of the Lagrangian function \eqref{Eq: simplified_lagrangian} via the $\bx$-updat
         \label{Eq: the recursive relation of L on x}\calL (\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k}) \leq \frac{\eta_{k}}{2}\| \be^{k}\|^{2}- (\eta_{k}^{-1}- L_{F})\Delta_{\bx}^{k+1}.
     \end{align}
 \end{lemma}
-We introduce the following Lyapunov function of \Cref{alg:our_algorithm_storm}:
+
+We \blue{then} introduce the following Lyapunov function of \Cref{alg:our_algorithm_storm}:
 % and sequence specific to \Cref{alg:our_algorithm_storm}:
 \begin{align}
     \Psi_r(\mathcal{Q}^{k}) &= \calL(\bx^{k}, \bm{B}^{k}, \bLmbd^{k}) 
@@ -230,65 +238,63 @@ We introduce the following Lyapunov function of \Cref{alg:our_algorithm_storm}:
     % \bB^{k+1}, \bB^{k-1}, \bx^{k+1}\}_{k \in \NN},
     % \label{Eq: the Lyapunov sequence in STORM}
 \end{align}where $C_1, C_2, C_3$, independent of $k$, are chosen as in 
-\eqref{Eq: the coefficients of the Lyapunov function in SGDM}.
-In the next lemma, we establish an approximate sufficient descent property 
+\eqref{Eq: the coefficients of the Lyapunov function in SGDM}. In the next lemma, we establish an \blue{in-expectation} approximate sufficient descent property 
 of $\Psi_r$, with the proof provided in \Cref{app:storm-descent-proof}.
 \begin{lemma}
 \label{Lemma: approximate sufficient descent property storm}
-    Under \Cref{Ass: main assumptions}(i)\blue{--}(ii) and \Cref{Ass: the mean squared smoothness of F}, with $\tau$ satisfying \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, for any $k \geq 1$, it holds that
-    \begin{align}
-        \label{Eq: the descent property of Lyapunov func in storm}\Psi_r(\mathcal{Q}^{k+1}) - \Psi_r(\mathcal{Q}^{k}) \leq -C_{\bB}\left( \Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}\right)- C_{\bx}^{k}\Delta_{\bm{x}}^{k+1}+ \frac{\eta_{k}}{2}\| \be^{k}\|^{2},
-    \end{align}
+    Under \Cref{Ass: main assumptions}(i)\blue{--}(ii), with \blue{$0<\tau<\frac{\sqrt{30}-2}{13L_F}$ and $\eta_{k}^{-1}- \tilde{L}_{F}>0$}, for any $k \geq 1$, it holds that
+    \blue{\begin{align}
+        \EE[\Psi_r(\mathcal{Q}^{k+1})] - \EE[\Psi_r(\mathcal{Q}^{k})]
+        &\leq -C_{\bB}\EE[\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}]-C_{\bx}^{k}\EE[\Delta_{\bx}^{k+1}]+\frac{\eta_k}{2}\EE[\|\be^{k}\|^{2}],
+        \label{Eq: the descent property of Lyapunov func in storm}
+    \end{align}}
     where the descent coefficients are given by:
     \begin{align}
         % \label{Eq: the descent coefficients of potential function}
-        \begin{cases}C_{\bB}&= C_{2}- K_{3}= \frac{K_2 - K_3 -K_1}{2}>0, \\ C_{\bx}^{k}&=\eta_{k}^{-1}- \tilde{L}_{F}, \text{ where }\tilde{L}_{F}= L_{F}+ K_{3}+ K_{4}.\end{cases} \notag 
-    \end{align}
-    Furthermore, the following inequalities hold:
-    \begin{align}
-        \label{Eq: bound B and x in storm}
-        \left\{ \begin{array}{ll}C_{\bB} \left( \Delta_{\bB}^{k+1} + \Delta_{\bB}^k \right) \leq \Psi_r(\mathcal{Q}^k) - \Psi_r(\mathcal{Q}^{k+1}) + \frac{\eta_{k}}{2} \| \be^k\|^2, \\ C_{\bx}^k \Delta_{\bm{x}}^{k+1} \leq \Psi_r(\mathcal{Q}^k) - \Psi_r(\mathcal{Q}^{k+1}) +\frac{\eta_{k}}{2} \| \be^k\|^2.\end{array} \right.
+        \begin{cases}C_{\bB}&= C_{2}- K_{3}= \frac{K_2 - K_3 -K_1}{2}>0, \\ C_{\bx}^{k}&=\eta_{k}^{-1}- \tilde{L}_{F} > 0, \quad \blue{\tilde{L}_F:=L_F+K_3+K_4}.\end{cases} \notag 
     \end{align}
 \end{lemma}
-
-\blue{In the same way, there exists $\Psi_r^{*}>-\infty$, independent of $T$, such that $\EE[\Psi_r(\calQ^{k})]+\frac{\eta_T}{\rho_T}\EE\|\be^{k}\|^{2}\ge\Psi_r^{*}$ for all $k\ge1$; see Proposition~\ref{prop:lyapunov-lower-bound}(ii).}
-
-We now analysis the convergence rate of \Cref{alg:our_algorithm_storm} and we use the following parameter setting,
-\begin{align}
-\label{Eq: the parameters conditions in dualhash-storm}
-    \eta_k = \frac{\eta}{\tilde{L}_{F} T^{\frac{1}{3}}}, \quad 
-    \rho_k = \frac{8\rho\eta^2}{T^{\frac{2}{3}}}, \quad 
-    \tau \leq \frac{\sqrt{\tilde{\delta}}}{L_F}, \quad 
-    b_1 = c_b T^{1/3}, \quad b_k = b \ (k \ge 2),
-\end{align}where $\eta$, $\rho$, $\tilde{\delta}$, $c_b$, and $b$ are positive constants
-independent of $T$, and $\tilde{\delta}= c_{\delta}\delta^{2}$ with $\delta, c_{\delta}> 0$. \blue{In addition, we take $\delta=\frac16$, $0<c_{\delta}<36\bigl(\frac{\sqrt{30}-2}{13}\bigr)^{2}$, and
-\begin{equation}\label{Eq: the constants for storm}
-\rho\ \ge\ \max\Bigl\{1,\ \frac{2L_F^{2}(1+G)}{b\tilde{L}_F^{2}}\Bigr\},\qquad
-0<\eta\ \le\ \min\Bigl\{\frac12,\ \frac{1}{4\sqrt{\rho}}\Bigr\},\qquad G:=1753L_{\mathcal{D}}^{2},
-\end{equation}
-where $L_{\mathcal{D}}$ is the Lipschitz constant of $\mathcal{D}$ from Appendix~\ref{app:smoothness-discussion}, and the initialization of \Cref{alg:our_algorithm_storm} is the block-stationary one described in \Cref{Sec: Algorithm implementations}.}
+\blue{We now analyze the convergence rate of \Cref{alg:our_algorithm_storm} with the following parameter conditions:}
+\blue{\begin{align}
+    &\eta_k \equiv\eta_T:= \frac{\eta}{\tilde{L}_{F} T^{1/3}},\quad
+    \rho_k \equiv\rho_T:= \frac{8\rho\eta^2}{T^{2/3}},\quad
+    b_k = \begin{cases} b_1, & k = 1, \\ b, & k \geq 2, \end{cases}
+    \label{Eq: the parameters conditions in dualhash-storm}\\
+    &0<\tau<\frac{\sqrt{30}-2}{13L_F},\quad
+    \rho\ge\frac{2L_F^{2}(1+G)}{b\tilde{L}_F^{2}},\quad
+    0<\eta\le\min\Bigl\{\frac12,\frac{1}{4\sqrt{\rho}}\Bigr\},
+    \label{Eq: the constants for storm}
+\end{align}
+where $\eta$, $\rho$, and $b$ are positive constants independent of $T$, and $G:=1753G_{\mathcal{D}}^{2}$ with $G_{\mathcal{D}}$ given in Assumption~\ref{Ass: main assumptions}(ii).}
+\blue{Unlike $F$, the potential $\Psi_r$ contains the coupling term $\langle\bB^k,\bLmbd^k\rangle$ and the negative increments $-C_1\Delta_{\bB}^{k+1}$ and $-C_3\Delta_{\bx}^{k+1}$, and its descent involves the estimator error with the weight $\eta_T/\rho_T$; hence it is not trivially bounded below. However, these parameter conditions give $\eta_T\tilde{L}_F\le\frac12$ and $\rho_T\le\frac12$, so these terms are dominated by $F-\underline{\ell}$ and $\frac{\eta_T}{\rho_T}\|\be^k\|^2$. Consequently, under \Cref{Ass: main assumptions}, there exists $\Psi_r^{*}>-\infty$, independent of $T$, such that
+\[
+\EE[\Psi_r(\calQ^{k})]+\frac{\eta_T}{\rho_T}\EE\|\be^{k}\|^{2}\ge\Psi_r^{*},\qquad k\ge1.
+\]
+The proof and the explicit value of $\Psi_r^*$ are given in \Cref{Lemma: lower bound of W}. For a deterministic initial point, define $\tilde{\Delta}_{1}:=\calL(\bx^{1},\bB^{1},\bLmbd^{1})-\Psi_r^{*}$.}
 \begin{lemma}[Convergence rate of \Cref{alg:our_algorithm_storm}]
-    \label{Lemma: convergence rate of storm} Under \Cref{Ass: main assumptions}(i)--(iii), \Cref{Ass: the mean squared smoothness of F}, the parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}, and \eqref{eq:P1s}--\eqref{eq:P2s}, for any $T \geq 1$, there exists \blue{$R$ uniformly selected from $\{1,\ldots,T\}$} such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
-    \begin{align}
-    \label{Eq: the convergence rate of storm}\EE[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))] \leq \frac{\bar{N}\,\Theta}{T^{2/3}},
-    \end{align}
-    \blue{where $\Theta:=\tilde{\Delta}_{1}+\dfrac{\sigma^{2}}{8\rho\eta\tilde{L}_{F}c_b}+\dfrac{16\rho\eta^{3}\sigma^{2}}{\tilde{L}_{F}b}$, $\bar{N}:=\max\Bigl\{\dfrac{S_1}{C_{\bB}},\dfrac{S_2}{C_{\bB}},\dfrac{48\tilde{L}_F}{\eta}+\dfrac{16\eta L_F^{2}(1+3\tau^{2})}{\tilde{L}_F}\Bigr\}$ with $S_1,S_2$ defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}, and $\tilde{\Delta}_{1}:=\calL(\bx^{1},\bB^{1},\bLmbd^{1})-\Psi_r^{*}$, where $\Psi_r^{*}$ is a lower bound, independent of $T$. The constants $\bar N$ and $\Theta$ do not depend on $T$.}
+    \label{Lemma: convergence rate of storm} Under \blue{Assumptions~\ref{Ass: main assumptions}--\ref{Ass: the mean squared smoothness of F}} and the parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}, for any $T \geq 1$, there exists $R$ uniformly selected from \blue{$\{1,\ldots,T\}$} such that $(\bx^{R}, \bB^{R}, \bLmbd^{R})$ satisfies \eqref{equ:esp} with
+    \blue{\begin{align}
+    \label{Eq: the convergence rate of storm}\EE[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))] \leq \frac{\tilde{L}_{\Delta}\tilde{\Delta}_{1}}{T^{2/3}}+\frac{\tilde{C}_{\sigma}\sigma^{2}}{4\rho\eta^{2}b_1T^{1/3}}+\frac{32\rho\eta^{2}\tilde{C}_{\sigma}\sigma^{2}}{b\,T^{2/3}},
+    \end{align}}
+    where
+    \blue{\[
+    \tilde{L}_{\Delta}:=\max\Bigl\{\frac{S_1}{C_{\bB}},\frac{S_2}{C_{\bB}},\frac{48\tilde{L}_F}{\eta}+\frac{16\eta L_F^{2}(1+3\tau^{2})}{\tilde{L}_F}\Bigr\},\qquad \tilde{C}_{\sigma}:=\frac{\eta\tilde{L}_{\Delta}}{2\tilde{L}_F}
+    \]}
+    are constants independent of $T$, with $S_1,S_2$ defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}.
 \end{lemma}
-From \eqref{Eq: the convergence rate of storm}, to \blue{achieve} the $\mathcal{O}(T^{-2/3})$ convergence rate, we require
-$b_{1}= \Theta(T^{1/3})$ and $b_{k}= \mathcal{O}(1)$ for $k > 1$. With this parameter choice, we proceed to analyze the oracle complexity of \Cref{alg:our_algorithm_storm}.
+\blue{To achieve the desired oracle complexity, we choose $b_1=c_bT^{1/3}$, where $c_b>0$ is a constant independent of $T$.}
 \begin{theorem}
 \label{Theorem: the oracle complexity in STORM}
-Under \Cref{Ass: main assumptions}(i), (iii), \Cref{Ass: the mean squared smoothness of F}, and \eqref{eq:P1s}--\eqref{eq:P2s}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_storm} with the parameters satisfying \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} whenever
+Under \blue{Assumptions~\ref{Ass: main assumptions}--\ref{Ass: the mean squared smoothness of F}}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_storm} with the parameters satisfying \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm} \blue{and $b_1=c_bT^{1/3}$}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} whenever
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm VR}
-        T = \left\lceil \frac{\left(\bar{N}\,\Theta\right)^{\frac{3}{2}}}{\varepsilon^3} \right\rceil,
+        \blue{T = \left\lceil \frac{\Bigl(\tilde{L}_{\Delta}\tilde{\Delta}_{1}+\tilde{C}_{\sigma}\bigl(\frac{\sigma^{2}}{4\rho\eta^{2}c_b}+\frac{32\rho\eta^{2}\sigma^{2}}{b}\bigr)\Bigr)^{3/2}}{\varepsilon^3} \right\rceil,}
 \end{align}
-with $\bar{N}$ and $\Theta$ from \Cref{Lemma: convergence rate of storm}. Moreover, the total number of SFO calls is of order \(\calO(\varepsilon^{-3})\).
+with \blue{$\tilde{L}_{\Delta}$ and $\tilde{C}_{\sigma}$ from \Cref{Lemma: convergence rate of storm}}. \blue{Consequently,} the total number of SFO calls is of order \(\calO(\varepsilon^{-3})\).
 \end{theorem} 
 \begin{remark}
 \begin{enumerate}[label=(\roman*), leftmargin=2em]
 \item The results in Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM} are novel for stochastic, non-convex, multi-block primal-dual optimization, a challenging area where existing work has largely focused on one-block \cite{xu2023momentum,shi2025momentum} or deterministic settings \cite{ADMMNolinear2024}.  
-    \item  \Cref{alg:our_algorithm_sgdm} \blue{with constant parameters from \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and batch size from} \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. This matches the best-known lower bound \cite{arjevani2023lower} and the complexity of variance-reduced SFOMs for single-block problems \cite{shi2025momentum,xu2023momentum}. Notably, despite tackling a multi-block problem, our primal-dual framework preserves this efficiency without degrading the dependence on $\varepsilon$.
-%    \item  While DualHash-StoRM with parameters in \eqref{Eq: the parameters conditions in dualhash-storm} achieves better theoretical complexity than DualHash-StoM under \eqref{Eq: the parameters conditions of dualhash-sgdm}, the latter relies on a weaker assumption (\Cref{Ass: main assumptions} [ii]). In our experiments, while DualHash-StoRM enjoys faster training convergence, DualHash-StoM enerally delivers better final retrieval performance.
+    \item  \Cref{alg:our_algorithm_sgdm} \blue{under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. This matches the best-known lower bound \cite{arjevani2023lower} and the complexity of variance-reduced SFOMs for single-block problems \cite{shi2025momentum,xu2023momentum}. Notably, despite tackling a multi-block problem, our primal-dual framework preserves this efficiency without degrading the dependence on $\varepsilon$.
 \end{enumerate}
 \end{remark}

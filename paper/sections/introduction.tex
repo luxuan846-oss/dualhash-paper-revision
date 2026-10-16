@@ -2,7 +2,7 @@
 
 \label{Section: Introduction}
 % A key technique in large-scale image retrieval systems is hashing. Image hashing aims to represent the information of an image using a binary code (e.g.,\( \pm 1\)) for efficient storage and accurate retrieval \cite{L2H2009}. Recently, deep learning to hash has shown significant improvements due to its robust feature extraction capability \cite{luoSurveyDeepHashing2023,xiaSupervisedHashingImage2014}, which utilizes neural networks to map high-dimensional feature vectors (e.g., 1024 dimensions) into compact binary codes (e.g., 64 bits). 
-Hashing is a pivotal technique in large-scale image retrieval,  which encodes image content into compact binary codes (e.g., $\pm 1$) for efficient storage and accurate similarity search.
+Hashing is a pivotal technique in large-scale image retrieval, which encodes image content into compact binary codes (e.g., $\pm 1$) for efficient storage and accurate similarity search.
 Mathematically, this amounts to \blue{carrying out} a \emph{constrained projection} 
 onto the binary hypercube $\{-1,+1\}^d$ that preserves semantic 
 neighborhood structures\blue{. Such a process can be interpreted as} a nonconvex discrete optimization problem 
@@ -12,7 +12,7 @@ Deep hashing leverages neural networks to learn such projections and
 \blue{is able to reduce storage by a factor of $512$ (a $1024$-dimensional \texttt{float32} feature vector versus a $64$-bit binary code)} while maintaining
 competitive retrieval accuracy~\cite{luoSurveyDeepHashing2023}.
 The mainstream approaches fall into two categories: sign-based 
-methods and continuous relaxation.
+methods and \blue{continuous-relaxation methods}.
 A fundamental challenge, however, is that the $\operatorname{sgn}$ 
 function has zero gradient almost everywhere, rendering standard 
 first-order methods ineffective~\cite{Cao2017HashNetDL}.
@@ -41,25 +41,21 @@ continuous values and the final binary codes~\cite{weissSpectralHashing2008}.
         \node at (0,-1.15) {$\text{(b)}\ \phi(x)=\bigl||x|-1\bigr|$};
     \end{scope}
 \end{tikzpicture}}
-\caption{The V-type (left) versus W-type (right) regularizations.}
+\caption{The \blue{one-dimensional} V-type (left) versus W-type (right) regularizations.}
 \label{Fig: the W and V regularizations}
 \vspace{-3ex}
 \end{figure}
-To mitigate this issue, researchers have developed specialized regularization techniques \cite{caoDeepCauchyHashing2018,li2017deep,liuDeepSupervisedHashing}. \red{Among them, W-type regularizers, i.e., coordinatewise penalties that vanish exactly at $\pm1$, such as $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$~\cite{liuDeepSupervisedHashing,wang2023deep} and $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$~\cite{wang2016DTSH,he2025mambahash}, have proven effective.}
+To mitigate this issue, researchers have developed specialized regularization techniques \cite{caoDeepCauchyHashing2018,li2017deep,liuDeepSupervisedHashing}. \blue{Among them, W-type regularizers, i.e., coordinatewise penalties that vanish exactly at $\pm1$, such as $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$~\cite{liuDeepSupervisedHashing,wang2023deep} and $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$~\cite{wang2016DTSH,he2025mambahash}, have proven effective.}
 These regularizers impose sharp penalties to encourage variables towards binary values (e.g., $-1$ or $1$). Mathematically, this approach naturally formulates deep hashing as a nonconvex composite optimization problem\footnote{A formal definition of this problem is provided in \Cref{Sec:W-type Regularized Deep Hashing Model}}:
 \begin{align}
 \label{Eq: the general nonlinear composite problem in intro}
 \min_{\bx \in \RR^{\blue{q}}} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
 \tag{P0}
-\end{align}\red{where \(\bx\in\RR^{q}\) collects the network parameters and \(\bD_i:\RR^q\to\RR^{d}\) is the continuous network output mapping for the \(i\)-th sample.}
-\red{The row-stacked output mapping is
-\(\mathcal{D}(\bx):=[\bD_1(\bx)^\top;\ldots;\bD_n(\bx)^\top]\in\RR^{n\times d}\).
-The mappings \(f_i\) and \(\bD_i\) are continuously differentiable, and \(h\) is a proper and lower semicontinuous regularizer. Classic examples include the
-\(\ell_1\) norm to introduce sparsity and the \(\ell_2\) norm weight decay to prevent overfitting.} In practice, researchers typically apply stochastic (sub)gradient methods (SGD) directly to optimize the objective \eqref{Eq: the general nonlinear composite problem in intro}, and deep hashing follows this paradigm as well. This seemingly effective choice, however, frequently leads to suboptimal performance. \blue{The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.}
+\end{align}\blue{Here, \(\bx\) collects the network parameters, \(\bD_i(\bx)\) is the continuous output for sample \(i\), \(f_i\) is the sample loss, and \(h\) is the W-type regularizer; their formal definitions are given in Section~\ref{Section: Problem Reformulation}.} In practice, researchers typically apply stochastic (sub)gradient methods (SGD) directly to optimize the objective \eqref{Eq: the general nonlinear composite problem in intro}, and deep hashing follows this paradigm as well. This seemingly effective choice, however, frequently leads to suboptimal performance. \blue{The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.}
 
 The proximal operator is a powerful tool for handling nonsmooth 
 regularizers, with widespread applications in signal/image processing 
-and computer vision, including sparse recovery~\cite{yin2015minimization}, 
+and computer vision, including 
 \blue{inverse imaging problems~\cite{ding2020ldct_pfbs,
 chambolleFirstOrderPrimalDualAlgorithm2011,
 repetti2021variable,shumaylovweakly,li2023spherical}, }
@@ -88,6 +84,6 @@ In this paper, we propose an efficient deep hashing algorithm to address these c
 \item {\textbf{\blue{Theoretical characterization of the reformulated model.}}} We reformulate deep hashing models with W-type regularization as a finite-sum multi-block optimization problem \eqref{Prop: block-wise regularized problem}, decoupling \blue{the challenging composite term $h\circ\mathcal{D}$} and facilitating sequential convergence analysis. \blue{We show that any primal--dual optimal pair with zero duality gap satisfies the KKT conditions of the associated Lagrangian. More generally, we establish an exact characterization of when a KKT point corresponds to a stationary point of the reformulated problem.}
 
 \item {\textbf{Novel primal-dual hashing algorithms.}} \blue{Building on this formulation,} we propose \textit{DualHash}, a stochastic primal-dual algorithm for deep hashing. Using Fenchel duality, we partially transform the nonconvex W-type regularization optimization into a convex dual formulation that admits closed-form updates, ensuring robustness and stable convergence. We then develop two important instances: a momentum-based implementation (\textbf{DualHash-StoM}) and a variance-reduced implementation using StoRM (\textbf{DualHash-StoRM}).
-\item {\textbf{Comparable complexity guarantee.} We provide rigorous non-asymptotic complexity analysis for deep hashing optimization under the challenging stochastic, nonconvex, multi-block primal-dual framework.} {Specifically, to attain stochastic critical points of Problem \eqref{Prop: block-wise regularized problem}, we establish an $\mathcal{O}(\varepsilon^{-4})$ oracle complexity result for DualHash-StoM and, under the mean-square smoothness condition, an improved $\mathcal{O}(\varepsilon^{-3})$ complexity result for DualHash-StoRM, matching the best-known lower bound for stochastic smooth optimization~\cite{arjevani2023lower}}. Table~\ref{Table: summary of deep hashing algorithms} summarizes the comparison with existing deep hashing methods.
+\item {\textbf{Comparable complexity guarantee.} We provide rigorous non-asymptotic complexity analysis for deep hashing optimization under the challenging stochastic, nonconvex, multi-block primal-dual framework.} {Specifically, to attain stochastic critical points of Problem \eqref{Prop: block-wise regularized problem}, we establish an $\mathcal{O}(\varepsilon^{-4})$ oracle complexity result for DualHash-StoM and, under the mean-square smoothness condition, an improved $\mathcal{O}(\varepsilon^{-3})$ complexity result for DualHash-StoRM, matching the best-known lower bound for stochastic smooth optimization~\cite{arjevani2023lower}}. Table~\ref{Table: summary of deep hashing algorithms} summarizes the comparison with existing deep hashing methods \blue{in terms of model, regularizer, optimization method, and oracle complexity}.
 \item {\textbf{Superior empirical performance.} Extensive experiments on three widely-used datasets} demonstrate the practical effectiveness of DualHash. In particular, the proposed method achieves consistently lower quantization errors across different bit lengths compared to baselines, validating the advantages of our primal-dual framework for image retrieval in both single-label and multi-label settings. 
 \end{itemize}

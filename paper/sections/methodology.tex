@@ -198,7 +198,7 @@ whose dual problem is
 \min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd)
 =\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB).
 \end{equation}
-where the equality follows from $\sup_{\bLmbd}\{\langle\bB,\bLmbd\rangle-h^*(\bLmbd)\}=h^{**}(\bB)$. Here, the function $\calL$ is concave in $\bLmbd$ but, through $\mathcal{D}$, nonconvex in $(\bx,\bB)$ jointly. Consequently, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard in general~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for the problem \eqref{Eq: minmax problem} and subsequently relate these conditions to those of Problem~\eqref{Prop: block-wise regularized problem}.}
+where the equality follows from $\sup_{\bLmbd}\{\langle\bB,\bLmbd\rangle-h^*(\bLmbd)\}=h^{**}(\bB)$. Here, the function $\calL$ is concave in $\bLmbd$ but, through $\mathcal{D}$, nonconvex in $(\bx,\bB)$ jointly. Consequently, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard in general~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for Problem~\eqref{Eq: minmax problem} and subsequently relate these conditions to those of Problem~\eqref{Prop: block-wise regularized problem}.}
 \subsection{\blue{KKT Conditions of the Min--Max Reformulation}}
 \label{Sec: first-order optimality conditions}
 \blue{Following \cite{chambolleFirstOrderPrimalDualAlgorithm2011,clasonAccelerationGlobalConvergence2019,botBohm2023alternating},} we say that $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ is a \emph{KKT point} of $\calL$ if $\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$, that is,
@@ -235,7 +235,7 @@ We then prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ \b
 Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~\eqref{Prop: block-wise regularized problem} and Problem~\eqref{Prop: the dual problem}, respectively, \blue{with zero duality gap}. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\bm{0}\in\mathcal{K}(\bx^*,\bB^*,\bLmbd^*)$.
 \end{proposition}
 
-\blue{Recall that strong duality holds for Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem} if their optimal values coincide (zero duality gap) and both are attained. Here, \red{by the coercivity of $J$} and $\phi^*(y)\ge|y|$ for a W-type regularizer (Lemma~\ref{lem:wtype-conj}), both problems always admit optimal solutions, so zero duality gap and strong duality are equivalent and hold or fail together. Let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of the right-hand side of~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
+\blue{Recall that strong duality holds for Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem} if their optimal values coincide (zero duality gap) and both are attained. Here, assuming that $J$ is coercive (see Remark~\ref{rem:coercivity}) and using $\phi^*(y)\ge|y|$ for a W-type regularizer (Lemma~\ref{lem:wtype-conj}), both problems admit optimal solutions, so zero duality gap and strong duality are equivalent and hold or fail together. Let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of the right-hand side of~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
 \[
 p^*-d^*=(p^*-p^{**})+(p^{**}-d^*),
 \]
@@ -253,7 +253,7 @@ attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$, and no zero-gap primal--d
 \begin{remark}[On the choice of $\mathcal{K}$]\label{rem:kkt-choice}
 \blue{(i) The condition $\bm{0}\in\mathcal{K}$ applies the convex subdifferential $\partial h^*$ to the maximization variable $\bLmbd$. This is the standard first-order condition for min--max problems with a nonsmooth convex term in the maximization variable, in both convex--concave~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and nonconvex~\cite[(2.1)]{clasonAccelerationGlobalConvergence2019},~\cite[Section~1]{botBohm2023alternating} settings.
 
-(ii) Lagrangian-based methods such as ADMM~\cite{wangGlobalConvergenceADMM2018,li2015global} use $\bm{0}\in\partial\calL$, which is equivalent to the KKT system there because the Lagrangian is affine in the multiplier. In~\eqref{Eq: simplified_lagrangian}, the conjugation places the nonsmooth term $-h^*$ on $\bLmbd$, and the two conditions differ. For $\bLmbd\in\dom h^*$, the sum rule~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} and the closedness of the graph of $\partial h^*$ give
+(ii) Lagrangian-based methods such as ADMM~\cite{wangGlobalConvergenceADMM2018} use $\bm{0}\in\partial\calL$, which is equivalent to the KKT system there because the Lagrangian is affine in the multiplier. In~\eqref{Eq: simplified_lagrangian}, the conjugation places the nonsmooth term $-h^*$ on $\bLmbd$, and the two conditions differ. For $\bLmbd\in\dom h^*$, the sum rule~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} and the closedness of the graph of $\partial h^*$ give
 \[
 \partial\calL(\bx,\bB,\bLmbd)=\nabla\Phi+\{\bm{0}\}\times\{\bm{0}\}\times\partial(-h^*)(\bLmbd)
 \subseteq\nabla\Phi+\{\bm{0}\}\times\{\bm{0}\}\times\big(-\partial h^*(\bLmbd)\big)=\mathcal{K}(\bx,\bB,\bLmbd),
@@ -275,8 +275,7 @@ $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
 
 \subsection{\blue{Algorithmic Framework}}
 \label{Sec: DualHash framework}
-\blue{Through the Problem~\eqref{Eq: simplified_lagrangian},} we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$.
-\blue{By~\eqref{Eq: the proximal mapping of conjugate function}, this proximal mapping acts entrywise. This motivates a proximal step for $\bLmbd$.}
+\blue{Using the Lagrangian~\eqref{Eq: simplified_lagrangian},} we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$, \blue{which motivates a proximal step for $\bLmbd$.}
 
 We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and $\bm{\Lambda}$ alternately. The resulting algorithm can be viewed as a first-order multiblock primal--dual method. First, we update $\bx$ by a stochastic first-order step, as is standard in training neural networks. \blue{At iteration $k$, the $\bx$-update takes the form
 \begin{equation}
@@ -284,7 +283,7 @@ We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and 
     \bx^{k+1} = \by^k - \eta_k \bg^k,
 \end{equation}
 where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
-The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: Algorithm implementations}.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$.} Finally, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
+The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: Algorithm implementations}.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$.} Finally, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$:
 \begin{align}
 \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1},\bB^k,\bLmbd^k) \notag\\
 &= \bB^k - \tau\big(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\big), \label{Eq: the update of B}\\
@@ -293,7 +292,7 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 \end{align}
 \subsection{\blue{Instantiating the Stochastic Update}}
 \label{Sec: Algorithm implementations}
-\blue{Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. In both instances, the batch size is constant: $b_k\equiv b$ for DualHash-StoM, and $b_1$ followed by $b_k\equiv b$ for $k\ge2$ for DualHash-StoRM; their values are specified in \Cref{Section: Convergence analysis}. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
+\blue{Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
 \begin{equation}
 \label{Eq: minibatch oracle}
 \tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
@@ -324,7 +323,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \caption{DualHash-StoM}
 \label{alg:our_algorithm_sgdm}
 \begin{algorithmic}[1]
-\STATE \textbf{Input:} \blue{$\bx^0=\bx^1\in\RR^{q}$}, $\bB^1\in\RR^{n\times d}$, \blue{$\bLmbd^1\in[-\lambda,\lambda]^{n\times d}$}, parameters {$\{\alpha_k\},\{\beta_k\}\subset[0,1)$, $\{\eta_k\}$ and $\tau$, number of iterations $T$}
+\STATE \textbf{Input:} \blue{$\bx^0=\bx^1\in\RR^{q}$}, \blue{$\bB^0=\bB^1=\mathcal{D}(\bx^1)\in[-1,1]^{n\times d}$, $\bLmbd^1=\bm{0}$}, parameters {$\{\alpha_k\},\{\beta_k\}\subset[0,1)$, $\{\eta_k\}$ and $\tau$, number of iterations $T$}
 \FOR{\blue{$k = 1, \ldots, T$}}
   \STATE \blue{Compute $\by^k$ and $\bz^k$ by \eqref{Eq: extrapolated points in SGDM}}
   \STATE \blue{Draw $\calJ_k$ and compute $\bg_m^k$ by \eqref{Eq: the stochastic approximate in SGDM}}
@@ -348,7 +347,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
-\STATE \textbf{Input:} $\bx^1\in\RR^{\blue{q}}$, \blue{$\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m\bigl(\mathcal{D}(\bx^1)-\bB^1\bigr)$}, parameters {$m>0$, $\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$ and $\tau$, number of iterations $T$}
+\STATE \textbf{Input:} \blue{$\bx^0=\bx^1\in\RR^{q}$}, \blue{$\bB^0=\bB^1=\mathcal{D}(\bx^1)\in[-1,1]^{n\times d}$, $\bLmbd^1=\bm{0}$}, parameters {$\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$ and $\tau$, number of iterations $T$}
 \FOR{\blue{$k = 1, \ldots, T$}}
   \STATE \blue{Draw $\calJ_k$ and compute $\bg_s^k$ by \eqref{Eq: the stochastic approximate in STORM}}
   \STATE Update $\bx^{k+1}$ by
@@ -368,7 +367,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \end{algorithmic}
 \end{algorithm}
 \subsubsection{DualHash with Recursive Momentum}
-Alternatively, we consider the StoRM estimator for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. Given its practical effectiveness in deep learning \cite{levy2021storm+}, we adapt the generic StoRM estimator in \eqref{Eq: the generic StoRM estimator} to construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
+Alternatively, we consider the StoRM estimator for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. We adapt the generic StoRM estimator in \eqref{Eq: the generic StoRM estimator} to construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
 \begin{equation}
 \label{Eq: the stochastic approximate in STORM}
 \blue{\bg_s^k} :=

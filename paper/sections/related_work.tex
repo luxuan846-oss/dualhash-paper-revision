@@ -2,16 +2,16 @@
 \label{Section: related work}
 \begin{table}[t]
     \centering
-    \caption{Comparison of optimization and convergence guarantee of deep hashing methods.}
+    \caption{Comparison of representative deep hashing methods in terms of regularizer, optimization strategy, and oracle complexity.}
     \label{Table: summary of deep hashing algorithms}
     \resizebox{\linewidth}{!}{
 \begin{tabular}{cccccc}
 \toprule
 \textbf{Type} & \textbf{Method} & \textbf{Model} 
-  & \textbf{Quantization Loss} & \textbf{Optimization} & \textbf{Complexity} \\
+  & \textbf{\blue{Regularizer}} & \textbf{Optimization} & \textbf{Complexity} \\
 \midrule
     \multirow{4}{*}{\centering Discrete} 
-    & DDSH \cite{liDeepSupervisedHashing} & $\min L_s(\bb) + Q(\bu, \bb)$ & \centering $\|\cdot\|^2$ & BQP & \multirow{14}{*}{\centering ---} \\
+    & DDSH \cite{liDeepSupervisedHashing} & $\min L_s(\bb) + Q(\bu, \bb)$ & \centering $\|\cdot\|^2$ & BQP & \multirow{14}{*}{\centering \textemdash} \\
     \cmidrule(lr){2-5}
     & DSDH \cite{li2017deep}& \multirow{3}{*}{\centering $\min L_s(\bu) + Q(\bu, \bb)$} & \multirow{3}{*}{\centering $\|\cdot\|^2$} & $sgn$ update &  \\ 
     & DPSH \cite{liFeatureLearningBased2016} & &  & DCC &  \\ 
@@ -29,7 +29,7 @@
     & \blue{MambaHash \cite{he2025mambahash}} & \blue{$\min L_s(\bu)+h(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{RMSProp} &  \\
     & \blue{CRH \cite{yin2026crh}} & \blue{$\min L_C(\bu)+\lambda L_Q(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{Adam + center reassignment} &  \\
     \cmidrule(lr){2-5}
-    & HashNet \cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering $\min L_s(\bu)$} & \multirow{2}{*}{\centering \blue{---}} & SGDM &  \\     
+    & HashNet \cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering $\min L_s(\bu)$} & \multirow{2}{*}{\centering \blue{\text{n/a}}} & SGDM &  \\     
     & OrthoHash \cite{hoeOneLossAll2021} & & & Adam &  \\
     % \cmidrule(lr){2-5}
     % & SBPG \cite{wang2024bregman} & \scriptsize $\min L_s(\bu) + h(\bu)$ & Weakly convex $h$ & SBregman PG & $\mathcal{O}(\varepsilon^{-4})$ \\
@@ -44,9 +44,9 @@
     \textbf{Notes}: 
     The \textbf{Type} column indicates whether binary codes are explicitly updated; DSARH is grouped with Discrete because its unified-hashing branch uses DCC updates.
     \blue{CRH reassigns class centers; its quantization penalty is disabled in the reported multi-label experiments.}
-    The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{Quantization Loss} column specifies the loss (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)) for quantization error, with `\blue{---}' indicating no explicit loss. 
+    The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{\blue{Regularizer}} column specifies the \blue{quantization regularizer} (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)), with `\blue{n/a}' indicating no explicit regularizer. 
     % The \textbf{Optimization} column describes the training strategy, with discrete methods focusing on binary code updates. 
-    DCC stands for Discrete Cyclic Coordinate, PGD-based AT for projected-gradient adversarial training, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `\blue{---}' indicating no such analysis.
+    DCC stands for Discrete Cyclic Coordinate Descent, PGD-based AT for projected-gradient adversarial training, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `\blue{\textemdash}' indicating that no corresponding complexity guarantee is reported in the cited work.
     }
      \vspace{-2ex}
 \end{table}
@@ -65,16 +65,11 @@ objective via central similarity targets~\cite{yuanCentralSimilarityQuantization
 \blue{Recent architectures retain squared W-type penalties: MambaHash~\cite{he2025mambahash}
 and CRH~\cite{yin2026crh} use $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$
 to reduce quantization error.
-Related regularization-based approaches also arise in neural-network weight quantization:
-BinaryRelax penalizes squared distances to quantized weight sets~\cite{yin2018binaryrelax},
-while ProxQuant uses W-shaped penalties with explicit proximal updates~\cite{bai2019proxquant}.
-More recently, PARQ develops convex piecewise-affine regularization for
-quantization-aware training~\cite{jin2025parq}.
-These methods regularize weights directly; our focus is stochastic optimization
-with nonsmooth W-type penalties composed with nonlinear network outputs,
-with non-asymptotic complexity guarantees.}
+Nevertheless, theoretically grounded methods for nonsmooth W-type regularization
+composed with nonlinear network mappings remain limited. This is the gap addressed
+by our work.}
 
-\paragraph{Primal-Dual and Stochastic Splitting Methods} Primal-dual methods, such as PDHG~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and its unified extensions~\cite{esserZhangChan2010}, are foundational tools for composite optimization with broad applications in imaging sciences. These methods enjoy ergodic $\mathcal{O}(1/k)$ convergence and remain stable under adjoint mismatch~\cite{chouzenouxAdjointMismatch}. For convex nonlinear saddle-point models, Gao and Zhang~\cite{gao2023alternative} proposed an alternative extrapolation scheme with provable convergence guarantees. Stochastic counterparts, notably SPDHG~\cite{chambolleSPDHG2018} \blue{and stochastic majorization-minimization subspace methods~\cite{chouzenouxStochasticMM2017}}, handle structured finite-sum objectives with almost-sure and ergodic convergence. In the nonconvex setting, Clason et al.~\cite{clasonAccelerationGlobalConvergence2019} established global convergence under the Kurdyka--{\L}ojasiewicz (KL) condition, while Guo et al.~\cite{guo2023preconditioned} further addressed nonconvex stochastic composite problems. More recently, Shumaylov et al.~\cite{shumaylovweakly} incorporated weakly convex neural-network regularizers into a primal-dual framework and proved convergence of PDHGM to critical points under the KL condition. When the problem admits a block-separable structure, splitting methods such as ADMM with its stochastic variants~\cite{ADMMNolinear2024,chen2025convergence} and stochastic alternating minimization~\cite{driggs2021stochastic,InertialProximalAlternating,bian2026stochastic} provide promising approaches for nonconvex multi-block optimization.
+\paragraph{Primal-Dual and Stochastic Splitting Methods} Primal-dual methods, such as PDHG~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and its unified extensions~\cite{esserZhangChan2010}, are foundational tools for composite optimization with broad applications in imaging sciences. These methods enjoy ergodic $\mathcal{O}(1/k)$ convergence and remain stable under adjoint mismatch~\cite{chouzenouxAdjointMismatch}. Stochastic counterparts, notably SPDHG~\cite{chambolleSPDHG2018} \blue{and stochastic majorization-minimization subspace methods~\cite{chouzenouxStochasticMM2017}}, handle structured finite-sum objectives with almost-sure and ergodic convergence. In the nonconvex setting, Clason et al.~\cite{clasonAccelerationGlobalConvergence2019} established global convergence under the Kurdyka--{\L}ojasiewicz (KL) condition, while Guo et al.~\cite{guo2023preconditioned} further addressed nonconvex stochastic composite problems. More recently, Shumaylov et al.~\cite{shumaylovweakly} incorporated weakly convex neural-network regularizers into a primal-dual framework and proved convergence of PDHGM to critical points under the KL condition. When the problem admits a block-separable structure, splitting methods such as ADMM with its stochastic variants~\cite{ADMMNolinear2024,chen2025convergence} and stochastic alternating minimization~\cite{driggs2021stochastic,InertialProximalAlternating,bian2026stochastic} provide promising approaches for nonconvex multi-block optimization.
 
 \paragraph{Stochastic Nonconvex Constrained Optimization}
 From a constrained optimization perspective, Problem~\eqref{Eq: the general nonlinear composite problem in intro} \blue{can be reformulated via a variable lifting technique~\cite{wang2025augmentedrnn,jin2025multicomposite} as a nonlinearly constrained optimization problem of the form

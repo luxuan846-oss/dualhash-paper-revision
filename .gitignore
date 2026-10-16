@@ -33,3 +33,7 @@
 /revision/*.ptc
 /revision/*.synctex.gz
 /revision/*.toc
+
+# Separate local checkouts
+/paper-overleaf/
+/.claude/worktrees/

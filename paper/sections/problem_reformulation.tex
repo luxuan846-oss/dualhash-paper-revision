@@ -75,15 +75,16 @@ Let \(h\) be a W-type regularizer. Then \(\phi^*\) is proper, lower semicontinuo
 \]
 Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
 \end{lemma}
-The proof is provided in \Cref{app:transfer-proof}.
+\endgroup
+\blue{The proof is provided in \Cref{app:wtype-conjugate-proof}.}
 
 \Cref{tab:wtype} summarizes representative W-type regularizers, their scalar conjugates, and their proximal mappings.
 
 \begin{table}[htbp]
+\begingroup
 \centering
 \color{blue}
-\caption{Representative W-type regularizers, with \(\lambda,\delta>0\), \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\), and \(\operatorname{Hub}_{\delta}(s):=s^2/(2\delta)\) if \(|s|\le\delta\), \(|s|-\delta/2\) otherwise. Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\); \(\operatorname{clip}\) denotes projection onto \([-\lambda,\lambda]\).}
-% ``---'' means that no closed form is available.}
+\caption{Representative W-type regularizers, with \(\lambda,\delta>0\), \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\), and \(\operatorname{Hub}_{\delta}(s):=s^2/(2\delta)\) if \(|s|\le\delta\), \(|s|-\delta/2\) otherwise. Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\); \(\operatorname{clip}\) denotes projection onto \([-\lambda,\lambda]\). In the Algorithm column, `n/a' indicates that no cited method uses the regularizer; in the proximal-mapping column, `\textemdash' indicates that no closed-form expression is available.}
 \label{tab:wtype}
 \resizebox{\linewidth}{!}{
 \begin{tabular}{lllcccc}
@@ -101,12 +102,13 @@ The proof is provided in \Cref{app:transfer-proof}.
 \multicolumn{2}{l}{\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
  & \(\{\pm\lambda\tanh1\}\)
  & \(|y|+\lambda\psi(|y|/\lambda)\)
- & \([-\lambda,\lambda]\) & ---\\
-\multicolumn{2}{l}{\(\lambda\operatorname{Hub}_{\delta}(|t|-1)\)} & ---
+ & \([-\lambda,\lambda]\) & \textemdash\\
+\multicolumn{2}{l}{\(\lambda\operatorname{Hub}_{\delta}(|t|-1)\)} & \text{n/a}
  & \(\{\pm\lambda\min\{1,\frac1\delta\}\}\) & \(|y|+\frac{\delta y^2}{2\lambda}\) & \([-\lambda,\lambda]\)
  & \(\operatorname{clip}\Bigl(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma\delta/\lambda}\Bigr)\)\\
 \bottomrule
 \end{tabular}}
+\endgroup
 \end{table}
 
 For a W-type regularizer, the conjugate and proximal mappings are separable entrywise:
@@ -183,8 +185,6 @@ For a W-type regularizer, the conjugate and proximal mappings are separable entr
 \label{fig:w-conj-prox}
 \vspace{-4ex}
 \end{figure}
-\endgroup
-
 \subsection{W-type Regularized Deep Hashing Model}
 \label{Sec:W-type Regularized Deep Hashing Model}
 Combining the W-type regularization \(h\) in \Cref{tab:wtype},  the model is now trained to produce the \(i\)-th continuous network output \(\bD_i(\bx)\), and binary codes are obtained post-training via \(\operatorname{sgn}(\bD_i(\bx))\blue{\in\{-1,1\}^d}\). \blue{Consequently, we formulate the following core optimization problem for W-type regularized deep hashing methods, which serves as a continuous surrogate of Problem~\eqref{Eq:direct_deep_hashing_problem}:}
@@ -197,18 +197,18 @@ Combining the W-type regularization \(h\) in \Cref{tab:wtype},  the model is now
 \begin{align}
     \blue{\min_{\bx \in \RR^{q},\ \bB \in \RR^{n\times d}}\quad \frac{1}{n}\sum_{i=1}^{n} f_i(\bx)+\sum_{i=1}^{n}h(\bb_i)\quad \text{s.t.}\quad \bb_i=\bD_i(\bx),\ \forall i=1,\dots,n.} \notag
 \end{align}
-We then \blue{relax these constraints by} the quadratic penalty method \cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
-\begin{align}
-    \label{Prop: block-wise regularized problem}
-    \blue{\min_{\bx \in \RR^{q},\,\bB \in \RR^{n\times d}}\ J(\bx,\bB):=F(\bx,\bB)+h(\bB),} \tag{P}
-\end{align}
-\blue{Here, \(\gamma>0\) is the penalty parameter, and we use the separable extension \(h(\bB):=\sum_{i=1}^{n}h(\bb_i)\) for matrices. We define}
+\blue{Let \(\gamma>0\) be a penalty parameter, use the separable extension \(h(\bB):=\sum_{i=1}^{n}h(\bb_i)\) for matrices, and define}
 \begin{align}
     \blue{F(\bx,\bB):= \frac{1}{n}\sum_{i=1}^{n}F_i(\bx,\bb_i),\qquad F_i(\bx,\bb_i):= f_i(\bx)+\frac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2.} \notag
 \end{align}
 \blue{Averaging over \(i\) gives the decomposition \(F=f+P\), where}
 \begin{align}
     \blue{f(\bx):= \frac{1}{n}\sum_{i=1}^{n}f_i(\bx),\qquad P(\bx,\bB):= \frac{\gamma}{2n}\sum_{i=1}^{n}\|\bD_i(\bx)-\bb_i\|^2.} \notag
+\end{align}
+We then \blue{relax these constraints by} the quadratic penalty method \cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
+\begin{align}
+    \label{Prop: block-wise regularized problem}
+    \blue{\min_{\bx \in \RR^{q},\,\bB \in \RR^{n\times d}}\ J(\bx,\bB):=F(\bx,\bB)+h(\bB).} \tag{P}
 \end{align}
 
 This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon Problem~\eqref{Prop: block-wise regularized problem}, we develop a stochastic primal-dual algorithm {that addresses the lack of tractable proximal mappings in the nonsmooth composite form and the absence of convergence guarantees in existing deep hashing methods.}

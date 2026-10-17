@@ -1,7 +1,7 @@
 \section{\blue{Problem Formulation and Preliminaries}}
 \label{Section: Problem Reformulation}
+\subsection{\blue{Notation and Preliminaries}}
 \input{sections/preliminary.tex}
-\subsection{W-type Regularized Deep Hashing Model}
 % Deep hashing methods aim to learn network parameters \(\bx \in \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space. 
 % A natural approach is to minimize a similarity-preserving loss function \( \frac{1}{n}\sum_{i=1}^n L_s(\text{sgn}(\bD_i(\bx)))\) where $n$ is the number of training samples, $\bD_i(\bx)$ represents the \(i\)-th network output and \(f_i\) is the similarity-preserving loss function (e.g., pairwise cross-entropy loss \cite{zhuDeepHashingNetwork2016}). However, the function \( sgn(\cdot) \) renders standard backpropagation infeasible due to its zero gradient for all nonzero inputs. This discreteness poses a central challenge in deep hashing.
 
@@ -26,6 +26,10 @@
 % \end{align} Here, \( \bB = [\bb_1, \bb_2, \dots, \bb_n]\) and \( \gamma > 0 \) is the penalty parameter. This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon this problem, we develop a stochastic primal-dual algorithm that effectively addresses the challenges above.
 
 
+\begingroup
+\color{blue}
+\subsection{W-type Regularizer: Definition and Properties}
+\label{Section: W-regularizer}
 Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that generate binary codes preserving semantic similarity in the Hamming space. A direct formulation is
 \begin{align}
 \label{Eq:direct_deep_hashing_problem}
@@ -37,15 +41,10 @@ where \(n\) is the number of training samples, \blue{\(\bD_i:\RR^q\to\RR^d\) is 
 $\pm1$, are added to drive the continuous outputs toward $\{-1,1\}^d$. Such penalties
 are standard in deep hashing~\cite{liuDeepSupervisedHashing,yuanCentralSimilarityQuantization2020,he2025mambahash,
 yin2026crh}. Their formulas differ, but our analysis depends only on their common
-shape, which we formalize in \Cref{Section: W-regularizer}.}
+shape, which we formalize next.}
 
-\begingroup
-\color{blue}
-\subsection{W-type Regularizer: Definition and Properties}
-\label{Section: W-regularizer}
-We now define W-type regularizers.
 \begin{definition}[W-type regularizer]\label{def:wtype}
-Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in\mathbb{R}^{n\times d}\), define \(h(\bz):=\sum_{j=1}^{d}\phi(z_j)\) and \(h(\bZ):=\sum_{i=1}^{n}\sum_{j=1}^{d}\phi(z_{ij})\). We call \(h\) a \emph{W-type regularizer} if \(\phi\) satisfies:
+Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in\mathbb{R}^{n\times d}\), define \(h(\bz):=\sum_{j=1}^{d}\phi(z_j)\) and \(h(\bZ):=\sum_{i=1}^{n}\sum_{j=1}^{d}\phi(z_{ij})\); with a slight abuse of notation, \(h\), \(h^*\), and \(h^{**}\) refer to both the vector and the matrix cases. We call \(h\) a \emph{W-type regularizer} if \(\phi\) satisfies:
 \begin{enumerate}[label=\textup{(W\arabic*)}]
   \item\label{W1} \(\phi\) is even and continuous, and \(\phi(t)=0\) if and only if \(t\in\{-1,1\}\);
   \item\label{W2} \(\phi\) is convex on \([1,+\infty)\);
@@ -63,10 +62,12 @@ Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum
 \end{lemma}
  
 
-\begin{remark}[Role of the conditions]\label{rem:wtype-roles}
-Conditions~\ref{W1}--\ref{W2} yield the envelope formula of Lemma~\ref{lem:wtype-conj}; hence the min--max reformulation keeps $h$ unchanged wherever $|b_{ij}|\ge1$ and replaces it by zero on $[-1,1]^{n\times d}$. Condition~\ref{W3} excludes stationary points of $\phi$ in $(-1,1)$ and is used only in the necessity part of Proposition~\ref{prop:transfer}. The certificate in Proposition~\ref{prop:original-certificate} uses only the nonnegativity of $\phi$ and $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$, and the complexity results in Section~\ref{Section: Convergence analysis} further require $\phi^*$ to be bounded on its domain; by Table~\ref{tab:wtype}, both conditions hold for every row except $p=2$, which Proposition~\ref{prop:transfer} still covers.
-\end{remark}
+
 \Cref{tab:wtype} summarizes representative W-type regularizers, their scalar conjugates, and their proximal mappings. Every row has $\partial\phi(0)=\{\pm c\}$ with $c>0$, a downward kink at the origin, so none of these penalties is weakly convex.
+
+\begin{remark}[Role of the conditions]\label{rem:wtype-roles}
+Conditions~\ref{W1}--\ref{W2} give the envelope formula in \Cref{lem:wtype-conj}, so the min--max reformulation keeps $h$ where $|b_{ij}|\ge1$ and replaces it by zero on $[-1,1]^{n\times d}$. Condition~\ref{W3} is used only in the necessity part of \Cref{prop:transfer}.
+\end{remark}
 
 \begin{table}[!t]
 \centering
@@ -97,9 +98,9 @@ Conditions~\ref{W1}--\ref{W2} yield the envelope formula of Lemma~\ref{lem:wtype
 \end{tabular}}
 \end{table}
 
-For the complexity analysis in Section~\ref{Section: Convergence analysis}, the W-type regularizer satisfies $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$, and $\phi^*$ is bounded on its domain; by Table~\ref{tab:wtype}, this holds for every row except $p=2$.
+The certificate in \Cref{prop:original-certificate} requires $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$, and the complexity analysis in Section~\ref{Section: Convergence analysis} further requires $\phi^*$ to be bounded on its domain. By \Cref{tab:wtype}, both hold for every row except $p=2$.
 
-For a W-type regularizer, the conjugate and proximal mappings are separable entrywise:
+For a W-type regularizer, the proximal mapping of \(h^*\) is separable entrywise:
 \begin{equation}
 \label{Eq: the proximal mapping of conjugate function}
 [\operatorname{prox}_{\sigma h^*}(\bY)]_{ij}
@@ -181,7 +182,7 @@ For a W-type regularizer, the conjugate and proximal mappings are separable entr
 \blue{With the W-type regularizer \(h\) defined in \Cref{def:wtype},} the model is now trained to produce the \(i\)-th continuous network output \(\bD_i(\bx)\), and binary codes are obtained post-training via \(\operatorname{sgn}(\bD_i(\bx))\blue{\in\{-1,1\}^d}\). \blue{Consequently, we formulate the following core optimization problem for W-type regularized deep hashing methods, which serves as a continuous surrogate of Problem~\eqref{Eq:direct_deep_hashing_problem}:}
 \begin{align}
 \label{Eq: the primal deep hashing problem}
-\min_{\bx \in \RR^{\blue{q}}} \quad \frac{1}{n}\sum_{i=1}^n f_i(\bx) + \sum_{i=1}^n h(\bD_i(\bx)),
+\blue{\min_{\bx \in \RR^{q}} \quad J_0(\bx):=\frac{1}{n}\sum_{i=1}^n f_i(\bx) + \sum_{i=1}^n h(\bD_i(\bx)),}
 \tag{P0}
 \end{align}\blue{where
 \(f_i(\bx):=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^2\) with \(\mu>0\), and \(\bar{\ell}_s:=n^{-1}\sum_{i=1}^{n}\ell_{s,i}\).}
@@ -206,7 +207,7 @@ We then employ variable splitting by introducing \blue{continuous auxiliary vari
 \begin{align}
     \blue{\min_{\bx \in \RR^{q},\ \bB \in \RR^{n\times d}}\quad \frac{1}{n}\sum_{i=1}^{n} f_i(\bx)+\sum_{i=1}^{n}h(\bb_i)\quad \text{s.t.}\quad \bb_i=\bD_i(\bx),\ \forall i=1,\dots,n.} \notag
 \end{align}
-\blue{Let \(\gamma>0\) be a penalty parameter, use the separable extension \(h(\bB):=\sum_{i=1}^{n}h(\bb_i)\) for matrices, and define}
+\blue{Let \(\gamma>0\) be a penalty parameter and define}
 \begin{align}
     \blue{F(\bx,\bB):= \frac{1}{n}\sum_{i=1}^{n}F_i(\bx,\bb_i),\qquad F_i(\bx,\bb_i):= f_i(\bx)+\frac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2.} \notag
 \end{align}

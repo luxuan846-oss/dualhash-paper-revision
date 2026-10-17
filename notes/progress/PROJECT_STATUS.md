@@ -14,7 +14,7 @@
 |---|---|
 | 论文主入口 | `paper/main.tex` 与 `paper/ex_shared.tex`；标题已调整为 W-Type Regularized Deep Hashing 的随机原始—对偶算法 |
 | 模型与最优性关系 | §2 `paper/sections/problem_reformulation.tex` 合并模型与预备知识，包含 W 类定义与结构性质、原目标 P0、量化误差 Q、罚模型 P 和基本假设；通用定义保留在 `preliminary.tex`；Q 使用到二值集合的逐元素 ℓ₁ 距离，列出 ℓ₁ W 正则的精确等式及一般 W 类的零值等价；最优性证明见 `supplementaryB.tex` 中 `app:optimality-properties` |
-| 算法及采样 | §3 `paper/sections/methodology.tex`；原预备知识中的 StoRM 估计器介绍移至 Recursive Momentum 小节，采样与 §4 复杂度章节联合说明 |
+| 算法及采样 | §3 `paper/sections/methodology.tex`；Recursive Momentum 小节已注释通用 StoRM 介绍，保留 Cutkosky 等人的引用并直接给出实例化估计量；采样与 §4 复杂度章节联合说明 |
 | 理论条件与复杂度 | `problem_reformulation.tex` 模型后列 Basic regularity，W 类讨论保留共轭有效域条件；`convergence.tex` 列 Stochastic first-order oracle，方差条件限定于已有迭代有界区域，StoRM 的 Mean-square smoothness 独立保留；相关引用已统一 |
 | 理论证明 | `paper/sections/supplementaryB.tex`；含共同估计、两种算法的势函数下界与复杂度证明 |
 | 实验 | `paper/sections/numerical_experiments.tex`、`supplementaryA.tex` 与图片目录；本次同步未开展新实验 |
@@ -47,3 +47,7 @@
 - 2026-10-17 按用户指定原文加入 `rem:wtype-roles` 三句 Remark，并在 W 类表格说明后补充非弱凸结论；旧条件说明注释与必要性反例当前已不存在，复杂度章未修改。PDF 已生成；`prop:original-certificate` 尚未定义，`Ass: basic regularity` 已恢复，当前仅证书命题引用待处理。
 
 - 2026-10-17 同步当前修订：统一 W-type 术语；预备知识中通用函数用 `r`、光滑函数用 `g` 与 `L_g`，模型保留 `f`；W 类小节整体标蓝并清理重复标色，表格设为 `[!t]`。保留用户对引言与模型叙述的修改。
+
+- 2026-10-17 注释通用 StoRM 介绍，消除其目标函数与 W 类标量函数的记号冲突；移除通用估计量的正文引用。编译生成 PDF，无新增引用警告，仍有 `prop:original-certificate` 未定义引用。
+
+- 2026-10-17 按清单命名原目标 `J_0`、整理 §2 小节与 W 类条件说明、迁移记号复用约定、精简重复文字、将已注释 StoRM 通用块的目标符号换为 `\Theta`，并加入指定引言段落及贡献说明；逐项检索与 `latexmk -pdf main.tex` 验收通过，无 LaTeX 错误或重复标签，仅待补 `prop:original-certificate`、`cor:original-stationarity` 两个标签。

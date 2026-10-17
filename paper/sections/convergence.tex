@@ -189,7 +189,7 @@ where $c_b>0$ is a constant independent of $T$.} The complexity result is establ
 \begin{theorem}
 % [Oracle complexity of \Cref{alg:our_algorithm_sgdm}]
     \label{Theorem: the oracle complexity in SGDM} 
-Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \blue{\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} \blue{with}
+Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \blue{\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm}. \blue{Assume further that $h$ has a compact dual domain.} Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} \blue{with}
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm SGDM}
         T = \left\lceil \frac{L_{\Delta} \Delta_1+ C_{\sigma}\frac{\sigma^2}{c_b}}{\varepsilon^2} \right\rceil.
@@ -279,7 +279,7 @@ The proof and the explicit value of $\Psi_r^*$ are given in \Cref{Lemma: lower b
 \blue{To achieve the desired oracle complexity, we choose $b_1=c_bT^{1/3}$, where $c_b>0$ is a constant independent of $T$.}
 \begin{theorem}
 \label{Theorem: the oracle complexity in STORM}
-Under \blue{Assumptions~\ref{Ass: basic regularity}, \ref{Ass: main assumptions}, and~\ref{Ass: the mean squared smoothness of F}}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_storm} with the parameters satisfying \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm} \blue{and $b_1=c_bT^{1/3}$}. Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} whenever
+Under \blue{Assumptions~\ref{Ass: basic regularity}, \ref{Ass: main assumptions}, and~\ref{Ass: the mean squared smoothness of F}}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_storm} with the parameters satisfying \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm} \blue{and $b_1=c_bT^{1/3}$}. \blue{Assume further that $h$ has a compact dual domain.} Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} whenever
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm VR}
         \blue{T = \left\lceil \frac{\Bigl(\tilde{L}_{\Delta}\tilde{\Delta}_{1}+\tilde{C}_{\sigma}\bigl(\frac{\sigma^{2}}{4\rho\eta^{2}c_b}+\frac{32\rho\eta^{2}\sigma^{2}}{b}\bigr)\Bigr)^{3/2}}{\varepsilon^3} \right\rceil,}

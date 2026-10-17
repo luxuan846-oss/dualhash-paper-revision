@@ -1,6 +1,6 @@
 \section{\blue{Problem Formulation and Preliminaries}}
 \label{Section: Problem Reformulation}
-\subsection{\blue{Notation and Preliminaries}}
+\subsection{{Preliminaries}}
 \input{sections/preliminary.tex}
 % Deep hashing methods aim to learn network parameters \(\bx \in \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space. 
 % A natural approach is to minimize a similarity-preserving loss function \( \frac{1}{n}\sum_{i=1}^n L_s(\text{sgn}(\bD_i(\bx)))\) where $n$ is the number of training samples, $\bD_i(\bx)$ represents the \(i\)-th network output and \(f_i\) is the similarity-preserving loss function (e.g., pairwise cross-entropy loss \cite{zhuDeepHashingNetwork2016}). However, the function \( sgn(\cdot) \) renders standard backpropagation infeasible due to its zero gradient for all nonzero inputs. This discreteness poses a central challenge in deep hashing.
@@ -98,7 +98,7 @@ Conditions~\ref{W1}--\ref{W2} give the envelope formula in \Cref{lem:wtype-conj}
 \end{tabular}}
 \end{table}
 
-The certificate in \Cref{prop:original-certificate} requires $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$, and the complexity analysis in Section~\ref{Section: Convergence analysis} further requires $\phi^*$ to be bounded on its domain. By \Cref{tab:wtype}, both hold for every row except $p=2$.
+We say that a W-type regularizer has a \emph{compact dual domain} if $\operatorname{dom}\phi^*=[-\lambda,\lambda]$ for some $\lambda>0$; then $\phi^*$, being convex and finite on a compact interval, is bounded on its domain. In \Cref{tab:wtype}, every row except $p=2$ has a compact dual domain.
 
 For a W-type regularizer, the proximal mapping of \(h^*\) is separable entrywise:
 \begin{equation}

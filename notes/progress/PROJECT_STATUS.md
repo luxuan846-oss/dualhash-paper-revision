@@ -51,3 +51,5 @@
 - 2026-10-17 注释通用 StoRM 介绍，消除其目标函数与 W 类标量函数的记号冲突；移除通用估计量的正文引用。编译生成 PDF，无新增引用警告，仍有 `prop:original-certificate` 未定义引用。
 
 - 2026-10-17 按清单命名原目标 `J_0`、整理 §2 小节与 W 类条件说明、迁移记号复用约定、精简重复文字、将已注释 StoRM 通用块的目标符号换为 `\Theta`，并加入指定引言段落及贡献说明；逐项检索与 `latexmk -pdf main.tex` 验收通过，无 LaTeX 错误或重复标签，仅待补 `prop:original-certificate`、`cor:original-stationarity` 两个标签。
+
+- 2026-10-17 将 W 类表格后的适用范围段替换为 `compact dual domain` 子类定义，并在 StoM、StoRM 两个复杂度定理中显式加入该条件；W1–W3 的两句 Remark 与全 W 类的精确驻点对应保持不变。证书命题尚待添加，届时采用该子类条件，并注明证明只用共轭域的有界包含关系。编译生成 PDF，无新增错误，仍待补 `prop:original-certificate`、`cor:original-stationarity`。

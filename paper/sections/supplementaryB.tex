@@ -90,7 +90,7 @@ where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by the common b
 \subsection{\blue{Smoothness Constant of $F$}}
 \label{app:smoothness-discussion}
 \begingroup\color{blue}
-Under Assumption~\ref{Ass: main assumptions}(ii), $F$ is $L_F$-smooth on $\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$, where
+Under Assumption~\ref{Ass: basic regularity}(ii), $F$ is $L_F$-smooth on $\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$, where
 \begin{equation}
 \label{eq:derived-smoothness-constant}
 L_F:=2L_f+\frac{\gamma}{n}\left(L_{\nabla\mathcal{D}}C_{\mathcal{D}B}+2G_{\mathcal{D}}^2+1\right).
@@ -104,7 +104,7 @@ This region contains all primal iterates under the prescribed initializations an
 \begin{proof}
 The initializations and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$.
 Since $L_F\ge\gamma/n$, the prescribed step sizes satisfy $0<\tau\gamma/n<1$.
-Since $\bB^1=\mathcal{D}(\bx^1)$, Assumption~\ref{Ass: main assumptions}(ii) gives $\|\bB^1\|_F\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|_F\le R_B$, then \eqref{Eq: the update of B} gives
+Since $\bB^1=\mathcal{D}(\bx^1)$, Assumption~\ref{Ass: basic regularity}(ii) gives $\|\bB^1\|_F\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|_F\le R_B$, then \eqref{Eq: the update of B} gives
 \[
 \|\bB^{k+1}\|_F\le\left(1-\frac{\tau\gamma}{n}\right)R_B
 +\frac{\tau\gamma}{n}C_{\mathcal{D}}+\tau\lambda\sqrt{nd}=R_B,
@@ -119,7 +119,7 @@ For two points $(\bx,\bB)$ and $(\bx',\bB')$ in this region, the gradient of $P(
 \|\nabla_{\bB}P(\bx,\bB)-\nabla_{\bB}P(\bx',\bB')\|_F
 &\le\frac{\gamma}{n}\left[G_{\mathcal{D}}\|\bx-\bx'\|+\|\bB-\bB'\|_F\right],
 \end{align*}
-by Assumption~\ref{Ass: main assumptions}(ii).
+by Assumption~\ref{Ass: basic regularity}(ii).
 The coefficient matrix of these two bounds is positive semidefinite, so its spectral norm is at most its trace.
 Hence $P$ is jointly smooth with constant $\frac{\gamma}{n}(L_{\nabla\mathcal{D}}C_{\mathcal{D}B}+G_{\mathcal{D}}^2+1)$.
 Since $F=f+P$, \eqref{eq:derived-smoothness-constant} is a valid smoothness constant.
@@ -138,7 +138,7 @@ Since $F=f+P$, \eqref{eq:derived-smoothness-constant} is a valid smoothness cons
     &+\nabla_{\bB}F(\bx^{k+1},\bB^k)
     -\nabla_{\bB}F(\bx^{k+2},\bB^{k+1}).
     \end{align*}
-    By the $L_F$-smoothness of $F$ in \Cref{Ass: main assumptions},
+    By the $L_F$-smoothness of $F$ under \Cref{Ass: basic regularity}(ii),
     \begin{align*}
     \|\bLmbd^{k+1}-\bLmbd^k\|
     \leq{}&\tau^{-1}\|\bB^{k+2}-\bB^{k+1}\|
@@ -364,7 +364,7 @@ Let $t:=\tau L_F$. Both parameter settings \eqref{Eq: the parameters conditions 
 \[
 C_1=K_1=\frac{1}{2\tau},\qquad C_3=K_4=\frac{\tau L_F^2}{2}.
 \]
-By Appendix~\ref{app:smoothness-discussion}, $\|\bB^k\|_F\le R_B$ and $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$ for all $k\ge1$, and $0\le h^*\le nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)$ on $\operatorname{dom}h^*$ by \Cref{lem:wtype-conj} and the condition on $\phi^*$ in \Cref{Section: Convergence analysis}. Therefore $\langle\bB^k,\bLmbd^k\rangle\ge-\lambda\sqrt{nd}\,R_B$ and $\Delta_{\bB}^{k+1}=\frac12\|\bB^{k+1}-\bB^k\|_F^2\le2R_B^2$, so for both algorithms and every $k\ge1$,
+By Appendix~\ref{app:smoothness-discussion}, $\|\bB^k\|_F\le R_B$ and $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$ for all $k\ge1$, and $0\le h^*\le nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)$ on $\operatorname{dom}h^*$ by \Cref{lem:wtype-conj} and the condition on $\phi^*$ in \Cref{Section: W-regularizer}. Therefore $\langle\bB^k,\bLmbd^k\rangle\ge-\lambda\sqrt{nd}\,R_B$ and $\Delta_{\bB}^{k+1}=\frac12\|\bB^{k+1}-\bB^k\|_F^2\le2R_B^2$, so for both algorithms and every $k\ge1$,
 \begin{equation}
 \label{eq:lb-common}
 \calL(\bx^k,\bB^k,\bLmbd^k)-C_1\Delta_{\bB}^{k+1}
@@ -372,7 +372,7 @@ By Appendix~\ref{app:smoothness-discussion}, $\|\bB^k\|_F\le R_B$ and $\|\bLmbd^
 \qquad
 c_1':=\lambda\sqrt{nd}\,R_B+nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)+\frac{R_B^2}{\tau}.
 \end{equation}
-It remains to control $C_3\Delta_{\bx}^{k+1}=\frac{\tau L_F^2}{4}\|\bx^{k+1}-\bx^k\|^2$ by $F-\underline{\ell}$. Since $f\ge\underline{\ell}$ by \Cref{Ass: main assumptions}(i) and $P\ge0$, we have $F\ge\underline{\ell}$. Let $\Omega:=\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$. For $(\bx,\bB)\in\Omega$, the point $(\bx,\bB)-L_F^{-1}\nabla F(\bx,\bB)$ has $\bB$-component $(1-\frac{\gamma}{nL_F})\bB+\frac{\gamma}{nL_F}\mathcal{D}(\bx)$, a convex combination of $\bB$ and $\mathcal{D}(\bx)$ since $L_F\ge\gamma/n$; it therefore lies in the convex set $\Omega$ because $R_B\ge C_{\mathcal{D}}$. The descent lemma on $\Omega$ and $F\ge\underline{\ell}$ give
+It remains to control $C_3\Delta_{\bx}^{k+1}=\frac{\tau L_F^2}{4}\|\bx^{k+1}-\bx^k\|^2$ by $F-\underline{\ell}$. Since $f\ge\underline{\ell}$ by \Cref{Ass: basic regularity}(i) and $P\ge0$, we have $F\ge\underline{\ell}$. Let $\Omega:=\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$. For $(\bx,\bB)\in\Omega$, the point $(\bx,\bB)-L_F^{-1}\nabla F(\bx,\bB)$ has $\bB$-component $(1-\frac{\gamma}{nL_F})\bB+\frac{\gamma}{nL_F}\mathcal{D}(\bx)$, a convex combination of $\bB$ and $\mathcal{D}(\bx)$ since $L_F\ge\gamma/n$; it therefore lies in the convex set $\Omega$ because $R_B\ge C_{\mathcal{D}}$. The descent lemma on $\Omega$ and $F\ge\underline{\ell}$ give
 \begin{equation}
 \label{eq:lb-gradient}
 \|\nabla F(\bx,\bB)\|^2\le2L_F\bigl(F(\bx,\bB)-\underline{\ell}\bigr),\qquad(\bx,\bB)\in\Omega .
@@ -380,7 +380,7 @@ It remains to control $C_3\Delta_{\bx}^{k+1}=\frac{\tau L_F^2}{4}\|\bx^{k+1}-\bx
 
 \begin{lemma}[Lower bound of $\Psi_m$]
 \label{Lemma: lower bound of Psi_m}
-Under \Cref{Ass: main assumptions} and the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, for every $k\ge1$,
+Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions} and the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, for every $k\ge1$,
 \[
 \EE[\Psi_m(\calQ^k)]\ge\Psi_m^*:=\underline{\ell}-c_1,
 \qquad
@@ -426,7 +426,7 @@ Hence the term $C_4\Delta_{\bx}^k=\frac{C_4}{2}\|\bm{p}_k\|^2$ dominates the $\|
 We then bound the three terms on the right-hand side of \eqref{Eq: the stationarity error bound in proof}.
 
 \begin{lemma}[Stationarity error bound]
-    \label{Lemma: Stationarity error bound in SGDM} Under \Cref{Ass: main assumptions},
+    \label{Lemma: Stationarity error bound in SGDM} Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions},
     for any $k \geq 1$, it holds that
     \begin{align}\label{Eq: the stationarity error bound in SGDM Lemma}
         \EE [\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))] \leq S_{1}\EE[ \Delta_{\bB}^{k+1}] + S_{2}\EE[ \Delta_{\bB}^{k}] + S_{3}^{k}\EE[ \Delta_{\bm{x}}^{k+1}] + S_{4}^{k}\EE [\Delta_{\bm{x}}^{k}] + \blue{\frac{3\sigma^{2}}{b_{k}}},
@@ -641,7 +641,7 @@ We adopt the same notation as in \Cref{app:stom-complexity}.
 \begingroup\color{blue}
 \begin{lemma}[Lower bound of the StoRM potential]
 \label{Lemma: lower bound of W}
-Under \Cref{Ass: main assumptions} and the parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}, for every $k\ge1$,
+Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions} and the parameter conditions \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}, for every $k\ge1$,
 \[
 W_k:=\EE[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\EE\|\be^k\|^2\ge\Psi_r^*:=\underline{\ell}-c_1',
 \]
@@ -672,7 +672,7 @@ W_k\ge\underline{\ell}+\left(1-\frac t4\right)\EE\bigl[F(\bx^k,\bB^k)-\underline
 \label{app:storm-stationarity-proof}
 We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with analysis comparable to those in \cite[Lemma~2\blue{.2}]{xu2023momentum} and \cite[Lemma 8]{shi2025momentum}. \blue{We provide the proof for completeness.}
 \begin{lemma}[Recursive bound on gradient error]
-    \label{Lemma: Recursive bound on gradient error} Under \Cref{Ass: main assumptions}\blue{(iii) and \Cref{Ass: the mean squared smoothness of F}},
+    \label{Lemma: Recursive bound on gradient error} Under \Cref{Ass: main assumptions}\blue{(ii) and \Cref{Ass: the mean squared smoothness of F}},
     for any $k \geq 1$, it holds that
     \begin{align}
         \blue{\EE}[\| \be^{k+1}\|^{2}] \leq \left(1 - \rho_{k}\right)^{2}\blue{\EE}[\| \be^{k}\|^{2}] + \frac{2 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}}+ \frac{4(1 - \rho_{k})^{2}L_{F}^{2}}{\blue{b_{k+1}}}\blue{\EE}\left[\Delta_{\bx}^{k+1}\blue{{}+\Delta_{\bB}^{k+1}}\right]. \notag
@@ -686,12 +686,12 @@ We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with ana
         & \,+\frac{2(1-\rho_k)^{2}}{b_{k+1}}\cdot\frac1n\sum_{i=1}^{n}\|\nabla_{\bx}F_i(\bx^{k+1},\bb_i^{k+1})-\nabla_{\bx}F_i(\bx^{k},\bb_i^{k})\|^{2}\notag\\
         \leq & \,(1-\rho_k)^{2}\|\be^{k}\|^{2}+\frac{2\rho_k^{2}\sigma^{2}}{b_{k+1}}+\frac{4(1-\rho_k)^{2}L_F^{2}}{b_{k+1}}\left(\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}\right)\quad\text{a.s.},\notag
     \end{align}
-    where the first inequality follows from $\|\bm a+\bm b\|^{2}\leq2\|\bm a\|^{2}+2\|\bm b\|^{2}$, \Cref{Ass: main assumptions}(iii), and the mini-batch variance bound under uniform sampling without replacement, and the last inequality follows from \Cref{Ass: the mean squared smoothness of F}. Taking the full expectation completes the proof.}
+    where the first inequality follows from $\|\bm a+\bm b\|^{2}\leq2\|\bm a\|^{2}+2\|\bm b\|^{2}$, \Cref{Ass: main assumptions}(ii), and the mini-batch variance bound under uniform sampling without replacement, and the last inequality follows from \Cref{Ass: the mean squared smoothness of F}. Taking the full expectation completes the proof.}
 \end{proof}
 
 We now establish a weighted error accumulation bound for the variance-reduced gradient estimator in \Cref{alg:our_algorithm_storm}.
 \begin{lemma}[Weighted error accumulation bound]
-    \label{Lemma: Weighted error accumulation} Under Assumption\blue{s}~\ref{Ass: main assumptions}\blue{--\ref{Ass: the mean squared smoothness of F}} and parameter conditions \blue{\eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}}, for any $T \geq 1$, the following weighted cumulative error bound holds:
+    \label{Lemma: Weighted error accumulation} Under Assumption\blue{s}~\ref{Ass: basic regularity}, \ref{Ass: main assumptions}, \blue{and~\ref{Ass: the mean squared smoothness of F}} and parameter conditions \blue{\eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm}}, for any $T \geq 1$, the following weighted cumulative error bound holds:
     \begin{align}
         \blue{\frac{1}{T}\sumT\EE\Bigl[C_{\bB}\bigl(\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}\bigr)+\frac{1}{4\eta_T}\Delta_{\bx}^{k+1}+\frac{\eta_T}{2}\|\be^{k}\|^{2}\Bigr]\leq\frac{1}{T}\Bigl(\tilde{\Delta}_{1}+\frac{\eta_T\sigma^{2}}{\rho_Tb_1}\Bigr)+\frac{2\eta_T\rho_T\sigma^{2}}{b},}
         \label{Eq: weighted error accumulation bound}
@@ -731,7 +731,7 @@ We now establish a weighted error accumulation bound for the variance-reduced gr
 
 We derive an upper stationarity error bound for the iterates generated by \Cref{alg:our_algorithm_storm}.
 \begin{lemma}[Stationarity error bound]
-    \label{Lemma: Stationarity error bound} Under \Cref{Ass: main assumptions} (ii),
+    \label{Lemma: Stationarity error bound} Under \Cref{Ass: basic regularity}(ii),
     for any $k \geq 1$, it holds that
     \begin{align}
         \mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k})) \leq S_{1}\Delta_{\bB}^{k+1}+ S_{2}\Delta_{\bB}^{k}+ S_{3}^{k}\Delta_{\bm{x}}^{k+1}+ 2 \| \be^{k}\|^{2}, \label{Eq: the stationarity error bound in Lemma in storm}

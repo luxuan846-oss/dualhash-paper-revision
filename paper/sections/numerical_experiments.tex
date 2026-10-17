@@ -13,16 +13,16 @@ standard image retrieval datasets. All experiments use PyTorch 1.12.1 with CUDA 
 \textbf{ImageNet}\footnote{\url{https://www.image-net.org/}} \blue{is a single-label dataset.} Following \cite{Cao2017HashNetDL}, we randomly select 100 categories to create ImageNet-100. We use 100 images per category (10,000 total) for training, 30 per category (3,000 total) for validation, and 50 per category (5,000 total) for testing. The training, validation, and testing sets are mutually exclusive with no data overlap.
 
 % \vspace{3pt}
-\paragraph{Training Setup}  It is worth noting that our method is compatible with different similarity measurement paradigms, including \blue{pointwise~\cite{shenSupervisedDiscreteHashing2015}, pairwise~\cite{liuDeepSupervisedHashing}, and tripletwise~\cite{wang2016DTSH}} methods. In our experiments, we focus on deep supervised pairwise hashing using a pairwise cross-entropy loss \( f \) and the nonsmooth W-type regularization term \( h(\blue{\bz}) = \lambda \| |\bz| -1 \|_1 \). 
+\paragraph{Training Setup}  It is worth noting that our method is compatible with different similarity measurement paradigms, including \blue{pointwise~\cite{shenSupervisedDiscreteHashing2015}, pairwise~\cite{liuDeepSupervisedHashing}, and tripletwise~\cite{wang2016DTSH}} methods. In our experiments, we focus on deep supervised pairwise hashing using a pairwise cross-entropy loss \( f \) and the nonsmooth \blue{W-type regularizer} \( h(\blue{\bz}) = \lambda \| |\bz| -1 \|_1 \). 
 
 % \vspace{3pt}
-\paragraph{Baselines} We compare against eight baselines: SDH \cite{shenSupervisedDiscreteHashing2015}; four deep hashing methods with W-type regularizations (DHN \cite{zhuDeepHashingNetwork2016}, DSH \cite{liuDeepSupervisedHashing}, DTSH \cite{wang2016DTSH}, MDSHC \cite{wang2023deep}); 
+\paragraph{Baselines} We compare against eight baselines: SDH \cite{shenSupervisedDiscreteHashing2015}; four deep hashing methods with \blue{W-type regularizers} (DHN \cite{zhuDeepHashingNetwork2016}, DSH \cite{liuDeepSupervisedHashing}, DTSH \cite{wang2016DTSH}, MDSHC \cite{wang2023deep}); 
 and three state-of-the-art methods addressing quantization error (HashNet \cite{Cao2017HashNetDL}, DSDH \cite{li2017deep}, OrthoHash \cite{hoeOneLossAll2021}). Following \cite{liuDeepSupervisedHashing}, we report the mean Average Precision (mAP), precision curves (P@topK), and precision within Hamming radius 2 (P@r=2).
 
 % \vspace{3pt}
 \paragraph{Architecture} For fair comparison, all deep learning-based methods employ AlexNet and ResNet-50\footnote{AlexNet is the default backbone unless specified.} as the 
 backbone network and use ELU activation to leverage its 
-1-Lipschitz continuous gradient property for satisfying the smoothness assumption (\Cref{Ass: main assumptions}(ii)).
+1-Lipschitz continuous gradient property for satisfying the smoothness assumption (\Cref{Ass: basic regularity}(ii)).
 All images are resized to $256 \times 256$ pixels and center-cropped to 
 $224 \times 224$. We fine-tune the pre-trained convolutional layers 
 (conv1--conv5) and fully connected layers (fc6--fc7), while initializing 
@@ -188,7 +188,7 @@ For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently m
     \vspace{-2ex}
 \end{figure}
 To elucidate the mechanisms behind the performance of DualHash, following \cite{hoeOneLossAll2021},
-we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig:His_64_NUSWIDE,fig:His_16_NUSWIDE}) across different bit lengths $K$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet \cite{Cao2017HashNetDL} and OrthoHash \cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH \cite{wang2016DTSH} and MDSHC \cite{wang2023deep} (both utilizing $W$-type regularization).
+we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig:His_64_NUSWIDE,fig:His_16_NUSWIDE}) across different bit lengths $K$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet \cite{Cao2017HashNetDL} and OrthoHash \cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH \cite{wang2016DTSH} and MDSHC \cite{wang2023deep} (both utilizing \blue{W-type regularization}).
 
 % \vspace{3pt}
 \noindent\textbf{(1) Quantization Error Correlates with Intra- and Inter-class Distances.}
@@ -198,7 +198,7 @@ This demonstrates that reducing quantization error enhances code quality primari
 
 % \vspace{3pt}
 \noindent\textbf{(2) DualHash Achieves Lower Quantization Error via Dual-Space Reformulation.}
-As shown in \Cref{fig:quantization_error}(a), DualHash attains the smallest quantization error across different bit lengths among all evaluated methods. This performance advantage stems from a fundamental methodological innovation: DualHash employs a novel dual-space reformulation of the W-regularization. The convexity property inherent in our dual formulation's conjugate function yields significant optimization advantages compared to directly optimizing the original nonconvex regularization or activation functions. 
+As shown in \Cref{fig:quantization_error}(a), DualHash attains the smallest quantization error across different bit lengths among all evaluated methods. This performance advantage stems from a fundamental methodological innovation: DualHash employs a novel dual-space reformulation of the \blue{W-type regularization}. The convexity property inherent in our dual formulation's conjugate function yields significant optimization advantages compared to directly optimizing the original nonconvex regularization or activation functions. 
 
 % \vspace{3pt}
 \noindent\textbf{(3) Bit-Dependent Performance and the Separability-Semantics Trade-off.}

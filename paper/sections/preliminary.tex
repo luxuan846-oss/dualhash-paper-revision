@@ -1,76 +1,50 @@
-\section{Preliminary}
-\blue{An} extended real-valued function $f:\RR^{q}\to\blue{[-\infty,+\infty]}$ is called
-\textit{proper} if \blue{$f(\bx)>-\infty$ for all $\bx\in\RR^{q}$ and} its domain
-$\operatorname{dom}(f):=\{\bx\in\RR^{q}\mid f(\bx)<+\infty\}$ is nonempty; \blue{it is called
+\blue{An} extended real-valued function $r:\RR^{q}\to\blue{[-\infty,+\infty]}$ is called
+\textit{proper} if \blue{$r(\bx)>-\infty$ for all $\bx\in\RR^{q}$ and} its domain
+$\operatorname{dom}(r):=\{\bx\in\RR^{q}\mid r(\bx)<+\infty\}$ is nonempty; \blue{it is called
 \textit{lower semicontinuous} if its epigraph
-$\operatorname{epi}(f):=\{(\bx,t)\in\RR^{q+1}\mid f(\bx)\le t\}$ is closed.}
+$\operatorname{epi}(r):=\{(\bx,t)\in\RR^{q+1}\mid r(\bx)\le t\}$ is closed.}
 \blue{We write
-$\by\xrightarrow{f}\bx$ to denote $\by\to\bx$ and $f(\by)\to f(\bx)$. The \textit{(limiting) subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point
-$\bx$ where $f(\bx)$ is finite is given by
+$\by\xrightarrow{r}\bx$ to denote $\by\to\bx$ and $r(\by)\to r(\bx)$. The \textit{(limiting) subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $r:\RR^{q}\to[-\infty,+\infty]$ at a point
+$\bx$ where $r(\bx)$ is finite is given by
 \begin{equation}\label{Eq: limiting subdifferential}
 \begin{aligned}
-\partial f(\bx):={}&\Bigl\{\bv\in\RR^{q}:\ \exists\,\bx^{k}\xrightarrow{f}\bx,\ \bv^{k}\to\bv\ \text{with}\\
+\partial r(\bx):={}&\Bigl\{\bv\in\RR^{q}:\ \exists\,\bx^{k}\xrightarrow{r}\bx,\ \bv^{k}\to\bv\ \text{with}\\
 &\quad \liminf_{\substack{\by\to\bx^{k}\\ \by\neq\bx^{k}}}
-\frac{f(\by)-f(\bx^{k})-\langle\bv^{k},\by-\bx^{k}\rangle}{\|\by-\bx^{k}\|}
+\frac{r(\by)-r(\bx^{k})-\langle\bv^{k},\by-\bx^{k}\rangle}{\|\by-\bx^{k}\|}
 \ge0\quad\text{for all } k\Bigr\}.
 \end{aligned}
-\end{equation}When $f$ is continuously differentiable or convex, the above subdifferential coincides with the
-classical gradient or convex subdifferential of $f$
+\end{equation}When $r$ is continuously differentiable or convex, the above subdifferential coincides with the
+classical gradient or convex subdifferential of $r$
 \cite[Exercise~8.8(b) and Proposition~8.12]{Rockafellar1998VariationalA}.
 Moreover, for any continuously differentiable $g$, it holds that
-$\partial(f+g)(\bx)=\partial f(\bx)+\nabla g(\bx)$
+$\partial(r+g)(\bx)=\partial r(\bx)+\nabla g(\bx)$
 \cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}; and if
-$f(\bx_{1},\bx_{2})=f_{1}(\bx_{1})+f_{2}(\bx_{2})$ with $f_{1},f_{2}$ proper and lower
-semicontinuous, then $\partial f(\bx_{1},\bx_{2})=\partial f_{1}(\bx_{1})\times\partial f_{2}(\bx_{2})$
+$r(\bx_{1},\bx_{2})=r_{1}(\bx_{1})+r_{2}(\bx_{2})$ with $r_{1},r_{2}$ proper and lower
+semicontinuous, then $\partial r(\bx_{1},\bx_{2})=\partial r_{1}(\bx_{1})\times\partial r_{2}(\bx_{2})$
 \cite[Proposition~10.5]{Rockafellar1998VariationalA}.}
-
-For a proper, \blue{lower semicontinuous, and bounded-below} function $f$, the \textit{proximal mapping} of $f$, denoted by $\operatorname{prox}_{\tau f}(\by)$, is defined as
+For a proper function $r:\RR^{l}\to(-\infty,+\infty]$, its conjugate is $r^*(\by):=\sup_{\bx}\{\langle\by,\bx\rangle-r(\bx)\}$ and its biconjugate is $r^{**}:=(r^*)^*$. \blue{If $r$ has an affine minorant, then $r^{**}$ is the largest lower semicontinuous convex function below $r$~\cite[Theorem~11.1]{Rockafellar1998VariationalA}; with a slight abuse of notation, \(r\), \(r^*\), and \(r^{**}\) refer to both the vector and the matrix cases.}
+For a proper, \blue{lower semicontinuous, and bounded-below} function $r$, the \textit{proximal mapping} of $r$, denoted by $\operatorname{prox}_{\tau r}(\by)$, is defined as
 \begin{align}
     % \label{Def: the definition of proximal operator}
-    \operatorname{prox}_{\tau f}(\by) := \argmin\limits_{\bx \in \operatorname{dom}(f)}\left\{ f(\bx) + \frac{1}{2\tau}\|\bx - \by\|^{2}\right\}, \notag
+    \operatorname{prox}_{\tau r}(\by) := \argmin\limits_{\bx \in \operatorname{dom}(r)}\left\{ r(\bx) + \frac{1}{2\tau}\|\bx - \by\|^{2}\right\}, \notag
 \end{align} 
 where $\tau$ is a positive scalar parameter. The proximal mapping admits the following
 properties.
 \begin{proposition}\label{prop:rockafellar}
 \textnormal{\cite{Rockafellar1998VariationalA}}
-    Let $f : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper, \blue{lower semicontinuous, and bounded below}. Then, the following holds.
+    Let $r : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper, \blue{lower semicontinuous, and bounded below}. Then, the following holds.
     \begin{enumerate}[label=(\roman*)]
-        \item The set $\operatorname{prox}_{\tau f}(\bx)$ is nonempty and compact
+        \item The set $\operatorname{prox}_{\tau r}(\bx)$ is nonempty and compact
             for any $\bx \in \mathbb{R}^{q}$ and $\tau > 0$.
 
-        \item If $f$ is convex, then $\operatorname{prox}_{\tau f}(\bx)$
+        \item If $r$ is convex, then $\operatorname{prox}_{\tau r}(\bx)$
             contains exactly one value for any $\bx \in \mathbb{R}^{q}$ and
             $\tau > 0$.
     \end{enumerate}
 \end{proposition}
-\blue{\qquad For a W-type regularizer, \(\phi\) denotes the scalar function, while \(h\) and \(h^*\) denote its separable vector- and matrix-valued extensions and conjugates. In particular,
-\[
-h^*(\bLmbd)=\sum_{i=1}^{n}\sum_{j=1}^{d}\phi^*(\Lambda_{ij}),\qquad
-\phi^*(s):=\sup_{t\in\mathbb{R}}\{st-\phi(t)\},\qquad \bLmbd\in\mathbb{R}^{n\times d}.
-\]}\blue{\qquad A differentiable} function $f: \RR^q \rightarrow \RR$ is said to be $L_f$-smooth if $\| \nabla f(\bx) - \nabla f(\bx') \| \leq L_f \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^q$.
-A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \blue{\Omega}$. For an $L_f$-smooth function, \blue{the descent lemma \blue{\cite{Bertsekas1997}} states that
+\blue{A differentiable} function $g: \RR^q \rightarrow \RR$ is said to be $L_g$-smooth if $\| \nabla g(\bx) - \nabla g(\bx') \| \leq L_g \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^q$.
+A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \blue{\Omega}$. For an $L_g$-smooth function, \blue{the descent lemma \blue{\cite{Bertsekas1997}} states that
 \begin{align}
 \label{Eq: the descent lemma}
-    f(\bx) \leq f(\bx') + \langle \nabla f(\bx'), \bx - \bx' \rangle + \frac{L_f}{2} \| \bx - \bx'\|^2. 
-\end{align}}We use the StoRM (stochastic recursive momentum) variance-reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}.
-\blue{Consider a stochastic optimization problem with objective}
-\[
-\blue{\phi(\bx)=\mathbb{E}_{\xi}[\phi(\bx;\xi)], \qquad \xi\in\Xi.}
-\]
-\blue{A standard momentum-based stochastic first-order method constructs the stochastic direction}
-\begin{align*}
-    \blue{\bg^{k} = \rho_{k-1}\nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bg^{k-1}, \qquad \rho_{k-1}\in[0,1],}
-\end{align*}
-\blue{which is generally a biased estimator of $\nabla\phi(\bx^{k})$.} \blue{StoRM introduces the correction term}
-\[
-\blue{(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k};\xi^{k})-\nabla\phi(\bx^{k-1};\xi^{k})\bigr),}
-\]
-\blue{into the momentum estimator above, leading to the recursive estimator}
-\begin{align}
-    \label{Eq: the generic StoRM estimator}
-    \blue{\bg^{k}=\left\{\begin{array}{ll}
-        \nabla\phi(\bx^{k};\xi^{k}), & \text{if } k=1, \\[1mm]
-        \nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1};\xi^{k})\bigr), & \text{if } k>1,
-    \end{array}\right.}
-\end{align}
-% \blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}
+    g(\bx) \leq g(\bx') + \langle \nabla g(\bx'), \bx - \bx' \rangle + \frac{L_g}{2} \| \bx - \bx'\|^2. 
+\end{align}}

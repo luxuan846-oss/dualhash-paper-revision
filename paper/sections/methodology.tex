@@ -176,6 +176,7 @@
 % % which corresponds to the necessary condition \eqref{Eq: the sufficient and necessary condition for dual} for the second relation in optimality condition \eqref{Eq: the sufficient and necessary condition}.
 % This establishes \eqref{Eq: the sufficient and necessary condition for dual}, which is precisely the necessary condition for the second relation in \eqref{Eq: the sufficient and necessary condition}.
 % \end{remark}
+
 \subsection{\blue{Min--Max Reformulation}}
 Consider the equivalent constrained formulation of Problem~\eqref{Prop: block-wise regularized problem}:
 \begin{align}
@@ -273,6 +274,7 @@ $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
 \end{enumerate}
 \end{proposition}
 
+
 \subsection{\blue{Algorithmic Framework}}
 \label{Sec: DualHash framework}
 \blue{Using the Lagrangian~\eqref{Eq: simplified_lagrangian},} we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$, \blue{which motivates a proximal step for $\bLmbd$.}
@@ -367,6 +369,29 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 \end{algorithmic}
 \end{algorithm}
 \subsubsection{DualHash with Recursive Momentum}
+We use the StoRM (stochastic recursive momentum) variance-reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}.
+\blue{Consider a stochastic optimization problem with objective}
+\[
+\blue{\phi(\bx)=\mathbb{E}_{\xi}[\phi(\bx;\xi)], \qquad \xi\in\Xi.}
+\]
+\blue{A standard momentum-based stochastic first-order method constructs the stochastic direction}
+\begin{align*}
+    \blue{\bg^{k} = \rho_{k-1}\nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bg^{k-1}, \qquad \rho_{k-1}\in[0,1],}
+\end{align*}
+\blue{which is generally a biased estimator of $\nabla\phi(\bx^{k})$.} \blue{StoRM introduces the correction term}
+\[
+\blue{(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k};\xi^{k})-\nabla\phi(\bx^{k-1};\xi^{k})\bigr),}
+\]
+\blue{into the momentum estimator above, leading to the recursive estimator}
+\begin{align}
+    \label{Eq: the generic StoRM estimator}
+    \blue{\bg^{k}=\left\{\begin{array}{ll}
+        \nabla\phi(\bx^{k};\xi^{k}), & \text{if } k=1, \\[1mm]
+        \nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1};\xi^{k})\bigr), & \text{if } k>1,
+    \end{array}\right.}
+\end{align}
+% \blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}
+
 Alternatively, we consider the StoRM estimator for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. We adapt the generic StoRM estimator in \eqref{Eq: the generic StoRM estimator} to construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
 \begin{equation}
 \label{Eq: the stochastic approximate in STORM}

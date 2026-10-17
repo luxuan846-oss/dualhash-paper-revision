@@ -277,7 +277,7 @@ $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
 
 \subsection{\blue{Algorithmic Framework}}
 \label{Sec: DualHash framework}
-\blue{Using the Lagrangian~\eqref{Eq: simplified_lagrangian},} we replace $h(\bY)$ with $-h^*(\bLmbd)$ and optimize the \(h^*\) in the dual space. The convexity of $h^*$ makes $\operatorname{prox}_{h^*}(\cdot)$ often much easier to compute (potentially having a closed-form solution) than $\operatorname{prox}_{h}(\cdot)$, \blue{which motivates a proximal step for $\bLmbd$.}
+\blue{Using the Lagrangian~\eqref{Eq: simplified_lagrangian}, we perform a proximal step on $h^*$ to update $\bLmbd$; its entrywise evaluation is given by \eqref{Eq: the proximal mapping of conjugate function}.}
 
 We now present the \textbf{DualHash} framework, which updates $\bx$, $\bB$, and $\bm{\Lambda}$ alternately. The resulting algorithm can be viewed as a first-order multiblock primal--dual method. First, we update $\bx$ by a stochastic first-order step, as is standard in training neural networks. \blue{At iteration $k$, the $\bx$-update takes the form
 \begin{equation}

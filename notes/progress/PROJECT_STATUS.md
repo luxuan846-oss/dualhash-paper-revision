@@ -53,3 +53,7 @@
 - 2026-10-17 按清单命名原目标 `J_0`、整理 §2 小节与 W 类条件说明、迁移记号复用约定、精简重复文字、将已注释 StoRM 通用块的目标符号换为 `\Theta`，并加入指定引言段落及贡献说明；逐项检索与 `latexmk -pdf main.tex` 验收通过，无 LaTeX 错误或重复标签，仅待补 `prop:original-certificate`、`cor:original-stationarity` 两个标签。
 
 - 2026-10-17 将 W 类表格后的适用范围段替换为 `compact dual domain` 子类定义，并在 StoM、StoRM 两个复杂度定理中显式加入该条件；W1–W3 的两句 Remark 与全 W 类的精确驻点对应保持不变。证书命题尚待添加，届时采用该子类条件，并注明证明只用共轭域的有界包含关系。编译生成 PDF，无新增错误，仍待补 `prop:original-certificate`、`cor:original-stationarity`。
+
+- 2026-10-17 调整 W 类计算性质的叙述：说明表中原正则的近端映射在原点集值且无连续单值选择，共轭近端映射单值且非扩张；移除算法框架中“凸性使近端更易计算”的比较。保留逐元素近端公式及标签，并在算法框架引用；明确共轭函数有界用于建立 Lyapunov 函数的一致下界。
+
+- 2026-10-17 将模型部分的量化误差记为 $Q_1$，正式定义为网络输出与逐元素二值化结果的 entrywise ℓ₁ 距离，保留 `eq:quantization-error` 标签；以行内一句给出表中 p=1 与 p=2 的对应关系，矩阵平方误差使用 Frobenius 范数。Notation 明确 sgn(0)=1；表中双变量 Q 与附录迭代元组 $\mathcal{Q}^k$ 保持原记号。

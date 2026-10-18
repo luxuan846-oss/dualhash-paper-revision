@@ -91,40 +91,6 @@ $\pm1$, are added to drive the continuous outputs toward $\{-1,1\}^d$. Such pena
 are standard in deep hashing~\cite{liuDeepSupervisedHashing,yuanCentralSimilarityQuantization2020,he2025mambahash,
 yin2026crh}. Their formulas differ, but our analysis depends only on their common
 shape, which we formalize next.}
-\begin{table}[!t]
-\centering
-\color{blue}
-\captionsetup{labelfont={color=blue},textfont={color=blue}}
-\caption{Representative W-type regularizers, with \(\lambda,\delta>0\), \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\), and \(\operatorname{Hub}_{\delta}(s):=s^2/(2\delta)\) if \(|s|\le\delta\), \(|s|-\delta/2\) otherwise. Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\). In the Algorithm column, `n/a' indicates that no cited method uses the regularizer; in the proximal-mapping column, `\textemdash' indicates that no closed-form expression is available.}
-\label{tab:wtype}
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.4}
-\resizebox{\columnwidth}{!}{
-\begin{tabular}{@{}ll>{\raggedright\arraybackslash}m{1.9cm}cccc>{\centering\arraybackslash}m{2.2cm}@{}}
-\toprule
-\multicolumn{2}{l}{\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\) & Relation to \(Q_1\)\\
-\midrule
-\multirow{2}{*}{\(\lambda\bigl||t|-1\bigr|^{p}\)}
- & \(p=1\) & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
- & \(\{\pm\lambda\}\) & \(|y|\) & \([-\lambda,\lambda]\)
- & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\sigma)_+\bigr)\) & $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$\\
-\addlinespace[3pt]
- & \(p=2\) & \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh,bai2019proxquant}
- & \(\{\pm2\lambda\}\) & \(|y|+\frac{y^2}{4\lambda}\) & \(\mathbb{R}\)
- & \(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma/(2\lambda)}\)
- & {\scriptsize $h(\mathcal{D}(\bx))\le\lambda\max\{1,C_{\mathcal{D}}-1\}Q_1(\bx)$}\\
-\midrule
-\multicolumn{2}{l}{\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
- & \(\{\pm\lambda\tanh1\}\)
- & \(|y|+\lambda\psi(|y|/\lambda)\)
- & \([-\lambda,\lambda]\) & \textemdash & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
-\addlinespace[3pt]
-\multicolumn{2}{l}{\(\lambda\operatorname{Hub}_{\delta}(|t|-1)\)} & \text{n/a}
- & \(\{\pm\lambda\min\{1,\frac1\delta\}\}\) & \(|y|+\frac{\delta y^2}{2\lambda}\) & \([-\lambda,\lambda]\)
- & \(\operatorname{clip}\Bigl(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma\delta/\lambda}\Bigr)\) & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
-\bottomrule
-\end{tabular}}
-\end{table}
 \begin{definition}[W-type regularizer]\label{def:wtype}
 Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in\mathbb{R}^{n\times d}\), define \(h(\bz):=\sum_{j=1}^{d}\phi(z_j)\) and \(h(\bZ):=\sum_{i=1}^{n}\sum_{j=1}^{d}\phi(z_{ij})\); with a slight abuse of notation, \(h\), \(h^*\), and \(h^{**}\) refer to both the vector and the matrix cases. We call \(h\) a \emph{W-type regularizer} if \(\phi\) satisfies:
 \begin{enumerate}[label=\textup{(W\arabic*)}]
@@ -144,24 +110,6 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\) satisfy \ref{W1}--\ref{W2}. Then the follo
 Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
 \end{lemma}
 
-We list representative W-type regularizers from the deep hashing literature in \Cref{tab:wtype}. As can be seen, the proximal mapping of $\phi$ is set-valued at the origin due to its nonconvexity. In contrast, the convexity of $\phi^*$ ensures that its proximal mapping is single-valued and
-nonexpansive. Moreover, the separability of $h^*$ allows the dual proximal update to be computed entrywise:
-\begin{equation}
-\label{Eq: the proximal mapping of conjugate function}
-[\operatorname{prox}_{\sigma h^*}(\bLmbd)]_{ij}
-=\operatorname{prox}_{\sigma\phi^*}(\Lambda_{ij}),
-\qquad \sigma>0,
-\end{equation}
-This entrywise form is used in the single-loop primal--dual updates below, and \Cref{tab:wtype} provides the closed-form expressions when available.
-
-We say that $h$ has a \emph{compact dual domain} if
-$\operatorname{dom}\phi^*=[-\lambda,\lambda]$
-for some $\lambda>0$.
-This condition also ensures that $\phi^*$ is bounded
-on its domain, which is used in the complexity analysis
-to establish lower bounds for the Lyapunov functions.
-All regularizers in \Cref{tab:wtype} except $p=2$
-satisfy this condition.
 \endgroup
 \begin{figure}[!t]
 \centering
@@ -242,8 +190,7 @@ satisfy this condition.
 \label{eq:quantization-error}
 Q_1(\bx):=\bigl\|\mathcal{D}(\bx)-\operatorname{sgn}(\mathcal{D}(\bx))\bigr\|_1
 =\sum_{i=1}^{n}\sum_{j=1}^{d}\bigl||\mathcal{D}_{ij}(\bx)|-1\bigr|,
-\end{equation}where the equality follows entrywise from $\min_{b\in\{-1,1\}}|z-b|=\bigl||z|-1\bigr|$. We relate each W-type regularizer to the quantization error
-$Q_1$ in the last column of \Cref{tab:wtype}. Sepcifically, for $p=1$, also used in our experiments, $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$, so the regularizer is exactly the scaled quantization error; In contrast, for the other regularizers, $h(\mathcal{D}(\bx))\le c_\phi Q_1(\bx)$ provides only an upper bound, which may be loose.}
+\end{equation}\red{where the equality follows componentwise from $\min_{b\in\{-1,1\}}|z-b|=\bigl||z|-1\bigr|$. We relate each W-type regularizer to the quantization error $Q_1$ in the last column of \Cref{tab:wtype}. Specifically, for $p=1$, which is also used in our experiments, $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$, so the regularizer is exactly the scaled quantization error. For the other regularizers, $h(\mathcal{D}(\bx))\le c_\phi Q_1(\bx)$ provides only an upper bound, which may be loose.}}
 
 \blue{Using variable splitting, we introduce continuous auxiliary variables \(\bb_i\in\RR^d\) and \(\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\RR^{n\times d}\), subject to \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\),} to obtain the following equivalent nonlinearly constrained problem:
 \begin{align}
@@ -261,7 +208,7 @@ We then \blue{relax these constraints by} the quadratic penalty method \cite[Sec
 \begin{align}
     \label{Prop: block-wise regularized problem}
     \blue{\min_{\bx \in \RR^{q},\,\bB \in \RR^{n\times d}}\ J(\bx,\bB):=F(\bx,\bB)+h(\bB).} \tag{P}
-\end{align}This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon Problem~\eqref{Prop: block-wise regularized problem}, we develop a stochastic primal-dual algorithm {that addresses the lack of tractable proximal mappings in the nonsmooth composite form and the absence of convergence guarantees in existing deep hashing methods.}
+\end{align}\red{This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks and yields a tractable two-block formulation.} Building upon Problem~\eqref{Prop: block-wise regularized problem}, we develop a stochastic primal-dual algorithm {that addresses the lack of tractable proximal mappings in the nonsmooth composite form and the absence of convergence guarantees in existing deep hashing methods.}
 \subsection{\blue{Basic Assumptions}}
 \blue{We impose the following basic assumptions on Problem \eqref{Eq: the primal deep hashing problem}.}
 \begin{assumption}
@@ -276,6 +223,7 @@ We then \blue{relax these constraints by} the quadratic penalty method \cite[Sec
         \forall\,\bx\in\RR^q.
     \]}
 \end{enumerate}
+\end{assumption}
 \begin{remark}[Coercivity of $J(\bx, \bB)$]\label{rem:coercivity}
 \blue{Assumption~\ref{Ass: basic regularity}(i) yields the coercivity of $J$. Indeed, since $P\ge0$,
 \[
@@ -283,4 +231,56 @@ J(\bx,\bB)\ge\underline{\ell}+\frac{\mu}{2}\|\bx\|^2+h(\bB),
 \]
 and $h$ grows at least linearly in each entry because $\phi^*$ is even and $\operatorname{dom}\phi^*$ has nonempty interior (Lemma~\ref{lem:wtype-conj}).}
 \end{remark}
-\end{assumption}
+
+\begin{table}[!t]
+\centering
+\color{blue}
+\captionsetup{labelfont={color=blue},textfont={color=blue}}
+\caption{Representative W-type regularizers, with \(\lambda,\delta>0\), \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\), and \(\operatorname{Hub}_{\delta}(s):=s^2/(2\delta)\) if \(|s|\le\delta\), \(|s|-\delta/2\) otherwise. Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\). In the Algorithm column, `n/a' indicates that no cited method uses the regularizer; in the proximal-mapping column, `\textemdash' indicates that no closed-form expression is available.}
+\label{tab:wtype}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.4}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{@{}ll>{\raggedright\arraybackslash}m{1.9cm}cccc>{\centering\arraybackslash}m{2.2cm}@{}}
+\toprule
+\multicolumn{2}{l}{\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\) & Relation to \(Q_1\)\\
+\midrule
+\multirow{2}{*}{\(\lambda\bigl||t|-1\bigr|^{p}\)}
+ & \(p=1\) & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
+ & \(\{\pm\lambda\}\) & \(|y|\) & \([-\lambda,\lambda]\)
+ & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\sigma)_+\bigr)\) & $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$\\
+\addlinespace[3pt]
+ & \(p=2\) & \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh,bai2019proxquant}
+ & \(\{\pm2\lambda\}\) & \(|y|+\frac{y^2}{4\lambda}\) & \(\mathbb{R}\)
+ & \(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma/(2\lambda)}\)
+ & {\scriptsize $h(\mathcal{D}(\bx))\le\lambda\max\{1,C_{\mathcal{D}}-1\}Q_1(\bx)$}\\
+\midrule
+\multicolumn{2}{l}{\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
+ & \(\{\pm\lambda\tanh1\}\)
+ & \(|y|+\lambda\psi(|y|/\lambda)\)
+ & \([-\lambda,\lambda]\) & \textemdash & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
+\addlinespace[3pt]
+\multicolumn{2}{l}{\(\lambda\operatorname{Hub}_{\delta}(|t|-1)\)} & \text{n/a}
+ & \(\{\pm\lambda\min\{1,\frac1\delta\}\}\) & \(|y|+\frac{\delta y^2}{2\lambda}\) & \([-\lambda,\lambda]\)
+ & \(\operatorname{clip}\Bigl(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma\delta/\lambda}\Bigr)\) & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\red{We list representative W-type regularizers from the deep hashing literature in
+\Cref{tab:wtype}. The proximal mapping of $\phi$ is set-valued at the origin because
+of its nonconvexity, whereas the convexity of $\phi^*$ makes its proximal mapping
+single-valued and nonexpansive. The separability of $h^*$ gives the dual proximal
+update componentwise:}
+\begin{equation}
+\label{Eq: the proximal mapping of conjugate function}
+[\operatorname{prox}_{\sigma h^*}(\bLmbd)]_{ij}
+=\operatorname{prox}_{\sigma\phi^*}(\Lambda_{ij}),
+\qquad \sigma>0,
+\end{equation}
+\red{and \Cref{tab:wtype} records closed-form expressions when they are available. Throughout
+the paper, $h$ has a \emph{compact dual domain} when
+$\operatorname{dom}\phi^*=[-\lambda,\lambda]$ for some $\lambda>0$. This condition also
+ensures that $\phi^*$ is bounded on its domain, which is used in the complexity analysis
+to establish lower bounds for the Lyapunov functions. All regularizers in
+\Cref{tab:wtype} except $p=2$ satisfy this condition.}

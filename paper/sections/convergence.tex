@@ -11,7 +11,7 @@ is called an \emph{$\varepsilon$-KKT point} if
 \leq\varepsilon^2.
 \end{equation}
 
-\blue{Before proceeding, let $T$ denote the maximum number of iterations.} \blue{Under the mini-batch sampling scheme
+\red{Let $T$ denote the maximum number of iterations.} \blue{Under the mini-batch sampling scheme
 introduced in Section~\ref{Sec: DualHash framework}, let $(\Omega,\mathcal F,\mathbb P)$
 be the underlying probability space. For $k\geq1$, define
 $\mathcal F_k:=\sigma(\mathcal J_1,\ldots,\mathcal J_{k-1})$ with $\mathcal F_1$ trivial, as
@@ -25,7 +25,7 @@ Section~\ref{Section: Problem Reformulation} and impose the following stochastic
 \leavevmode
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2em,font=\color{blue}]
     \item \blue{The set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.}
-    \item \blue{There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$ with $\|\bB\|\le R_B$,}
+    \item \blue{There exist constants $R_B>0$ and $\sigma^2\geq0$ such that, for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$ with $\|\bB\|\le R_B$,}
     \begin{align}
         \label{Eq: finite-sum sampling identities}
         &\frac{1}{n}\sum_{i=1}^{n}\nabla_{\bx} F_i(\bx, \bb_i)
@@ -37,6 +37,11 @@ Section~\ref{Section: Problem Reformulation} and impose the following stochastic
     \end{align}
 \end{enumerate}
 \end{assumption}
+
+\red{Throughout this section, we assume that $h$ has a compact dual domain. The
+iterate bounds and the resulting $L_F$-smoothness of $F$ on
+$\RR^q\times\{\bB:\|\bB\|\le R_B\}$ are established in
+\Cref{app:smoothness-discussion}.}
 
 Our analysis aims to bound $\mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)\big]$. However,
 \blue{the dual update can increase $\calL$, so $\calL$ need not decrease along the iterates and standard descent arguments do not apply directly} \cite{xu2023momentum,zhang2022stochastic}.
@@ -164,29 +169,29 @@ We now present the convergence rate of \Cref{alg:our_algorithm_sgdm} under the p
     \end{align}\blue{where $L_{\Delta}:=\frac{\max\{S_1,S_2,S_3,S_4\}}{\min\{C_{\bB},C_{\bx}\}}$ and $C_{\sigma}:=\frac{L_{\Delta}}{L_F}+3$ are constants independent of $T$, with $S_1,\ldots,S_4$ defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}.}
 \end{lemma}
 
-\blue{To achieve the desired oracle complexity, we choose the batch size according to \eqref{Eq: the convergence rate of sgdm} as
+\blue{To achieve the desired oracle complexity, we choose the batch size according to \eqref{Eq: the convergence rate of sgdm} as}
 \begin{align}
 \label{Eq: the parameters conditions of dualhash-sgdm}
-    \red{b_k=b=\lceil c_bT\rceil,}
+    \red{b_k=b=\lceil c_bT\rceil\in\{1,\ldots,n\},}
 \end{align}
-\red{where $c_b>0$ is a constant independent of $T$, and $\lceil c_bT\rceil\le n$.} The complexity result is established in \Cref{Theorem: the oracle complexity in SGDM}, with the proof in  \Cref{app:stom-oracle-proof}.
+\red{where $c_b>0$ is a constant independent of $T$, and $1\le\lceil c_bT\rceil\le n$.} The complexity result is established in \Cref{Theorem: the oracle complexity in SGDM}, with the proof in  \Cref{app:stom-oracle-proof}.
 \begin{theorem}
 % [Oracle complexity of \Cref{alg:our_algorithm_sgdm}]
     \label{Theorem: the oracle complexity in SGDM}
-Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \blue{\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm} \red{with $\lceil c_bT\rceil\le n$.} \blue{Assume further that $h$ has a compact dual domain.} Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} \blue{with}
+Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_sgdm} with the parameters satisfying \blue{\eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm} \red{with $\lceil c_bT\rceil\le n$.} Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} \blue{with}
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm SGDM}
-        T = \left\lceil \frac{L_{\Delta} \Delta_1+ C_{\sigma}\frac{\sigma^2}{c_b}}{\varepsilon^2} \right\rceil.
+        \red{T \geq \left\lceil \frac{L_{\Delta} \Delta_1+ C_{\sigma}\frac{\sigma^2}{c_b}}{\varepsilon^2} \right\rceil.}
 \end{align}
 Consequently, the total number of SFO calls is of order \(\calO(\varepsilon^{-4})\).
 \end{theorem}
 \subsection{Oracle Complexity of DualHash-StoRM}
-Before proceeding, we introduce an additional assumption, also known as the mean-squared smoothness
+\red{We impose the additional mean-squared smoothness}
 assumption, widely used in variance reduction methods \cite{arjevani2023lower,driggs2021stochastic}.
 \blue{
 \begin{assumption}[Mean-square smoothness]
 \label{Ass: the mean squared smoothness of F}
-    There exists $L_{F} > 0$ such that for all $\bx, \bx' \in \RR^{\blue{q}}$ and $\bB, \bB' \in \RR^{n\times d}$, it holds that
+    \red{There exists $L_{F} > 0$ such that for all $\bx, \bx' \in \RR^{\blue{q}}$ and $\bB, \bB' \in \RR^{n\times d}$ with $\|\bB\|,\|\bB'\|\le R_B$,} it holds that
 \begin{align}
     \label{eq:mss}
     \frac{1}{n}\sum_{i=1}^{n}
@@ -199,7 +204,7 @@ Let us denote the gradient error \[\be^{k} = \blue{\bg_s^{k}} - \nabla_{\bx}F(\b
 ,\], where $\blue{\bg_s^k}$ is defined in \eqref{Eq: the stochastic approximate in STORM}. Similarly, the following lemma estimates the one-iteration progress
 of the Lagrangian function \eqref{Eq: simplified_lagrangian} via the $\bx$-update \eqref{Eq: the update of x in STORM}. \blue{Its proof follows from \cite[Lemma~2.1]{xu2023momentum} and is given in \Cref{app:storm-primal-progress-proof}.}
 \begin{lemma}[One-iteration progress on $\bx$ \cite{xu2023momentum}]
-    \label{Lemma: One-iteration progress of x in STORM} Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_storm}. Under \Cref{Ass: basic regularity} and \Cref{Ass: main assumptions}(i), for any $k \geq 1$, it holds that
+    \label{Lemma: One-iteration progress of x in STORM} Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_storm}. \red{Under \Cref{Ass: basic regularity}(ii),} for any $k \geq 1$, it holds that
     \begin{align}
         \label{Eq: the recursive relation of L on x}\calL (\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k}) \leq \frac{\eta_{k}}{2}\| \be^{k}\|^{2}- (\eta_{k}^{-1}- L_{F})\Delta_{\bx}^{k+1}.
     \end{align}
@@ -221,7 +226,7 @@ where $C_1$, $C_2$, and $C_3$, which are independent of $k$, are chosen as in
 of $\Psi_r$, with the proof provided in \Cref{app:storm-descent-proof}.
 \begin{lemma}
 \label{Lemma: approximate sufficient descent property storm}
-    Under \Cref{Ass: basic regularity} and \Cref{Ass: main assumptions}(i), with \blue{$0<\tau<\frac{\sqrt{30}-2}{13L_F}$ and $\eta_{k}^{-1}- \tilde{L}_{F}>0$}, for any $k \geq 1$, it holds that
+    \red{Under \Cref{Ass: basic regularity}(ii),} with \blue{$0<\tau<\frac{\sqrt{30}-2}{13L_F}$ and $\eta_{k}^{-1}- \tilde{L}_{F}>0$}, for any $k \geq 1$, it holds that
     \blue{\begin{align}
         \EE[\Psi_r(\mathcal{Q}^{k+1})] - \EE[\Psi_r(\mathcal{Q}^{k})]
         &\leq -C_{\bB}\EE[\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}]-C_{\bx}^{k}\EE[\Delta_{\bx}^{k+1}]+\frac{\eta_k}{2}\EE[\|\be^{k}\|^{2}],
@@ -244,7 +249,7 @@ of $\Psi_r$, with the proof provided in \Cref{app:storm-descent-proof}.
     0<\eta\le\min\Bigl\{\frac12,\frac{1}{4\sqrt{\rho}}\Bigr\},
     \label{Eq: the constants for storm}
 \end{align}
-where $\eta$, $\rho$, and $b$ are positive constants independent of $T$, and $G:=1753G_{\mathcal{D}}^{2}$ with $G_{\mathcal{D}}$ given in Assumption~\ref{Ass: basic regularity}(ii).}
+where $\eta$ and $\rho$ are positive constants independent of $T$, $b\in\{1,\ldots,n\}$ is an integer, and $G:=1753G_{\mathcal{D}}^{2}$ with $G_{\mathcal{D}}$ given in Assumption~\ref{Ass: basic regularity}(ii).}
 \begin{lemma}[\blue{Auxiliary-block tracking}]
 \label{lem:auxiliary-tracking}
 \blue{Under \Cref{Ass: basic regularity}(ii), for the iterates generated by
@@ -287,20 +292,20 @@ The proof and the explicit value of $\Psi_r^*$ are given in \Cref{Lemma: lower b
     \]}
     are constants independent of $T$, with $S_1,S_2$ defined in \eqref{Eq: the coefficients of stationarity error bound in SGDM}.
 \end{lemma}
-\blue{To achieve the desired oracle complexity, we choose $b_1=c_bT^{1/3}$, where $c_b>0$ is a constant independent of $T$.}
+\red{To achieve the desired oracle complexity, we choose $b_1=\lceil c_bT^{1/3}\rceil$ with $c_b>0$ independent of $T$ and require $1\le b_1\le n$.}
 \begin{theorem}
 \label{Theorem: the oracle complexity in STORM}
-Under \blue{Assumptions~\ref{Ass: basic regularity}, \ref{Ass: main assumptions}, and~\ref{Ass: the mean squared smoothness of F}}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_storm} with the parameters satisfying \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm} \blue{and $b_1=c_bT^{1/3}$}. \blue{Assume further that $h$ has a compact dual domain.} Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} whenever
+Under \blue{Assumptions~\ref{Ass: basic regularity}, \ref{Ass: main assumptions}, and~\ref{Ass: the mean squared smoothness of F}}, let \(\{\bx^k, \bB^k, \bLmbd^k\}_{k \in \NN}\) be the iterate sequence from \Cref{alg:our_algorithm_storm} with the parameters satisfying \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm} \red{and $b_1=\lceil c_bT^{1/3}\rceil\in\{1,\ldots,n\}$.} Then there exists \blue{$R$ uniformly selected from $\{1,\dots,T\}$} such that \( (\bx^R, \bB^R, \bLmbd^R )\) satisfies \eqref{equ:esp} whenever
 \begin{align}
     \label{Eq: the iterate number upper bound of algorithm VR}
-        \blue{T = \left\lceil \frac{\Bigl(\tilde{L}_{\Delta}\tilde{\Delta}_{1}+\tilde{C}_{\sigma}\bigl(\frac{\sigma^{2}}{4\rho\eta^{2}c_b}+\frac{32\rho\eta^{2}\sigma^{2}}{b}\bigr)\Bigr)^{3/2}}{\varepsilon^3} \right\rceil,}
+        \red{T \geq \left\lceil \frac{\Bigl(\tilde{L}_{\Delta}\tilde{\Delta}_{1}+\tilde{C}_{\sigma}\bigl(\frac{\sigma^{2}}{4\rho\eta^{2}c_b}+\frac{32\rho\eta^{2}\sigma^{2}}{b}\bigr)\Bigr)^{3/2}}{\varepsilon^3} \right\rceil,}
 \end{align}
 with \blue{$\tilde{L}_{\Delta}$ and $\tilde{C}_{\sigma}$ from \Cref{Lemma: convergence rate of storm}}. \blue{Consequently,} the total number of SFO calls is of order \(\calO(\varepsilon^{-3})\).
 \end{theorem}
 \begin{remark}
 \begin{enumerate}[label=(\roman*), leftmargin=2em]
 \item The results in Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM} are novel for stochastic, non-convex, multi-block primal-dual optimization, a challenging area where existing work has largely focused on one-block \cite{xu2023momentum,shi2025momentum} or deterministic settings \cite{ADMMNolinear2024}.
-    \item  \Cref{alg:our_algorithm_sgdm} \blue{under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. \red{matches the order of the best-known lower bound} \cite{arjevani2023lower} and the complexity of variance-reduced SFOMs for single-block problems \cite{shi2025momentum,xu2023momentum}. Notably, despite tackling a multi-block problem, our primal-dual framework preserves this efficiency without degrading the dependence on $\varepsilon$.
+    \item  \Cref{alg:our_algorithm_sgdm} \blue{under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. \red{This matches the $\varepsilon$-order of the best-known lower bound for smooth stochastic nonconvex optimization~\cite{arjevani2023lower}; that lower bound concerns a single-block smooth stationarity measure.} The complexity of variance-reduced SFOMs for single-block problems has the same order \cite{shi2025momentum,xu2023momentum}. Despite tackling a multi-block problem, our primal-dual framework preserves this $\varepsilon$-dependence.
 \end{enumerate}
 \end{remark}
 

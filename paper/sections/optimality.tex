@@ -329,9 +329,9 @@ s_{\bLmbd}(\by):=f(\by)+\langle\bLmbd,\mathcal{D}(\by)\rangle-h^*(\bLmbd).
 \]
 By Assumption~\ref{Ass: basic regularity}(ii), $s_{\bLmbd}$ is
 $L_{s_{\bLmbd}}:=(L_f+\|\bLmbd\|L_{\nabla\mathcal{D}})$-smooth.
-\red{If $h$ has a compact dual domain, as for $p=1$, log-cosh, and Huber in
+If $\operatorname{dom}h^*$ is bounded, as for $p=1$, log-cosh, and Huber in
 \Cref{tab:wtype}, then $\operatorname{dom}\phi^*=[-\lambda,\lambda]$ gives
-$\|\bLmbd\|\le\lambda\sqrt{nd}$, and hence}
+$\|\bLmbd\|\le\lambda\sqrt{nd}$, and hence
 \[
 L_{s_{\bLmbd}}\le L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}},
 \]
@@ -340,10 +340,10 @@ For notational simplicity, we set
 $m:=\gamma/n$ and $\kappa:=(1+m^2)/(4m)$. The following lemma shows that, at $\bx$, the
 first-order error of $s_{\bLmbd}$ is governed by the KKT residual, while its gap to $J_0$
 is governed by the network outputs and is never smaller than the convexification error;
-the structural error is therefore associated with passing from the convexified model \eqref{Eq: minmax problem} to the original problem \eqref{Prop: block-wise regularized problem}.
+the structural error is therefore intrinsic to passing from the convexified model \eqref{Eq: minmax problem} to the original problem \eqref{Prop: block-wise regularized problem}.
 
 \begin{lemma}\label{lem:conjugate-minorant}
-Suppose Assumption~\ref{Ass: basic regularity}(ii) holds. Let $h$ be a W-type
+\red{Under Assumption~\ref{Ass: basic regularity}(ii),} let $h$ be a W-type
 regularizer defined in \Cref{def:wtype}, and let $(\bx,\bB,\bLmbd)$ satisfy
 $r_{\mathcal{K}}<\infty$. \red{Then $s_{\bLmbd}\le J_0$ on $\RR^q$, and the following
 inequalities hold at the given point $\bx$:}
@@ -363,8 +363,7 @@ We are now ready to bound the near-stationarity of $J_0$ explicitly. The proof i
 \begin{theorem}\label{prop:original-certificate}
 Under the conditions of \Cref{lem:conjugate-minorant},
 let $L>0$ satisfy
-$L\ge L_f+\|\bLmbd\|L_{\nabla\mathcal{D}}$.
-Then there exists $\widehat{\bx}\in\RR^q$ such that
+\red{$L\ge L_s(\|\bLmbd\|)$.} Then there exists $\widehat{\bx}\in\RR^q$ such that
 \begin{align*}
 \|\widehat{\bx}-\bx\|
 &\le\sqrt{\frac{2}{L}}

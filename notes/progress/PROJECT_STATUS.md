@@ -81,3 +81,9 @@
 - 2026-10-18 将 StoRM 的辅助块跟踪结论提到 `convergence.tex`，新增 `lem:auxiliary-tracking`，并将附录对应部分改为 `Proof of \Cref{lem:auxiliary-tracking}`；加权误差累积证明改为引用正文引理。`latexmk -pdf main.tex` 通过，未发现新增未定义引用或 LaTeX 错误；常数 12 和 146 的完整展开证明仍待补充。
 
 - 2026-10-18 在 `prop:original-certificate` 后新增 `rem:conjugate-minorant-role`，说明共轭下界保留乘子的一阶项、将乘子依赖集中到 `L_0`，以及结构误差对固定罚参数 `\gamma` 的无关性；引用 `nocedalWright2006`。本次未编译。
+
+- 2026-10-18 按最新写作要求更新引言：在现有 “In this paper…” 段后加入计算与意义两个科学问题及回答，恢复四条贡献并将新增内容标为红色；将复杂度表述改为 “matches the order of the best-known lower bound”。同时修正 `convergence.tex` 中未闭合的 `\blue{...}`，`latexmk -pdf main.tex` 通过，未发现新增未定义引用或编译错误。
+
+- 2026-10-18 将正文及回稿信中的 `entrywise` 统一改为 `componentwise`，覆盖 dual proximal 更新、量化误差等式、符号函数和辅助块跟踪证明，并标注替换处。
+
+- 2026-10-18 将原目标证书中的光滑常数记号简化为 $L_s(\|\bLmbd\|)$，保留其对乘子范数的依赖。

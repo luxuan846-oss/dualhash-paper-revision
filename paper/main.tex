@@ -19,15 +19,16 @@
 \begin{document}
 
 \maketitle
-
 \begin{abstract}
 {Deep hashing encodes high-dimensional image features into compact 
 binary codes, enabling efficient similarity search in large-scale 
 content-based image retrieval, a problem akin to semantic-preserving 
-lossy compression under extreme bit-rate constraints.} A fundamental challenge in deep hashing stems from the discrete nature of quantization in generating the codes. \blue{W-type regularizers}, such as \blue{$\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$}, have been proven effective as they encourage variables toward binary values. However, existing methods often directly optimize these \blue{regularizers} without convergence guarantees. While proximal gradient methods offer a promising solution, the coupling between W-type regularizers and neural network outputs results in composite forms that generally lack closed-form proximal solutions. In this paper, we present a stochastic primal-dual hashing algorithm, referred to as DualHash, that provides rigorous complexity bounds. Using Fenchel duality, we partially transform the \blue{optimization of nonconvex W-type regularizers} into the dual space, which results in a proximal operator that admits closed-form solutions. We derive two algorithm instances: a momentum-accelerated version with $\mathcal{O}(\varepsilon^{-4})$ complexity and an improved $\mathcal{O}(\varepsilon^{-3})$ version using variance reduction. Experiments on three standard datasets demonstrate superior retrieval accuracy and reduced quantization error, validating the practical value of DualHash for image retrieval problems. Our implementation of DualHash is available at \url{https://github.com/RailLee/DualHash}.
+lossy compression under extreme bit-rate constraints.} A fundamental challenge in deep hashing stems from the discrete nature of quantization in generating the codes. \blue{W-type regularizers}, such as \blue{$\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$}, have been proven effective as they encourage variables toward binary values. However, existing methods often directly optimize these regularizations without convergence guarantees. While proximal gradient methods offer a promising solution, the coupling between W-type regularizers and neural network outputs results in composite forms that generally lack closed-form proximal solutions. In this paper, we present a stochastic primal-dual hashing algorithm, referred to as DualHash, that provides rigorous complexity bounds. \blue{Using Fenchel duality, we partially transform the nonconvex W-type regularization into the dual space, yielding tractable proximal updates.} We derive two algorithm instances: a momentum-accelerated version with $\mathcal{O}(\varepsilon^{-4})$ complexity and an improved $\mathcal{O}(\varepsilon^{-3})$ version using variance reduction. \blue{For the $\ell_1$ W-type regularizer, we further show that the KKT residual and the quantization error jointly certify near-stationarity of the original deep hashing objective.} Experiments on three standard datasets demonstrate \blue{strong retrieval performance} and reduced quantization error, validating the practical value of DualHash for image retrieval problems. Our implementation of DualHash is available at \url{https://github.com/RailLee/DualHash}.
 \end{abstract}
-
-\begin{keywords}{nonconvex nonsmooth optimization, primal-dual method, deep hashing, {image retrieval}, {stochastic optimization}, oracle complexity}
+\begin{keywords}
+nonconvex nonsmooth optimization, primal-dual method, deep hashing,
+image retrieval, stochastic optimization, oracle complexity,
+\blue{W-type regularization}
 \end{keywords}
 
 \begin{MSCcodes}

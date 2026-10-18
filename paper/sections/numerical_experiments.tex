@@ -13,7 +13,7 @@ standard image retrieval datasets. All experiments use PyTorch 1.12.1 with CUDA 
 \textbf{ImageNet}\footnote{\url{https://www.image-net.org/}} \blue{is a single-label dataset.} Following \cite{Cao2017HashNetDL}, we randomly select 100 categories to create ImageNet-100. We use 100 images per category (10,000 total) for training, 30 per category (3,000 total) for validation, and 50 per category (5,000 total) for testing. The training, validation, and testing sets are mutually exclusive with no data overlap.
 
 % \vspace{3pt}
-\paragraph{Training Setup}  It is worth noting that our method is compatible with different similarity measurement paradigms, including \blue{pointwise~\cite{shenSupervisedDiscreteHashing2015}, pairwise~\cite{liuDeepSupervisedHashing}, and tripletwise~\cite{wang2016DTSH}} methods. In our experiments, we focus on deep supervised pairwise hashing using a pairwise cross-entropy loss \( f \) and the nonsmooth \blue{W-type regularizer} \( h(\blue{\bz}) = \lambda \| |\bz| -1 \|_1 \). 
+\paragraph{Training Setup} Our method is compatible with different similarity measurement paradigms, including \blue{pointwise~\cite{shenSupervisedDiscreteHashing2015}, pairwise~\cite{liuDeepSupervisedHashing}, and tripletwise~\cite{wang2016DTSH}} methods. In our experiments, we focus on deep supervised pairwise hashing using a pairwise cross-entropy loss \( f \) and the nonsmooth \blue{W-type regularizer} \( h(\blue{\bz}) = \lambda \| |\bz| -1 \|_1 \).
 
 % \vspace{3pt}
 \paragraph{Baselines} We compare against eight baselines: SDH \cite{shenSupervisedDiscreteHashing2015}; four deep hashing methods with \blue{W-type regularizers} (DHN \cite{zhuDeepHashingNetwork2016}, DSH \cite{liuDeepSupervisedHashing}, DTSH \cite{wang2016DTSH}, MDSHC \cite{wang2023deep}); 
@@ -111,8 +111,7 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
 \end{table}
 We provide empirical evidence that is consistent with our theoretical results (Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM}) and compare with HashNet, OrthoHash, and MDSHC with 64-bit codes on CIFAR-10 and NUS-WIDE. 
 \Cref{fig:training_loss_map_2datasets} shows the training loss and validation mAP curves over epochs.
-As shown in \Cref{fig:training_loss_map_2datasets} (a)\blue{--}(b), DualHash-StoRM achieves the fastest convergence and lowest loss values on CIFAR-10 and NUS-WIDE, requiring only approximately 25 epochs on CIFAR-10. This aligns with our theoretical outcome: the variance reduction mechanism accelerates convergence. Though slower than DualHash-StoRM, DualHash-StoM still outperforms other baselines (approximately 75 epochs on CIFAR-10). 
-Meanwhile, \Cref{fig:training_loss_map_2datasets} (c)\blue{--}(d) show that although DualHash-StoRM converges faster during training, DualHash-StoM ultimately exhibits superior retrieval performance compared to other baselines. 
+\red{As shown in \Cref{fig:training_loss_map_2datasets} (a)\blue{--}(b), the StoRM curves reach lower training losses earlier than the StoM curves on CIFAR-10 and NUS-WIDE; the CIFAR-10 curve reaches this level after approximately 25 epochs. The StoM curves reach comparable losses after approximately 75 epochs on CIFAR-10.} \red{\Cref{fig:training_loss_map_2datasets} (c)\blue{--}(d) show that the StoM and StoRM variants have different validation-mAP trajectories, with the StoM variant attaining the higher final value in this comparison.}
 % \vspace{3pt}
 \subsection{Comparison of Retrieval Performance}
 \label{Subsection: Comparison of retrieval performance}
@@ -144,14 +143,11 @@ DualHash-StoM & 0.7402 & 0.7705 & \textbf{0.8662} & \textbf{0.8714} \\
 We report retrieval performance on CIFAR-10 and NUS-WIDE datasets, as shown in Tables \ref{Table: baselines mAP}
 % , \ref{Table: performance_comparison_resnet50_small}, \ref{tab:performance_imagenet_resnet50} 
 and \ref{fig:retrieval_2datasets}. 
-In terms of mAP, DualHash methods consistently outperform most baselines, including recent advanced methods like OrthoHash and MDSHC.
-On CIFAR-10, DualHash-StoM achieves 0.8539 mAP with 64-bit codes, outperforming OrthoHash (0.8355). On the NUS-WIDE dataset, it reaches 0.7448 mAP, significantly superior to MDSHC (0.6493).
-Although slightly less accurate than the StoM variant, DualHash-StoRM remains comparable to other baselines, providing a trade-off between accuracy and efficiency. 
+\red{The tables report mAP values for DualHash and the listed baselines. On CIFAR-10, DualHash-StoM reports 0.8539 mAP with 64-bit codes, compared with 0.8355 for OrthoHash; on NUS-WIDE, it reports 0.7448, compared with 0.6493 for MDSHC. The StoRM variant has lower mAP than StoM in these settings.}
 
-To further demonstrate the scalability of our approach, we evaluate our method and three baselines using a \textbf{ResNet-50 backbone}. As shown in \Cref{Table: performance_comparison_resnet50_small}, this modern architecture brings substantial performance gains in terms of mAP for all methods across CIFAR-10 and NUS-WIDE. Our DualHash-StoM, for example, achieves mAP improvements of 10.3\% on CIFAR-10 (0.9416 vs 0.8539) and 7.6\% on NUS-WIDE (0.8016 vs 0.7448) at 64 bits. Nevertheless, our method consistently maintains peak performance at 32 bits or more, outperforming all baseline methods. Moreover, on the more complex ImageNet-100 dataset, our method continues to demonstrate superior performance. As reported in \Cref{tab:performance_imagenet_resnet50}, DualHash-StoM reaches 86.62\% and 87.14\% mAP at 48 and 64 bits, outperforming all baselines. These results confirm that our method maintains robust performance and strong generalization capability as data complexity increases.
+\red{We also evaluate the methods with a ResNet-50 backbone. In \Cref{Table: performance_comparison_resnet50_small}, DualHash-StoM reports 0.9416 mAP on CIFAR-10 and 0.8016 on NUS-WIDE at 64 bits. In \Cref{tab:performance_imagenet_resnet50}, it reports 0.8662 and 0.8714 mAP on ImageNet-100 at 48 and 64 bits, respectively. The best-performing method varies with the dataset and code length.}
 
-For P@topK (\Cref{fig:retrieval_2datasets} (a),(c)), DualHash maintains 0.9 precision at lower top-k values on CIFAR-10, significantly outperforming other methods. This indicates that our method is suitable for precision-oriented image retrieval systems.
-For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently maintains peak performance at 32 bits and above, with 32 bits being optimal across CIFAR-10 and NUS-WIDE. These results align with the fact that as bit length increases, the Hamming space becomes sparse and few data points fall within the Hamming ball with radius 2 \cite{norouzi2012fast}.
+\red{For P@topK (\Cref{fig:retrieval_2datasets} (a),(c)), the curves report precision values for the compared methods, with DualHash reaching approximately 0.9 at low top-$k$ values on CIFAR-10. For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), the reported curves vary with the code length; the 32-bit setting is competitive in the displayed CIFAR-10 and NUS-WIDE comparisons.}
 % \vspace{3pt}
 
 \subsection{Quantization Error Analysis}
@@ -191,37 +187,29 @@ To elucidate the mechanisms behind the performance of DualHash, following \cite{
 we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig:His_64_NUSWIDE,fig:His_16_NUSWIDE}) across different bit lengths $K$ on the NUS-WIDE dataset. The reported quantization error is the average per-bit error $Q_1/(nd)$ defined by \eqref{eq:quantization-error}, evaluated over the outputs used in this comparison. We compare DualHash-StoM against four deep hashing methods: HashNet \cite{Cao2017HashNetDL} and OrthoHash \cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH \cite{wang2016DTSH} and MDSHC \cite{wang2023deep} (both utilizing \blue{W-type regularization}).
 
 % \vspace{3pt}
-\noindent\textbf{(1) Quantization Error Correlates with Intra- and Inter-class Distances.}
-We find that methods achieving smaller quantization errors produce hash codes with reduced intra-class distances and enhanced inter-class separability, as shown in \Cref{fig:quantization_error}(a) and \Cref{fig:His_16_NUSWIDE,fig:His_64_NUSWIDE}. In the 64-bit setting (\Cref{fig:His_64_NUSWIDE}), both HashNet and DualHash exhibit similar inter-class distributions (close to Hamming distance $K/2 = 32$). However, DualHash's lower quantization error (0.0906 vs. 0.1390) enables significantly superior separability, i.e., the difference in the mean of intra-class distance (the blue dotted line)
-with the mean of inter-class distance (the orange dotted line). In contrast, MDSHC's high quantization error (0.8023) leads to substantially larger intra-class distances and weaker inter-class separation, yielding a $5\times$ inferior separability ratio (24.19 vs. 4.47). 
-This demonstrates that reducing quantization error enhances code quality primarily by compressing intra-class distributions.
+\red{\noindent\textbf{(1) Quantization Error and Hamming-Distance Distributions.}
+We observe an association between the reported quantization errors and the intra- and inter-class distance distributions in \Cref{fig:quantization_error}(a) and \Cref{fig:His_16_NUSWIDE,fig:His_64_NUSWIDE}. In the 64-bit setting (\Cref{fig:His_64_NUSWIDE}), HashNet and DualHash have similar inter-class distributions near the Hamming distance $K/2=32$. DualHash reports a quantization error of 0.0906 versus 0.1390 for HashNet, while MDSHC reports 0.8023 and a different distance distribution. The corresponding separability ratios in the plotted comparison are 24.19 for DualHash and 4.47 for MDSHC. These observations describe the association between quantization error and the displayed distance statistics; they do not by themselves establish a causal effect.}
 
 % \vspace{3pt}
-\noindent\textbf{(2) DualHash Achieves Lower Quantization Error via Dual-Space Reformulation.}
-As shown in \Cref{fig:quantization_error}(a), DualHash attains the smallest quantization error across different bit lengths among all evaluated methods. This performance advantage stems from a fundamental methodological innovation: DualHash employs a novel dual-space reformulation of the \blue{W-type regularization}. The convexity property inherent in our dual formulation's conjugate function yields significant optimization advantages compared to directly optimizing the original nonconvex regularization or activation functions. 
+\red{\noindent\textbf{(2) Quantization Error of DualHash.}
+As shown in \Cref{fig:quantization_error}(a), DualHash reports the smallest quantization error among the evaluated methods at the displayed bit lengths. This empirical result is associated with the dual-space reformulation of the \blue{W-type regularization}; the convex conjugate supplies the componentwise proximal update used by the algorithm. The experiment does not isolate the contribution of this reformulation from other implementation choices.}
 
 % \vspace{3pt}
 \noindent\textbf{(3) Bit-Dependent Performance and the Separability-Semantics Trade-off.}
-While lower quantization error generally improves separability (\Cref{fig:quantization_error}(b) and (d)), its impact on retrieval performance varies significantly across bit settings, revealing a fundamental trade-off between class separability and semantic preservation.
+\red{The displayed relation between quantization error and separability varies across bit settings (\Cref{fig:quantization_error}(b) and (d)), and the corresponding mAP values do not follow a single monotone pattern.}
 
-\noindent\(\triangleright\) \textit{High-bit regime ($K = 64$): Lower quantization error helps \blue{to produce} high mAP.}
-At $K = 64$ (Figures \ref{fig:quantization_error}(d) and (e)), lower quantization error consistently correlates with higher mAP by enhancing separability and preserving both semantic discriminability and visual feature quality. Methods achieving low quantization loss (e.g., DualHash, HashNet, and DTSH) demonstrate superior retrieval accuracy, with DualHash achieving peak mAP performance. This observation is consistent with \Cref{rem:code-length}, whose sufficient per-bit quantization-error threshold becomes smaller for longer codes.
+\red{\noindent\(\triangleright\) \textit{High-bit regime ($K = 64$): the displayed mAP and quantization-error values.}
+At $K=64$ (Figures \ref{fig:quantization_error}(d) and (e)), the methods with lower reported quantization errors also have higher mAP in the displayed comparison. This is an empirical association; the figures do not identify a causal mechanism.}
 
-\noindent\(\triangleright\) \textit{Low-bit regime ($K = 16$): Low quantization error may produce low performance.}
-At $K = 16$ (\Cref{fig:quantization_error}(b) and (c)), we observe a contrasting pattern: both extremely low and extremely high quantization error methods yield suboptimal performance. Notably, DTSH, which maintains intermediate quantization error, achieves superior mAP. Methods with very low quantization error (e.g., DualHash and HashNet) exhibit relatively lower mAP, particularly on multi-label datasets (e.g., NUS-WIDE). Specifically, we observe that  DualHash generates hash codes with low intra-class distances and high inter-class separation. This creates relatively clean class separation, but the actual visual relationships between images may get lost. Consequently, DualHash excels on simple datasets like CIFAR-10 but shows relatively lower performance on complex datasets like NUS-WIDE (multi-label) and ImageNet-100 (large-scale single-label).
+\red{\noindent\(\triangleright\) \textit{Low-bit regime ($K = 16$): the association is not monotone.}
+At $K=16$ (\Cref{fig:quantization_error}(b) and (c)), methods with both low and high reported quantization errors can have lower mAP in the displayed comparisons, while DTSH has an intermediate error and higher mAP in those plots. The relation between quantization error and retrieval performance therefore varies with the dataset and code length.}
 
 % \vspace{3pt}
 \subsection{Parameter Sensitivity Analysis}
 To explore the sensitivity of key hyperparameters $\eta$ and $\lambda$ in 
 DualHash, we conduct a grid search with $\eta \in \{10^{-4}, 10^{-3}, 
 10^{-2}, 10^{-1}\}$ and $\lambda \in \{10^{-3}, 10^{-2}, 5\times 10^{-2}, 10^{-1}\}$. Unlike many deep hashing 
-methods that exhibit significant hyperparameter sensitivity, DualHash-StoM 
-demonstrates robust performance across a wide range of hyperparameter 
+methods that exhibit significant hyperparameter sensitivity, the DualHash-StoM
+curves show limited variation across a range of hyperparameter
 combinations (see \Cref{fig:sensitivity_analysis_DualHash}). 
-Specifically, 64-bit codes achieve excellent stability with mAP variations 
-below 3\% on CIFAR-10 and 8\% on NUS-WIDE. While 16-bit codes show greater 
-sensitivity (up to 18\% on CIFAR-10), this behavior is consistent with the 
-intrinsic optimization challenges of extremely compact hash codes. Overall, 
-the method demonstrates strong stability for standard hash lengths ($\geq$64 bits), 
-which simplifies hyperparameter tuning in practical high-precision retrieval 
-applications.
+\red{Specifically, the 64-bit curves show mAP variations below 3\% on CIFAR-10 and 8\% on NUS-WIDE, whereas the 16-bit curves show greater sensitivity, up to 18\% on CIFAR-10. Overall, the displayed sensitivity curves show smaller variation for the 64-bit setting than for the 16-bit setting.}

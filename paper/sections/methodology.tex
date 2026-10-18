@@ -8,7 +8,7 @@ First, we update $\bx$ by a stochastic first-order step, as is standard in train
     \bx^{k+1} = \by^k - \eta_k \bg^k,
 \end{equation}
 where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
-The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in Section~\ref{Sec: DualHash framework}.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$.} Finally, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$:
+The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in the following two subsections.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$.} Finally, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$:
 \begin{align}
 \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1},\bB^k,\bLmbd^k) \notag\\
 &= \bB^k - \tau\big(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\big), \label{Eq: the update of B}\\
@@ -65,30 +65,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
   \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
   \]
 \ENDFOR
-\STATE \textbf{Output:} \blue{$\bx^R$ with $R$ drawn uniformly from $\{1,\ldots,T\}$}
-\end{algorithmic}
-\end{algorithm}
-\begin{algorithm}[t]
-\caption{DualHash-StoRM}
-\label{alg:our_algorithm_storm}
-\begin{algorithmic}[1]
-\STATE \textbf{Initialize:} $\bx^0=\bx^1\in\RR^q$, $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$, $\bB^0=\bB^1$, and $\bLmbd^0=\bLmbd^1$; parameters $\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$, $\tau$, and $T$.
-\FOR{\blue{$k = 1, \ldots, T$}}
-  \STATE \blue{Draw $\calJ_k$ and compute $\bg_s^k$ by \eqref{Eq: the stochastic approximate in STORM}}
-  \STATE Update $\bx^{k+1}$ by
-  \[
-  \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}
-  \]
-  \STATE Update $\bB^{k+1}$ by
-  \[
-  \bB^{k+1} = \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k)
-  \]
-  \STATE Update $\bLmbd^{k+1}$ by
-  \[
-  \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
-  \]
-\ENDFOR
-\STATE \textbf{Output:} \blue{$\bx^R$ with $R$ drawn uniformly from $\{1,\ldots,T\}$}
+\STATE \textbf{Output:} \red{ $(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$}
 \end{algorithmic}
 \end{algorithm}
 \subsection{DualHash with Recursive Momentum}
@@ -131,4 +108,28 @@ Alternatively, we consider the StoRM estimator \cite{cutkoskyMomentumBasedVarian
     \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}.
 \end{equation}
 The overall algorithm, DualHash-StoRM, is summarized in \Cref{alg:our_algorithm_storm}.
+
+\begin{algorithm}[t]
+\caption{DualHash-StoRM}
+\label{alg:our_algorithm_storm}
+\begin{algorithmic}[1]
+\STATE \textbf{Initialize:} $\bx^0=\bx^1\in\RR^q$, $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$, $\bB^0=\bB^1$, and $\bLmbd^0=\bLmbd^1$; parameters $\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$, $\tau$, and $T$.
+\FOR{\blue{$k = 1, \ldots, T$}}
+  \STATE \blue{Draw $\calJ_k$ and compute $\bg_s^k$ by \eqref{Eq: the stochastic approximate in STORM}}
+  \STATE Update $\bx^{k+1}$ by
+  \[
+  \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}
+  \]
+  \STATE Update $\bB^{k+1}$ by
+  \[
+  \bB^{k+1} = \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k)
+  \]
+  \STATE Update $\bLmbd^{k+1}$ by
+  \[
+  \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
+  \]
+\ENDFOR
+\STATE \textbf{Output:} \red{$(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$}
+\end{algorithmic}
+\end{algorithm}
 

@@ -1164,7 +1164,7 @@ For instance, $h\circ\bD$ is weakly convex when $h$ is convex and $\bD$ is smoot
 \end{bluequote}
 \item (page 8) What do you mean by ``inexpensive gradient'' ?
 \par\smallskip
-\normalfont\upshape\responseLabel By ``inexpensive'' we meant that the $\bB$-update requires neither stochastic sampling nor backpropagation through the network. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}\big(\bB-\calD(\bx)\big)$, once the network outputs $\calD(\bx^{k+1})$ are available, the update (4.4) is an entrywise operation on an $n\times d$ matrix, and the $\bLmbd$-update (4.5) is a closed-form proximal step of $h^*$. As the word was informal, we have removed it and now describe only the computational structure \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel By ``inexpensive'' we meant that the $\bB$-update requires neither stochastic sampling nor backpropagation through the network. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}\big(\bB-\calD(\bx)\big)$, once the network outputs $\calD(\bx^{k+1})$ are available, the update (4.4) is a \red{componentwise} operation on an $n\times d$ matrix, and the $\bLmbd$-update (4.5) is a closed-form proximal step of $h^*$. As the word was informal, we have removed it and now describe only the computational structure \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
 Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\calD(\bx^{k+1})$ is available, this step is evaluated from the closed-form expression of $\nabla_{\bB}F$.
 \end{bluequote}

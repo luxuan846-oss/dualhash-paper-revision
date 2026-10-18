@@ -374,3 +374,7 @@ That is, $\bx$ is $(\delta,\varepsilon)$-near-stationary for $J_0$ in the sense 
 \end{theorem}
 The theorem connects the near-stationarity of the original objective $J_0$ to two quantities: the KKT residual, which motivates our oracle-complexity analysis, and the regularization term $h(\mathcal{D}(\bx))$, which is determined by the network outputs. For the $\ell_1$ W-type regularizer, the latter equals $\lambda Q_1(\bx)$; thus, the quantization error contributes directly to the near-stationarity bound and motivates our use of the $\ell_1$ W-type regularizer in the experiments.
 
+\begin{remark}[Role of the conjugate minorant]\label{rem:conjugate-minorant-role}
+\blue{Since $h\ge0$, the loss $f$ is also a smooth minorant of $J_0$, but its gradient $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal{D}(\bx)^*\bLmbd$ retains the multiplier in the first-order term. The minorant $s_{\bLmbd}$ absorbs $\langle\bLmbd,\mathcal{D}(\cdot)\rangle$, so the multiplier enters \Cref{prop:original-certificate} only through the curvature constant $L_0$. Consequently, the structural error does not depend on the penalty parameter $\gamma$, which enters only the optimization error through $\kappa$; the certificate holds for every fixed $\gamma>0$, without the limit $\gamma\to\infty$ required by classical quadratic penalty methods~\cite[Sec.~17.1]{nocedalWright2006}.}
+\end{remark}
+

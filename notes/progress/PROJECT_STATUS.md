@@ -77,3 +77,7 @@
 - 2026-10-18 近驻点定义已改为正式 definition 环境；将残差定义移至本节首次使用处并补上 Q1 符号。定义引导改引 Tian、Zhou、So (ICML 2022), Definition 2.5，注明本文用极限次微分替代其 Clarke 次微分；保留原定义与证明。Goldstein (1977)、Zhang 等 (2020) 的 BibTeX 条目保留，但不作为本文 nearby-point 定义的直接出处。
 
 - 2026-10-18 将 `prop:original-certificate` 改为优化误差与结构误差的加法分离形式：在 `methodology.tex` 中拆分 `(a)` 的 `\delta`、`\varepsilon`，保留 `(b)` 的 `L_0`；在 `convergence.tex` 中保留推论期望界并简化证明；在 `supplementaryB.tex` 中补充 `\sqrt{a+b}\le\sqrt a+\sqrt b` 与近驻点单调性推导。`revision/response_letter.tex` 未引用该命题。`latexmk -pdf main.tex` 已通过，未发现未定义引用或新增 LaTeX 错误；保留既有排版警告。
+
+- 2026-10-18 将 StoRM 的辅助块跟踪结论提到 `convergence.tex`，新增 `lem:auxiliary-tracking`，并将附录对应部分改为 `Proof of \Cref{lem:auxiliary-tracking}`；加权误差累积证明改为引用正文引理。`latexmk -pdf main.tex` 通过，未发现新增未定义引用或 LaTeX 错误；常数 12 和 146 的完整展开证明仍待补充。
+
+- 2026-10-18 在 `prop:original-certificate` 后新增 `rem:conjugate-minorant-role`，说明共轭下界保留乘子的一阶项、将乘子依赖集中到 `L_0`，以及结构误差对固定罚参数 `\gamma` 的无关性；引用 `nocedalWright2006`。本次未编译。

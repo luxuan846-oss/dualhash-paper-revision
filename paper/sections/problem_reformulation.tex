@@ -99,28 +99,29 @@ shape, which we formalize next.}
 \label{tab:wtype}
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.4}
-\resizebox{\linewidth}{!}{
-\begin{tabular}{@{}ll>{\raggedright\arraybackslash}m{1.9cm}cccc@{}}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{@{}ll>{\raggedright\arraybackslash}m{1.9cm}cccc>{\centering\arraybackslash}m{2.2cm}@{}}
 \toprule
-\multicolumn{2}{l}{\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\)\\
+\multicolumn{2}{l}{\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\) & Relation to \(Q_1\)\\
 \midrule
 \multirow{2}{*}{\(\lambda\bigl||t|-1\bigr|^{p}\)}
  & \(p=1\) & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
  & \(\{\pm\lambda\}\) & \(|y|\) & \([-\lambda,\lambda]\)
- & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\sigma)_+\bigr)\)\\
+ & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\sigma)_+\bigr)\) & $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$\\
 \addlinespace[3pt]
  & \(p=2\) & \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh,bai2019proxquant}
  & \(\{\pm2\lambda\}\) & \(|y|+\frac{y^2}{4\lambda}\) & \(\mathbb{R}\)
- & \(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma/(2\lambda)}\)\\
+ & \(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma/(2\lambda)}\)
+ & {\scriptsize $h(\mathcal{D}(\bx))\le\lambda\max\{1,C_{\mathcal{D}}-1\}Q_1(\bx)$}\\
 \midrule
 \multicolumn{2}{l}{\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
  & \(\{\pm\lambda\tanh1\}\)
  & \(|y|+\lambda\psi(|y|/\lambda)\)
- & \([-\lambda,\lambda]\) & \textemdash\\
+ & \([-\lambda,\lambda]\) & \textemdash & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
 \addlinespace[3pt]
 \multicolumn{2}{l}{\(\lambda\operatorname{Hub}_{\delta}(|t|-1)\)} & \text{n/a}
  & \(\{\pm\lambda\min\{1,\frac1\delta\}\}\) & \(|y|+\frac{\delta y^2}{2\lambda}\) & \([-\lambda,\lambda]\)
- & \(\operatorname{clip}\Bigl(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma\delta/\lambda}\Bigr)\)\\
+ & \(\operatorname{clip}\Bigl(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma\delta/\lambda}\Bigr)\) & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -143,13 +144,24 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\) satisfy \ref{W1}--\ref{W2}. Then the follo
 Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
 \end{lemma}
 
-\Cref{tab:wtype} lists representative W-type regularizers from the deep hashing literature. In every row, $\partial\phi(0)=\{-c,c\}$ for some $c>0$, so $\operatorname{prox}_{\sigma\phi}$ is set-valued at the origin and admits no continuous single-valued selection there. However, the conjugate removes this discontinuity: $\phi^*$ is convex by \Cref{lem:wtype-conj}, so $\operatorname{prox}_{\sigma\phi^*}$ is single-valued and nonexpansive. Since $h^*$ is separable, its proximal mapping acts entrywise, i.e.,
+We list representative W-type regularizers from the deep hashing literature in \Cref{tab:wtype}. As can be seen, the proximal mapping of $\phi$ is set-valued at the origin due to its nonconvexity. In contrast, the convexity of $\phi^*$ ensures that its proximal mapping is single-valued and
+nonexpansive. Moreover, the separability of $h^*$ allows the dual proximal update to be computed entrywise:
 \begin{equation}
 \label{Eq: the proximal mapping of conjugate function}
 [\operatorname{prox}_{\sigma h^*}(\bLmbd)]_{ij}
-=\operatorname{prox}_{\sigma\phi^*}(\Lambda_{ij}),\qquad \sigma>0,
+=\operatorname{prox}_{\sigma\phi^*}(\Lambda_{ij}),
+\qquad \sigma>0,
 \end{equation}
-and \Cref{tab:wtype} gives its closed form when available; \Cref{fig:w-conj-prox} illustrates the case $p=1$. The rows differ in tail growth, which determines $\operatorname{dom}\phi^*$. We say that $h$ has a \emph{compact dual domain} if $\operatorname{dom}\phi^*=[-\lambda,\lambda]$ for some $\lambda>0$; then $\phi^*$ is bounded on its domain, which the analysis in \Cref{Section: Convergence analysis} uses to establish uniform lower bounds for the Lyapunov functions. Every row except $p=2$ has a compact dual domain.
+This entrywise form is used in the single-loop primal--dual updates below, and \Cref{tab:wtype} provides the closed-form expressions when available.
+
+We say that $h$ has a \emph{compact dual domain} if
+$\operatorname{dom}\phi^*=[-\lambda,\lambda]$
+for some $\lambda>0$.
+This condition also ensures that $\phi^*$ is bounded
+on its domain, which is used in the complexity analysis
+to establish lower bounds for the Lyapunov functions.
+All regularizers in \Cref{tab:wtype} except $p=2$
+satisfy this condition.
 \endgroup
 \begin{figure}[!t]
 \centering
@@ -230,7 +242,8 @@ and \Cref{tab:wtype} gives its closed form when available; \Cref{fig:w-conj-prox
 \label{eq:quantization-error}
 Q_1(\bx):=\bigl\|\mathcal{D}(\bx)-\operatorname{sgn}(\mathcal{D}(\bx))\bigr\|_1
 =\sum_{i=1}^{n}\sum_{j=1}^{d}\bigl||\mathcal{D}_{ij}(\bx)|-1\bigr|,
-\end{equation}where the equality follows entrywise from $\min_{b\in\{-1,1\}}|z-b|=\bigl||z|-1\bigr|$. For the row $p=1$ of \Cref{tab:wtype}, used in our experiments, the regularizer equals the quantization error up to the factor $\lambda$: $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$. For $p=2$, $h(\mathcal{D}(\bx))=\lambda\|\mathcal{D}(\bx)-\operatorname{sgn}(\mathcal{D}(\bx))\|^2$.}
+\end{equation}where the equality follows entrywise from $\min_{b\in\{-1,1\}}|z-b|=\bigl||z|-1\bigr|$. We relate each W-type regularizer to the quantization error
+$Q_1$ in the last column of \Cref{tab:wtype}. Sepcifically, for $p=1$, also used in our experiments, $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$, so the regularizer is exactly the scaled quantization error; In contrast, for the other regularizers, $h(\mathcal{D}(\bx))\le c_\phi Q_1(\bx)$ provides only an upper bound, which may be loose.}
 
 \blue{Using variable splitting, we introduce continuous auxiliary variables \(\bb_i\in\RR^d\) and \(\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\RR^{n\times d}\), subject to \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\),} to obtain the following equivalent nonlinearly constrained problem:
 \begin{align}

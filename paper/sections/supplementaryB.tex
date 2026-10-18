@@ -127,7 +127,7 @@ Applying this argument with $s=s_{\bLmbd}$ and $E=h(\mathcal{D}(\bx))+\kappa r_{
 \qquad
 2\sqrt{2LE}\le 2\sqrt{2\kappa L}\,r_{\mathcal{K}}+2\sqrt{2L\,h(\mathcal{D}(\bx))},
 \]
-by $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$. Since the near-stationarity definition is monotone in $(\delta,\varepsilon)$, these bounds prove part~(a), including $E=0$.
+by $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$. Since the near-stationarity definition is monotone in $(\delta,\varepsilon)$, \red{these bounds prove the theorem, including the case $E=0$.}
 
 \section{Auxiliary Results for the Complexity Analysis}
 \label{app:complexity-auxiliary-results}
@@ -680,8 +680,32 @@ We adopt the same notation as in \Cref{app:stom-complexity}.
     By substituting the Lyapunov function coefficients \eqref{Eq: the coefficients of the Lyapunov function in SGDM} into \eqref{the descent property of Lyapunov func in STORM first} \blue{and taking full expectation}, we obtain \eqref{Eq: the descent property of Lyapunov func in storm}. With $\tau$ satisfying \blue{$0<\tau<\frac{\sqrt{30}-2}{13L_F}$}, \Cref{lem:lyapunov-coef-positivity} guarantees that $C_{\bB}>0$.
 \end{proof}
 
-% \subsection{Proof of \Cref{Lemma: Weighted error accumulation}}
-% \label{Subsubsec: proof Weighted error accumulation}
+\subsection{\blue{Proof of \Cref{lem:auxiliary-tracking}}}
+\label{app:auxiliary-tracking-proof}
+\begingroup\color{blue}
+\begin{proof}
+    Let $r=\tau\gamma/n$ and define $H_k$ as in \Cref{lem:auxiliary-tracking}. Since the initialization sets
+    $\bB^{0}=\bB^{1}$ and $\bLmbd^{0}=\bLmbd^{1}$, we have $H_1=0$ and $H_k\geq0$.
+    The $\bB$- and $\bLmbd$-updates, together with
+    $r\leq\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$ and the entrywise monotonicity and
+    $1$-Lipschitz continuity of $\operatorname{prox}_{\tau^{-1}h^{*}}$, yield
+    \begin{align}
+        H_{k+1}-H_k
+        &\leq-\frac{r}{8}\Bigl(\|\bB^{k}-\bB^{k-1}\|^{2}
+        +\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}\Bigr)\notag\\
+        &\qquad+146rG_{\mathcal{D}}^{2}\Delta_{\bx}^{k+1}.
+        \label{Eq: auxiliary tracking descent in proof}
+    \end{align}
+    Combining this estimate with the update relations and using $r<2/7$ gives
+    \begin{align}
+        \Delta_{\bB}^{k+1}
+        \leq\frac{12}{r}(H_k-H_{k+1})+G\,\Delta_{\bx}^{k+1},
+    \end{align}
+    where $G=1753G_{\mathcal{D}}^{2}$. This proves
+    \Cref{lem:auxiliary-tracking}.
+\end{proof}
+\endgroup
+
 \subsection{\blue{Lower Bound of the StoRM Potential}}
 \label{app:storm-lower-bound}
 \begingroup\color{blue}
@@ -750,17 +774,8 @@ We now establish a weighted error accumulation bound for the variance-reduced gr
         \EE[\Psi_r(\calQ^{k+1})]-\EE[\Psi_r(\calQ^{k})]\leq\blue{-C_{\bB}\EE[\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}]}-\frac{1}{2\blue{\eta_T}}\EE[\Delta_{\bx}^{k+1}]+\frac{\blue{\eta_T}}{2}\EE[\|\be^{k}\|^{2}].
         \label{Eq: descent of Psi_r in weighted error bound}
     \end{align}
-    \blue{To handle the term $\Delta_{\bB}^{k+1}$ in \Cref{Lemma: Recursive bound on gradient error}, let $r=\tau\gamma/n$ and
-    \[
-        H_k=(1-r)\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}+r\tau^{2}\|\bLmbd^{k}-\bLmbd^{k-1}\|^{2}
-    \]
-    with $\bLmbd^{0}=\bLmbd^{1}$. Since the initialization sets $\bB^{0}=\bB^{1}$ and $\bLmbd^{0}=\bLmbd^{1}$, we have $H_1=0$ and $H_k\geq0$. By the $\bB$- and $\bLmbd$-updates, we obtain}
-    \begin{align}
-        \blue{\Delta_{\bB}^{k+1}\leq\frac{12}{r}\bigl(H_k-H_{k+1}\bigr)+G\,\Delta_{\bx}^{k+1},}
-        \label{Eq: tracking of B increments}
-    \end{align}
-    \blue{where the inequality follows from $r\le\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$ and the entrywise monotonicity and $1$-Lipschitz continuity of $\operatorname{prox}_{\tau^{-1}h^{*}}$, which give $H_{k+1}-H_k\leq-\frac{r}{8}\bigl(\|\bB^{k}-\bB^{k-1}\|^{2}+\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}\bigr)+146rG_{\mathcal{D}}^{2}\Delta_{\bx}^{k+1}$.}
-    From \Cref{Lemma: Recursive bound on gradient error} \blue{and \eqref{Eq: tracking of B increments}}, we obtain
+    From \Cref{Lemma: Recursive bound on gradient error} and
+    \Cref{lem:auxiliary-tracking}, we obtain
     \begin{align}
         &\blue{\EE[\|\be^{k+1}\|^{2}]+\frac{48L_F^{2}}{br}\EE[H_{k+1}]}\notag\\
         &\blue{\leq(1-\rho_T)\EE[\|\be^{k}\|^{2}]+\frac{48L_F^{2}}{br}\EE[H_{k}]+\frac{2\rho_T^{2}\sigma^{2}}{b}+\frac{4L_F^{2}(1+G)}{b}\EE[\Delta_{\bx}^{k+1}],}

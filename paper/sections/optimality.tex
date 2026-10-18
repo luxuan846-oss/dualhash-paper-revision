@@ -329,9 +329,9 @@ s_{\bLmbd}(\by):=f(\by)+\langle\bLmbd,\mathcal{D}(\by)\rangle-h^*(\bLmbd).
 \]
 By Assumption~\ref{Ass: basic regularity}(ii), $s_{\bLmbd}$ is
 $L_{s_{\bLmbd}}:=(L_f+\|\bLmbd\|L_{\nabla\mathcal{D}})$-smooth.
-If $\operatorname{dom}h^*$ is bounded, as for $p=1$, log-cosh, and Huber in
+\red{If $h$ has a compact dual domain, as for $p=1$, log-cosh, and Huber in
 \Cref{tab:wtype}, then $\operatorname{dom}\phi^*=[-\lambda,\lambda]$ gives
-$\|\bLmbd\|\le\lambda\sqrt{nd}$, and hence
+$\|\bLmbd\|\le\lambda\sqrt{nd}$, and hence}
 \[
 L_{s_{\bLmbd}}\le L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}},
 \]
@@ -340,12 +340,13 @@ For notational simplicity, we set
 $m:=\gamma/n$ and $\kappa:=(1+m^2)/(4m)$. The following lemma shows that, at $\bx$, the
 first-order error of $s_{\bLmbd}$ is governed by the KKT residual, while its gap to $J_0$
 is governed by the network outputs and is never smaller than the convexification error;
-the structural error is therefore intrinsic to passing from the convexified model \eqref{Eq: minmax problem} to the original problem \eqref{Prop: block-wise regularized problem}.
+the structural error is therefore associated with passing from the convexified model \eqref{Eq: minmax problem} to the original problem \eqref{Prop: block-wise regularized problem}.
 
 \begin{lemma}\label{lem:conjugate-minorant}
 Suppose Assumption~\ref{Ass: basic regularity}(ii) holds. Let $h$ be a W-type
 regularizer defined in \Cref{def:wtype}, and let $(\bx,\bB,\bLmbd)$ satisfy
-$r_{\mathcal{K}}<\infty$. Then, for all $\bx\in\RR^q$, the following hold
+$r_{\mathcal{K}}<\infty$. \red{Then $s_{\bLmbd}\le J_0$ on $\RR^q$, and the following
+inequalities hold at the given point $\bx$:}
 \begin{align}
 \|\nabla s_{\bLmbd}(\bx)\|
 &\le\sqrt{1+G_{\mathcal{D}}^2}\;r_{\mathcal{K}},
@@ -360,17 +361,32 @@ $$0 \le h(\mathcal{D}(\bx))\le J_0(\bx)-s_{\bLmbd}(\bx)\le h(\mathcal{D}(\bx))+\
 \end{lemma}
 We are now ready to bound the near-stationarity of $J_0$ explicitly. The proof is given in \Cref{app:original-certificate-proof}.
 \begin{theorem}\label{prop:original-certificate}
-Under the conditions of \Cref{lem:conjugate-minorant}, assume in addition that
-$\operatorname{dom}h^*$ is bounded. Then there exists $\widehat{\bx}\in\RR^q$ such that
+Under the conditions of \Cref{lem:conjugate-minorant},
+let $L>0$ satisfy
+$L\ge L_f+\|\bLmbd\|L_{\nabla\mathcal{D}}$.
+Then there exists $\widehat{\bx}\in\RR^q$ such that
 \begin{align*}
 \|\widehat{\bx}-\bx\|
-&\le\sqrt{\frac{2}{L_0}}\Bigl(\sqrt{\kappa}\,r_{\mathcal{K}}+\sqrt{h(\mathcal{D}(\bx))}\Bigr),\\
+&\le\sqrt{\frac{2}{L}}
+\Bigl(\sqrt{\kappa}\,r_{\mathcal{K}}
++\sqrt{h(\mathcal{D}(\bx))}\Bigr),\\
 \operatorname{dist}\bigl(\bm{0},\partial J_0(\widehat{\bx})\bigr)
-&\le\underbrace{\Bigl(\sqrt{1+G_{\mathcal{D}}^2}+2\sqrt{2\kappa L_0}\Bigr)r_{\mathcal{K}}}_{\text{optimization error}}
-+\underbrace{2\sqrt{2L_0\,h(\mathcal{D}(\bx))}}_{\text{structural error}}.
+&\le
+\underbrace{
+\Bigl(\sqrt{1+G_{\mathcal{D}}^2}
++2\sqrt{2\kappa L}\Bigr)r_{\mathcal{K}}
+}_{\text{optimization error}}
++\underbrace{
+2\sqrt{2L\,h(\mathcal{D}(\bx))}
+}_{\text{structural error}}.
 \end{align*}
-That is, $\bx$ is $(\delta,\varepsilon)$-near-stationary for $J_0$ in the sense of
-\Cref{def:near-stationarity}, with $\delta$ and $\varepsilon$ given by the right-hand sides above.
+\red{Moreover, if $h$ has a compact dual domain, one may take
+$L=L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}$,
+so that the bounds hold uniformly over $\bLmbd$.}
 \end{theorem}
 The theorem connects the near-stationarity of the original objective $J_0$ to two quantities: the KKT residual, which motivates our oracle-complexity analysis, and the regularization term $h(\mathcal{D}(\bx))$, which is determined by the network outputs. For the $\ell_1$ W-type regularizer, the latter equals $\lambda Q_1(\bx)$; thus, the quantization error contributes directly to the near-stationarity bound and motivates our use of the $\ell_1$ W-type regularizer in the experiments.
+
+\begin{remark}[Role of the conjugate minorant]\label{rem:conjugate-minorant-role}
+\blue{Since $h\ge0$, the loss $f$ is also a smooth minorant of $J_0$, but its gradient $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal{D}(\bx)^*\bLmbd$ retains the multiplier in the first-order term. The minorant $s_{\bLmbd}$ absorbs $\langle\bLmbd,\mathcal{D}(\cdot)\rangle$, so the multiplier enters \Cref{prop:original-certificate} only through the curvature constant $L_0$. Consequently, the structural error does not depend on the penalty parameter $\gamma$, which enters only the optimization error through $\kappa$; the certificate holds for every fixed $\gamma>0$, without the limit $\gamma\to\infty$ required by classical quadratic penalty methods~\cite[Sec.~17.1]{nocedalWright2006}.}
+\end{remark}
 

@@ -129,17 +129,6 @@ Applying this argument with $s=s_{\bLmbd}$ and $E=h(\mathcal{D}(\bx))+\kappa r_{
 \]
 by $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$. Since the near-stationarity definition is monotone in $(\delta,\varepsilon)$, \red{these bounds prove the theorem, including the case $E=0$.}
 
-\paragraph{Certificate with the loss minorant.}
-Define $T(\bm{U}):=m\bigl(\bm{U}-\operatorname{prox}_{h^{**}/m}(\bm{U})\bigr)$. Since $\bLmbd\in\partial h^{**}(V)$ is equivalent to $V=\operatorname{prox}_{h^{**}/m}(V+\bLmbd/m)$, and since $V=\bB-c$ and $\bB=D+(b-\bLmbd)/m$, we obtain $\bLmbd=T(V+\bLmbd/m)=T(D-c+b/m)$. The map $\bm{U}\mapsto\bm{U}-\operatorname{prox}_{h^{**}/m}(\bm{U})$ is nonexpansive, so $T$ is $m$-Lipschitz. Since $h^{**}$ is separable, vanishes on $[-1,1]^{n\times d}$, and is nondecreasing in $|t|$ outside this cube by \Cref{lem:wtype-conj}, each entry of $\operatorname{prox}_{h^{**}/m}(D)$ lies between $D_{ij}$ and its projection onto $[-1,1]$. Hence
-\[
-\|\bLmbd\|\le\|T(D)\|+\|b-mc\|
-\le m\bigl\|(|D|-\bm{1})_+\bigr\|+\sqrt{1+m^2}\,r_{\mathcal K}.
-\]
-Combining this bound with~\eqref{eq:minorant-gradient} and $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal D(\bx)^*\bLmbd$ gives
-$\|\nabla f(\bx)\|\le c_{\mathcal{K}}r_{\mathcal K}+mG_{\mathcal{D}}\|(|D|-\bm{1})_+\|$.
-Applying the argument above with $s=f$, $L=L_f$, and $E=h(D)$ proves the first bound in \Cref{rem:conjugate-minorant-role}.
-\endgroup
-
 \section{Auxiliary Results for the Complexity Analysis}
 \label{app:complexity-auxiliary-results}
 

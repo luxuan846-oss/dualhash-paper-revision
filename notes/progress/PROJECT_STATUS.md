@@ -81,5 +81,3 @@
 - 2026-10-18 将 StoRM 的辅助块跟踪结论提到 `convergence.tex`，新增 `lem:auxiliary-tracking`，并将附录对应部分改为 `Proof of \Cref{lem:auxiliary-tracking}`；加权误差累积证明改为引用正文引理。`latexmk -pdf main.tex` 通过，未发现新增未定义引用或 LaTeX 错误；常数 12 和 146 的完整展开证明仍待补充。
 
 - 2026-10-18 在 `prop:original-certificate` 后新增 `rem:conjugate-minorant-role`，说明共轭下界保留乘子的一阶项、将乘子依赖集中到 `L_0`，以及结构误差对固定罚参数 `\gamma` 的无关性；引用 `nocedalWright2006`。本次未编译。
-
-- 2026-10-18 重写 `rem:conjugate-minorant-role`：并列给出以 $f$ 和以 $s_{\bLmbd}$ 为下界的两条近驻点界，说明乘子分别进入一阶项与曲率常数、结构误差对 $\gamma$ 的依赖差异；附录 `app:original-certificate-proof` 新增“Certificate with the loss minorant”段，恢复乘子界 $\|\bLmbd\|\le m\|(|D|-1)_+\|+\sqrt{1+m^2}r_{\mathcal K}$ 的证明，并补上该小节缺失的 `\endgroup`（此前附录后续内容整体被染成蓝色）。本机无法获取 TeX 宏包，未编译。

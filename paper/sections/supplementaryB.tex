@@ -78,7 +78,7 @@ Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\ph
     \label{Eq: the components of the subgradient}
     \begin{cases}&\bd_{\bx}^{k}= \nabla_{\bx}F(\bx^{k}, \bB^{k}),\\&\bd_{\bB}^{k}=\nabla_{\bB}F(\bx^{k}, \bB^{k}) + \bLmbd^{k}, \\&\bd_{\bLmbd}^{k}= \bB^{k}- \calG_{\bLmbd}^{k},\end{cases}
 \end{align}
-where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by proximal optimality in \eqref{eq:proximal-initialization} and subgradient inversion, and $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})$ for $k\ge2$ by the optimality condition of the $\bLmbd$-update \eqref{Eq: the update of lambda}, implying}
+where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by proximal optimality of the algorithm initialization and subgradient inversion, and $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})$ for $k\ge2$ by the optimality condition of the $\bLmbd$-update \eqref{Eq: the update of lambda}, implying}
 \begin{align}
     \label{Eq: the stationarity error bound in proof}
     \mathrm{dist}^{2}(\bm{0},\blue{\mathcal K}(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd_{\bx}^{k}\|^{2}+\|\bd_{\bB}^{k}\|^{2}+\|\bd_{\bLmbd}^{k}\|^{2}.
@@ -121,23 +121,13 @@ $\nabla s(\bx)-2L(\widehat{\bx}-\bx)\in\partial J_0(\widehat{\bx})$, hence
 \operatorname{dist}(\bm0,\partial J_0(\widehat{\bx}))
 \le\|\nabla s(\bx)\|+2\sqrt{2LE}.
 \]
-Applying this argument with $s=s_{\bLmbd}$ and $E=h(\mathcal{D}(\bx))+\kappa r_{\mathcal{K}}^2$, and using \Cref{lem:conjugate-minorant} proves part~(a), including $E=0$. For part~(b), $\bLmbd\in\dom h^*$ implies $\|\bLmbd\|\le\lambda\sqrt{nd}$.
-
-\paragraph{Representative regularizers.}
-For $u\in\RR$, $\log\cosh u\le|u|$ and $\operatorname{Hub}_{\delta}(u)\le|u|$. For the squared penalty, Assumption~\ref{Ass: basic regularity}(ii) gives
-$\bigl||D_{ij}|-1\bigr|\le\max\{1,C_{\mathcal D}-1\}$.
-Multiplying by $\bigl||D_{ij}|-1\bigr|$ and summing proves the bounds in \Cref{rem:certificate-table}.
-
-\paragraph{Multiplier bound and the loss minorant.}
-Define $T(U):=m(U-\operatorname{prox}_{h^{**}/m}(U))$. Firm nonexpansiveness of the convex proximal mapping implies that $T$ is $m$-Lipschitz. The residual identities give
-$D=V+\bLmbd/m+c-b/m$, so $\bLmbd=T(D-c+b/m)$.
-Since $h^{**}$ is separable, vanishes on the cube, and is nondecreasing away from it, each coordinate of $\operatorname{prox}_{h^{**}/m}(D)$ lies between $D_{ij}$ and its projection onto $[-1,1]$. Therefore
+Applying this argument with $s=s_{\bLmbd}$ and $E=h(\mathcal{D}(\bx))+\kappa r_{\mathcal{K}}^2$, and using \Cref{lem:conjugate-minorant}, we have
 \[
-\|\bLmbd\|\le\|T(D)\|+\|mc-b\|
-\le m\|(|D|-\bm1)_+\|+\sqrt{1+m^2}\,r_{\mathcal K}.
+\sqrt{\frac{2E}{L}}\le\sqrt{\frac{2}{L}}\Bigl(\sqrt{\kappa}\,r_{\mathcal{K}}+\sqrt{h(\mathcal{D}(\bx))}\Bigr),
+\qquad
+2\sqrt{2LE}\le 2\sqrt{2\kappa L}\,r_{\mathcal{K}}+2\sqrt{2L\,h(\mathcal{D}(\bx))},
 \]
-Using $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal D(\bx)^*\bLmbd$ and the preceding certificate argument with $s=f$, $L=L_f$, and $E=h(D)$ proves part~(i) of \Cref{rem:certificate-without-conjugate}. At an exact KKT point, $b=c=0$, giving $\bB=\operatorname{prox}_{h^{**}/m}(D)$ and $\bLmbd=T(D)$. For $p=1$, the scalar proximal formula gives $|\Lambda_{ij}|=\min\{m(|D_{ij}|-1)_+,\lambda\}$. On the cube, $T(D)=0$, $\bB=D$, and $\nabla f(\bx)=0$; also $h^*(0)=0$, so $s_{\bm0}=f$. This proves part~(ii).
-\endgroup
+by $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$. Since the near-stationarity definition is monotone in $(\delta,\varepsilon)$, these bounds prove part~(a), including $E=0$.
 
 \section{Auxiliary Results for the Complexity Analysis}
 \label{app:complexity-auxiliary-results}
@@ -159,7 +149,7 @@ This region contains all primal iterates under the prescribed initializations an
 \begin{proof}
 For a W-type regularizer with compact dual domain, $\bB^1\in\partial h^*(\bLmbd^1)$ and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$.
 Since $L_F\ge\gamma/n$, the prescribed step sizes satisfy $0<\tau\gamma/n<1$.
-Since $\phi^{**}$ is even and convex, its proximal mapping preserves sign and does not increase magnitude. Thus \eqref{eq:proximal-initialization} and Assumption~\ref{Ass: basic regularity}(ii) give $\|\bB^1\|\le\|\mathcal{D}(\bx^1)\|\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|\le R_B$, then \eqref{Eq: the update of B} gives
+Since $\phi^{**}$ is even and convex, its proximal mapping preserves sign and does not increase magnitude. Thus the algorithm initialization and Assumption~\ref{Ass: basic regularity}(ii) give $\|\bB^1\|\le\|\mathcal{D}(\bx^1)\|\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|\le R_B$, then \eqref{Eq: the update of B} gives
 \[
 \|\bB^{k+1}\|\le\left(1-\frac{\tau\gamma}{n}\right)R_B
 +\frac{\tau\gamma}{n}C_{\mathcal{D}}+\tau\lambda\sqrt{nd}=R_B,
@@ -654,6 +644,7 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
         \text{Complexity}= (T-1)b_{k}=\calO(T^{2}) = \calO(\varepsilon^{-4}).
     \]
 \end{proof}
+
 \section{Complexity Analysis of DualHash-StoRM (\texorpdfstring{\Cref{alg:our_algorithm_storm}}{Algorithm 2})}
 \label{app:storm-complexity}
 We adopt the same notation as in \Cref{app:stom-complexity}. 

@@ -1,26 +1,76 @@
 \section{\blue{Problem Formulation and Preliminaries}}
 \label{Section: Problem Reformulation}
 \subsection{{Preliminaries}}
-\input{sections/preliminary.tex}
-% Deep hashing methods aim to learn network parameters \(\bx \in \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space. 
+\blue{An} extended real-valued function $r:\RR^{q}\to\blue{[-\infty,+\infty]}$ is called
+\textit{proper} if \blue{$r(\bx)>-\infty$ for all $\bx\in\RR^{q}$ and} its domain
+$\operatorname{dom}(r):=\{\bx\in\RR^{q}\mid r(\bx)<+\infty\}$ is nonempty; \blue{it is called
+\textit{lower semicontinuous} if its epigraph
+$\operatorname{epi}(r):=\{(\bx,t)\in\RR^{q+1}\mid r(\bx)\le t\}$ is closed.}
+\blue{We write
+$\by\xrightarrow{r}\bx$ to denote $\by\to\bx$ and $r(\by)\to r(\bx)$. The \textit{(limiting) subdifferential} \cite[Definition~8.3]{Rockafellar1998VariationalA} of a function $r:\RR^{q}\to[-\infty,+\infty]$ at a point
+$\bx$ where $r(\bx)$ is finite is given by
+\begin{equation}\label{Eq: limiting subdifferential}
+\begin{aligned}
+\partial r(\bx):={}&\Bigl\{\bv\in\RR^{q}:\ \exists\,\bx^{k}\xrightarrow{r}\bx,\ \bv^{k}\to\bv\ \text{with}\\
+&\quad \liminf_{\substack{\by\to\bx^{k}\\ \by\neq\bx^{k}}}
+\frac{r(\by)-r(\bx^{k})-\langle\bv^{k},\by-\bx^{k}\rangle}{\|\by-\bx^{k}\|}
+\ge0\quad\text{for all } k\Bigr\}.
+\end{aligned}
+\end{equation}When $r$ is continuously differentiable or convex, the above subdifferential coincides with the
+classical gradient or convex subdifferential of $r$
+\cite[Exercise~8.8(b) and Proposition~8.12]{Rockafellar1998VariationalA}.
+Moreover, for any continuously differentiable $g$, it holds that
+$\partial(r+g)(\bx)=\partial r(\bx)+\nabla g(\bx)$
+\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA}; and if
+$r(\bx_{1},\bx_{2})=r_{1}(\bx_{1})+r_{2}(\bx_{2})$ with $r_{1},r_{2}$ proper and lower
+semicontinuous, then $\partial r(\bx_{1},\bx_{2})=\partial r_{1}(\bx_{1})\times\partial r_{2}(\bx_{2})$
+\cite[Proposition~10.5]{Rockafellar1998VariationalA}.}
+For a proper function $r:\RR^{l}\to(-\infty,+\infty]$, its conjugate is $r^*(\by):=\sup_{\bx}\{\langle\by,\bx\rangle-r(\bx)\}$ and its biconjugate is $r^{**}:=(r^*)^*$. \blue{If $r$ has an affine minorant, then $r^{**}$ is the largest lower semicontinuous convex function below $r$~\cite[Theorem~11.1]{Rockafellar1998VariationalA}.}
+For a proper, \blue{lower semicontinuous, and bounded-below} function $r$, the \textit{proximal mapping} of $r$, denoted by $\operatorname{prox}_{\tau r}(\by)$, is defined as
+\begin{align}
+    % \label{Def: the definition of proximal operator}
+    \operatorname{prox}_{\tau r}(\by) := \argmin\limits_{\bx \in \operatorname{dom}(r)}\left\{ r(\bx) + \frac{1}{2\tau}\|\bx - \by\|^{2}\right\}, \notag
+\end{align}
+where $\tau$ is a positive scalar parameter. The proximal mapping admits the following
+properties.
+\begin{proposition}\label{prop:rockafellar}
+\textnormal{\cite{Rockafellar1998VariationalA}}
+    Let $r : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper, \blue{lower semicontinuous, and bounded below}. Then, the following holds.
+    \begin{enumerate}[label=(\roman*)]
+        \item The set $\operatorname{prox}_{\tau r}(\bx)$ is nonempty and compact
+            for any $\bx \in \mathbb{R}^{q}$ and $\tau > 0$.
+
+        \item If $r$ is convex, then $\operatorname{prox}_{\tau r}(\bx)$
+            contains exactly one value for any $\bx \in \mathbb{R}^{q}$ and
+            $\tau > 0$.
+    \end{enumerate}
+\end{proposition}
+
+\blue{A differentiable} function $g: \RR^q \rightarrow \RR$ is said to be $L_g$-smooth if $\| \nabla g(\bx) - \nabla g(\bx') \| \leq L_g \| \bx - \bx'\|$ for all $\bx,\, \bx' \in \RR^q$.
+A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz continuous if $\|\mathcal{M}(\bx) - \mathcal{M}(\bx')\| \leq C\|\bx - \bx'\|$ for all $\bx, \bx' \in \blue{\Omega}$. For an $L_g$-smooth function, \blue{the descent lemma \blue{\cite{Bertsekas1997}} states that
+\begin{align}
+\label{Eq: the descent lemma}
+    g(\bx) \leq g(\bx') + \langle \nabla g(\bx'), \bx - \bx' \rangle + \frac{L_g}{2} \| \bx - \bx'\|^2.
+\end{align}}
+% Deep hashing methods aim to learn network parameters \(\bx \in \RR^{d_{\bx}}\) to generate discrete codes that preserve semantic similarity effectively in the Hamming space.
 % A natural approach is to minimize a similarity-preserving loss function \( \frac{1}{n}\sum_{i=1}^n L_s(\text{sgn}(\bD_i(\bx)))\) where $n$ is the number of training samples, $\bD_i(\bx)$ represents the \(i\)-th network output and \(f_i\) is the similarity-preserving loss function (e.g., pairwise cross-entropy loss \cite{zhuDeepHashingNetwork2016}). However, the function \( sgn(\cdot) \) renders standard backpropagation infeasible due to its zero gradient for all nonzero inputs. This discreteness poses a central challenge in deep hashing.
 
 % A W-type regularization (e.g., $\lambda | |z| - 1 |$) has effectively mitigated this issue. This type of regularization encourages outputs to approach binary values \(\{-1, 1\}\) during training. Specifically, the model is trained to produce continuous outputs \(\bu_i = \bD_i(\bx)\) with W-type regularization, and binary codes are obtained post-training via \(\bb_i = \text{sgn}(\bu_i)\).  Consequently, we formulate the core optimization problem for W-type regularized deep hashing methods as follows,
 % \begin{align}
 % \label{Eq: the primal deep hashing problem}
-% \min_{\bx \in \RR^{d_{\bx}}} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)), 
+% \min_{\bx \in \RR^{d_{\bx}}} \quad \frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
 % \end{align}where \(\frac{1}{n}\sumn f_i\) is the similarity-preserving loss, \(D_i\) is the \(i\)-th network output and \(h\) is a W-type regularization.
 % % \footnote{In the problem \eqref{Eq: the primal deep hashing problem}, we use vectorized \(\bz\), thus the regularization is also \(\| |\bz| - \bm{1}\|_1 = \sumn | |z_i| - 1 |\)}.
 % \subsection{A Two-Block Structured Reformulation}
 % We then employ variable splitting % \cite{wangLiftedBregmanTraining2022, zengBlockCoordinateDescent2018, lauProximalBlockCoordinate2018}, ]\
 % to reformulate problem \eqref{Eq: the primal deep hashing problem} equivalently as the constrained problem:
-% \begin{align} 
-% \label{Eq: constrained_dlh} 
-% \min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}}&\quad \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\ 
-% \text{s.t.} &\quad \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n. 
+% \begin{align}
+% \label{Eq: constrained_dlh}
+% \min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}}&\quad \frac{1}{n} \sumn f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
+% \text{s.t.} &\quad \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n.
 % \end{align} Combined with the quadratic penalty method \cite{nocedal1999numerical}, this transformation yields the following two-block finite-sum optimization problem:
-% \begin{align} 
-% \label{Prop: block-wise regularized problem} 
+% \begin{align}
+% \label{Prop: block-wise regularized problem}
 % \nonumber&\min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}} J(\bx, \bB) \\
 % &= \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sumn F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}. \tag{P}
 % \end{align} Here, \( \bB = [\bb_1, \bb_2, \dots, \bb_n]\) and \( \gamma > 0 \) is the penalty parameter. This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon this problem, we develop a stochastic primal-dual algorithm that effectively addresses the challenges above.
@@ -34,7 +84,7 @@ Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that ge
 \label{Eq:direct_deep_hashing_problem}
 \blue{\min_{\bx \in \RR^{q}}\ \frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}\!\big(\operatorname{sgn}(\mathcal{D}(\bx))\big),}
 \end{align}
-where \(n\) is the number of training samples, \blue{\(\bD_i:\RR^q\to\RR^d\) is the continuous network output mapping for sample \(i\), \(\mathcal{D}(\bx):=[\bD_1(\bx)^\top;\ldots;\bD_n(\bx)^\top]\), and \(\ell_{s,i}:\RR^{n\times d}\to\RR\) is a similarity-preserving loss} (e.g., pairwise cross-entropy \cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere. 
+where \(n\) is the number of training samples, \blue{\(\bD_i:\RR^q\to\RR^d\) is the continuous network output mapping for sample \(i\), \(\mathcal{D}(\bx):=[\bD_1(\bx)^\top;\ldots;\bD_n(\bx)^\top]\), and \(\ell_{s,i}:\RR^{n\times d}\to\RR\) is a similarity-preserving loss} (e.g., pairwise cross-entropy \cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere.
 
 \blue{To address this issue, penalties with W-shaped graphs, vanishing exactly at
 $\pm1$, are added to drive the continuous outputs toward $\{-1,1\}^d$. Such penalties
@@ -83,7 +133,7 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in
 \end{enumerate}
 \end{definition}
 
-For W-type regularizers, the convex envelope and the conjugate admit the following explicit description. The proof is provided in \Cref{app:wtype-conjugate-proof}. 
+For W-type regularizers, the convex envelope and the conjugate admit the following explicit description. The proof is provided in \Cref{app:wtype-conjugate-proof}.
 \begin{lemma}\label{lem:wtype-conj}
 Let \(\phi:\mathbb{R}\to[0,+\infty)\) satisfy \ref{W1}--\ref{W2}. Then the following holds
 \begin{enumerate}[label=\textup{(\alph*)}]
@@ -93,7 +143,7 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\) satisfy \ref{W1}--\ref{W2}. Then the follo
 Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\), and \(h(\bB)=h^{**}(\bB)\) if and only if \(|b_{ij}|\ge1\) for all \(i,j\).
 \end{lemma}
 
-\Cref{tab:wtype} lists representative W-type regularizers from the deep hashing literature. In every row, $\partial\phi(0)=\{-c,c\}$ for some $c>0$, so $\operatorname{prox}_{\sigma\phi}$ is set-valued at the origin and admits no continuous single-valued selection there. However, the conjugate removes this discontinuity: $\phi^*$ is convex by \Cref{lem:wtype-conj}, so $\operatorname{prox}_{\sigma\phi^*}$ is single-valued and nonexpansive. Since $h^*$ is separable, its proximal mapping acts entrywise, i.e., 
+\Cref{tab:wtype} lists representative W-type regularizers from the deep hashing literature. In every row, $\partial\phi(0)=\{-c,c\}$ for some $c>0$, so $\operatorname{prox}_{\sigma\phi}$ is set-valued at the origin and admits no continuous single-valued selection there. However, the conjugate removes this discontinuity: $\phi^*$ is convex by \Cref{lem:wtype-conj}, so $\operatorname{prox}_{\sigma\phi^*}$ is single-valued and nonexpansive. Since $h^*$ is separable, its proximal mapping acts entrywise, i.e.,
 \begin{equation}
 \label{Eq: the proximal mapping of conjugate function}
 [\operatorname{prox}_{\sigma h^*}(\bLmbd)]_{ij}

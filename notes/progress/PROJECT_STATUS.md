@@ -75,3 +75,5 @@
 - 2026-10-18 合并 3.3 过渡段：区分罚模型的精确驻点关系与原目标证书，说明有限罚参数下 B 与网络输出可能不一致；零残差、零量化误差下的精确驻点结论作为已有证书特例。小节标题引用由 P 修正为 P0，未新增定理。
 
 - 2026-10-18 近驻点定义已改为正式 definition 环境；将残差定义移至本节首次使用处并补上 Q1 符号。定义引导改引 Tian、Zhou、So (ICML 2022), Definition 2.5，注明本文用极限次微分替代其 Clarke 次微分；保留原定义与证明。Goldstein (1977)、Zhang 等 (2020) 的 BibTeX 条目保留，但不作为本文 nearby-point 定义的直接出处。
+
+- 2026-10-18 将 `prop:original-certificate` 改为优化误差与结构误差的加法分离形式：在 `methodology.tex` 中拆分 `(a)` 的 `\delta`、`\varepsilon`，保留 `(b)` 的 `L_0`；在 `convergence.tex` 中保留推论期望界并简化证明；在 `supplementaryB.tex` 中补充 `\sqrt{a+b}\le\sqrt a+\sqrt b` 与近驻点单调性推导。`revision/response_letter.tex` 未引用该命题。`latexmk -pdf main.tex` 已通过，未发现未定义引用或新增 LaTeX 错误；保留既有排版警告。

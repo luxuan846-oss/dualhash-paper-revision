@@ -101,7 +101,7 @@ Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum
 \end{equation}
 and \Cref{tab:wtype} gives its closed form when available; \Cref{fig:w-conj-prox} illustrates the case $p=1$. The rows differ in tail growth, which determines $\operatorname{dom}\phi^*$. We say that $h$ has a \emph{compact dual domain} if $\operatorname{dom}\phi^*=[-\lambda,\lambda]$ for some $\lambda>0$; then $\phi^*$ is bounded on its domain, which the analysis in \Cref{Section: Convergence analysis} uses to establish uniform lower bounds for the Lyapunov functions. Every row except $p=2$ has a compact dual domain.
 \endgroup
-\begin{figure}[thbp]
+\begin{figure}[!t]
 \centering
 \resizebox{0.98\columnwidth}{!}{
 \begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth,line cap=round,line join=round]
@@ -165,7 +165,7 @@ and \Cref{tab:wtype} gives its closed form when available; \Cref{fig:w-conj-prox
 }
 \caption{\blue{The row $p=1$ of Table~\ref{tab:wtype}, drawn with $\lambda=\sigma=1$: (a) the scalar W-type regularizer $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\sigma$ and clips to $[-\lambda,\lambda]$.}}
 \label{fig:w-conj-prox}
-\vspace{-4ex}
+\vspace{-2ex}
 \end{figure}
 \subsection{W-type Regularized Deep Hashing Model}
 \label{Sec:W-type Regularized Deep Hashing Model}
@@ -180,7 +180,7 @@ and \Cref{tab:wtype} gives its closed form when available; \Cref{fig:w-conj-prox
 \label{eq:quantization-error}
 Q_1(\bx):=\bigl\|\mathcal{D}(\bx)-\operatorname{sgn}(\mathcal{D}(\bx))\bigr\|_1
 =\sum_{i=1}^{n}\sum_{j=1}^{d}\bigl||\mathcal{D}_{ij}(\bx)|-1\bigr|,
-\end{equation}where the equality follows entrywise from $\min_{b\in\{-1,1\}}|z-b|=\bigl||z|-1\bigr|$. For the row $p=1$ of \Cref{tab:wtype}, $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$; for $p=2$, $h(\mathcal{D}(\bx))=\lambda\|\mathcal{D}(\bx)-\operatorname{sgn}(\mathcal{D}(\bx))\|_F^2$.}
+\end{equation}where the equality follows entrywise from $\min_{b\in\{-1,1\}}|z-b|=\bigl||z|-1\bigr|$. For the row $p=1$ of \Cref{tab:wtype}, used in our experiments, the regularizer equals the quantization error up to the factor $\lambda$: $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$. For $p=2$, $h(\mathcal{D}(\bx))=\lambda\|\mathcal{D}(\bx)-\operatorname{sgn}(\mathcal{D}(\bx))\|^2$.}
 
 \blue{Using variable splitting, we introduce continuous auxiliary variables \(\bb_i\in\RR^d\) and \(\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\RR^{n\times d}\), subject to \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\),} to obtain the following equivalent nonlinearly constrained problem:
 \begin{align}
@@ -208,9 +208,16 @@ We then \blue{relax these constraints by} the quadratic penalty method \cite[Sec
     \item \blue{The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}\!\left(\mathcal{D}(\bx)\right)>-\infty$ where \(\bar{\ell}_s:=n^{-1}\sum_{i=1}^{n}\ell_{s,i}\). }
     \item \blue{The function $f$ is $L_f$-smooth on $\RR^q$, and $\nabla\mathcal{D}$ is $L_{\nabla\mathcal{D}}$-Lipschitz on $\RR^q$, with $L_f,L_{\nabla\mathcal{D}}>0$. There exist constants $C_{\mathcal{D}},G_{\mathcal{D}}>0$ such that
     \[
-        \|\mathcal{D}(\bx)\|_F\le C_{\mathcal{D}},\qquad
+        \|\mathcal{D}(\bx)\|\le C_{\mathcal{D}},\qquad
         \|\nabla\mathcal{D}(\bx)\|\le G_{\mathcal{D}},\qquad
         \forall\,\bx\in\RR^q.
     \]}
 \end{enumerate}
+\begin{remark}[Coercivity of $J(\bx, \bB)$]\label{rem:coercivity}
+\blue{Assumption~\ref{Ass: basic regularity}(i) yields the coercivity of $J$. Indeed, since $P\ge0$,
+\[
+J(\bx,\bB)\ge\underline{\ell}+\frac{\mu}{2}\|\bx\|^2+h(\bB),
+\]
+and $h$ grows at least linearly in each entry because $\phi^*$ is even and $\operatorname{dom}\phi^*$ has nonempty interior (Lemma~\ref{lem:wtype-conj}).}
+\end{remark}
 \end{assumption}

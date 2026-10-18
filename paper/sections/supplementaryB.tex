@@ -78,11 +78,66 @@ Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\ph
     \label{Eq: the components of the subgradient}
     \begin{cases}&\bd_{\bx}^{k}= \nabla_{\bx}F(\bx^{k}, \bB^{k}),\\&\bd_{\bB}^{k}=\nabla_{\bB}F(\bx^{k}, \bB^{k}) + \bLmbd^{k}, \\&\bd_{\bLmbd}^{k}= \bB^{k}- \calG_{\bLmbd}^{k},\end{cases}
 \end{align}
-where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by the common block-stationary initialization, and $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})$ for $k\ge2$ by the optimality condition of the $\bLmbd$-update \eqref{Eq: the update of lambda}, implying}
+where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by proximal optimality in \eqref{eq:proximal-initialization} and subgradient inversion, and $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})$ for $k\ge2$ by the optimality condition of the $\bLmbd$-update \eqref{Eq: the update of lambda}, implying}
 \begin{align}
     \label{Eq: the stationarity error bound in proof}
     \mathrm{dist}^{2}(\bm{0},\blue{\mathcal K}(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd_{\bx}^{k}\|^{2}+\|\bd_{\bB}^{k}\|^{2}+\|\bd_{\bLmbd}^{k}\|^{2}.
 \end{align}
+
+\subsection{\blue{Proofs of \Cref{lem:conjugate-minorant,prop:original-certificate}}}
+\label{app:original-certificate-proof}
+\begingroup
+\color{blue}
+\paragraph{Conjugate minorant.}
+Write $D=\mathcal{D}(\bx)$ and choose $V\in\partial h^*(\bLmbd)$ closest to $\bB$. Such a point exists because this set is nonempty and closed when $r_{\mathcal K}<\infty$. Set
+\[
+a=\nabla_{\bx}F(\bx,\bB),\qquad b=m(\bB-D)+\bLmbd,\qquad c=\bB-V.
+\]
+Then $r_{\mathcal K}^2=\|a\|^2+\|b\|^2+\|c\|^2$ and
+$\nabla s_{\bLmbd}(\bx)=a+\nabla\mathcal D(\bx)^*b$, which proves~\eqref{eq:minorant-gradient}. The asserted Lipschitz constant follows from Assumption~\ref{Ass: basic regularity}(ii). Fenchel--Young gives $s_{\bLmbd}\le J_0$ and
+$J_0(\bx)-s_{\bLmbd}(\bx)\ge h(D)-h^{**}(D)$.
+Since $\bLmbd\in\partial h^{**}(V)$, Fenchel equality and $h^{**}\ge0$ yield
+\[
+\langle\bLmbd,D\rangle-h^*(\bLmbd)
+=h^{**}(V)+\frac{\|\bLmbd\|^2}{m}
++\left\langle\bLmbd,c-\frac{b}{m}\right\rangle
+\ge-\frac{\|mc-b\|^2}{4m}
+\ge-\kappa r_{\mathcal K}^2.
+\]
+This proves~\eqref{eq:minorant-gap}.
+
+\paragraph{Near-stationarity certificate.}
+Let $s\le J_0$ have an $L$-Lipschitz gradient, where $L>0$, and suppose $J_0(\bx)-s(\bx)\le E$. Choose a global minimizer $\widehat{\bx}$ of
+\[
+H(\by):=J_0(\by)-\langle\nabla s(\bx),\by-\bx\rangle+L\|\by-\bx\|^2.
+\]
+The lower smoothness bound gives $H(\by)\ge s(\bx)+(L/2)\|\by-\bx\|^2$, so continuity of $J_0$ implies existence of this minimizer. Since $H(\widehat{\bx})\le H(\bx)=J_0(\bx)$,
+\[
+\|\widehat{\bx}-\bx\|\le\sqrt{2E/L}.
+\]
+Fermat's rule and the smooth sum rule give
+$\nabla s(\bx)-2L(\widehat{\bx}-\bx)\in\partial J_0(\widehat{\bx})$, hence
+\[
+\operatorname{dist}(\bm0,\partial J_0(\widehat{\bx}))
+\le\|\nabla s(\bx)\|+2\sqrt{2LE}.
+\]
+Applying this argument to $s=s_{\bLmbd}$ and using \Cref{lem:conjugate-minorant} proves part~(a), including $E=0$. For part~(b), $\bLmbd\in\dom h^*$ implies $\|\bLmbd\|\le\lambda\sqrt{nd}$.
+
+\paragraph{Representative regularizers.}
+For $u\in\RR$, $\log\cosh u\le|u|$ and $\operatorname{Hub}_{\delta}(u)\le|u|$. For the squared penalty, Assumption~\ref{Ass: basic regularity}(ii) gives
+$\bigl||D_{ij}|-1\bigr|\le\max\{1,C_{\mathcal D}-1\}$.
+Multiplying by $\bigl||D_{ij}|-1\bigr|$ and summing proves the bounds in \Cref{rem:certificate-table}.
+
+\paragraph{Multiplier bound and the loss minorant.}
+Define $T(U):=m(U-\operatorname{prox}_{h^{**}/m}(U))$. Firm nonexpansiveness of the convex proximal mapping implies that $T$ is $m$-Lipschitz. The residual identities give
+$D=V+\bLmbd/m+c-b/m$, so $\bLmbd=T(D-c+b/m)$.
+Since $h^{**}$ is separable, vanishes on the cube, and is nondecreasing away from it, each coordinate of $\operatorname{prox}_{h^{**}/m}(D)$ lies between $D_{ij}$ and its projection onto $[-1,1]$. Therefore
+\[
+\|\bLmbd\|\le\|T(D)\|+\|mc-b\|
+\le m\|(|D|-\bm1)_+\|+\sqrt{1+m^2}\,r_{\mathcal K}.
+\]
+Using $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal D(\bx)^*\bLmbd$ and the preceding certificate argument with $s=f$, $L=L_f$, and $E=h(D)$ proves part~(i) of \Cref{rem:certificate-without-conjugate}. At an exact KKT point, $b=c=0$, giving $\bB=\operatorname{prox}_{h^{**}/m}(D)$ and $\bLmbd=T(D)$. For $p=1$, the scalar proximal formula gives $|\Lambda_{ij}|=\min\{m(|D_{ij}|-1)_+,\lambda\}$. On the cube, $T(D)=0$, $\bB=D$, and $\nabla f(\bx)=0$; also $h^*(0)=0$, so $s_{\bm0}=f$. This proves part~(ii).
+\endgroup
 
 \section{Auxiliary Results for the Complexity Analysis}
 \label{app:complexity-auxiliary-results}
@@ -90,7 +145,7 @@ where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by the common b
 \subsection{\blue{Smoothness Constant of $F$}}
 \label{app:smoothness-discussion}
 \begingroup\color{blue}
-Under Assumption~\ref{Ass: basic regularity}(ii), $F$ is $L_F$-smooth on $\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$, where
+Under Assumption~\ref{Ass: basic regularity}(ii), $F$ is $L_F$-smooth on $\RR^q\times\{\bB:\|\bB\|\le R_B\}$, where
 \begin{equation}
 \label{eq:derived-smoothness-constant}
 L_F:=2L_f+\frac{\gamma}{n}\left(L_{\nabla\mathcal{D}}C_{\mathcal{D}B}+2G_{\mathcal{D}}^2+1\right).
@@ -102,22 +157,22 @@ R_B:=C_{\mathcal{D}}+\frac{n\lambda\sqrt{nd}}{\gamma}.
 This region contains all primal iterates under the prescribed initializations and step sizes, and $L_F$ is independent of $T$.
 
 \begin{proof}
-The initializations and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$.
+For a W-type regularizer with compact dual domain, $\bB^1\in\partial h^*(\bLmbd^1)$ and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$.
 Since $L_F\ge\gamma/n$, the prescribed step sizes satisfy $0<\tau\gamma/n<1$.
-Since $\bB^1=\mathcal{D}(\bx^1)$, Assumption~\ref{Ass: basic regularity}(ii) gives $\|\bB^1\|_F\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|_F\le R_B$, then \eqref{Eq: the update of B} gives
+Since $\phi^{**}$ is even and convex, its proximal mapping preserves sign and does not increase magnitude. Thus \eqref{eq:proximal-initialization} and Assumption~\ref{Ass: basic regularity}(ii) give $\|\bB^1\|\le\|\mathcal{D}(\bx^1)\|\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|\le R_B$, then \eqref{Eq: the update of B} gives
 \[
-\|\bB^{k+1}\|_F\le\left(1-\frac{\tau\gamma}{n}\right)R_B
+\|\bB^{k+1}\|\le\left(1-\frac{\tau\gamma}{n}\right)R_B
 +\frac{\tau\gamma}{n}C_{\mathcal{D}}+\tau\lambda\sqrt{nd}=R_B,
 \]
-where the equality follows from the definition of $R_B$. By induction, $\|\bB^k\|_F\le R_B$ for all $k\ge1$.
-Thus $\|\mathcal{D}(\bx)-\bB\|_F\le C_{\mathcal{D}B}$ throughout the stated region.
+where the equality follows from the definition of $R_B$. By induction, $\|\bB^k\|\le R_B$ for all $k\ge1$.
+Thus $\|\mathcal{D}(\bx)-\bB\|\le C_{\mathcal{D}B}$ throughout the stated region.
 
-For two points $(\bx,\bB)$ and $(\bx',\bB')$ in this region, the gradient of $P(\bx,\bB)=\frac{\gamma}{2n}\|\mathcal{D}(\bx)-\bB\|_F^2$ satisfies
+For two points $(\bx,\bB)$ and $(\bx',\bB')$ in this region, the gradient of $P(\bx,\bB)=\frac{\gamma}{2n}\|\mathcal{D}(\bx)-\bB\|^2$ satisfies
 \begin{align*}
 \|\nabla_{\bx}P(\bx,\bB)-\nabla_{\bx}P(\bx',\bB')\|
-&\le\frac{\gamma}{n}\left[\left(L_{\nabla\mathcal{D}}C_{\mathcal{D}B}+G_{\mathcal{D}}^2\right)\|\bx-\bx'\|+G_{\mathcal{D}}\|\bB-\bB'\|_F\right],\\
-\|\nabla_{\bB}P(\bx,\bB)-\nabla_{\bB}P(\bx',\bB')\|_F
-&\le\frac{\gamma}{n}\left[G_{\mathcal{D}}\|\bx-\bx'\|+\|\bB-\bB'\|_F\right],
+&\le\frac{\gamma}{n}\left[\left(L_{\nabla\mathcal{D}}C_{\mathcal{D}B}+G_{\mathcal{D}}^2\right)\|\bx-\bx'\|+G_{\mathcal{D}}\|\bB-\bB'\|\right],\\
+\|\nabla_{\bB}P(\bx,\bB)-\nabla_{\bB}P(\bx',\bB')\|
+&\le\frac{\gamma}{n}\left[G_{\mathcal{D}}\|\bx-\bx'\|+\|\bB-\bB'\|\right],
 \end{align*}
 by Assumption~\ref{Ass: basic regularity}(ii).
 The coefficient matrix of these two bounds is positive semidefinite, so its spectral norm is at most its trace.
@@ -364,7 +419,7 @@ Let $t:=\tau L_F$. Both parameter settings \eqref{Eq: the parameters conditions 
 \[
 C_1=K_1=\frac{1}{2\tau},\qquad C_3=K_4=\frac{\tau L_F^2}{2}.
 \]
-By Appendix~\ref{app:smoothness-discussion}, $\|\bB^k\|_F\le R_B$ and $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$ for all $k\ge1$, and $0\le h^*\le nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)$ on $\operatorname{dom}h^*$ by \Cref{lem:wtype-conj} and the condition on $\phi^*$ in \Cref{Section: W-regularizer}. Therefore $\langle\bB^k,\bLmbd^k\rangle\ge-\lambda\sqrt{nd}\,R_B$ and $\Delta_{\bB}^{k+1}=\frac12\|\bB^{k+1}-\bB^k\|_F^2\le2R_B^2$, so for both algorithms and every $k\ge1$,
+By Appendix~\ref{app:smoothness-discussion}, $\|\bB^k\|\le R_B$ and $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$, and $0\le h^*\le nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)$ on $\operatorname{dom}h^*$ by \Cref{lem:wtype-conj} and the condition on $\phi^*$ in \Cref{Section: W-regularizer}. Therefore $\langle\bB^k,\bLmbd^k\rangle\ge-\lambda\sqrt{nd}\,R_B$ and $\Delta_{\bB}^{k+1}=\frac12\|\bB^{k+1}-\bB^k\|^2\le2R_B^2$, so for both algorithms and every $k\ge1$,
 \begin{equation}
 \label{eq:lb-common}
 \calL(\bx^k,\bB^k,\bLmbd^k)-C_1\Delta_{\bB}^{k+1}
@@ -372,7 +427,7 @@ By Appendix~\ref{app:smoothness-discussion}, $\|\bB^k\|_F\le R_B$ and $\|\bLmbd^
 \qquad
 c_1':=\lambda\sqrt{nd}\,R_B+nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)+\frac{R_B^2}{\tau}.
 \end{equation}
-It remains to control $C_3\Delta_{\bx}^{k+1}=\frac{\tau L_F^2}{4}\|\bx^{k+1}-\bx^k\|^2$ by $F-\underline{\ell}$. Since $f\ge\underline{\ell}$ by \Cref{Ass: basic regularity}(i) and $P\ge0$, we have $F\ge\underline{\ell}$. Let $\Omega:=\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$. For $(\bx,\bB)\in\Omega$, the point $(\bx,\bB)-L_F^{-1}\nabla F(\bx,\bB)$ has $\bB$-component $(1-\frac{\gamma}{nL_F})\bB+\frac{\gamma}{nL_F}\mathcal{D}(\bx)$, a convex combination of $\bB$ and $\mathcal{D}(\bx)$ since $L_F\ge\gamma/n$; it therefore lies in the convex set $\Omega$ because $R_B\ge C_{\mathcal{D}}$. The descent lemma on $\Omega$ and $F\ge\underline{\ell}$ give
+It remains to control $C_3\Delta_{\bx}^{k+1}=\frac{\tau L_F^2}{4}\|\bx^{k+1}-\bx^k\|^2$ by $F-\underline{\ell}$. Since $f\ge\underline{\ell}$ by \Cref{Ass: basic regularity}(i) and $P\ge0$, we have $F\ge\underline{\ell}$. Let $\Omega:=\RR^q\times\{\bB:\|\bB\|\le R_B\}$. For $(\bx,\bB)\in\Omega$, the point $(\bx,\bB)-L_F^{-1}\nabla F(\bx,\bB)$ has $\bB$-component $(1-\frac{\gamma}{nL_F})\bB+\frac{\gamma}{nL_F}\mathcal{D}(\bx)$, a convex combination of $\bB$ and $\mathcal{D}(\bx)$ since $L_F\ge\gamma/n$; it therefore lies in the convex set $\Omega$ because $R_B\ge C_{\mathcal{D}}$. The descent lemma on $\Omega$ and $F\ge\underline{\ell}$ give
 \begin{equation}
 \label{eq:lb-gradient}
 \|\nabla F(\bx,\bB)\|^2\le2L_F\bigl(F(\bx,\bB)-\underline{\ell}\bigr),\qquad(\bx,\bB)\in\Omega .
@@ -394,7 +449,7 @@ Write $\bm{p}_k:=\bx^k-\bx^{k-1}$. By \eqref{Eq: the update of x in SGDM} and th
 \[
 \bx^{k+1}-\bx^k=\alpha\bm{p}_k-\frac{\eta}{L_F}\bigl(\nabla_{\bx}F(\bz^k,\bB^k)+\be^k\bigr).
 \]
-Since $\|\bB^k\|_F\le R_B$, the $L_F$-smoothness of $F$ and \eqref{eq:lb-gradient} give
+Since $\|\bB^k\|\le R_B$, the $L_F$-smoothness of $F$ and \eqref{eq:lb-gradient} give
 \[
 \|\nabla_{\bx}F(\bz^k,\bB^k)\|^2\le2\|\nabla_{\bx}F(\bx^k,\bB^k)\|^2+2L_F^2\beta^2\|\bm{p}_k\|^2
 \le4L_F\bigl(F(\bx^k,\bB^k)-\underline{\ell}\bigr)+2L_F^2\beta^2\|\bm{p}_k\|^2 .
@@ -708,7 +763,7 @@ We now establish a weighted error accumulation bound for the variance-reduced gr
     \[
         H_k=(1-r)\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}+r\tau^{2}\|\bLmbd^{k}-\bLmbd^{k-1}\|^{2}
     \]
-    with $\bLmbd^{0}=\bLmbd^{1}$. Since $\bB^{0}=\bB^{1}=\mathcal{D}(\bx^{1})$ and $\bLmbd^{1}=\bm{0}$, we have $H_1=0$ and $H_k\geq0$. By the $\bB$- and $\bLmbd$-updates, we obtain}
+    with $\bLmbd^{0}=\bLmbd^{1}$. Since the initialization sets $\bB^{0}=\bB^{1}$ and $\bLmbd^{0}=\bLmbd^{1}$, we have $H_1=0$ and $H_k\geq0$. By the $\bB$- and $\bLmbd$-updates, we obtain}
     \begin{align}
         \blue{\Delta_{\bB}^{k+1}\leq\frac{12}{r}\bigl(H_k-H_{k+1}\bigr)+G\,\Delta_{\bx}^{k+1},}
         \label{Eq: tracking of B increments}

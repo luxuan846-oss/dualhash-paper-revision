@@ -1,16 +1,13 @@
 \section{Complexity Analysis}
 \label{Section: Convergence analysis}
-
-We analyze the proposed algorithms in terms of the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-KKT point of the Lagrangian function~\eqref{Eq: simplified_lagrangian}. 
-Given $\varepsilon>0$, we say that a random point $(\bx,\bB,\bLmbd)$ is an \emph{$\varepsilon$-KKT point} of $\calL$ if
+We measure their complexity by the number of stochastic first-order oracle (SFO) calls required to find an $\varepsilon$-KKT point of $\calL$. Given $\varepsilon>0$, a random point $(\bx,\bB,\bLmbd)$ is an \emph{$\varepsilon$-KKT point} if
 \begin{equation}
 \label{equ:esp}
 \mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)\big]
 \leq\varepsilon^2.
 \end{equation}
-
 \subsection{\blue{Main Assumption}}
-\blue{Under Assumption~\ref{Ass: basic regularity}(ii), $F$ is $L_F$-smooth on $\RR^q\times\{\bB:\|\bB\|_F\le R_B\}$, and by the initialization and the $\bB$-update this set contains all primal iterates; $L_F$ and $R_B$ are given in Appendix~\ref{app:smoothness-discussion}.}
+\blue{Under Assumption~\ref{Ass: basic regularity}(ii), $F$ is $L_F$-smooth on $\RR^q\times\{\bB:\|\bB\|\le R_B\}$, and by the initialization and the $\bB$-update this set contains all primal iterates; $L_F$ and $R_B$ are given in Appendix~\ref{app:smoothness-discussion}.}
 
 \blue{Let $T$ denote the maximum number of iterations.} \blue{Under the mini-batch sampling scheme
 introduced in Section~\ref{Sec: Algorithm implementations}, let $(\Omega,\mathcal F,\mathbb P)$
@@ -27,7 +24,7 @@ In the remainder of this paper, we impose the following assumptions.
 \leavevmode
 \begin{enumerate}[label=\textup{(\roman*)},leftmargin=2em,font=\color{blue}]
     \item \blue{The set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.}
-    \item \blue{There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$ with $\|\bB\|_F\le R_B$,}
+    \item \blue{There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$ with $\|\bB\|\le R_B$,}
     \begin{align}
         \label{Eq: finite-sum sampling identities}
         &\frac{1}{n}\sum_{i=1}^{n}\nabla_{\bx} F_i(\bx, \bb_i)
@@ -39,19 +36,13 @@ In the remainder of this paper, we impose the following assumptions.
     \end{align}
 \end{enumerate}
 \end{assumption}
-\begin{remark}[Coercivity of $J$]\label{rem:coercivity}
-\blue{Assumption~\ref{Ass: basic regularity}(i) yields the coercivity of $J$ assumed in Section~\ref{Sec: first-order optimality conditions}. Indeed, since $P\ge0$,
-\[
-J(\bx,\bB)\ge\underline{\ell}+\frac{\mu}{2}\|\bx\|^2+h(\bB),
-\]
-and $h$ grows at least linearly in each entry because $\phi^*$ is even and $\operatorname{dom}\phi^*$ has nonempty interior (Lemma~\ref{lem:wtype-conj}).}
-\end{remark}
+
 \begin{remark}
-    \red{Both algorithms initialize $\bB^0=\bB^1=\mathcal{D}(\bx^1)\in[-1,1]^{n\times d}$ and $\bLmbd^1=\bm{0}$. Since $h^{**}$ vanishes on $[-1,1]^{n\times d}$, this gives
+    \blue{The proximal optimality condition in \eqref{eq:proximal-initialization} gives $\bLmbd^1\in\partial h^{**}(\bB^1)$. Together with the definition of $\bLmbd^1$ and subgradient inversion, this yields
 \[
 \nabla_{\bB}F(\bx^1,\bB^1)+\bLmbd^1=\bm{0},\qquad
 \bB^1\in\partial h^*(\bLmbd^1),
-\]  
+\]
 so the common one-step estimates apply from the first iteration.}
 
 \end{remark}
@@ -291,4 +282,28 @@ with \blue{$\tilde{L}_{\Delta}$ and $\tilde{C}_{\sigma}$ from \Cref{Lemma: conve
 \item The results in Theorems \ref{Theorem: the oracle complexity in SGDM} and \ref{Theorem: the oracle complexity in STORM} are novel for stochastic, non-convex, multi-block primal-dual optimization, a challenging area where existing work has largely focused on one-block \cite{xu2023momentum,shi2025momentum} or deterministic settings \cite{ADMMNolinear2024}.  
     \item  \Cref{alg:our_algorithm_sgdm} \blue{under the parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and} \eqref{Eq: the parameters conditions of dualhash-sgdm} attains both oracle and sample \(\mathcal{O}(\varepsilon^{-4})\) complexities, which matches that of stochastic first-order methods (SFOMs) for one-block stochastic optimization \cite{Ghadimi2013MinibatchSA}. Meanwhile, \Cref{alg:our_algorithm_storm} with the refined constant parameters from \eqref{Eq: the parameters conditions in dualhash-storm} attains both oracle and sample $\mathcal{O}(\varepsilon^{-3})$ complexities. This matches the best-known lower bound \cite{arjevani2023lower} and the complexity of variance-reduced SFOMs for single-block problems \cite{shi2025momentum,xu2023momentum}. Notably, despite tackling a multi-block problem, our primal-dual framework preserves this efficiency without degrading the dependence on $\varepsilon$.
 \end{enumerate}
+\end{remark}
+
+\subsection{Guarantees for the Original Objective}
+\label{Sec: guarantees original objective}
+\Cref{Theorem: the oracle complexity in SGDM,Theorem: the oracle complexity in STORM} control the KKT residual of the conjugate model. \Cref{prop:original-certificate} transfers this control to the original objective.
+
+\begin{corollary}[Near-stationarity of the original objective]\label{cor:original-stationarity}
+Under the assumptions of \Cref{Theorem: the oracle complexity in SGDM} (resp.\ \Cref{Theorem: the oracle complexity in STORM}), let $T$ be chosen as in that theorem, so that the expected squared KKT residual satisfies \eqref{equ:esp}. Then, almost surely, $\bx^R$ is $(\delta_R,\varepsilon_R)$-near-stationary for $J_0$, with tolerances from \Cref{prop:original-certificate}(b) satisfying
+\begin{align*}
+\EE\,\varepsilon_R &\le\Bigl(\sqrt{1+G_{\mathcal{D}}^2}+2\sqrt{2\kappa L_0}\Bigr)\varepsilon+2\sqrt{2L_0\,\EE\,h\bigl(\mathcal{D}(\bx^R)\bigr)},\\
+\EE\,\delta_R &\le\sqrt{\frac{2}{L_0}}\Bigl(\sqrt{\kappa}\,\varepsilon+\sqrt{\EE\,h\bigl(\mathcal{D}(\bx^R)\bigr)}\Bigr),
+\end{align*}
+after $\calO(\varepsilon^{-4})$ (resp.\ $\calO(\varepsilon^{-3})$) SFO calls. Here $\kappa=(1+m^2)/(4m)$, $m=\gamma/n$, and $L_0=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}$. For the row $p=1$ of \Cref{tab:wtype}, $h(\mathcal{D}(\bx^R))=\lambda Q_1(\bx^R)$.
+\end{corollary}
+\begin{proof}
+Apply \Cref{prop:original-certificate}(b) at $(\bx^R,\bB^R,\bLmbd^R)$, split the square roots by $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$, and take expectations using Jensen's inequality.
+\end{proof}
+
+\begin{remark}[Guidance on the code length]\label{rem:code-length}
+For the row $p=1$ of \Cref{tab:wtype}, a sufficient condition for the structural term in \Cref{cor:original-stationarity} to be at most $\varepsilon/2$ is $\lambda\,\EE\,Q_1(\bx^R)\le\varepsilon^2/(32L_0)$. Under this condition, the same SFO complexity orders yield $\EE\,\varepsilon_R=\calO(\varepsilon)$ and $\EE\,\delta_R=\calO(\varepsilon)$. This sufficient quantization-error threshold is quadratic in the target accuracy. In terms of the average per-bit quantization error $Q_1/(nd)$, which is the quantity reported in \Cref{Section: Numerical experiments}, this condition reads
+\[
+\frac{\EE\,Q_1(\bx^R)}{nd}\le\frac{\varepsilon^2}{32\,\lambda\,nd\,\bigl(L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}\bigr)}.
+\]
+For fixed $n$, $\lambda$, and smoothness constants, this sufficient per-bit threshold decreases at least as $d^{-1}$ in the code length $d$, and as $d^{-3/2}$ when $\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}$ dominates $L_f$. Thus, certifying the same accuracy for the original objective requires a smaller average per-bit error as the code length increases. This is consistent with the association between low quantization error and high mAP observed at 64 bits in \Cref{Section: Numerical experiments}.
 \end{remark}

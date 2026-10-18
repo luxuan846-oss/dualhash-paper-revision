@@ -387,6 +387,21 @@ so that the bounds hold uniformly over $\bLmbd$.}
 The theorem connects the near-stationarity of the original objective $J_0$ to two quantities: the KKT residual, which motivates our oracle-complexity analysis, and the regularization term $h(\mathcal{D}(\bx))$, which is determined by the network outputs. For the $\ell_1$ W-type regularizer, the latter equals $\lambda Q_1(\bx)$; thus, the quantization error contributes directly to the near-stationarity bound and motivates our use of the $\ell_1$ W-type regularizer in the experiments.
 
 \begin{remark}[Role of the conjugate minorant]\label{rem:conjugate-minorant-role}
-\blue{Since $h\ge0$, the loss $f$ is also a smooth minorant of $J_0$, but its gradient $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal{D}(\bx)^*\bLmbd$ retains the multiplier in the first-order term. The minorant $s_{\bLmbd}$ absorbs $\langle\bLmbd,\mathcal{D}(\cdot)\rangle$, so the multiplier enters \Cref{prop:original-certificate} only through the curvature constant $L_0$. Consequently, the structural error does not depend on the penalty parameter $\gamma$, which enters only the optimization error through $\kappa$; the certificate holds for every fixed $\gamma>0$, without the limit $\gamma\to\infty$ required by classical quadratic penalty methods~\cite[Sec.~17.1]{nocedalWright2006}.}
+\blue{Since $h\ge0$, the loss $f$ is also a smooth minorant of $J_0$, with gap $h(\mathcal{D}(\bx))$ and smoothness constant $L_f$, so the argument of \Cref{prop:original-certificate} also applies with $s=f$. The two minorants differ in where the multiplier enters. Since $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal{D}(\bx)^*\bLmbd$, the minorant $f$ keeps $\bLmbd$ in the first-order term, and bounding $\|\bLmbd\|$ by the KKT residual and the outputs beyond $\pm1$ (\Cref{app:original-certificate-proof}) yields a point $\widehat{\bx}_f$ with $\|\widehat{\bx}_f-\bx\|\le\sqrt{2h(\mathcal{D}(\bx))/L_f}$ and
+\[
+\operatorname{dist}\bigl(\bm{0},\partial J_0(\widehat{\bx}_f)\bigr)
+\le c_{\mathcal{K}}\,r_{\mathcal{K}}
++mG_{\mathcal{D}}\bigl\|(|\mathcal{D}(\bx)|-\bm{1})_+\bigr\|
++2\sqrt{2L_f\,h(\mathcal{D}(\bx))},
+\qquad
+c_{\mathcal{K}}:=\sqrt{1+G_{\mathcal{D}}^2}+G_{\mathcal{D}}\sqrt{1+m^2}.
+\]
+The minorant $s_{\bLmbd}$ absorbs $\langle\bLmbd,\mathcal{D}(\cdot)\rangle$, so $\bLmbd$ enters only the curvature constant; with a compact dual domain, \Cref{prop:original-certificate} with $L=L_0$ gives
+\[
+\operatorname{dist}\bigl(\bm{0},\partial J_0(\widehat{\bx})\bigr)
+\le\Bigl(\sqrt{1+G_{\mathcal{D}}^2}+2\sqrt{2\kappa L_0}\Bigr)r_{\mathcal{K}}
++2\sqrt{2L_0\,h(\mathcal{D}(\bx))}.
+\]
+Both structural errors vanish exactly at binary outputs. With $f$, outputs beyond $\pm1$ contribute linearly with the factor $m=\gamma/n$. With $s_{\bLmbd}$, the structural error is independent of $\gamma$, which enters only the optimization error through $\kappa$, at the price of the larger curvature constant $L_0\ge L_f$. Hence the certificate holds for every fixed $\gamma>0$, without the limit $\gamma\to\infty$ required by classical quadratic penalty methods~\cite[Sec.~17.1]{nocedalWright2006}.}
 \end{remark}
 

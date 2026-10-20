@@ -2,74 +2,56 @@
 \label{Section: related work}
 \begin{table}[t]
     \centering
-    \caption{Comparison of representative deep hashing methods in terms of regularizer, optimization strategy, and oracle complexity.}
+    \caption{\blue{Comparison of representative deep hashing methods in terms of regularizer, optimization strategy, and oracle complexity.}}
     \label{Table: summary of deep hashing algorithms}
     \resizebox{\linewidth}{!}{
-\begin{tabular}{cccccc}
+\begin{tabular}{ccccc}
 \toprule
-\textbf{Type} & \textbf{Method} & \textbf{Model} 
-  & \textbf{\blue{Regularizer}} & \textbf{Optimization} & \textbf{Complexity} \\
+\textbf{Type} & \textbf{Method} & \textbf{\blue{W-type Regularizer}} & \textbf{Optimization} & \textbf{Complexity} \\
 \midrule
-    \multirow{4}{*}{\centering Discrete} 
-    & DDSH \cite{liDeepSupervisedHashing} & $\min L_s(\bb) + Q(\bu, \bb)$ & \centering $\|\cdot\|^2$ & BQP & \multirow{14}{*}{\centering \textemdash} \\
+    \multirow{4}{*}{\centering Discrete}
+    & DDSH~\cite{liDeepSupervisedHashing} & \multirow{4}{*}{\centering \blue{$\ell_2^2$}} & BQP & \multirow{12}{*}{\centering \textemdash} \\
+    & DSDH~\cite{li2017deep} & & $\operatorname{sgn}$ update & \\
+    & DPSH~\cite{liFeatureLearningBased2016} & & DCC & \\
+    & \blue{DSARH~\cite{zhang2026dsarh}} & & \blue{DCC + PGD-based AT} & \\
+    \cmidrule(lr){1-4}
+    \multirow{8}{*}{\centering Continuous}
+    & DSH~\cite{liuDeepSupervisedHashing} & \blue{$\ell_1$} & \multirow{3}{*}{\centering SGDM} & \\
+    & DTSH~\cite{wang2016DTSH} & \blue{$\ell_2^2$} & & \\
+    & DHN~\cite{zhuDeepHashingNetwork2016} & \blue{log-cosh} & & \\
+    \cmidrule(lr){2-4}
+    & MDSHC~\cite{wang2023deep} & \blue{$\ell_1$} & RMSProp & \\
+    & \blue{MambaHash~\cite{he2025mambahash}} & \blue{$\ell_2^2$} & \blue{RMSProp} & \\
+    & \blue{CRH~\cite{yin2026crh}} & \blue{$\ell_2^2$} & \blue{Adam + center reassignment} & \\
+    \cmidrule(lr){2-4}
+    & HashNet~\cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering \blue{\textemdash}} & SGDM & \\
+    & OrthoHash~\cite{hoeOneLossAll2021} & & Adam & \\
     \cmidrule(lr){2-5}
-    & DSDH \cite{li2017deep}& \multirow{3}{*}{\centering $\min L_s(\bu) + Q(\bu, \bb)$} & \multirow{3}{*}{\centering $\|\cdot\|^2$} & $sgn$ update &  \\ 
-    & DPSH \cite{liFeatureLearningBased2016} & &  & DCC &  \\ 
-    & DSARH \cite{zhang2026dsarh} & & & DCC + PGD-based AT &  \\
-    \cmidrule(lr){1-5}
-    \multirow{12}{*}{\centering Continuous}
-    & DCH \cite{caoDeepCauchyHashing2018} &\multirow{5}{*}{\centering $\min L_s(\bu) + h(\bu)$} & $\log \left( 1 + \frac{\text{dist}_{\text{h}}(|\bu|, \mathbf{1})}{\gamma} \right)$ & \multirow{5}{*}{\centering SGDM} &  \\
-    & DNNH \cite{laiSimultaneousFeatureLearning2015} & & $\mathcal{I}_{[-1,1]^d}(\bu)$ & &  \\
-    & DSH \cite{liuDeepSupervisedHashing} & & $\| | \bu| - \mathbf{1}\|_1$ &  &  \\ 
-    & DTSH \cite{wang2016DTSH} & & $\| | \bu| - \mathbf{1}\|_2^2$ &  &  \\ 
-    & DHN \cite{zhuDeepHashingNetwork2016} & & $\sum_i\log(\cosh(|u_i|-1))$&  &  \\ 
-    \cmidrule(lr){2-5}
-    & MDSHC \cite{wang2023deep} & \scriptsize $\min L_c(\bu) + L_s (\bu)+ h(\bu)$ & $\| | \bu| - \mathbf{1}\|_1$ & RMSProp &  \\ 
-    \cmidrule(lr){2-5}
-    & \blue{MambaHash \cite{he2025mambahash}} & \blue{$\min L_s(\bu)+h(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{RMSProp} &  \\
-    & \blue{CRH \cite{yin2026crh}} & \blue{$\min L_C(\bu)+\lambda L_Q(\bu)$} & \blue{$\| |\bu|-\mathbf{1}\|_2^2$} & \blue{Adam + center reassignment} &  \\
-    \cmidrule(lr){2-5}
-    & HashNet \cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering $\min L_s(\bu)$} & \multirow{2}{*}{\centering \blue{\text{n/a}}} & SGDM &  \\     
-    & OrthoHash \cite{hoeOneLossAll2021} & & & Adam &  \\
-    % \cmidrule(lr){2-5}
-    % & SBPG \cite{wang2024bregman} & \scriptsize $\min L_s(\bu) + h(\bu)$ & Weakly convex $h$ & SBregman PG & $\mathcal{O}(\varepsilon^{-4})$ \\
-    \cmidrule(lr){2-6}
-   & \textbf{DualHash-StoM} & \multirow{2}{*}{\small $ \min L_s(\bu) + Q(\bu,\bb) + h(\bb)$} & \multirow{2}{*}{$\| | \bb| - \mathbf{1}\|_1$} & \multirow{2}{*}{Sto Primal-Dual} & $\mathcal{O}(\varepsilon^{-4})$ \\
-    & \textbf{DualHash-StoRM} & & & & $\mathcal{O}(\varepsilon^{-3})$ \\
+    & \textbf{DualHash-StoM} & \multirow{2}{*}{\blue{$\ell_1$}} & \multirow{2}{*}{Sto Primal-Dual} & $\mathcal{O}(\varepsilon^{-4})$ \\
+    & \textbf{DualHash-StoRM} & & & $\mathcal{O}(\varepsilon^{-3})$ \\
     \bottomrule
-    \end{tabular}
+    \end{tabular} 
     }
     % \vspace{-5pt}
     \parbox{\linewidth}{\scriptsize
     \textbf{Notes}: 
-    The \textbf{Type} column indicates whether binary codes are explicitly updated; DSARH is grouped with Discrete because its unified-hashing branch uses DCC updates.
-    \blue{CRH reassigns class centers; its quantization penalty is disabled in the reported multi-label experiments.}
-    The \textbf{Model} column shows the core optimization objective, where \(\bb\) denotes binary codes and \(\bu\) denotes continuous outputs. The \textbf{\blue{Regularizer}} column specifies the \blue{quantization regularizer} (\(Q(\cdot, \cdot)\) or \(h(\cdot)\)), with `\blue{n/a}' indicating no explicit regularizer. 
-    % The \textbf{Optimization} column describes the training strategy, with discrete methods focusing on binary code updates. 
-    DCC stands for Discrete Cyclic Coordinate Descent, PGD-based AT for projected-gradient adversarial training, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `\blue{\textemdash}' indicating that no corresponding complexity guarantee is reported in the cited work.
-    }
+    \blue{The \textbf{Type} column indicates whether binary codes are explicitly updated; DSARH is grouped with Discrete because its unified-hashing branch uses DCC updates.}
+    \blue{For continuous methods, regularizer names follow \Cref{tab:wtype}, and `\textemdash' indicates no explicit regularizer.} DCC stands for Discrete Cyclic Coordinate \blue{Descent}, \blue{PGD-based AT for projected-gradient adversarial training,} while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the convergence rate, with `\textemdash' indicating that \blue{no corresponding complexity guarantee is reported in the cited work}.}
      \vspace{-2ex}
 \end{table}
-\paragraph{Optimization in Deep Hashing}
-% Existing approaches to bridging the continuous--discrete gap in deep hashing fall into three categories.
-% One line of work adopts continuous relaxation and introduces explicit quantization regularization on network outputs; in particular, W-type regularizers such as $\||\bz|-\mathbf{1}\|_1$ have been widely used to encourage binary-like activations \cite{liuDeepSupervisedHashing,wang2023deep,zhuDeepHashingNetwork2016}. Another line refines the discretization objective through greedy coding schemes, central similarity targets, or proxy-based supervision \cite{su2018greedy,yuanCentralSimilarityQuantization2020,semanticHashCenters2025}. Alternative strategies directly address binary constraints by introducing auxiliary hash codes \cite{liDeepSupervisedHashing,li2017deep,liFeatureLearningBased2016}. Notably, even recent architectures retain W-type regularization; for instance, He and Wei \cite{he2025mambahash} employ $\||\bz|-\mathbf{1}\|_2^2$ as a smooth surrogate for $\||\bz|-\mathbf{1}\|_1$ to facilitate gradient-based optimization. These developments indicate that the practical relevance of W-type regularization has not diminished. The remaining challenge is to develop theoretically grounded optimization methods that can directly handle nonsmooth W-type regularization under nonlinear deep network mappings, which is precisely the focus of this work.
-% Recent studies have further strengthened backbone architectures to improve feature quality, extending deep hashing from conventional CNNs to hybrid CNN--Transformer frameworks \cite{he2024hybridhash}, Transformer-based hashing models \cite{chen2021transhash,wu2025fth,liu2025capmh}, and state-space architectures \cite{he2025mambahash}. 
-W-type regularizers such as \blue{$\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$} have been 
-widely adopted in deep hashing to bridge the gap between continuous 
-network outputs and discrete binary codes~\cite{liuDeepSupervisedHashing,
-wang2023deep,zhuDeepHashingNetwork2016}.
-Alternative strategies either introduce auxiliary hash codes with a 
+\paragraph{Optimization in Deep Hashing} 
+\blue{Besides W-type regularizers,}
+alternative strategies either introduce auxiliary hash codes with a 
 smoother surrogate $\|\cdot\|_2^2$~\cite{liDeepSupervisedHashing,
 li2017deep,liFeatureLearningBased2016}, or refine the discretization 
 objective via central similarity targets~\cite{yuanCentralSimilarityQuantization2020}.
-\blue{Recent architectures retain squared W-type regularizers: MambaHash~\cite{he2025mambahash}
+\blue{Recent architectures retain squared W-type penalties: MambaHash~\cite{he2025mambahash}
 and CRH~\cite{yin2026crh} use $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$
 to reduce quantization error.
 Nevertheless, theoretically grounded methods for nonsmooth W-type regularization
-composed with nonlinear network mappings remain limited. This is the gap addressed
-by our work.}
+composed with nonlinear network mappings remain limited. This is the gap we aim to address in this work.}
 
-\paragraph{Primal-Dual and Stochastic Splitting Methods} Primal-dual methods, such as PDHG~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and its unified extensions~\cite{esserZhangChan2010}, are foundational tools for composite optimization with broad applications in imaging sciences. These methods enjoy ergodic $\mathcal{O}(1/k)$ convergence and remain stable under adjoint mismatch~\cite{chouzenouxAdjointMismatch}. Stochastic counterparts, notably SPDHG~\cite{chambolleSPDHG2018} \blue{and stochastic majorization-minimization subspace methods~\cite{chouzenouxStochasticMM2017}}, handle structured finite-sum objectives with almost-sure and ergodic convergence. In the nonconvex setting, Clason et al.~\cite{clasonAccelerationGlobalConvergence2019} established global convergence under the Kurdyka--{\L}ojasiewicz (KL) condition, while Guo et al.~\cite{guo2023preconditioned} further addressed nonconvex stochastic composite problems. More recently, Shumaylov et al.~\cite{shumaylovweakly} incorporated weakly convex neural-network regularizers into a primal-dual framework and proved convergence of PDHGM to critical points under the KL condition. When the problem admits a block-separable structure, splitting methods such as ADMM with its stochastic variants~\cite{ADMMNolinear2024,chen2025convergence} and stochastic alternating minimization~\cite{driggs2021stochastic,InertialProximalAlternating,bian2026stochastic} provide promising approaches for nonconvex multi-block optimization.
+\paragraph{Primal-Dual and Stochastic Splitting Methods} Primal-dual methods, such as PDHG~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and its unified extensions~\cite{esserZhangChan2010}, are foundational tools for composite optimization with broad applications in imaging sciences. These methods enjoy ergodic $\mathcal{O}(1/k)$ convergence and remain stable under adjoint mismatch~\cite{chouzenouxAdjointMismatch}. Stochastic counterparts, notably SPDHG~\cite{chambolleSPDHG2018} \blue{and stochastic majorization-minimization subspace methods~\cite{chouzenouxStochasticMM2017}}, handle structured finite-sum objectives with almost-sure and ergodic convergence. In the nonconvex setting, Clason et al.~\cite{clasonAccelerationGlobalConvergence2019} established global convergence under the Kurdyka--{\L}ojasiewicz (KL) condition, while Guo et al.~\cite{guo2023preconditioned} further addressed nonconvex stochastic composite problems. More recently, Shumaylov et al.~\cite{shumaylovweakly} incorporated weakly convex neural-network regularizers into a primal-dual framework and proved convergence of PDHGM to critical points under the KL condition. When the problem admits a block-separable structure, splitting methods such as ADMM with its stochastic variants~\blue{\cite{ADMMNolinear2024,chen2025convergence}} and stochastic alternating \blue{minimization~\cite{driggs2021stochastic,InertialProximalAlternating,bian2026stochastic}} \blue{have been applied} to nonconvex multi-block optimization.
 
 \paragraph{Stochastic Nonconvex Constrained Optimization}
 From a constrained optimization perspective, Problem~\eqref{Eq: the general nonlinear composite problem in intro} \blue{can be reformulated via a variable lifting technique~\cite{wang2025augmentedrnn,jin2025multicomposite} as a nonlinearly constrained optimization problem of the form
@@ -79,12 +61,12 @@ From a constrained optimization perspective, Problem~\eqref{Eq: the general nonl
   \quad \text{s.t.}\quad
   \bc(\bw) = 0. 
   \notag
-\end{equation}}Several recent works have established oracle complexity results for first-order stochastic augmented-Lagrangian and penalty methods for problems of this type. For instance, Jin and Wang \cite{jin2022stochastic} proposed a single-loop stochastic primal-dual method based on a linearized augmented-Lagrangian function, achieving oracle complexities of $\mathcal{O}(\varepsilon^{-6})$ from an arbitrary initial point and $\mathcal{O}(\varepsilon^{-5})$ from a feasible one for locating an $\varepsilon$-KKT point. By incorporating the recursive momentum estimator of \cite{cutkoskyMomentumBasedVarianceReduction2019}, Shi et al. \cite{shi2025momentum} developed a momentum-based linearized augmented-Lagrangian method, improving these bounds to $\mathcal{O}(\varepsilon^{-4})$, or the nearly optimal $\mathcal{O}(\varepsilon^{-3})$ when initialized at a nearly feasible point. To certify a stronger notion of stationarity that deterministically enforces constraint violation of at most $\varepsilon$, Lu et al. \cite{lu2024variancereducedfirstordermethodsdeterministically} introduced a linearized quadratic-penalty method with truncated momentum. Under a regularity condition on the constraint gradients, recursive momentum yields the nearly optimal complexity $\widetilde{\mathcal{O}}(\varepsilon^{-3})$. 
+\end{equation}}Several recent works have established oracle complexity results for first-order stochastic augmented-Lagrangian and penalty methods for problems of this type. For instance, Jin and Wang~\cite{jin2022stochastic} proposed a single-loop stochastic primal-dual method based on a linearized augmented-Lagrangian function, achieving oracle complexities of $\mathcal{O}(\varepsilon^{-6})$ from an arbitrary initial point and $\mathcal{O}(\varepsilon^{-5})$ from a feasible one for locating an $\varepsilon$-KKT point. By incorporating the recursive momentum estimator of~\cite{cutkoskyMomentumBasedVarianceReduction2019}, Shi et al.~\cite{shi2025momentum} developed a momentum-based linearized augmented-Lagrangian method, improving these bounds to $\mathcal{O}(\varepsilon^{-4})$, or the nearly optimal $\mathcal{O}(\varepsilon^{-3})$ when initialized at a nearly feasible point. To certify a stronger notion of stationarity that deterministically enforces constraint violation of at most $\varepsilon$, Lu et al.~\cite{lu2024variancereducedfirstordermethodsdeterministically} introduced a linearized quadratic-penalty method with truncated momentum. Under a regularity condition on the constraint gradients, recursive momentum yields the nearly optimal complexity $\widetilde{\mathcal{O}}(\varepsilon^{-3})$. 
 
 \smallskip
 \noindent\textbf{Notations.}\quad Throughout this paper, we use $a$, $\ba$, and $\bA$ to denote scalars, vectors, and matrices, respectively.
 \blue{All vectors are column vectors. For a matrix \(\bA\in\RR^{m\times d}\), we write \(\bA=[\ba_1^\top;\dots;\ba_m^\top]\), where \(\ba_i\in\RR^d\) and \(\ba_i^\top\) is the $i$-th row of \(\bA\).}
-\blue{$\bm{1}$ denotes an all-ones vector or matrix of the appropriate size}, and $i,j$ serve as indices. For matrices \(\bA,\bA^{\prime}\in\RR^{m\times d}\), we use the Frobenius inner product \(\langle \bA,\bA^{\prime}\rangle\) and the induced Frobenius norm \(\|\bA\|:=\sqrt{\langle\bA,\bA\rangle}\). Unless specified otherwise, $\|\cdot\|$ denotes the Euclidean norm for vectors and the Frobenius norm for matrices. $|\cdot|$ denotes element-wise absolute value.
-\blue{For a matrix \(\bA=[A_{ij}]\), $\|\bA\|_1:=\sum_{i,j}|A_{ij}|$ denotes the \red{componentwise} \(\ell_1\) norm.} For a closed set \(\calC\subseteq\RR^q\), the distance from \(\bx\) to \(\calC\) is \(\text{dist}(\bx,\calC):=\min_{\by\in\calC}\|\bx-\by\|\).
-\blue{The sign function is applied \red{componentwise}, with $\operatorname{sgn}(t)=1$ for $t\ge0$ and $\operatorname{sgn}(t)=-1$ for $t<0$. For $\lambda>0$, $\operatorname{clip}$ denotes projection onto $[-\lambda,\lambda]$.}
+\blue{$\bm{1}$ denotes an all-ones vector or matrix of the appropriate size}, and $i,j$ serve as indices. For matrices \(\bA,\bA^{\prime}\in\RR^{m\times d}$, we use the Frobenius inner product \(\langle \bA,\bA^{\prime}\rangle\) and the induced Frobenius norm \(\|\bA\|:=\sqrt{\langle\bA,\bA\rangle}\). Unless specified otherwise, $\|\cdot\|$ denotes the Euclidean norm for vectors and the Frobenius norm for matrices. $|\cdot|$ denotes element-wise absolute value.
+\blue{For a matrix \(\bA=[A_{ij}]\), $\|\bA\|_1:=\sum_{i,j}|A_{ij}|$ denotes the \blue{componentwise} \(\ell_1\) norm.} For a closed set \(\calC\subseteq\RR^q$, the distance from \(\bx$ to \(\calC$ is $\text{dist}(\bx,\calC):=\min_{\by\in\calC}\|\bx-\by\|$.
+\blue{The sign function is applied \blue{componentwise}, with $\operatorname{sgn}(t)=1$ for $t\ge0$ and $\operatorname{sgn}(t)=-1$ for $t<0$. For $\lambda>0$, $\operatorname{clip}$ denotes projection onto $[-\lambda,\lambda]$.}
 \smallskip

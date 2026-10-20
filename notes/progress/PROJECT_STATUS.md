@@ -29,6 +29,16 @@
 3. 2026-10-16 Booming 研讨确定初步科学问题（出口 A0）：`DualHash_A0_科学问题.md`。主线为「对偶化换来光滑随机速率、付出量化误差」；「对偶相对拆分加 $\operatorname{prox}_h$ 多换来什么」待验证。
 4. 正文内容稳定后，更新对应审稿回复、主要变化摘要与修订摘录，编译并核对最终编号、页码和标色。
 
+## 2026-10-20 修订记录与待办
+
+- **单位标注（实验室自主课题要求）**：作者信息中崔春风老师的 `\thanks` 已加上 “State Key Laboratory of Virtual Reality Technology and Systems, Beihang University”（`paper/ex_shared.tex`，2026-10-21）。终稿、回稿信首页及后续成果（含 arXiv、slides、致谢/基金说明）提交前都要核对这一单位是否保留。
+
+- 第 5 节（复杂度）结构调整：正文保留 Dual increment bound、两个 Lyapunov 函数及其充分下降引理、势函数下界段落和两个复杂度定理；One-iteration progress（\(\boldsymbol{B},\boldsymbol{\Lambda}\) 与两种 \(\boldsymbol{x}\)）、Auxiliary-block tracking、两个收敛率引理移入 `supplementaryB.tex` 各自证明小节开头，附录章节结构不变。正文新增或改写处标红：\(K_1\)–\(K_4\) 的定义句、指向移动引理的引用、StoM 定理中 \(L_\Delta, C_\sigma\) 的出处。备份为 `*.bak_move`。
+- 第 5 节开头改为显式定义 \(L_F\)，有界性推导留在附录 B.1；code-length remark 已删除。
+- §3.3 重写为“优化误差 + 结构误差”两项叙述；引理 `lem:smooth-lower-bound` 改为 (a)(b)(c) 三条，(c) 分一般情形与 \(\ell_1\) 情形；定理 Moreover 给出 \(Q_1\) 版本与 \(L=L_0\)；remark 环境已去掉。
+- 正则项分层：W 类管结构性结论，\(\ell_1\) 管算法、复杂度与实验；§2 一句话说明范围并定义 compact dual domain；§6.4 开头一句连接 \(Q_1\) 与结构误差；表 1 精简正则列。
+- **待办（编译后统一处理）**：回信中所有引理、定理、公式编号需重核。第 5 节引理移入附录后，“Lemma 5.x (now Lemma 5.y)” 应改为 “now Lemma C.x”，定理编号可能变化；附录公式编号也需核对。回信 R1 “Length and organization” 回复仍为空，可写入第 5 节精简；回信尚未提及推论 `cor:original-stationarity`。
+
 ## 历史材料的使用
 
 - `revision/research/stochastic_proof_audit/report.md` 记录早期修正方案，含 `revision.tex` 及“正文尚未替换”等历史状态；当前正文已存在新的初始化、下界和证明章节，研究时直接读取最新源码。
@@ -87,3 +97,15 @@
 - 2026-10-18 将正文及回稿信中的 `entrywise` 统一改为 `componentwise`，覆盖 dual proximal 更新、量化误差等式、符号函数和辅助块跟踪证明，并标注替换处。
 
 - 2026-10-18 将原目标证书中的光滑常数记号简化为 $L_s(\|\bLmbd\|)$，保留其对乘子范数的依赖。
+
+- 2026-10-19 按讨论版本修订 Introduction：明确核心困难与 W-type 正则项的采用情况，调整标量 profile 和随机复合优化相关表述，恢复 Q1 的 affirmatively 回答；补充 DualHash 的 Fenchel 对偶更新机制、紧致对偶域下的复杂度范围，以及原目标近驻点证书和实验量化误差结果。删除 `optimality.tex` §3.3 开头重复的证书预览。本轮按要求未编译。
+
+- 2026-10-19 修复 `paper/main.tex` 摘要中的双反斜杠转义错误。`\\red`、`\\blue`、`\\bz` 等内容曾被 LaTeX 解释为换行加普通文本，导致 PDF 摘要出现裸露的 `red`、`blue` 和宏名。改为正确的单反斜杠命令后，强制 `latexmk -g -pdf -interaction=nonstopmode -halt-on-error main.tex` 编译通过，未发现未定义引用或 LaTeX 致命错误。
+
+- 2026-10-20 标色核对任务状态：对照基准为固定提交版文本导出 `paper/DualHash(2).md`；范围从当前稿 Related Work 到旧稿 §3.1 对应内容。已有标色调整，但尚未完成该范围的逐处最终核对，不得据此声称全部审稿意见均已落实或标色完整。
+
+- 本项任务的修改约束：不得改动用户已经修改的正文内容，包括文字、公式、变量、论证与内容顺序；只允许调整颜色标记（如 `\\blue`、`\\red` 或图中颜色参数）。仅移动位置且内容不变的文字不标色。若发现正文或审稿意见尚有问题，只记录并报告，不直接修改正文。`old_version/` 是小改版工作材料，不作为当前大改版与提交版的对照基准。
+
+- 2026-10-20 核对 Related Work 至旧稿 §3.1 标色：对照 `paper/DualHash(2).md` 和两份审稿附件、回稿信完成范围内检查。仅微调 `related_work.tex` 与 `problem_reformulation.tex` 的颜色标记：补上新增共轭定义、表格说明和非凸分裂文献引用的颜色；撤掉与旧式相同的下降引理公式及模型中保留公式主体的整块蓝色；保留图中发生变化的变量标签和阈值标签标蓝，未改曲线和刻度保持原色。没有修改论文语义正文。
+
+- 本次发现的待处理项：`related_work.tex` 中约束提升式仍使用 `\\notag`，正文也未定义 `f(\\bw)`,`h(\\bw)`,`\\bc(\\bw)`；但 `revision/response_letter.tex` 声称该式编号为 (1.2) 并已给出定义。这是正文与回稿信不一致，按用户要求仅报告，未改正文。另有 Reviewer 1 关于精简或移置常规预备知识的建议；当前稿将预备知识并入模型章，但仍保留 proximal mapping 性质和下降引理等陈述，是否足以回应需单独判断。

@@ -1,14 +1,25 @@
 \section{\blue{DualHash: Stochastic Primal-Dual Hashing Algorithms}}
 \label{Sec: DualHash framework}
 \subsection{Algorithmic Framework}
-Having established the stationarity relationships and guarantees for the original objective, we now present the \textbf{DualHash} framework, a stochastic multiblock primal--dual method. The framework updates $\bx$, $\bB$, and $\bLmbd$ alternately. The resulting algorithm can be viewed as a first-order multiblock primal--dual method.
-First, we update $\bx$ by a stochastic first-order step, as is standard in training neural networks. \blue{At iteration $k$, the $\bx$-update takes the form
+\blue{Having established the stationarity relationships and guarantees for the original objective, we now present the \textbf{DualHash} framework, a \blue{stochastic first-order multiblock primal--dual method}}. 
+
+\blue{From \Cref{tab:wtype}, the proximal mapping of $\phi$ is set-valued at the origin because of its nonconvexity, whereas the convexity of $\phi^*$ (\Cref{lem:wtype-conj}) makes its proximal mapping single-valued and nonexpansive.} By the separability of $h^*$, its proximal mapping is computed componentwise \blue{using the scalar mappings in \Cref{tab:wtype}}:
+\begin{equation}
+\label{Eq: the proximal mapping of conjugate function}
+\blue{[\operatorname{prox}_{\sigma h^*}(\bLmbd)]_{ij}
+=\operatorname{prox}_{\sigma\phi^*}(\Lambda_{ij}),
+\qquad \sigma>0,}
+\end{equation}
+\blue{and \Cref{tab:wtype} records closed-form expressions when they are available.} This motivates us to perform a proximal step to update $\bLmbd$.
+
+The framework updates $\bx$, $\bB$, and $\bLmbd$ alternately.
+First, we update $\bx$ by a stochastic first-order step, as is standard in training neural networks. At iteration $k$, \blue{the $\bx$-update takes the form
 \begin{equation}
     \label{Eq: the generic update of x}
     \bx^{k+1} = \by^k - \eta_k \bg^k,
 \end{equation}
-where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
-The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and variance-reduced ones, which may improve both the complexity guarantees and the practical performance; the choices of $\by^k$ and $\bg^k$ for each implementation are specified in the following two subsections.} \blue{Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$.} Finally, following \cite{chambolleFirstOrderPrimalDualAlgorithm2011}, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$:
+where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.}
+The framework accommodates different stochastic estimators $\bg^k$, including momentum-based and \blue{variance-reduced} ones, which may improve both the complexity guarantees and the practical performance; \blue{the choices of $\by^k$ and $\bg^k$ for each implementation are specified in the following two subsections.} Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$. Finally, following~\cite{chambolleFirstOrderPrimalDualAlgorithm2011}, the dual variable $\bLmbd$ is updated by a proximal step on $h^*$ at the extrapolated point $2\bB^{k+1}-\bB^k$:
 \begin{align}
 \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1},\bB^k,\bLmbd^k) \notag\\
 &= \bB^k - \tau\big(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\big), \label{Eq: the update of B}\\
@@ -16,34 +27,13 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 &= \operatorname{prox}_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \label{Eq: the update of lambda}
 \end{align}
 
-\blue{Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
+Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, \blue{independently of the past. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
 \begin{equation}
 \label{Eq: minibatch oracle}
-\tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),
+\tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i).
 \end{equation}}
-\subsection{DualHash with Momentum Acceleration}
+\subsection{DualHash with \blue{Momentum}}
 \label{Sec: DualHash StoM}
-We first present a momentum-based instance. At iteration $k$, we form two extrapolated points
-\begin{equation}
-\label{Eq: extrapolated points in SGDM}
-\by^k=\bx^k+\alpha_k(\bx^k-\bx^{k-1}),\qquad
-\bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1}),
-\end{equation}
-where $\by^k$ is the base point of the step and $\bz^k$ is the query point of the oracle. Since $(\bz^k,\bB^k)$ is determined before $\calJ_k$ is drawn, \blue{calling \eqref{Eq: minibatch oracle} at this point gives an unbiased estimator of $\nabla_{\bx}F(\bz^k,\bB^k)$:}
-\begin{equation}
-\label{Eq: the stochastic approximate in SGDM}
-\blue{\bg_m^k} := \tilde{\nabla}_{\bx}F(\bz^k,\bB^k;\calJ_k).
-\end{equation}
-\blue{Taking $\bg^k=\bg_m^k$ in \eqref{Eq: the generic update of x} yields the $\bx$-update}
-\begin{equation}
-\label{Eq: the update of x in SGDM}
-\bx^{k+1} = \by^k - \eta_k \blue{\bg_m^k}.
-\end{equation}
-The overall algorithm, DualHash-StoM, is summarized in \Cref{alg:our_algorithm_sgdm}.
-
-\begin{remark}
-The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} covers these two accelerations: Nesterov acceleration  \cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method \cite{Polyak1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$. In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$.
-\end{remark}
 \begin{algorithm}[t]
 \caption{DualHash-StoM}
 \label{alg:our_algorithm_sgdm}
@@ -65,12 +55,33 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
   \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
   \]
 \ENDFOR
-\STATE \textbf{Output:} \red{ $(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$}
+\STATE \textbf{Output:} { $(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$.}
 \end{algorithmic}
 \end{algorithm}
+We first present a momentum-based instance. At iteration $k$, we form two extrapolated points
+\begin{equation}
+\label{Eq: extrapolated points in SGDM}
+\by^k=\bx^k+\alpha_k(\bx^k-\bx^{k-1}),\qquad
+\bz^k=\bx^k+\beta_k(\bx^k-\bx^{k-1}),
+\end{equation}
+where $\by^k$ is the base point of the step and $\bz^k$ is the query point of the oracle. Since $(\bz^k,\bB^k)$ is determined before $\calJ_k$ is drawn, \blue{calling \eqref{Eq: minibatch oracle} at this point gives an unbiased estimator of $\nabla_{\bx}F(\bz^k,\bB^k)$:}
+\begin{equation}
+\label{Eq: the stochastic approximate in SGDM}
+\blue{\bg_m^k} := \tilde{\nabla}_{\bx}F(\bz^k,\bB^k;\calJ_k).
+\end{equation}
+\blue{Taking $\bg^k=\bg_m^k$ in \eqref{Eq: the generic update of x} yields the $\bx$-update}
+\begin{equation}
+\label{Eq: the update of x in SGDM}
+\bx^{k+1} = \by^k - \eta_k \blue{\bg_m^k}.
+\end{equation}
+The overall algorithm, DualHash-StoM, is summarized in \Cref{alg:our_algorithm_sgdm}.
+
+\begin{remark}
+{The update \eqref{Eq: the update of x in SGDM} contains Nesterov's scheme ($\alpha_k=\beta_k$), the heavy-ball method ($\beta_k=0$), and SGD ($\alpha_k=\beta_k=0$) as special cases. The analysis in \Cref{Section: Convergence analysis} requires constant $0<\alpha<(1-\nu)/2$ for some $\nu\in(0,1)$ and $0<\beta<1$, and therefore covers only part of this family.} 
+\end{remark}
 \subsection{DualHash with Recursive Momentum}
 \label{Sec: DualHash StoRM}
-% We use the StoRM (stochastic recursive momentum) variance-reduction estimator \cite{cutkoskyMomentumBasedVarianceReduction2019}.
+% We use the StoRM (stochastic recursive momentum) variance-reduction estimator~\cite{cutkoskyMomentumBasedVarianceReduction2019}.
 % \blue{Consider a stochastic optimization problem with objective}
 % \[
 % \blue{\Theta(\bx)=\mathbb{E}_{\xi}[\Theta(\bx;\xi)], \qquad \xi\in\Xi.}
@@ -93,7 +104,7 @@ The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} cover
 % \end{align}
 % \blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}
 
-Alternatively, we consider the StoRM estimator \cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. We construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
+Alternatively, we consider the StoRM estimator~\cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. We construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
 \begin{equation}
 \label{Eq: the stochastic approximate in STORM}
 \blue{\bg_s^k} :=
@@ -114,8 +125,8 @@ The overall algorithm, DualHash-StoRM, is summarized in \Cref{alg:our_algorithm_
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
 \STATE \textbf{Initialize:} $\bx^0=\bx^1\in\RR^q$, $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$, $\bB^0=\bB^1$, and $\bLmbd^0=\bLmbd^1$; parameters $\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$, $\tau$, and $T$.
-\FOR{\blue{$k = 1, \ldots, T$}}
-  \STATE \blue{Draw $\calJ_k$ and compute $\bg_s^k$ by \eqref{Eq: the stochastic approximate in STORM}}
+\FOR{$k = 1, \ldots, T$}
+  \STATE Draw $\calJ_k$ and compute \blue{$\bg_s^k$} by \eqref{Eq: the stochastic approximate in STORM}
   \STATE Update $\bx^{k+1}$ by
   \[
   \bx^{k+1} = \bx^k - \eta_k \blue{\bg_s^k}
@@ -129,7 +140,7 @@ The overall algorithm, DualHash-StoRM, is summarized in \Cref{alg:our_algorithm_
   \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
   \]
 \ENDFOR
-\STATE \textbf{Output:} \red{$(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$}
+\STATE \textbf{Output:} {$(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$.}
 \end{algorithmic}
 \end{algorithm}
 

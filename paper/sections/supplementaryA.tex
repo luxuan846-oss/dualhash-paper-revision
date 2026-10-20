@@ -3,50 +3,48 @@
 
 We consider deep supervised pairwise hashing in our experiments, which aims to learn binary codes that minimize Hamming distances for similar pairs and maximize them for dissimilar pairs. Let $\bA = \{\ba_i \in \RR^{d_a} : i = 1, \ldots, n\}$ be the training set with label vectors $\by_i \in \{0,1\}^C$, where $d_a$ is the input dimension and $C$ is the number of classes. The label vectors are one-hot for single-label datasets and multi-hot for multi-label datasets.
 
-
 \paragraph{Network Architecture}
-A CNN extracts features from $\ba_i$, followed by a fully connected hash layer and a $\tanh$ activation that produce the continuous code $\bD_i(\bx)\in\RR^d$.
-
+A CNN extracts features from $\ba_i$, followed by a fully connected hash layer \blue{that produces} \red{the continuous code} $\red{\bD_i(\bx)\in\RR^d}$.
 
 \paragraph{Loss Function}
-For post-training binary codes $\operatorname{sgn}(\bD_i(\bx))\in\{-1,1\}^d$, the Hamming distance is
+For \red{post-training binary} codes $\red{\operatorname{sgn}(\bD_i(\bx))}\in\{-1,1\}^d$, the Hamming distance is
 \begin{equation*}
- d_{ij}^h = \tfrac{1}{2}\left(d - \left\langle \operatorname{sgn}(\bD_i(\bx)), \operatorname{sgn}(\bD_j(\bx)) \right\rangle\right).
+ d_{ij}^h = \tfrac{1}{2}\left(d - \left\langle \red{\operatorname{sgn}(\bD_i(\bx))}, \red{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right).
 \end{equation*}
-Following \cite{xiaSupervisedHashingImage2014,laiSimultaneousFeatureLearning2015}, similarity $s^o_{ij} = 1$ if samples share labels, else $0$. The likelihood is:
+Following~\cite{xiaSupervisedHashingImage2014,laiSimultaneousFeatureLearning2015}, similarity $s^o_{ij} = 1$ if samples share labels, else $0$. The likelihood is:
 \[
 \begin{aligned}
-P\bigl(s^o_{ij} \mid \operatorname{sgn}(\bD_i(\bx)),\operatorname{sgn}(\bD_j(\bx))\bigr)
-={}&\ \operatorname{sig}_{\kappa}\!\left(\left\langle \operatorname{sgn}(\bD_i(\bx)),\operatorname{sgn}(\bD_j(\bx)) \right\rangle\right)^{s^o_{ij}}\\
-&\times\left(1 - \operatorname{sig}_{\kappa}\!\left(\left\langle \operatorname{sgn}(\bD_i(\bx)),\operatorname{sgn}(\bD_j(\bx)) \right\rangle\right)\right)^{1 - s^o_{ij}}.
+P\bigl(s^o_{ij} \mid \red{\operatorname{sgn}(\bD_i(\bx))},\red{\operatorname{sgn}(\bD_j(\bx))}\bigr)
+={}&\ \red{\operatorname{sig}_{\kappa}}\!\left(\left\langle \red{\operatorname{sgn}(\bD_i(\bx))},\red{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right)^{s^o_{ij}}\\
+&\times\left(1 - \red{\operatorname{sig}_{\kappa}}\!\left(\left\langle \red{\operatorname{sgn}(\bD_i(\bx))},\red{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right)\right)^{1 - s^o_{ij}}.
 \end{aligned}
 \]
 where
 \[
-\operatorname{sig}_{\kappa}(t) = (1 + \exp(-\kappa t))^{-1},\qquad \kappa < 1.
+\red{\operatorname{sig}_{\kappa}}(\red{t}) = (1 + \exp(-\red{\kappa t}))^{-1},\qquad \red{\kappa} < 1.
 \]
-Using continuous codes $\bD_i(\bx)$ and $s^h_{ij} = \tfrac{1}{2} \langle \bD_i(\bx), \bD_j(\bx) \rangle$, the loss becomes:
+Using continuous codes $\red{\bD_i(\bx)}$ and $s^h_{ij} = \tfrac{1}{2} \langle \red{\bD_i(\bx)}, \red{\bD_j(\bx)} \rangle$, the loss becomes:
 \begin{align}
 \label{Eq: the pairwise CE loss}
-\min_{\bx} \; \ell_{\calS}(\bx) = -\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\kappa s^o_{ij} s^h_{ij}\right)\right).
+\min_{\bx} \; \red{\ell}_{\calS}(\bx) = \blue{\frac{1}{|\calS|}\sum_{s^o_{ij}\in\calS}\Bigl[\log\bigl(1+\exp(\kappa s^h_{ij})\bigr)-\kappa\,s^o_{ij}s^h_{ij}\Bigr]}.
 \end{align}
 Substituting \eqref{Eq: the pairwise CE loss} into Problem~\eqref{Prop: block-wise regularized problem} gives the objective used in our experiments:
 \begin{align}
 % \label{Eq: the pairwise quantization-based hashing}
 \min_{\bx \in \calX, \bB \in \RR^{n\times d}} \;
-&-\frac{1}{|\calS|} \sum_{s^o_{ij} \in \calS} \log\left(1 + \exp\left(-\kappa s^o_{ij} s^h_{ij}\right)\right) \notag \\
-&+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \bD_i(\bx)\|_2^2
+&\blue{\frac{1}{|\calS|}\sum_{s^o_{ij}\in\calS}\Bigl[\log\bigl(1+\exp(\kappa s^h_{ij})\bigr)-\kappa\,s^o_{ij}s^h_{ij}\Bigr]} \notag \\
+&+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \red{\bD_i(\bx)}\|_2^2
 + \sum_{i=1}^n \lambda \|\,|\bb_i| - \bm{1}\,\|_1. \notag
 \end{align}
 
 \paragraph{Out-of-Sample Extension}
-For an unseen query $\ba^{\mathrm{qry}} \notin \bA$, its binary code is predicted as:
+For an unseen query $\ba^{\red{\mathrm{qry}}} \notin \bA$, its binary code is predicted as:
 \[
-\operatorname{sgn}\!\bigl(\bD(\bx; \ba^{\mathrm{qry}})\bigr).
+\operatorname{sgn}\!\bigl(\red{\bD}(\bx; \ba^{\red{\mathrm{qry}}})\bigr).
 \]
 
 % \paragraph{Evaluation Protocols}
-% Following \cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
+% Following~\cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
 
 % \begin{enumerate}[label=\textup{(\roman{*})}, leftmargin=2em]
 %     \item \textit{Mean Average Precision (mAP)}: For a query $\ba^{\mathrm{qry}}$, the Average Precision is computed as:
@@ -69,7 +67,7 @@ For an unseen query $\ba^{\mathrm{qry}} \notin \bA$, its binary code is predicte
 % To validate the effectiveness of our primal-dual framework, we compare DualHash-StoM
 % against optimization algorithms with different W-type regularizations. \Cref{tab:4_algorithms_for_hash_regularization_and_update}
 % summarizes the configurations of different regularization functions and their corresponding optimization approaches. For StoMHash-WCR, we employ the regularization $\lambda \| \bz^{2}- \mathbf{1}\|_1$
-% following the iSPALM framework \cite{Hertrich2020InertialSP}. The proximal
+% following the iSPALM framework~\cite{Hertrich2020InertialSP}. The proximal
 % operator is computed with parameter $\rho > 0$ under the condition
 % $\frac{\rho}{\eta}> \frac{1}{2}$, which ensures the subproblem is strongly convex
 % with a unique solution.
@@ -84,9 +82,9 @@ For an unseen query $\ba^{\mathrm{qry}} \notin \bA$, its binary code is predicte
 %         \toprule
 %         Method & $h(\bz)$ & Convexity & Algorithm & Complexity \\
 %         \midrule
-%         DSH \cite{liuDeepSupervisedHashing} & $\| |\bz| - \mathbf{1}\|_{1}$ & Nonconvex & SGDM & -- \\
+%         DSH~\cite{liuDeepSupervisedHashing} & $\| |\bz| - \mathbf{1}\|_{1}$ & Nonconvex & SGDM & -- \\
 %         StoMHash-WCR & $\| \bz^{2}- \mathbf{1}\|_{1}$ & Weakly convex & SPGD & -- \\
-%         DHN \cite{zhuDeepHashingNetwork2016} & $\sum_{i}\log(\cosh(|z_{i}| - 1))$ & Nonconvex & SGDM & -- \\
+%         DHN~\cite{zhuDeepHashingNetwork2016} & $\sum_{i}\log(\cosh(|z_{i}| - 1))$ & Nonconvex & SGDM & -- \\
 %         \textbf{DualHash-StoM} & $\| |\bz| - \mathbf{1}\|_{1}$ & Nonconvex & PD & $\checkmark$ \\
 %         \bottomrule
 %     \end{tabular*}}
@@ -144,8 +142,8 @@ For an unseen query $\ba^{\mathrm{qry}} \notin \bA$, its binary code is predicte
 %         \cmidrule(lr){2-4} \cmidrule(lr){5-7}
 %          & mAP@All & P@r=2 & Time\textsuperscript{*} & mAP@5000 & P@r=2 & Time\textsuperscript{*} \\
 %         \midrule
-%         DSH \cite{liuDeepSupervisedHashing} & 0.8010 & 0.4401 & 7.38 & 0.6634 & 0.4004 & 21.14 \\
-%         DHN \cite{zhuDeepHashingNetwork2016} & 0.8051 & 0.5272 & \textbf{6.74} & 0.7042 & 0.5432 & \textbf{16.47} \\
+%         DSH~\cite{liuDeepSupervisedHashing} & 0.8010 & 0.4401 & 7.38 & 0.6634 & 0.4004 & 21.14 \\
+%         DHN~\cite{zhuDeepHashingNetwork2016} & 0.8051 & 0.5272 & \textbf{6.74} & 0.7042 & 0.5432 & \textbf{16.47} \\
 %         StoMHash-WCR & 0.7773 & 0.5402 & 7.04 & 0.7225 & 0.5857 & 16.69 \\
 %         \textbf{DualHash-StoM} & \textbf{0.8539} & \textbf{0.6872} & 6.86 & \textbf{0.7448} & \textbf{0.6548} & 16.83 \\
 %         \bottomrule

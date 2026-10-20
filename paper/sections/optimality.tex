@@ -1,7 +1,7 @@
 \section{\blue{Primal--Dual Formulation and Optimality Guarantees}}
 \label{Section: Methodology}
 % \subsection{DualHash: A Stochastic Primal-Dual Hashing Algorithm}
-% Inspired by PDHG \cite{chambolleFirstOrderPrimalDualAlgorithm2011} in convex optimization and its nonconvex extension PPDG \cite{guoPreconditionedPrimalDualGradient2023}, we consider the equivalent constrained formulation of  the problem \eqref{Prop: block-wise regularized problem}:
+% Inspired by PDHG~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} in convex optimization and its nonconvex extension PPDG~\cite{guoPreconditionedPrimalDualGradient2023}, we consider the equivalent constrained formulation of  the problem \eqref{Prop: block-wise regularized problem}:
 % \begin{align}
 % \min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}, \by \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
 % \text{s.t. } &\quad \bY = \bB \nonumber ,
@@ -10,7 +10,7 @@
 % \label{Prop: the dual problem}
 % \max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{d_{\bx}}, \bB \in \RR^{n\times d}, \by \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) + \langle \bLmbd, \bB - \bY \rangle. \tag{D}
 % \end{align}
-% Recalling the definition of the conjugate function \cite{Rockafellar1998VariationalA}:
+% Recalling the definition of the conjugate function~\cite{Rockafellar1998VariationalA}:
 % \begin{equation}
 % \label{eq:fenchel_conjugate}
 % h^*(\bY) := \sup_{\bx \in \RR^{n\times d}} \{ \langle \bY, \bx \rangle - h(\bx) \}, \quad \bY \in \RR^{n\times d}
@@ -20,7 +20,7 @@
 % \calL(\bx, \bB, \bLmbd) := F(\bx, \bB) + \langle \bB, \bLmbd \rangle - h^*(\bLmbd).\tag{\(\calL\)}
 % \end{align}
 
-% Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and can optimize \(h^*\) in the dual space. Since $h^*$ is always convex and l.s.c. \cite{Rockafellar1998VariationalA}, it means that the $\text{prox}_{h^*}(\cdot)$ is often much easier to compute (potentially having a closed-form solution) than that of $h$.  For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate function as illustrated in \Cref{fig:w_type_regularization}:
+% Through this transformation, we replace $h(\bY)$ with $-h^*(\bLmbd)$ and can optimize \(h^*\) in the dual space. Since $h^*$ is always convex and l.s.c.~\cite{Rockafellar1998VariationalA}, it means that the $\text{prox}_{h^*}(\cdot)$ is often much easier to compute (potentially having a closed-form solution) than that of $h$.  For $h(\bz) = \sum_{i=1}^n \lambda ||z_i| - 1|$, we derive its conjugate function as illustrated in \Cref{fig:w_type_regularization}:
 % \begin{align*}
 % &h^*(\bx) = \sum_{i=1}^n h^*(x_i),\,\, \notag \\
 % & \text{where } h^*(x_i) = \begin{cases}
@@ -54,12 +54,12 @@
 % \end{align}
 % Then we utilize this approximation within an optimization strategy chosen to enhance efficiency (e.g., incorporating momentum or variance reduction), as detailed in \Cref{Sec: Algorithm implementations}.
 % Second, the auxiliary variable $\bB$ is updated via a simple gradient descent step \eqref{Eq: the update of B}; this suffices because the objective \eqref{Eq: simplified_lagrangian} with respect to $\bB$ is smooth with an inexpensive gradient,
-% % which is slightly different from \cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
+% % which is slightly different from~\cite{chambolleFirstOrderPrimalDualAlgorithm2011}:
 %     \begin{align}
 %    \nonumber \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1}, \bB^k, \bLmbd^k)\\
 %     &= \bB^k - \tau \left( \nabla_{\bB} F(\bx^{k+1}, \bB^k) + \bLmbd^k \right). \label{Eq: the update of B}
 %     \end{align}
-%     Finally, the dual variable $\bLmbd$ is updated via proximal gradient ascent on $h^*$, using an extrapolation step introduced in \cite{chambolleFirstOrderPrimalDualAlgorithm2011}. The update solves the following optimization problem:
+%     Finally, the dual variable $\bLmbd$ is updated via proximal gradient ascent on $h^*$, using an extrapolation step introduced in~\cite{chambolleFirstOrderPrimalDualAlgorithm2011}. The update solves the following optimization problem:
 % \begin{align}
 %     \bLmbd^{k+1} &= \text{prox}_{(1/\tau h^*)} \left( \bLmbd^k + \left(2\bB^{k+1} - \bB^k  \right) \right) \notag \\
 %     &=  \arg\min_{\bLmbd \in \RR^{n\times d} } \left\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle \right. \notag \\
@@ -68,13 +68,13 @@
 % \end{align}
 % \subsection{Implementations}
 % \label{Sec: Algorithm implementations}
-% The unified DualHash framework allows for flexible choices in the $\bx$ update step based on a mini-batch stochastic gradient approximation \eqref{Eq: the mini batch stochastic gradient estimator of F at x}. This flexibility enables us to incorporate advanced stochastic optimization techniques. We thus instantiate the $\bx$-update using two well-established approaches: \textbf{momentum} \cite{Nesterov1983AMF, Polyak1964} and \textbf{variance reduction} \cite{driggs2022biased}, which can improve empirical training efficiency and can also improve the theoretical convergence guarantees \cite{Liu2020AnIA,sutskever2013importance}.
+% The unified DualHash framework allows for flexible choices in the $\bx$ update step based on a mini-batch stochastic gradient approximation \eqref{Eq: the mini batch stochastic gradient estimator of F at x}. This flexibility enables us to incorporate advanced stochastic optimization techniques. We thus instantiate the $\bx$-update using two well-established approaches: \textbf{momentum}~\cite{Nesterov1983AMF, Polyak1964} and \textbf{variance reduction}~\cite{driggs2022biased}, which can improve empirical training efficiency and can also improve the theoretical convergence guarantees~\cite{Liu2020AnIA,sutskever2013importance}.
 
 % % \vspace{5pt}
 % \paragraph{DualHash-StoM}
 % %Numerically,
-% The heavy ball method \cite{Polyak1964} and Nesterov acceleration \cite{Nesterov1983AMF} can be integrated with stochastic gradient descent (SGD) to yield accelerated variants like SGD with momentum, which significantly speeds up convergence.
-% This approach has become a popular strategy for training neural networks \cite{fotopoulos2024review,Hertrich2020InertialSP}. We thus incorporate this technique and compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_sgdm}) as:
+% The heavy ball method~\cite{Polyak1964} and Nesterov acceleration~\cite{Nesterov1983AMF} can be integrated with stochastic gradient descent (SGD) to yield accelerated variants like SGD with momentum, which significantly speeds up convergence.
+% This approach has become a popular strategy for training neural networks~\cite{fotopoulos2024review,Hertrich2020InertialSP}. We thus incorporate this technique and compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_sgdm}) as:
 % \begin{align}
 % \label{Eq: the stochastic approximate in SGDM}
 %     \bG^k = \nabla_{\bx} F(\bz^k, \bB^k; \calJ_k),\, \text{where } \bz^k = \bx^k + \beta_k (\bx^k - \bx^{k-1}).
@@ -85,12 +85,12 @@
 % \end{align} The overall algorithm, DualHash-StoM, is detailed in \Cref{alg:our_algorithm_sgdm}.
 % \begin{remark}
 % The momentum acceleration framework in \eqref{Eq: the update of x in SGDM} covers these two accelerations:
-% Nesterov acceleration \cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method \cite{Polyak1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$; In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$.
+% Nesterov acceleration~\cite{Nesterov1983AMF} corresponds to $\alpha_k = \beta_k \neq 0$; the heavy-ball method~\cite{Polyak1964} is obtained with $\beta_k = 0$; vanilla SGD is recovered when $\alpha_k = \beta_k = 0$; In this paper, we set $\alpha_k, \beta_k \in (0,1)$ for all $k \geq 1$.
 % \end{remark}
 
 % % \vspace{3pt}
 % \paragraph{DualHash-StoRM}
-% Alternatively, we employ the STORM estimator \cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update. STORM utilizes a recursive momentum mechanism to reduce gradient variance, which is motivated by SGDM. Unlike some other variance reduction techniques (e.g., SVRG \cite{johnsonAcceleratingStochasticGradient2013}, SARAH \cite{SARAH2017}) that require full-gradient or large-batch gradient computations, STORM achieves variance reduction without such requirements. Given its practical effectiveness in deep learning \cite{cutkoskyMomentumBasedVarianceReduction2019,levy2021storm+}, we compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_storm}) as:
+% Alternatively, we employ the STORM estimator~\cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update. STORM utilizes a recursive momentum mechanism to reduce gradient variance, which is motivated by SGDM. Unlike some other variance reduction techniques (e.g., SVRG~\cite{johnsonAcceleratingStochasticGradient2013}, SARAH~\cite{SARAH2017}) that require full-gradient or large-batch gradient computations, STORM achieves variance reduction without such requirements. Given its practical effectiveness in deep learning~\cite{cutkoskyMomentumBasedVarianceReduction2019,levy2021storm+}, we compute the stochastic gradient estimator (Line 3 of \Cref{alg:our_algorithm_storm}) as:
 % % {\small
 % % \begin{align}
 % % \label{Eq: the stochastic approximate in STORM}
@@ -179,27 +179,19 @@
 
 \subsection{\textcolor{blue}{Min--Max Reformulation and KKT Conditions}}
 \label{Sec: first-order optimality conditions}
-Consider the equivalent constrained formulation of Problem~\eqref{Prop: block-wise regularized problem}:
+\blue{To derive a partial Fenchel dual formulation, we} consider the equivalent constrained formulation of Problem~\eqref{Prop: block-wise regularized problem}:
 \begin{align}
 \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + h(\bY) \notag \\
 \text{s.t. } &\quad \bY = \bB, \notag
 \end{align}
 whose dual problem is
-\begin{align}
-\label{Prop: the dual problem}
-\max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}, \bY \in \RR^{n\times d}} &\quad F(\bx, \bB) + \langle \bLmbd, \bB - \bY \rangle + h(\bY). \tag{D}
-\end{align}\blue{Recalling the definition of the conjugate function $h^*$} and observing that the minimization over $\bY$ in Problem~\eqref{Prop: the dual problem} can be carried out independently, we simplify the Lagrangian in Problem~\eqref{Prop: the dual problem} to
-\begin{equation}\label{Eq: simplified_lagrangian}
-\calL(\bx,\bB,\bLmbd):=\Phi(\bx,\bB,\bLmbd)-h^*(\bLmbd),
-\qquad\text{where}\quad
-\Phi(\bx,\bB,\bLmbd):=F(\bx,\bB)+\langle\bB,\bLmbd\rangle.
+\begin{equation}\label{Prop: the dual problem}
+\max_{\bLmbd \in \RR^{n\times d}} \min_{\bx \in \RR^{\blue{q}}, \bB \in \RR^{n\times d}}\quad \calL(\bx,\bB,\bLmbd):=F(\bx,\bB)+\langle\bB,\bLmbd\rangle-h^*(\bLmbd), \tag{D}
 \end{equation}
-Closely related to Problem~\eqref{Prop: the dual problem} is the nonconvex--concave min--max problem associated with $\calL$, which is equivalent to the convexified problem, i.e.,
-\begin{equation}\label{Eq: minmax problem}
-\min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd)
-=\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB).
-\end{equation}
-where the equality follows from $\sup_{\bLmbd}\{\langle\bB,\bLmbd\rangle-h^*(\bLmbd)\}=h^{**}(\bB)$. Here, the function $\calL$ is concave in $\bLmbd$ but, through $\mathcal{D}$, nonconvex in $(\bx,\bB)$ jointly. Consequently, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard in general~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for Problem~\eqref{Eq: minmax problem}. Following~\cite{chambolleFirstOrderPrimalDualAlgorithm2011,
+\begingroup\color{blue}
+which is obtained by minimizing over $\bY$ using the definition of the conjugate function $h^*$.
+
+In general, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard for nonconvex quadratic programs~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for the min--max problem~\eqref{Eq: minmax problem} below. Following~\cite{chambolleFirstOrderPrimalDualAlgorithm2011,
 clasonAccelerationGlobalConvergence2019,
 botBohm2023alternating}, we call
 $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ a
@@ -228,92 +220,95 @@ Equivalently,
 +\tilde{\bLmbd}=\bm{0},
 \qquad
 \tilde{\bB}\in\partial h^*(\tilde{\bLmbd}).
-\end{equation}Notice that the last relation in \eqref{Eq: KKT conditions}
-is the first-order condition for maximizing $\calL$ with
-respect to $\bLmbd$, namely
-$\bm{0}\in\partial_{\bLmbd}(-\calL)$.
-In contrast, for standard Lagrangian-based methods such as
-ADMM and ALM~\cite{wangGlobalConvergenceADMM2018,Bolte2018},
-the multiplier enters affinely, so
-$\bm{0}\in\partial\calL$ yields the usual KKT system,
-with the multiplier component enforcing primal feasibility.
-In our formulation, however, the nonsmooth concave term
-$-h^*(\bLmbd)$ prevents identifying
-$\bm{0}\in\partial\calL$ with
-$\bm{0}\in\mathcal{K}$. We therefore use
-$\bm{0}\in\mathcal{K}$. In the following, we denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$.
-
-In fact, every local saddle point of $\calL$ is a KKT point by Fermat's rule~\cite[Theorem~10.1]{Rockafellar1998VariationalA}. Moreover, for every $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ with $\tilde{\bLmbd}\in\dom h^*$, KKT points of $\calL$ correspond one-to-one to stationary points of the convexified problem~\eqref{Eq: minmax problem} through $\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})$, i.e.,
-\begin{equation}\label{Eq: saddle-KKT-convexified}
-\begin{aligned}
-\bm{0}\in\mathcal{K}(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})
-\quad\Longleftrightarrow\quad
-\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})\ \text{ and }\ \bm{0}\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\bm{0}\}\times\partial h^{**}(\tilde{\bB}).
-\end{aligned}
 \end{equation}
-where the equivalence follows from the subgradient inversion and sum rules~\cite[Theorems~23.5 and~23.8]{rockafellar1970convex}. This observation motivates the following characterization of when a KKT point of the min--max formulation~\eqref{Eq: minmax problem} is also stationary for Problem~\eqref{Prop: block-wise regularized problem}.
+% Notice that the last relation in \eqref{Eq: KKT conditions}
+% is the first-order condition for maximizing $\calL$ with
+% respect to $\bLmbd$, namely
+% $\bm{0}\in\partial_{\bLmbd}(-\calL)$.
+% In contrast, for standard Lagrangian-based methods such as
+% ADMM and ALM~\cite{wangGlobalConvergenceADMM2018,Bolte2018},
+% the multiplier enters affinely, so
+% $\bm{0}\in\partial\calL$ yields the usual KKT system,
+% with the multiplier component enforcing primal feasibility.
+% In our formulation, however, the nonsmooth concave term
+% $-h^*(\bLmbd)$ prevents identifying
+% $\bm{0}\in\partial\calL$ with
+% $\bm{0}\in\mathcal{K}$. We therefore use
+% $\bm{0}\in\mathcal{K}$. 
 
-\subsection{Exact Stationarity Relations for Problem~\eqref{Prop: block-wise regularized problem}}
+It is worth noting that the nonconvex--concave min--max problem associated with $\calL$ is closely related to Problem~\eqref{Prop: the dual problem} and admits the following equivalent formulation:
+\begin{equation}\label{Eq: minmax problem}
+\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB) = \min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd).
+\end{equation}Notice that KKT points of $\calL$ correspond one-to-one to stationary points of the min--max problem~\eqref{Eq: minmax problem}, i.e.,
+\begin{equation}\label{Eq: saddle-KKT-convexified}
+\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0},
+\qquad
+\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})+\tilde{\bLmbd}=\bm{0},
+\qquad
+\tilde{\bLmbd}\in\partial h^{**}(\tilde{\bB}),
+\end{equation}which motivates the characterization of when a KKT point of $\calL$ is also stationary for Problem~\eqref{Prop: block-wise regularized problem}. In the following, we denote by $\operatorname{crit}\calL:=\{(\bx, \bB, \bLmbd) \in \RR^{q} \times \RR^{n\times d} \times \RR^{n\times d}: \bm{0} \in \mathcal K(\bx, \bB, \bLmbd)\}$ the set of KKT points of $\calL$.
+\endgroup
+
+\subsection{\blue{Exact Stationarity Relations for Problem~\eqref{Prop: block-wise regularized problem}}}
 \label{Sec: original optimality relations}
+\begingroup\color{blue}
+In this subsection, we relate KKT points of $\calL$ to Problem~\eqref{Prop: block-wise regularized problem}, first through the duality gap and then through stationarity.
+
+Recall that strong duality holds for Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem} if their duality gap is zero and both optimal values are attained. Here, zero duality gap and strong duality are equivalent, since both problems admit optimal solutions by the coercivity of $J$ and $\phi^*(y)\ge|y|$ (Lemma~\ref{lem:wtype-conj}).
 We first prove that any primal--dual optimal solution $(\bx^*,\bB^*,\bLmbd^*)$ with zero duality gap is a KKT point of $\calL$. The proof is provided in \Cref{app:zero-gap-proof}.
 \begin{proposition}\label{prop:zerogap}
 Suppose that $(\bx^*,\bB^*)$ and $\bLmbd^*$ are optimal solutions of Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem}, respectively, with zero duality gap. Then $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$.
 \end{proposition}
-Recall that strong duality holds for Problems~\eqref{Prop: block-wise regularized problem} and~\eqref{Prop: the dual problem} if their optimal values coincide (zero duality gap) and both are attained. Here, since $J$ is coercive and using $\phi^*(y)\ge|y|$ for a W-type regularizer (Lemma~\ref{lem:wtype-conj}), both problems admit optimal solutions, so zero duality gap and strong duality are equivalent and hold or fail together. Let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of the right-hand side of~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
+While \Cref{prop:zerogap} requires a zero duality gap, this gap can be positive even when $F$ is convex, due to replacing $h$ with $h^{**}$. To see this, let $p^*$, $p^{**}$, and $d^*$ denote the optimal values of Problem~\eqref{Prop: block-wise regularized problem}, of Problem~\eqref{Eq: minmax problem}, and of Problem~\eqref{Prop: the dual problem}, respectively. The duality gap splits as
 \[
 p^*-d^*=(p^*-p^{**})+(p^{**}-d^*),
 \]
-where the first term is the loss caused by replacing $h$ with $h^{**}$, and the second term stems from the nonconvexity of $\calL$ in $(\bx,\bB)$. The following example shows that, even when $F$ is convex so that $p^{**}=d^*$, the first term can be positive, which motivates relating KKT points of $\calL$ directly to Problem~\eqref{Prop: block-wise regularized problem}
+where the first term is the loss caused by replacing $h$ with $h^{**}$, and the second term is the min--max gap of $\calL$. \Cref{ex:gap} illustrates this with a convex $F$, for which $p^{**}=d^*$.
 \begin{example}\label{ex:gap}
-Consider Problem~\eqref{Prop: block-wise regularized problem} with $n=d=1$ and without the $\bx$-block, and let $F(b)=\tfrac12 b^2$ and $\lambda=1$. The primal value is
-$p^*=\min_{b\in\RR}\bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\bigr\}=\tfrac12$, attained at $b^*=\pm1$.
-Since $\min_b\{\tfrac12 b^2+\Lambda b\}=-\tfrac12\Lambda^2$ and $h^*(\Lambda)=|\Lambda|$ on $[-1,1]$ ($+\infty$ elsewhere), the dual value is
+Consider the problem
+\[
+p^*=\min_{b\in\RR}\Bigl\{\tfrac12 b^2+\bigl||b|-1\bigr|\Bigr\}.
+\]
+Its optimal value is $p^*=\tfrac12$, attained at $b^*=\pm1$.
+The dual value is
 \[
 d^*=\sup_{|\Lambda|\le1}\Bigl\{-\tfrac12\Lambda^2-|\Lambda|\Bigr\}=0,
 \]
-attained at $\Lambda^*=0$. Hence $p^*-d^*=\tfrac12>0$, and no zero-gap primal--dual pair exists.
+attained at $\Lambda^*=0$. This follows from $\min_b\{\tfrac12 b^2+\Lambda b\}=-\tfrac12\Lambda^2$ and $h^*(\Lambda)=|\Lambda|$ on $[-1,1]$ ($+\infty$ elsewhere).
+Hence $p^*-d^*=\tfrac12>0$, and no zero-gap primal--dual pair exists.
 \end{example}
 
-A zero-gap pair therefore need not exist, and we relate KKT points of $\calL$ directly to Problem~\eqref{Prop: block-wise regularized problem}, which holds for every W-type regularizer. The proof is provided in \Cref{app:transfer-proof}.
+The following proposition characterizes the stationarity relation. The proof is provided in \Cref{app:transfer-proof}.
 \begin{proposition}\label{prop:transfer}
 Let \(h\) be a W-type regularizer, and let $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ be a KKT point of $\calL$. The following statements are equivalent:
 \begin{enumerate}[label=\textup{(\alph*)}]
 \item $(\tilde{\bx},\tilde{\bB})$ is a stationary point of Problem~\eqref{Prop: block-wise regularized problem}, i.e.,
-$\bm{0}\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\bm{0}\}\times\partial h(\tilde{\bB})$;
+$\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0}$ and
+$\bm{0}\in\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})+\partial h(\tilde{\bB})$;
 \item $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
 \item $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
 \end{enumerate}
 \end{proposition}
+\endgroup
 
 \subsection{From KKT Residuals to Problem~\eqref{Eq: the primal deep hashing problem}}
 \label{Sec: original objective guarantees}
-Proposition~\ref{prop:transfer} characterizes when a KKT point
-is stationary for the penalized problem.
-From an optimization perspective, however, for the original
-objective $J_0$, we must further account for
-the constraint violation and the convexification error,
-namely,
-\[
-\|\bB-\mathcal{D}(\bx)\|,
-\qquad
-h(\mathcal{D}(\bx))-h^{**}(\mathcal{D}(\bx)).
-\]
-In this subsection, Fenchel conjugacy allows us to control the effect of the
-constraint violation through the KKT residual
-$r_{\mathcal{K}}:=\operatorname{dist}\bigl(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\bigr)$,
-while the structure of the W-type regularizer bounds the convexification error by
-$h(\mathcal{D}(\bx))$, which equals $\lambda Q_1(\bx)$ for the $\ell_1$ penalty, with $Q_1$ defined in~\eqref{eq:quantization-error}. Consequently, we establish
-that the stationarity of $J_0$ at a point $\widehat{\bx}$ near $\bx$ is bounded by an
-optimization error and a structural error:
-\[
-\operatorname{dist}\bigl(\bm{0},\partial J_0(\widehat{\bx})\bigr)
-\le
-\underbrace{\calO\bigl(r_{\mathcal{K}}\bigr)}_{\text{optimization error}}
-+
-\underbrace{\calO\bigl(\sqrt{h(\mathcal{D}(\bx))}\bigr)}_{\text{structural error}}.
-\]
+\begingroup\color{blue}
+Proposition~\ref{prop:transfer} concerns exact KKT points, whereas the algorithms return an approximate KKT point $(\bx,\bB,\bLmbd)$ of $\calL$, whose accuracy is typically measured by the KKT residual
+\begin{align}
+    \label{Eq: kkt residual}
+r_{\mathcal{K}}:=\operatorname{dist}\bigl(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\bigr).
+\end{align} \blue{Transferring such a point to $J_0$, however, incurs two errors. The optimization error is controlled by $r_{\mathcal{K}}$ and can be driven to zero by the algorithm. The structural error stems from replacing $h$ with $h^{**}$ since the min--max problem~\eqref{Eq: minmax problem} does not penalize non-binary outputs in $[-1,1]^{n\times d}$. In this subsection, we quantify both errors and show that the structural error, which is intrinsic to the model, is controlled by the quantization error~\eqref{eq:quantization-error}, which gives this empirical quantity a theoretical interpretation.}
+% Consequently, the stationarity measure of $J_0$ at a point $\widehat{\bx}$ near $\bx$ is bounded by an optimization error, controlled by $r_{\mathcal{K}}$, and a structural error, controlled by $h(\mathcal{D}(\bx))$; for the $\ell_1$ W-regularizer, the latter equals $\lambda Q_1(\bx)$ with $Q_1$ defined in~\eqref{eq:quantization-error}.
+% \[
+% \operatorname{dist}\bigl(\bm{0},\partial J_0(\widehat{\bx})\bigr)
+% \le
+% \underbrace{\calO\bigl(r_{\mathcal{K}}\bigr)}_{\text{optimization error}}
+% +
+% \underbrace{\calO\bigl(\sqrt{h(\mathcal{D}(\bx))}\bigr)}_{\text{structural error}}.
+% \]
 
-Before proceeding, due to the nonsmooth, nonconvex nature of the objective $J_0$, we measure its stationarity using a nearby-point criterion related to near-approximate stationarity~\cite[Definition~2.5]{tian2022stationarity} as follows.
+Since $J_0$ is nonsmooth and nonconvex, our goal for Problem~\eqref{Eq: the primal deep hashing problem} is to find a point satisfying the following nearby-point criterion, related to near-approximate stationarity~\cite[Definition~2.5]{tian2022stationarity}.
 \begin{definition}[Near-stationarity]\label{def:near-stationarity}
 Given $\delta,\varepsilon\ge0$, a point $\bx$ is called \emph{$(\delta,\varepsilon)$-near-stationary} for Problem~\eqref{Eq: the primal deep hashing problem} if there exists $\widehat{\bx}$ such that
 \begin{equation}\label{eq:near-stationarity}
@@ -323,47 +318,34 @@ Given $\delta,\varepsilon\ge0$, a point $\bx$ is called \emph{$(\delta,\varepsil
 \end{equation}
 where $\partial$ denotes the limiting subdifferential defined in~\eqref{Eq: limiting subdifferential}.
 \end{definition}
-For $\bLmbd\in\operatorname{dom}h^*$, let us define the potential function used in this subsection,
+To address the nonsmoothness of $J_0$, we introduce a smooth lower bound based on Fenchel duality.
+The following lemma bounds $\|\nabla s_{\bLmbd}(\bx)\|$ by the KKT residual and gives a two-sided bound on the gap $J_0(\bx)-s_{\bLmbd}(\bx)$.
 \[
-s_{\bLmbd}(\by):=f(\by)+\langle\bLmbd,\mathcal{D}(\by)\rangle-h^*(\bLmbd).
+s_{\bLmbd}(\by):=f(\by)+\langle\bLmbd,\mathcal{D}(\by)\rangle-h^*(\bLmbd)\le J_0(\by).
 \]
-By Assumption~\ref{Ass: basic regularity}(ii), $s_{\bLmbd}$ is
-$L_{s_{\bLmbd}}:=(L_f+\|\bLmbd\|L_{\nabla\mathcal{D}})$-smooth.
-If $\operatorname{dom}h^*$ is bounded, as for $p=1$, log-cosh, and Huber in
-\Cref{tab:wtype}, then $\operatorname{dom}\phi^*=[-\lambda,\lambda]$ gives
-$\|\bLmbd\|\le\lambda\sqrt{nd}$, and hence
+\begin{lemma}\label{lem:smooth-lower-bound}
+Under Assumption~\ref{Ass: basic regularity}(ii), let $h$ be a W-type regularizer defined in \Cref{def:wtype}, and let $\kappa:=(1+m^2)/(4m)$. Then, for any $(\bx,\bB,\bLmbd)$ satisfying $r_{\mathcal{K}}<\infty$, the following hold:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $s_{\bLmbd}\le J_0$ on $\RR^q$, and $s_{\bLmbd}$ is $L_s(\|\bLmbd\|)$-smooth with $L_s(\|\bLmbd\|):=L_f+\|\bLmbd\|L_{\nabla\mathcal{D}}$;
+\item $\|\nabla s_{\bLmbd}(\bx)\|\le\sqrt{1+G_{\mathcal{D}}^2}\;r_{\mathcal{K}}$;
+\item the gap at $\bx$ satisfies
+\begin{equation}\label{eq:lower-bound-gap}
+\begin{split}
+J_0(\bx)-s_{\bLmbd}(\bx) \in\bigl[\,h(\mathcal{D}(\bx))-h^{**}(\mathcal{D}(\bx)), h(\mathcal{D}(\bx))+\kappa\,r_{\mathcal{K}}^2\,\bigr].
+\end{split}
+\end{equation}
+For the $\ell_1$ W-regularizer, if $\mathcal{D}(\bx)\in[-1,1]^{n\times d}$, then
 \[
-L_{s_{\bLmbd}}\le L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}},
+J_0(\bx)-s_{\bLmbd}(\bx)\in
+\bigl[\,\lambda Q_1(\bx),\ \lambda Q_1(\bx)+\kappa\,r_{\mathcal{K}}^2\,\bigr].
 \]
-a constant independent of $\bLmbd$.
-For notational simplicity, we set
-$m:=\gamma/n$ and $\kappa:=(1+m^2)/(4m)$. The following lemma shows that, at $\bx$, the
-first-order error of $s_{\bLmbd}$ is governed by the KKT residual, while its gap to $J_0$
-is governed by the network outputs and is never smaller than the convexification error;
-the structural error is therefore intrinsic to passing from the convexified model \eqref{Eq: minmax problem} to the original problem \eqref{Prop: block-wise regularized problem}.
-
-\begin{lemma}\label{lem:conjugate-minorant}
-\red{Under Assumption~\ref{Ass: basic regularity}(ii),} let $h$ be a W-type
-regularizer defined in \Cref{def:wtype}, and let $(\bx,\bB,\bLmbd)$ satisfy
-$r_{\mathcal{K}}<\infty$. \red{Then $s_{\bLmbd}\le J_0$ on $\RR^q$, and the following
-inequalities hold at the given point $\bx$:}
-\begin{align}
-\|\nabla s_{\bLmbd}(\bx)\|
-&\le\sqrt{1+G_{\mathcal{D}}^2}\;r_{\mathcal{K}},
-\label{eq:minorant-gradient}\\
-0\le h(\mathcal{D}(\bx))-h^{**}(\mathcal{D}(\bx))
-\le J_0(\bx)-s_{\bLmbd}(\bx)
-&\le h(\mathcal{D}(\bx))+\kappa\,r_{\mathcal{K}}^2.
-\label{eq:minorant-gap}
-\end{align}
-In particular, if $\mathcal{D}(\bx)\in[-1,1]^{n\times d}$, it holds that
-$$0 \le h(\mathcal{D}(\bx))\le J_0(\bx)-s_{\bLmbd}(\bx)\le h(\mathcal{D}(\bx))+\kappa\,r_{\mathcal{K}}^2.$$
+\end{enumerate}
 \end{lemma}
-We are now ready to bound the near-stationarity of $J_0$ explicitly. The proof is given in \Cref{app:original-certificate-proof}.
+The following theorem bounds the near-stationarity of $J_0$ explicitly. The proof is given in \Cref{app:original-certificate-proof}.
 \begin{theorem}\label{prop:original-certificate}
-Under the conditions of \Cref{lem:conjugate-minorant},
+Under the conditions of \Cref{lem:smooth-lower-bound},
 let $L>0$ satisfy
-\red{$L\ge L_s(\|\bLmbd\|)$.} Then there exists $\widehat{\bx}\in\RR^q$ such that
+$L\ge L_s(\|\bLmbd\|)$. Then there exists $\widehat{\bx}\in\RR^q$ such that
 \begin{align*}
 \|\widehat{\bx}-\bx\|
 &\le\sqrt{\frac{2}{L}}
@@ -379,13 +361,20 @@ let $L>0$ satisfy
 2\sqrt{2L\,h(\mathcal{D}(\bx))}
 }_{\text{structural error}}.
 \end{align*}
-\red{Moreover, if $h$ has a compact dual domain, one may take
-$L=L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}$,
-so that the bounds hold uniformly over $\bLmbd$.}
+Moreover, the structural error satisfies
+\[
+2\sqrt{2L\,h(\mathcal{D}(\bx))}\ 
+\begin{cases}
+\le 2\sqrt{2Lc\,Q_1(\bx)}, & \text{in general},\\
+= 2\sqrt{2L\lambda\,Q_1(\bx)}, & \text{for the $\ell_1$ W-regularizer},
+\end{cases}
+\]
+where $c$ and $\lambda$ are given in \Cref{tab:wtype}. If $h$ has a compact dual domain, then $\|\bLmbd\|\le\lambda\sqrt{nd}$, and one can take $L=L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}$, independent of $\bLmbd$.
 \end{theorem}
-The theorem connects the near-stationarity of the original objective $J_0$ to two quantities: the KKT residual, which motivates our oracle-complexity analysis, and the regularization term $h(\mathcal{D}(\bx))$, which is determined by the network outputs. For the $\ell_1$ W-type regularizer, the latter equals $\lambda Q_1(\bx)$; thus, the quantization error contributes directly to the near-stationarity bound and motivates our use of the $\ell_1$ W-type regularizer in the experiments.
 
-\begin{remark}[Role of the conjugate minorant]\label{rem:conjugate-minorant-role}
-\blue{Since $h\ge0$, the loss $f$ is also a smooth minorant of $J_0$, but its gradient $\nabla f(\bx)=\nabla s_{\bLmbd}(\bx)-\nabla\mathcal{D}(\bx)^*\bLmbd$ retains the multiplier in the first-order term. The minorant $s_{\bLmbd}$ absorbs $\langle\bLmbd,\mathcal{D}(\cdot)\rangle$, so the multiplier enters \Cref{prop:original-certificate} only through the curvature constant $L_0$. Consequently, the structural error does not depend on the penalty parameter $\gamma$, which enters only the optimization error through $\kappa$; the certificate holds for every fixed $\gamma>0$, without the limit $\gamma\to\infty$ required by classical quadratic penalty methods~\cite[Sec.~17.1]{nocedalWright2006}.}
-\end{remark}
+{The theorem shows that the quantization error is, to a large extent, \blue{the gap between the min--max problem and the original objective}.} Specifically, the optimization error can be made arbitrarily small by driving $r_{\mathcal{K}}$ to zero, whereas the structural error, determined by the continuous outputs $\mathcal{D}(\bx)$, need not vanish as $r_{\mathcal{K}}\to0$. The structural error is measured by $h(\mathcal{D}(\bx))$, the W-type penalty that many deep hashing methods add to the training loss, and is controlled by the quantization error, with equality for the $\ell_1$ W-regularizer. Hence, driving both $r_{\mathcal{K}}$ and $Q_1(\bx)$ to zero yields near-stationary points of the original problem.
+
+{It is worth noting that the penalty parameter $\gamma$ affects only the optimization error, and can therefore be fixed, without the limit $\gamma\to\infty$ required by penalty methods. A larger regularization parameter $\lambda$ may accelerate binarization during training, but it also increases the structural error through its dependence on $\lambda$ and $L_0$; designing W-type regularizers or output layers that drive $\mathcal{D}(\bx)$ toward $\pm1$ without relying on a large $\lambda$ is left for future work.}
+\endgroup
+% \end{remark}
 

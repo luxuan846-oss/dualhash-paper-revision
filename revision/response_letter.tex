@@ -126,14 +126,19 @@ We have carefully considered every comment and revised the manuscript accordingl
 \par\smallskip
 \normalfont\upshape\responseLabel
 {
-We thank the reviewer for this key question, which concerns the link between our reformulation and the original hashing objective. We agree that the submitted manuscript did not establish this link. The revised manuscript addresses it in a new Section~5.1, which first examines the duality gap between Problems~(P) and~(D) and then relates KKT points of $\calL$ directly to stationary points of Problem~(P).
+We thank the reviewer for this key question, which concerns the link between our reformulation and the original hashing objective. We agree that the submitted manuscript did not establish this link. The revised manuscript addresses it in a new Section~5.1, which first examines the duality gap between Problems~(P) and~(D) and then relates KKT points of $\calL$ directly to stationary points of Problem~(P)\red{, and finally bounds the near-stationarity of the original objective at approximate KKT points}.
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=2.2em]
-\item \textbf{Zero duality gap.} Proposition~5.1 shows that every primal--dual optimal pair with zero duality gap is a KKT point of $\calL$. Since both problems attain their optimal values, zero duality gap and strong duality are equivalent here. The duality gap splits as
+\item \textbf{Zero duality gap.} \red{Here, zero duality gap and strong duality are equivalent, since both problems attain their optimal values.} Proposition~5.1 shows that every primal--dual optimal pair with zero duality gap is a KKT point of $\calL$. The duality gap splits as
 \[
 p^*-d^*=(p^*-p^{**})+(p^{**}-d^*),
 \]
 where $p^{**}$ is the optimal value after replacing $h$ with its convex envelope $h^{**}$; the first term is the loss caused by this replacement, and the second stems from the nonconvexity of $\calL$ in $(\bx,\bB)$. Example~5.1 shows that the first term alone can be positive: for a one-dimensional instance with convex $F$, the second term vanishes and the duality gap equals $\tfrac12$. Hence strong duality between (P) and (D) depends on the instance, and a guarantee for Problem~(P) has to come from the KKT points of $\calL$ themselves.
-\item \textbf{Stationarity relationship.} Proposition~5.2 characterizes exactly when a KKT point of $\calL$ yields a stationary point of Problem~(P): this holds if and only if the Fenchel--Young equality holds for $h$, which is equivalent to $|\tilde b_{ij}|\ge1$ for all $i,j$. This relationship requires no zero duality gap, and condition~(c) involves only $\tilde{\bB}$, so it can be checked directly at the computed point.
+\item \textbf{Stationarity relationship.} Proposition~5.2 characterizes exactly when a KKT point of $\calL$ yields a stationary point of Problem~(P): this holds if and only if the Fenchel--Young equality holds for $h$, which is equivalent to $|\tilde b_{ij}|\ge1$ for all $i,j$. This relationship requires no zero duality gap.
+\item \red{\textbf{Guarantee for the original objective.} The algorithm returns an approximate KKT point of $\calL$, whose accuracy is measured by the KKT residual $r_{\calK}$. Compared with $J_0$, $\calL$ introduces two discrepancies: the convexification error $h(\calD(\bx))-h^{**}(\calD(\bx))$ and the constraint violation $\|\bB-\calD(\bx)\|$. Using a smooth lower bound $s_{\bLmbd}$ of $J_0$ induced by Fenchel conjugacy, Lemma~3.1 shows that the constraint violation is absorbed into $r_{\calK}$, and that the structural error is unavoidable. Theorem~3.5 then shows that there exists $\widehat{\bx}$ near $\bx$ with
+\[
+\operatorname{dist}\bigl(\zero,\partial J_0(\widehat{\bx})\bigr)\le\calO(r_{\calK})+\calO\Bigl(\sqrt{h\bigl(\calD(\bx)\bigr)}\Bigr).
+\]
+The first term is the optimization error, which vanishes as $r_{\calK}\to0$. The second term is the structural error, the price of replacing $h$ by $h^{**}$, and depends only on the network outputs at $\bx$. Remark~3.6 explains its consequences: for $\tanh$ outputs, the structural error is measured exactly by $h(\calD(\bx))$, which equals $\lambda Q_1(\bx)$ for the $\ell_1$ W-regularizer; and when $h$ has a compact dual domain, the structural error does not depend on the penalty parameter $\gamma$, so the guarantee holds for every fixed $\gamma>0$.}
 \end{enumerate}
 Proposition~5.2 is stated in Section~5.1 and proved in Appendix~A.2 \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.2, Page XX, lines XX--XX)}. For the reviewer's convenience, we reproduce it below.
 \begin{quote}\normalfont\upshape
@@ -168,7 +173,7 @@ Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three stat
 \begin{itemize}\itshape
 \item I also found the setting and writing unclear. The term ``W-type regularizer'' is used repeatedly but never properly defined; only one example is given. Even by the start of Section 3, the precise problem being studied is still not fully clear. If ``W-type'' denotes a class of regularizers, that class should be formally specified. If it refers only to the particular regularizer $h(z) = \lambda \lVert |z| - 1 \rVert_1$, the paper should state this much earlier and avoid presenting the results as applying to a broader family.
 \par\smallskip
-\normalfont\upshape\responseLabel 
+\normalfont\upshape\responseLabel We thank the reviewer for this comment. In the revised manuscript, ``W-type regularizer'' denotes a formally specified class: Definition~2.1 characterizes it by conditions (W1)--(W3), and Table~2.1 lists representative members from the deep hashing literature. We now state the scope of each result explicitly. The structural results in Section~3, namely the conjugate formula, the exact stationarity relation, and the near-stationarity certificate for the original objective, hold for every W-type regularizer. The algorithms, the complexity analysis, and the experiments use the $\ell_1$ W-regularizer $h(\bz)=\lambda\||\bz|-\mathbf{1}\|_1$, for three reasons: its conjugate has the compact domain $[-\lambda,\lambda]$, which bounds the multiplier in the complexity analysis; the proximal mapping of its conjugate is available in closed form, so the dual update is explicit; and $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$, so the penalty minimized in training, the structural error in the near-stationarity certificate, and the quantization error reported in the experiments coincide. By contrast, the $p=2$ regularizer has an unbounded dual domain, and the log-cosh regularizer has no closed-form dual proximal mapping. This scope is stated in Section~2 right after the definition of the $\ell_1$ W-regularizer and in the introduction. % VERIFY numbering
 \end{itemize}
 
 \subsubsection*{Length and organization}
@@ -237,7 +242,7 @@ Before proceeding, throughout Appendices~C and~D, we adopt the notation, the pro
 \[
 \EE_{\xi}[\phi(\bx;\xi)]=\frac{1}{n}\sum_{i=1}^{n}\phi(\bx;\xi_i),
 \]
-and our objective has exactly this structure, $F(\bx,\bB)=\frac{1}{n}\sum_{i=1}^{n}F_i(\bx,\bb_i)$. Since $\EE_i$ is not used elsewhere, we have removed it and written Assumption~5.1(iii) as the finite-sum form of the standard unbiasedness and bounded-variance conditions; the randomness of the algorithm enters only through the mini-batches $\calJ_k$ and is handled by the filtration $\{\calF_k\}$ introduced above \green{(Page XX, lines XX--XX):}
+and our objective has exactly this structure, $F(\bx,\bB)=\frac{1}{n}\sum_{i=1}^{n}F_i(\bx,\bb_i)$. Since $\EE_i$ is not used elsewhere, we have removed it and written Assumption~5.1 as the finite-sum form of the standard unbiasedness and bounded-variance conditions; the randomness of the algorithm enters only through the mini-batches $\calJ_k$ and is handled by the filtration $\{\calF_k\}$ introduced above \green{(Page XX, lines XX--XX):}
 \begin{bluequote}
 There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$,
 \[
@@ -289,7 +294,7 @@ of $\calF_k$, define
 -
 \nabla_{\bx}F(\bz^k,\bB^k).
 \]
-Conditionally on $\calF_k$, Assumption~5.1(iii)
+Conditionally on $\calF_k$, Assumption~5.1
 gives
 \[
 \frac{1}{n}\sum_{i=1}^n \bv_i^k=\zero,
@@ -337,13 +342,13 @@ is coercive. However, to ensure this property through the model structure, we im
 \[
 \underline{\ell}:=\inf_{\bx}\bar{\ell}_s(\bx)>-\infty.
 \]
-Together with the model structure, this condition ensures both coercivity and lower-boundedness of $J$. We therefore refine Assumption~5.1(i) accordingly. This refinement rules out cancellation of the growth of the regularization terms by the loss and justifies the coercivity stated in the manuscript.
+Together with the model structure, this condition ensures both coercivity and lower-boundedness of $J$. We therefore refine the lower-boundedness assumption accordingly; it is now Assumption~2.1(i). This refinement rules out cancellation of the growth of the regularization terms by the loss and justifies the coercivity stated in the manuscript.
 
-Under the refined Assumption~5.1(i) and the appropriate parameter conditions, the estimates in our analysis yield the required lower bounds on the potentials. \red{We have made these estimates explicit in Lemma~C.3 for $\Psi_m$ and Lemma~D.1 for $\Psi_r$.} These adjustments preserve the stated complexity orders and the main theoretical contributions of the manuscript.
+Under the refined Assumption~2.1(i) and the appropriate parameter conditions, the estimates in our analysis yield the required lower bounds on the potentials. \red{We have made these estimates explicit in Lemma~C.3 for $\Psi_m$ and Lemma~D.1 for $\Psi_r$.} These adjustments preserve the stated complexity orders and the main theoretical contributions of the manuscript.
 \item (Lemma 5.7) Why $R\in 2,...,T+1$ instead of $R\in 1,...,T$ ? Furthermore, I am not particularly in favour of using uniform sampling to present a rate; I would prefer to use the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[dist^2(...)]$. Finally, to use $\Psi_m^*$ you need at least to justify the lower-boundedness of $\{\Psi_m(\calQ^k)\}$ which doesn't seem straightforward.
 \par I would first introduce $L_\Delta$ before mentioning $S_1,S_2,S_3,S_4$ (these constant actually don't appear in (5.17) as such).
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the iterates, in Lemma~5.7 (now Lemma~5.5), \red{Theorem~5.2}, and the output step of Algorithm 4.1; the same correction is made in Lemma~5.10 (now Lemma~5.8), \red{Theorem~5.3}, and Algorithm 4.2. Following the reviewer's preference, the proof of Lemma~5.5 now states the averaged bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\calK(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, \red{the lower bound of $\{\EE[\Psi_m(\calQ^k)]\}$ is established in Lemma~C.3; its proof uses $F\ge\underline{\ell}$, the bounds $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$ and $\|\bB^k\|_F\le R_B$ from Appendix~B, and the $L_F$-smoothness of $F$ on $\{\|\bB\|_F\le R_B\}$.} We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~5.5, before $S_1,\ldots,S_4$ are mentioned.
+\normalfont\upshape\responseLabel We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the mini-batches, in Lemma~5.7 (now Lemma~5.5), \red{Theorem~5.2}, and the output step of Algorithm 4.1; the same correction is made in Lemma~5.10 (now Lemma~5.8), \red{Theorem~5.3}, and Algorithm 4.2. Following the reviewer's preference, the proof of Lemma~5.5 now states the averaged bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\calK(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, \red{the lower bound of $\{\EE[\Psi_m(\calQ^k)]\}$ is established in Lemma~C.3; its proof uses $F\ge\underline{\ell}$, the bounds $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$ and $\|\bB^k\|_F\le R_B$ from Appendix~B, and the $L_F$-smoothness of $F$ on $\{\|\bB\|_F\le R_B\}$.} We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~5.5, before $S_1,\ldots,S_4$ are mentioned.
 \item (Lemma 5.10) Similar comment as for Lemma 5.7, especially the fact you need to justify the lower-boundedness of $\{\Psi_r(\calQ^k)\}$ to be able to invoke $\Psi_r^*$.
 \par\smallskip
 \normalfont\upshape\responseLabel We thank the reviewer. As for Lemma~5.7 (now Lemma~5.5), the lower bound needed to define $\Psi_r^*$ is given in \red{Lemma~D.1}. It bounds from below the augmented potential $W_k=\EE[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\EE\|\be^k\|^2$, which contains the estimation-error term that the descent inequality produces, and $\Psi_r^*$ is defined from this bound.
@@ -517,7 +522,7 @@ The first term is controlled by $T$ and the second by $b$; the choice $b=c_bT$ b
 At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past.
 \end{bluequote}
 Under this sampling, the gradient error is bounded by $\frac{n-b}{n-1}\cdot\frac{\sigma^2}{b}$, which vanishes at $b=n$. Hence, when $c_bT>n$, taking $b=n$ yields exact gradients, and the bound of \red{Theorem~5.2} reduces to $L_\Delta\Delta_1/T\le\varepsilon^2$. With $b=\min\{\lceil c_bT\rceil,n\}$, the guarantee thus extends to every $\varepsilon>0$.
-\item \textbf{The StoRM variant.} DualHash-StoRM uses $b_1=c_bT^{1/3}=\calO(\varepsilon^{-1})$ at the first iteration and a constant $b$ afterwards, which may be as small as $1$, while attaining the improved $\calO(\varepsilon^{-3})$ complexity.
+\item \textbf{The StoRM variant.} DualHash-StoRM uses $b_1=c_bT^{1/3}=\calO(\varepsilon^{-1})$ at the first iteration and a constant $b$ afterwards, which may be as small as $1$, while attaining the improved $\calO(\varepsilon^{-3})$ complexity. \red{By the same argument, taking $b_1=\min\{\lceil c_bT^{1/3}\rceil,n\}$ keeps this guarantee for every $\varepsilon>0$, since $b_1=n$ gives an exact initial estimator.}
 \end{enumerate}
 
 \end{itemize}
@@ -672,11 +677,11 @@ We apologize for the unclear proof. We have revised the statement and proof of L
 \item \textbf{The function $G$.} $G$ was a typo for the penalty term $P$; it no longer appears in the proof.
 \item \textbf{Zero duality gap.} The proof in the submitted version already relied on a zero duality gap: together with the first condition in (5.2), the second condition $h(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$ is the zero-gap characterization in~[6, Theorem~2.158], and it is this equality that yields $\bB^*\in\partial h^*(\bLmbd^*)$. However, the statement of the original Lemma~5.2 did not include this assumption, and we apologize for this omission. Proposition~5.1 now states it explicitly; without it the conclusion fails, see Example~5.1 and our response to Reviewer~1(a).
 \item \textbf{Subdifferential property.} Since $-h^*$ is concave, $\partial(-h^*)$ differs from $-\partial h^*$ in general, so $\zero\in\partial\calL$ was not the right conclusion. Proposition~5.1 now concludes $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$, which is exactly the KKT system (A.2)--(A.3). The only subdifferential property used is the subgradient inversion rule for the convex function $h^{**}$~\cite[Theorem~23.5]{rockafellar1970convex}, combined with the Fenchel--Young inequality. This does not affect the complexity results: the vector $\bd^k$ in (A.5), on which all bounds in Section~5 are proved, satisfies $\bd^k\in\calK(\bx^k,\bB^k,\bLmbd^k)$, hence $\dist(\zero,\calK(\bx^k,\bB^k,\bLmbd^k))\le\|\bd^k\|$ and the stated bounds hold verbatim for the KKT residual.
-\item \textbf{Coercivity.} While the submitted proof began by invoking the coercivity of $\calL$, this step is not needed: $p^*$ is finite because Problem~(P) has an optimal solution, and the zero duality gap gives $\inf_{\bx,\bB}\calL(\bx,\bB,\bLmbd^*)=d^*=p^*>-\infty$. We have therefore removed this sentence and the reference to Assumption~5.1(i). The existence of an optimal solution of Problem~(P) is now discussed in Remark~5.3(ii): Assumption~5.1(i), the term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$ in $f_i$, and $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ make $J=F+h$ coercive, which guarantees that Problem~(P) has an optimal solution.
+\item \textbf{Coercivity.} While the submitted proof began by invoking the coercivity of $\calL$, this step is not needed: $p^*$ is finite because Problem~(P) has an optimal solution, and the zero duality gap gives $\inf_{\bx,\bB}\calL(\bx,\bB,\bLmbd^*)=d^*=p^*>-\infty$. We have therefore removed this sentence and the reference to Assumption~5.1(i). The existence of an optimal solution of Problem~(P) is now discussed in Remark~2.4: Assumption~2.1(i), the term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$ in $f_i$, and $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ make $J=F+h$ coercive, which guarantees that Problem~(P) has an optimal solution.
 \end{enumerate}
 For your convenience, we reproduce the revised statement and the last step of the proof \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.1, Page XX, lines XX--XX)}:
 \begin{bluequote}
-\textbf{Proposition 5.1.} Suppose that $(\bx^*,\bB^*,\bLmbd^*)$ are the optimal solutions of Problem~(P) and Problem~(D), respectively, with zero duality gap. Then, it holds that $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$.
+\textbf{Proposition 5.1.} Suppose that \red{$(\bx^*,\bB^*)$ and $\bLmbd^*$ are optimal solutions of Problems~(P) and~(D)}, respectively, with zero duality gap. Then $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$.
 
 \textit{Proof.} [\ldots] For the second condition in (A.1), since $h^{**}\le h$, the Fenchel--Young inequality for $h^{**}$ yields
 $\langle\bLmbd^*,\bB^*\rangle\le h^{**}(\bB^*)+h^*(\bLmbd^*)\le h(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$.
@@ -733,7 +738,7 @@ We thank the reviewer for this suggestion. We have added the proof and explain t
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item We have added the proof of Lemma~5.8 (now Lemma~5.6) in Appendix~D.1; for your convenience, we repeat the statement and proof below \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
-\textbf{Lemma 5.6} (One-iteration progress on $\bx$). Consider the sequence $\{\bx^k,\bB^k,\bLmbd^k\}_{k\in\NN}$ generated by Algorithm~4.2. Under Assumption~5.1(i)--(ii), for any $k\geq1$, it holds that
+\textbf{Lemma 5.6} (One-iteration progress on $\bx$). Consider the sequence $\{\bx^k,\bB^k,\bLmbd^k\}_{k\in\NN}$ generated by Algorithm~4.2. Under Assumption~2.1(ii), for any $k\geq1$, it holds that
 \[
 \calL(\bx^{k+1},\bB^{k},\bLmbd^{k})-\calL(\bx^{k},\bB^{k},\bLmbd^{k})\leq\frac{\eta_k}{2}\|\be^{k}\|^{2}-(\eta_k^{-1}-L_F)\Delta_{\bx}^{k+1}.
 \]
@@ -787,16 +792,16 @@ The one-iteration progress on $\bx$ is estimated as follows, with the proof prov
 \item (page 10) ``the set $\mathrm{crit}(\calL)$... is nonempty'', I would place this fact in Assumption 5.1.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have included nonemptiness of the critical set in Assumption~5.1(i), together with the lower-boundedness condition on the average loss; see the excerpt in our response to the next comment.
+We thank the reviewer for this suggestion. The nonemptiness of $\operatorname{crit}\calL$ is not used in our analysis: the complexity results guarantee approximate KKT points without assuming that an exact KKT point exists, and the results in Section~3 are stated for given KKT points. We have therefore removed this statement from the manuscript instead of adding it to an assumption.
 \item (Assumption 5.1) I would reformulate (ii) as ``$F$ is $L_F$-smooth ($L_F\in(0,+\infty)$) over $\RR^q\times\RR^{n\times d}$;''.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have reformulated Assumption~5.1(ii) as suggested, explicitly stating the smoothness domain and that $L_F\in(0,+\infty)$ \green{(Page XX, lines XX--XX):}
+We thank the reviewer for this suggestion. A global smoothness assumption on $F$ over $\RR^q\times\RR^{n\times d}$ cannot hold in our setting: the coupling term $\frac{m}{2}\|\calD(\bx)-\bB\|^2$ in $F$ has the $\bx$-gradient $m\nabla\calD(\bx)^*(\calD(\bx)-\bB)$, whose Lipschitz constant grows with $\|\bB\|$. We therefore impose smoothness on $f$ and $\calD$ in Assumption~2.1(ii), and show that $F$ is $L_F$-smooth, with an explicit $L_F\in(0,+\infty)$, on the region $\RR^q\times\{\bB:\|\bB\|\le R_B\}$ that contains all iterates \green{(Assumption~2.1, Section~5, and Appendix~B, Page XX, lines XX--XX)}:
 \begin{bluequote}
 \begin{itemize}[leftmargin=2em,before=\let\item\reviewitem]
-\item[{(i)}] The average loss is bounded below: $\underline{\ell}:=\inf_{\bx}\bar{\ell}_{s}(\bx)>-\infty$, where $\bar{\ell}_{s}(\bx):=n^{-1}\sum_{i=1}^{n}\ell_{s,i}(\bx)$; the set $\operatorname{crit}\calL$ of KKT points of $\calL$ is nonempty.
-\item[{(ii)}] $F$ is $L_F$-smooth, with $L_F\in(0,+\infty)$, over $\RR^q\times\RR^{n\times d}$;
+\item[{(ii)}] The function $f$ is $L_f$-smooth on $\RR^q$, and $\nabla\calD$ is $L_{\nabla\calD}$-Lipschitz on $\RR^q$, with $L_f,L_{\nabla\calD}>0$. There exist constants $C_{\calD},G_{\calD}>0$ such that $\|\calD(\bx)\|\le C_{\calD}$ and $\|\nabla\calD(\bx)\|\le G_{\calD}$ for all $\bx\in\RR^q$.
 \end{itemize}
+[\ldots] Let $L_F:=2L_f+\lambda\sqrt{nd}\,L_{\nabla\calD}+\frac{\gamma}{n}\bigl(2L_{\nabla\calD}C_{\calD}+2G_{\calD}^2+1\bigr)$. Under the prescribed initialization and step sizes, $F$ is $L_F$-smooth along the iterates.
 \end{bluequote}
 \item (page 13) For better consistency and since you state that $C_1,C_2,C_3,C_4$ are independent of $k$, you should introduce (5.14) setup before (5.12) and (5.13).
 \par\smallskip
@@ -1075,7 +1080,7 @@ Proposition B.1 (Proposition 4.1 in [48]).
 \par\smallskip
 {\normalfont\upshape\responseLabel We have split the sentence as suggested and added why the extension is nontrivial \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
-However, all consider only the \emph{deterministic} setting, whereas ours addresses the \emph{stochastic} finite-sum formulation that naturally arises in large-scale deep hashing. A direct extension of their results to our setting is far from trivial, since the stochastic gradient errors have to be controlled together with the dual dynamics, which we accomplish through the Lyapunov analysis in Section~5.
+However, all consider only the \emph{deterministic} setting, whereas ours addresses the \emph{stochastic} finite-sum formulation that naturally arises in large-scale deep hashing. A direct extension of their results to our setting is far from trivial, since the stochastic gradient errors are coupled with the dual dynamics introduced below. We control them jointly through a Lyapunov analysis (Section~5), which yields non-asymptotic oracle complexity bounds in the stochastic setting.
 \end{bluequote}}
 
 \item (page 11) ``The presence [...] renders the Lagrangian (4.2) non-descent'', I understand what you're saying, but the wording is still a bit vague. I would reformulate as ``The presence of dual variables $\Lambda$ makes it difficult to establish a descent property for the Lagrangian''.
@@ -1095,7 +1100,11 @@ However, all consider only the \emph{deterministic} setting, whereas ours addres
 \]
 so the dual term is controlled by the smoothness of $F$ alone. In the experiments, the factor $0.1$ is an empirical choice obtained by hyperparameter tuning.}
 \item \red{It would have been interesting to also display, in Tables 6.2 and 6.3, the performances of DualHash-StoRM.}
+\par\smallskip
+{\normalfont\upshape\responseLabel \red{We thank the reviewer for this suggestion. DualHash-StoM attained higher mAP than DualHash-StoRM in seven of the eight AlexNet settings in Table~6.1. Based on these results, we focused the ResNet-50 experiments on DualHash-StoM and did not conduct corresponding experiments with DualHash-StoRM. The behavior of DualHash-StoRM is reported in Table~6.1 and Figure~6.1.}}
 \item \red{I think you could try increasing the size of a few figures (especially 6.4).}
+\par\smallskip
+{\normalfont\upshape\responseLabel \red{We have enlarged Figures~6.3--6.5, in particular Figure~6.4.}}
 \end{itemize}
 
 \section{Typographical and formatting issues}
@@ -1158,9 +1167,9 @@ where $\bx\in\RR^{q}$ collects the network parameters, $\bD_i(\bx)\in\RR^{d}$ is
 \end{bluequote}
 \item (page 2) ``when $h$ is component-wise nondecreasing'', to verify but after quickly checked [29], I think $h$ also need to be convex. This would corroborate your next sentence ``when $h$ itself is nonconvex...''.
 \par\smallskip
-\normalfont\upshape\responseLabel We agree that the previous wording conflated two different sufficient conditions. We now state the assumptions separately: the first cited condition uses convex $h$ and smooth $\bD$, while the cited monotonicity-based result assumes a weakly convex and component-wise nondecreasing outer function together with a weakly convex inner mapping. We also clarify that our nonconvex W-type regularizer is outside these sufficient-condition results \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We agree. The cited monotonicity-based result~\cite{hu23} indeed assumes a weakly convex outer function, so both cited conditions rely on the (weak) convexity of $h$. Since our argument only needs that these methods require $h\circ\bD$ to be convex or weakly convex, which fails for our nonconvex W-type regularizer, we have removed the sufficient-condition examples and now state this point directly \green{(Page XX, lines XX--XX)}:
 \begin{bluequote}
-For instance, $h\circ\bD$ is weakly convex when $h$ is convex and $\bD$ is smooth~\cite{davis2019,Drusvyatskiy2019,wang2024}, or under the monotonicity-based conditions in~\cite{hu23}, where the outer function is weakly convex and component-wise nondecreasing and the inner mapping is weakly convex.
+For nonsmooth compositional optimization, [$\cdots$] significant research has been conducted when $h\circ\bD$ is either convex [$\cdots$] or weakly convex [$\cdots$]. However, when $h$ itself is nonconvex, as in our setting, $h\circ\bD$ is not necessarily weakly convex, rendering these methods inapplicable.
 \end{bluequote}
 \item (page 8) What do you mean by ``inexpensive gradient'' ?
 \par\smallskip

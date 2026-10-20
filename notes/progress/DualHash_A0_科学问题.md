@@ -13,19 +13,6 @@
 - 直接路线：$\operatorname{prox}_{\tau h}$ 在 $0$ 处不连续，这个跟踪不等式不成立。固定 $\tau$ 时现有证明无法推到直接路线；换一种参数选择能否恢复，仍是开放问题。
 - StoM 的 $\mathcal O(\varepsilon^{-4})$ 不需要跟踪不等式。$h^*$ 的凸性只在 B、Λ 一步进展里用到（`supplementaryB.tex` 174–176 行）。
 
-**第 10 轮完整性核对（影响主线，待用户决定处理方式）：**
-- **前提：** 输出落在立方体内（$\lvert\mathcal D_{ij}\rvert\le1$，tanh 满足）；初始化 $\mathbf B^1=\mathcal D(\mathbf x^1)$、$\boldsymbol\Lambda^1=0$（`convergence.tex` 47 行）；理论步长满足 $\tau m<\frac12$（$L_F\ge\gamma/n$，见 `supplementaryB.tex` 106 行）。
-- **归纳结论：** 对所有 $k$，$\boldsymbol\Lambda^k=0$，并且 $\mathbf B^{k+1}=(1-\tau m)\mathbf B^k+\tau m\,\mathcal D(\mathbf x^{k+1})$。
-  - 关键是 $2\mathbf B^{k+1}-\mathbf B^k$ 留在立方体内，而 $\partial\phi^*(0)=\operatorname{argmin}\phi^{**}=[-1,1]$，所以对偶近端步总是返回 0。
-  - 这对整个 W 类成立，与对偶步长无关。
-- **后果：**
-  - 在这一区域，ε-KKT 等价于 $\lVert\nabla f\rVert\lesssim\varepsilon$。直接对 $f$ 用 STORM 已经有同样的速率，$\lambda$ 不进入轨迹。
-  - 跟踪引理用到的凸性在这里不起作用；它只在输出越出立方体时才有实质作用，而那时量化误差证书又不再成立。
-  - 也就是说，「换来」和「付出」落在两个不同的区域。
-- **用户补充（第 11 轮）：** 提交版没有对初始化做任何处理，$\mathbf B^1=\mathcal D(\mathbf x^1)$、$\boldsymbol\Lambda^1=0$ 是后来为证明加上的。
-- **初始化不影响结论，有两点理由：**
-  - **KKT 点本身与初始化无关。** 若 $\mathcal D(\mathbf x)\in[-1,1]^{n\times d}$，则 $(\mathbf x,\mathbf B,\boldsymbol\Lambda)$ 是 KKT 点，当且仅当 $\mathbf B=\mathcal D(\mathbf x)$、$\boldsymbol\Lambda=0$、$\nabla f(\mathbf x)=0$。理由是 KKT 的后两行等价于 $\mathbf B=\operatorname{prox}_{h^{**}/m}(\mathcal D(\mathbf x))$，而 $h^{**}$ 在立方体上为零。所以复杂度定理保证的对象对 W 失明，对任意 $\lambda$ 都如此。
-  - **初始化只影响轨迹。** 由 Moreau 分解，$\boldsymbol\Lambda^{k+1}=\tau^{-1}\bigl(\mathbf z-\operatorname{prox}_{\tau h^{**}}(\mathbf z)\bigr)$，其中 $\mathbf z=\tau\boldsymbol\Lambda^k+2\mathbf B^{k+1}-\mathbf B^k$。只有 $\mathbf z$ 越出立方体时它才非零，而且方向总是把 $\mathbf B$ 拉回立方体，从不推向 ±1。一般初始化下，对偶块只在一段过渡期里充当盒约束的恢复力；论文现在的初始化让它从第一步起就恒为零。
 - **图表核对：** `results_images/sensitivity_2datasets.pdf` 两个坐标轴实际是 $\eta\in\{10^{-5},10^{-3},10^{-2},1\}$ 和 $\gamma\in\{0.3,3,30,100\}$；而图题和正文（`numerical_experiments.tex` 214–227 行）写的是 $\eta$ 与 $\lambda$。论文里没有任何关于 $\lambda$ 的实验证据，这与 $\boldsymbol\Lambda\equiv0$ 一致。
 
 ## 1. 研究背景（C1、C2）
@@ -123,7 +110,6 @@ $$
 
 1. **审稿人认为「Lipschitz 更新」这一收益偏弱。** 应对：如实写成结构性质，不声称训练效果更好。如果跟踪引理确实依赖它，就把它写成分析上的前提。
 2. **正面对比会暴露直接路线差距更小。** 应对：这是取舍本身的内容，按「换来什么、付出什么」写清楚，方法的定位就是可信的。
-3. **零对偶现象。** 在理论配置下 $\boldsymbol\Lambda\equiv0$，这与主线一致：凸松弛在立方体内本来就为零。正文可以把它写成凸松弛的直接推论；哈希反例按用户决定暂不展开。
 
 **第一步（一到两周）。**
 

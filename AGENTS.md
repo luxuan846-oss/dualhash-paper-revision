@@ -2,7 +2,7 @@
 
 ## 项目入口
 
-开始处理论文前，先读 `notes/progress/PROJECT_STATUS.md`。在那里维护当前进度、待办与历史材料的适用状态。
+开始处理论文前，先读 `notes/progress/PROJECT_STATUS.md`。在那里维护当前进度、待办与历史材料的适用状态。按任务只读最省 token 的必要文件或片段，需要时再逐步扩展，不预先通读全部文件。
 
 目标期刊为 **SIAM Journal on Imaging Sciences，SIIMS**。本轮任务是完成强修订稿，建立清楚、扎实、有价值的理论与应用论证。
 

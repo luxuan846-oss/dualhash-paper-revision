@@ -1,21 +1,20 @@
 \section{Introduction}
 
 \label{Section: Introduction}
-Hashing is a \red{widely used method} in large-scale image retrieval, which encodes image content into compact binary codes (e.g., $\pm 1$) for efficient storage and accurate similarity search.
-Mathematically, this amounts to \red{learning a mapping to} the binary hypercube $\{-1,+1\}^d$ that preserves semantic
-neighborhood structures\blue{. Such a process can be interpreted as} a nonconvex discrete optimization problem 
-akin to lossy image compression, where the \blue{data} fidelity criterion \blue{is based on} 
+Hashing is a \blue{widely used method} in large-scale image retrieval, which encodes image content into compact binary codes (e.g., $\pm 1$) for efficient storage and accurate similarity search.
+Mathematically, this amounts to \blue{learning a mapping to} the binary hypercube $\{-1,+1\}^d$ that preserves semantic
+neighborhood structures\blue{. Such a process can be interpreted as a nonconvex discrete optimization problem akin to lossy image compression, where the data fidelity criterion is based on}
 pairwise similarity rather than pixel-level reconstruction.
 Deep hashing leverages neural networks to learn such projections and
 \blue{is able to reduce storage by a factor of $512$ (a $1024$-dimensional \texttt{float32} feature vector versus a $64$-bit binary code)} while maintaining
 competitive retrieval accuracy~\cite{luoSurveyDeepHashing2023}.
-\red{Existing approaches} fall into two categories: sign-based
+\blue{Existing approaches} fall into two categories: sign-based
 methods and \blue{continuous-relaxation methods}.
-A fundamental challenge, however, is that the $\operatorname{sgn}$ 
+A fundamental challenge, however, is that the $\operatorname{sgn}$
 function has zero gradient almost everywhere, rendering standard 
 first-order methods ineffective~\cite{Cao2017HashNetDL}.
 Continuous relaxation mitigates this but inevitably introduces 
-\emph{quantization error}---the discrepancy between optimized 
+\emph{quantization error}\blue{\footnote{\blue{A precise definition is given in~\eqref{eq:quantization-error}.}}}---the discrepancy between optimized 
 continuous values and the final binary codes~\cite{weissSpectralHashing2008}.
 \begin{figure}[ht]
 \centering
@@ -42,13 +41,13 @@ continuous values and the final binary codes~\cite{weissSpectralHashing2008}.
 \label{Fig: the W and V regularizations}
 \vspace{-3ex}
 \end{figure}
-To mitigate this issue, researchers have developed specialized regularization techniques \cite{caoDeepCauchyHashing2018,li2017deep,liuDeepSupervisedHashing}. \blue{Among them, W-type regularizers, i.e., coordinatewise penalties that vanish exactly at $\pm1$, such as $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$~\cite{liuDeepSupervisedHashing,wang2023deep} and $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$~\cite{wang2016DTSH,he2025mambahash}, have proven effective.}
-These regularizers impose sharp penalties to encourage variables towards binary values (e.g., $-1$ or $1$). Mathematically, this approach naturally formulates deep hashing as a nonconvex composite optimization problem\footnote{A formal definition of this problem is provided in \Cref{Sec:W-type Regularized Deep Hashing Model}}:
+To mitigate this issue, researchers have developed specialized regularization techniques~\cite{caoDeepCauchyHashing2018,li2017deep,liuDeepSupervisedHashing}. Among them, W-type \blue{regularizers}, i.e., \blue{componentwise penalties that vanish exactly at $\pm1$, such as $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$~\cite{liuDeepSupervisedHashing,wang2023deep} and $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_2^2$~\cite{wang2016DTSH,he2025mambahash}}, \blue{are widely adopted and empirically effective}.
+These regularizers impose sharp penalties to encourage variables towards binary values (e.g., $-1$ or $1$). Mathematically, this approach naturally formulates deep hashing as a nonconvex composite optimization problem:
 \begin{align}
 \label{Eq: the general nonlinear composite problem in intro}
-\blue{\min_{\bx \in \RR^{q}} \quad J_0(\bx):=\frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),}
-\tag{P0}
-\end{align}\blue{Here, \(\bx\) collects the network parameters, \(\bD_i(\bx)\) is the continuous output for sample \(i\), \(f_i\) is the sample loss, and \(h\) is the W-type regularizer; their formal definitions are given in Section~\ref{Section: Problem Reformulation}.} In practice, researchers typically apply stochastic (sub)gradient methods (SGD) directly to optimize the objective \eqref{Eq: the general nonlinear composite problem in intro}, and deep hashing follows this paradigm as well. \red{This direct approach can be difficult to analyze and may exhibit suboptimal training behavior.} \blue{The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.}
+\min_{\bx \in \RR^{q}} \quad \blue{J_0(\bx):=}\frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
+\tag{\blue{P0}}
+\end{align}\blue{where \(\bx\) collects the network parameters, \(\bD_i(\bx)\) is the continuous output for sample \(i\), \(f_i\) is the sample loss, and \(h\) is the W-type regularizer.} In practice, researchers typically apply stochastic (sub)gradient methods (SGD) directly to optimize Problem \eqref{Eq: the general nonlinear composite problem in intro}, and deep hashing follows this paradigm as well. \blue{The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.}
 
 The proximal operator is a powerful tool for handling nonsmooth 
 regularizers, with widespread applications in signal/image processing 
@@ -57,58 +56,31 @@ and computer vision, including
 chambolleFirstOrderPrimalDualAlgorithm2011,
 repetti2021variable,shumaylovweakly,li2023spherical}, }
 low-rank and robust matrix factorization~\cite{chen2025convergence}, 
-and structured neural network training~\cite{bian2026stochastic}. For the special case $\bD_i(\bx) = \bx$, stochastic proximal gradient methods (SPGD) and their variance-reduced or momentum-based variants have been extensively studied~\cite{xu2023momentum}. However, these methods require regularizers with tractable proximal operators (e.g., $\ell_1$ soft-thresholding). Although the \blue{W-type regularizer} $\phi$ can admit closed-form proximal operators~\cite{bai2019proxquant} (\Cref{Fig: the W and V regularizations}), its composition with neural network outputs $h(\bD_i(\bx))$ renders the proximal subproblem intractable, making SPGD inapplicable to Problem~\eqref{Eq: the general nonlinear composite problem in intro}. Moreover, unlike standard deep learning tasks, where regularization is typically imposed on model parameters, deep hashing requires regularization directly on the network output to enforce binary codes, as illustrated in \Cref{Fig:comparison_classification_vs_hash}. This makes the nonsmooth composite form \(h(\bD_i(\bx))\) intrinsic to deep hashing and therefore necessary to handle explicitly.
+and structured neural network training~\cite{bian2026stochastic}. For the special case $\bD_i(\bx) = \bx$, stochastic proximal gradient methods (SPGD) and their variance-reduced or momentum-based variants have been extensively studied~\cite{xu2023momentum}. However, these methods require regularizers with tractable proximal operators (e.g., $\ell_1$ soft-thresholding). Although the \blue{scalar function underlying a W-type regularizer} can admit closed-form proximal operators~\cite{bai2019proxquant} (\Cref{Fig: the W and V regularizations}), its composition with neural network outputs $h(\bD_i(\bx))$ renders the proximal subproblem intractable, making SPGD inapplicable to Problem~\eqref{Eq: the general nonlinear composite problem in intro}. Moreover, unlike standard deep learning tasks, where regularization is typically imposed on model parameters, deep hashing requires regularization directly on the network output to enforce binary codes, as illustrated in \Cref{Fig:comparison_classification_vs_hash}.
 
-For nonsmooth compositional optimization, including Problem~\eqref{Eq: the general nonlinear composite problem in intro}, significant research has been conducted when \(h\circ \mathcal{D}\) is either convex~\cite{wang2024alexr} or weakly convex~\cite{davis2019,Drusvyatskiy2019,wang2024,hu23}. \blue{For instance, $h\circ\mathcal{D}$ is weakly convex when $h$ is convex and $\mathcal{D}$ is smooth~\cite{davis2019,Drusvyatskiy2019,wang2024}, or under the monotonicity-based conditions in~\cite{hu23}, where the outer function is weakly convex and component-wise nondecreasing and the inner mapping is weakly convex.} However, when $h$ itself is nonconvex, as in our setting, $h \circ \mathcal{D}$ is not necessarily weakly convex, rendering these methods inapplicable. For the case where $h$ is nonconvex, \cite{Bolte2018} reformulates the problem as \blue{a constrained optimization problem} by imposing redundant variables and establishes asymptotic convergence via a Lagrangian-based approach. {When \(h\) is Lipschitz continuous but possibly nonconvex, Yao et al.\cite{yao2024note} establish an \(\mathcal{O}(1/(\delta\epsilon^2))\) iteration complexity for finding a \((\delta,\epsilon)\)-stationary point. More recently, Zhang et al.\cite{zhang2025complexity} provide a systematic analysis for the cases where \(h\) is nonconvex with or without Lipschitz continuity.} Among their results most relevant to ours, they establish an $\mathcal{O}(\epsilon_1^{-2} \epsilon_2^{-1})$ iteration complexity for finding an $(\epsilon_1, \epsilon_2, 0)$-stationary point for Lipschitz continuous $h$, along with subsequential convergence results. However, all consider only the \emph{deterministic} setting, whereas ours addresses the \emph{stochastic} finite-sum formulation that naturally arises in large-scale deep hashing. \blue{This naturally raises our first question:
+For \blue{the complexity analysis of} nonsmooth compositional optimization, including Problem~\eqref{Eq: the general nonlinear composite problem in intro}, significant research has been conducted when \(h\circ \mathcal{D}\) is either convex~\cite{wang2024alexr} or weakly convex~\cite{davis2019,Drusvyatskiy2019,wang2024,hu23}. However, when $h$ itself is nonconvex, as in our setting, $h \circ \mathcal{D}$ is not necessarily weakly convex, rendering these methods inapplicable. When \(h\) is Lipschitz continuous but possibly nonconvex, Yao et al.~\cite{yao2024note} establish an \(\mathcal{O}(1/(\delta\epsilon^2))\) iteration complexity for finding a \((\delta,\epsilon)\)-stationary point. More recently, Zhang et al.~\cite{zhang2025complexity} provide a systematic analysis for the cases where \(h\) is nonconvex with or without Lipschitz continuity. However, all consider only the \emph{deterministic} setting, whereas ours addresses the \emph{stochastic} finite-sum formulation that naturally arises in large-scale deep hashing. \blue{A direct extension of their results to our setting is far from trivial, since the stochastic gradient errors are coupled with the dual dynamics. We control them jointly through a Lyapunov analysis (\Cref{Section: Convergence analysis}), which yields non-asymptotic oracle complexity bounds in the stochastic setting.}
+
+\blue{A useful alternative is to work with the conjugate $h^*$, which is always convex. This approach is widely used in imaging sciences~\cite{chambolleFirstOrderPrimalDualAlgorithm2011,esserZhangChan2010,clasonAccelerationGlobalConvergence2019}: Fenchel duality reformulates the composite problem as a min--max problem, which is equivalent to the original one when $h$ is convex. For nonconvex $h$, such as W-type regularizers, however, this equivalence no longer holds. This raises our first question:}
 \begin{quote}
-  \textbf{(Q1)}
-  \emph{Can the nonsmooth nonconvex composite term
-  \(h(\mathcal{D}(\bx))\) in deep hashing be efficiently
-  optimized via tractable updates with non-asymptotic
-  convergence guarantees?}
-\end{quote}}
-
-In this paper, \blue{we answer \textbf{(Q1)} affirmatively}. We propose an efficient deep hashing algorithm, \textbf{DualHash}, to address these challenges posed by nonlinear composition with W-type regularization. Our approach reformulates the W-type regularized problem using a decoupling scheme and develops a new primal-dual algorithm based on Fenchel duality. We develop two instances, \textbf{DualHash-StoM} and \textbf{DualHash-StoRM}, and establish stochastic
-first-order oracle complexities of
-\(\mathcal{O}(\varepsilon^{-4})\) and
-\(\mathcal{O}(\varepsilon^{-3})\), respectively, for finding an
-\(\varepsilon\)-KKT point of the resulting min--max model. Table~\ref{Table: summary of deep hashing algorithms} summarizes the comparison with existing deep hashing methods in terms of model, regularizer, optimization method, and oracle complexity.
-
-The same reformulation that makes the updates tractable, however,
-creates a gap between the model optimized by the algorithm and the
-original deep hashing objective. Maximization over the dual
-variable replaces \(h\) by its convex envelope \(h^{**}\), while
-the auxiliary codes \(\bB\) need not coincide exactly with the
-network outputs \(\mathcal{D}(\bx)\). Consequently, a small KKT
-residual for the primal--dual model does not by itself establish
-stationarity of the original objective \(J_0\).  This leads to our second question:
-\begin{quote}
-  \textbf{(Q2)}
-  \emph{What does the optimization accuracy of the tractable
-  primal--dual model imply for the original deep hashing objective,
-  and how does the quantization error enter this transfer?}
+  \blue{\textbf{(Q1)} \emph{To what extent does the min--max problem capture the stationarity of Problem~\eqref{Eq: the general nonlinear composite problem in intro} for W-type regularizers?}}
 \end{quote}
 
-We answer \textbf{(Q2)} at both exact and finite accuracy.
-First, we characterize exactly when a KKT point of the min--max
-model is also stationary for the nonconvex penalized problem:
-this occurs on the contact set where \(h=h^{**}\).
-Second, using the smooth minorant induced by Fenchel conjugacy,
-we show that the KKT residual and \(h(\mathcal{D}(\bx))\)
-jointly certify near-stationarity of \(J_0\).
-For the \(\ell_1\) W-type regularizer used in our experiments,
-\[
-h(\mathcal{D}(\bx))=\lambda Q_1(\bx),
-\]
-so the quantization error is precisely the structural term in
-this certificate. Combining this certificate with the oracle
-complexity results gives a guarantee for the algorithm output on
-the original objective, up to its quantization error.
+\blue{In this paper, we answer \textbf{(Q1)} by showing that the min--max problem captures the stationarity of Problem~\eqref{Eq: the general nonlinear composite problem in intro} up to the quantization error.} We reformulate deep hashing models with W-type regularization as a \blue{multi-block} optimization problem~\eqref{Prop: block-wise regularized problem}, decoupling the challenging composite term $h(\mathcal{D}(\bx))$\blue{, so that the analysis can focus on the effect of replacing $h$ by its biconjugate $h^{**}$. By modeling W-type regularizers through the unified conditions \ref{W1}--\ref{W3}, we derive their conjugates and biconjugates in closed form, so that a single analysis covers the whole class. On this basis, we identify the exact condition under which this replacement preserves stationarity (\Cref{prop:transfer}). We further show that, for any approximate KKT point of the min--max problem with residual $r_{\mathcal K}$ and network parameters $\bx$, there exists a nearby $\widehat{\bx}$ such that}
+\begin{equation}
+\label{eq:intro-certificate}
+\blue{\operatorname{dist}\bigl(\bm 0,\partial J_0(\widehat{\bx})\bigr)
+\le\underbrace{\mathcal O\bigl(r_{\mathcal K}\bigr)}_{\text{optimization error}}
++\underbrace{\mathcal O\Bigl(\sqrt{h(\mathcal{D}(\bx))}\Bigr)}_{\text{structural error}}}
+\end{equation}
+\blue{(\Cref{prop:original-certificate}). Here the optimization error vanishes as $r_{\mathcal K}\to0$, whereas the structural error, which accounts for the replacement of $h$ by $h^{**}$, is controlled by the quantization error. These results motivate our second question:}
+\begin{quote}
+  \blue{\textbf{(Q2)}
+  \emph{Based on the min--max problem, can a stochastic first-order method achieve non-asymptotic oracle complexity and thereby guarantee near-stationarity for the deep hashing problem~\eqref{Eq: the general nonlinear composite problem in intro} in finite time?}}
+\end{quote}
 
-Experiments on three standard image-retrieval datasets demonstrate
-that DualHash achieves strong retrieval performance and consistently
-low quantization error across different code lengths, supporting
-the practical value of the proposed primal--dual framework.
+\blue{We answer \textbf{(Q2)} affirmatively.} \blue{Building on this problem, we} propose \textit{DualHash}, a stochastic primal-dual algorithm for deep hashing\blue{, whose dual update uses the single-valued, nonexpansive proximal mapping of $h^*$ instead of the potentially set-valued proximal mapping of $h$}. We then develop two important instances: a momentum-based implementation (\textbf{DualHash-StoM}) and a variance-reduced implementation using StoRM (\textbf{DualHash-StoRM}). \blue{For the W-type regularizer $\bz\mapsto\lambda\lVert|\bz|-\mathbf{1}\rVert_1$,} we establish an $\mathcal{O}(\varepsilon^{-4})$ oracle complexity result for DualHash-StoM and, under the mean-square smoothness condition, an improved $\mathcal{O}(\varepsilon^{-3})$ complexity result for DualHash-StoRM\blue{, both for finding an $\varepsilon$-KKT point of the min--max problem}. Table~\ref{Table: summary of deep hashing algorithms} summarizes the comparison with existing deep hashing methods in terms of model, regularizer, optimization method, and oracle complexity. \blue{Combined with~\eqref{eq:intro-certificate}, these complexity results show that the algorithm output is near-stationary for the deep hashing problem~\eqref{Eq: the general nonlinear composite problem in intro} up to its quantization error (\Cref{cor:original-stationarity}).}
+
+Extensive experiments on three widely-used datasets demonstrate the practical effectiveness of DualHash. In particular, the proposed method achieves consistently lower quantization errors across different bit lengths compared to baselines \blue{on NUS-WIDE}, validating the advantages of our primal-dual framework for image retrieval in both single-label and multi-label settings.
 
 % Our main contributions are as follows:
 % \begin{itemize}[leftmargin=2em]

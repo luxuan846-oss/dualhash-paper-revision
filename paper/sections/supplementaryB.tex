@@ -6,14 +6,22 @@
 \begin{proof}
 Let \(\psi(t):=\phi(\max\{|t|,1\})\). By \ref{W1}--\ref{W2}, \(\phi\) is convex and nonnegative on \([1,+\infty)\), with \(\phi(1)=0\); hence it is nondecreasing there. Thus \(s\mapsto\phi(\max\{s,1\})\) is convex and nondecreasing on \([0,+\infty)\), so \(\psi\) is convex and satisfies \(\psi\le\phi\). Conversely, any convex \(q\le\phi\) satisfies \(q(\pm1)\le0\), hence \(q\le0=\psi\) on \([-1,1]\), while \(q\le\phi=\psi\) on \(|t|\ge1\). Therefore \(\phi^{**}=\psi\), the largest lower semicontinuous convex minorant of \(\phi\)~\cite[Theorem~12.2]{rockafellar1970convex}. For \(|t|<1\), \ref{W1} gives \(\phi(t)>0=\psi(t)\), proving the contact-set formula.
 
-Evaluating the definition of \(\phi^*\) at \(t=\pm1\) gives \(\phi^*(y)\ge|y|\). Since \(\phi(t_0)>0\) for any \(t_0>1\), convexity on \([1,+\infty)\) implies at least linear growth for large \(t\); evenness gives the same for negative \(t\). Hence \(\operatorname{dom}\phi^*\) contains an open interval around zero. The separable formulas follow from~\cite[Theorem~16.4]{rockafellar1970convex}.
+\blue{We next prove (b). The first three properties are standard. As a pointwise supremum of affine functions of \(y\), \(\phi^*\) is lower semicontinuous and convex, and the evenness of \(\phi\) gives \(\phi^*(-y)=\phi^*(y)\). Evaluating the definition of \(\phi^*\) at \(t=\pm1\) and using \(\phi(\pm1)=0\), we obtain \(\phi^*(y)\ge\max\{y,-y\}=|y|\) for all \(y\). Moreover, \(\phi\ge0\) gives \(\phi^*(0)=-\inf_{t}\phi(t)=0\), so \(\phi^*\) is proper.
+
+It remains to show that \(\operatorname{dom}\phi^*\) has nonempty interior, which follows from the linear growth of \(\phi\). Let \(a:=\phi(2)\), so \(a>0\) by \ref{W1}. For \(t>2\), we write \(2\) as a convex combination of \(1\) and \(t\) with weights \((t-2)/(t-1)\) and \(1/(t-1)\). The convexity of \(\phi\) on \([1,+\infty)\) in \ref{W2} and \(\phi(1)=0\) then give \(a\le\phi(t)/(t-1)\). Combining this with the evenness of \(\phi\), we have
+\[
+\phi(t)\ge a(|t|-1)\qquad\text{for all } |t|\ge2.
+\]
+Now fix \(y\) with \(|y|<a\). For \(|t|\ge2\), the above bound yields \(ty-\phi(t)\le(|y|-a)|t|+a\le a\); for \(|t|<2\), \(\phi\ge0\) yields \(ty-\phi(t)\le2|y|<2a\). Taking the supremum over \(t\) gives \(\phi^*(y)\le2a\), so \((-a,a)\subset\operatorname{dom}\phi^*\).
+
+Finally, since \(h\) is a sum of \(\phi\) over the entries, the supremum in the definition of \(h^*\) splits entrywise, which gives \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\). Applying the same argument to \(h^*\) gives \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\). Since \(\phi-\phi^{**}\ge0\) entrywise, \(h(\bB)=h^{**}(\bB)\) holds if and only if \(\phi(b_{ij})=\phi^{**}(b_{ij})\) for all \(i,j\), that is, by (a), if and only if \(|b_{ij}|\ge1\) for all \(i,j\).}
 \end{proof}
 \endgroup
 
 \subsection{Proof of \Cref{prop:zerogap}}
 \label{app:zero-gap-proof}
 \begin{proof}
-    According to \cite[Theorem 2.158]{temporary-citekey-11039},
+    According to~\cite[Theorem~2.158]{temporary-citekey-11039},
     $(\bx^{*}, \bB^{*}, \bLmbd^{*})$ are optimal solutions to the
     primal problem \eqref{Prop: block-wise regularized problem} and the dual problem
     \eqref{Prop: the dual problem} \blue{with zero duality gap} if and only if:
@@ -67,7 +75,7 @@ Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\ph
 
     (b)$\iff$(c). By Lemma~\ref{lem:wtype-conj}, the last equality in \eqref{Eq: inversion rule of the conjugate} is equivalent to \(h(\tilde{\bB})=h^{**}(\tilde{\bB})\), which holds if and only if \(|\tilde b_{ij}|\ge1\) for all \(i,j\).
 
-    (b)$\Rightarrow$(a). By the definition of \(h^{*}\), (b) means that \(\tilde{\bB}\) minimizes \(h(\cdot)-\langle\tilde{\bLmbd},\cdot\rangle\) globally. Fermat's rule~\cite[Theorem~10.1]{Rockafellar1998VariationalA} and \cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} give \(\tilde{\bLmbd}\in\partial h(\tilde{\bB})\).
+    (b)$\Rightarrow$(a). By the definition of \(h^{*}\), (b) means that \(\tilde{\bB}\) minimizes \(h(\cdot)-\langle\tilde{\bLmbd},\cdot\rangle\) globally. Fermat's rule~\cite[Theorem~10.1]{Rockafellar1998VariationalA} and~\cite[Exercise~8.8(c)]{Rockafellar1998VariationalA} give \(\tilde{\bLmbd}\in\partial h(\tilde{\bB})\).
 
     (a)$\Rightarrow$(c). By separability~\cite[Proposition~10.5]{Rockafellar1998VariationalA}, each entry satisfies \(\tilde\Lambda_{ij}\in\partial\phi(\tilde b_{ij})\cap\partial\phi^{**}(\tilde b_{ij})\). If \(|\tilde b_{ij}|<1\), Lemma~\ref{lem:wtype-conj} gives \(\partial\phi^{**}(\tilde b_{ij})=\{0\}\), so \(0\in\partial\phi(\tilde b_{ij})\), contradicting Lemma~\ref{lem:no-inner-stationary}. Hence \(|\tilde b_{ij}|\ge1\) for all \(i,j\).
 \end{proof}
@@ -84,17 +92,17 @@ where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by proximal opt
     \mathrm{dist}^{2}(\bm{0},\blue{\mathcal K}(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd_{\bx}^{k}\|^{2}+\|\bd_{\bB}^{k}\|^{2}+\|\bd_{\bLmbd}^{k}\|^{2}.
 \end{align}
 
-\subsection{\blue{Proofs of \Cref{lem:conjugate-minorant,prop:original-certificate}}}
+\subsection{\blue{Proofs of \Cref{lem:smooth-lower-bound,prop:original-certificate}}}
 \label{app:original-certificate-proof}
 \begingroup
 \color{blue}
-\paragraph{Conjugate minorant.}
+\paragraph{\blue{Smooth lower bound.}}
 Write $D=\mathcal{D}(\bx)$ and choose $V\in\partial h^*(\bLmbd)$ closest to $\bB$. Such a point exists because this set is nonempty and closed when $r_{\mathcal K}<\infty$. Set
 \[
 a=\nabla_{\bx}F(\bx,\bB),\qquad b=m(\bB-D)+\bLmbd,\qquad c=\bB-V.
 \]
 Then $r_{\mathcal K}^2=\|a\|^2+\|b\|^2+\|c\|^2$ and
-$\nabla s_{\bLmbd}(\bx)=a+\nabla\mathcal D(\bx)^*b$, which proves~\eqref{eq:minorant-gradient}. The asserted Lipschitz constant follows from Assumption~\ref{Ass: basic regularity}(ii). Fenchel--Young gives $s_{\bLmbd}\le J_0$ and
+$\nabla s_{\bLmbd}(\bx)=a+\nabla\mathcal D(\bx)^*b$, which proves \blue{\Cref{lem:smooth-lower-bound}(b)}. The asserted Lipschitz constant follows from Assumption~\ref{Ass: basic regularity}(ii). Fenchel--Young gives $s_{\bLmbd}\le J_0$ and
 $J_0(\bx)-s_{\bLmbd}(\bx)\ge h(D)-h^{**}(D)$.
 Since $\bLmbd\in\partial h^{**}(V)$, Fenchel equality and $h^{**}\ge0$ yield
 \[
@@ -104,7 +112,7 @@ Since $\bLmbd\in\partial h^{**}(V)$, Fenchel equality and $h^{**}\ge0$ yield
 \ge-\frac{\|mc-b\|^2}{4m}
 \ge-\kappa r_{\mathcal K}^2.
 \]
-This proves~\eqref{eq:minorant-gap}.
+This proves \blue{the first case of}~\eqref{eq:lower-bound-gap}. \blue{For the $\ell_1$ W-regularizer and $D\in[-1,1]^{n\times d}$, \Cref{lem:wtype-conj}(a) gives $h^{**}(D)=0$, and $h(D)=\lambda Q_1(\bx)$ by \Cref{tab:wtype}, which yields the second case.}
 
 \paragraph{Near-stationarity certificate.}
 Let $s\le J_0$ have an $L$-Lipschitz gradient, where $L>0$, and suppose $J_0(\bx)-s(\bx)\le E$. Choose a global minimizer $\widehat{\bx}$ of
@@ -121,17 +129,20 @@ $\nabla s(\bx)-2L(\widehat{\bx}-\bx)\in\partial J_0(\widehat{\bx})$, hence
 \operatorname{dist}(\bm0,\partial J_0(\widehat{\bx}))
 \le\|\nabla s(\bx)\|+2\sqrt{2LE}.
 \]
-Applying this argument with $s=s_{\bLmbd}$ and $E=h(\mathcal{D}(\bx))+\kappa r_{\mathcal{K}}^2$, and using \Cref{lem:conjugate-minorant}, we have
+Applying this argument with $s=s_{\bLmbd}$ and $E=h(\mathcal{D}(\bx))+\kappa r_{\mathcal{K}}^2$, and using \Cref{lem:smooth-lower-bound}, we have
 \[
 \sqrt{\frac{2E}{L}}\le\sqrt{\frac{2}{L}}\Bigl(\sqrt{\kappa}\,r_{\mathcal{K}}+\sqrt{h(\mathcal{D}(\bx))}\Bigr),
 \qquad
 2\sqrt{2LE}\le 2\sqrt{2\kappa L}\,r_{\mathcal{K}}+2\sqrt{2L\,h(\mathcal{D}(\bx))},
 \]
-by $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$. Since the near-stationarity definition is monotone in $(\delta,\varepsilon)$, \red{these bounds prove the theorem, including the case $E=0$.}
+by $\sqrt{a+b}\le\sqrt{a}+\sqrt{b}$. Since the near-stationarity definition is monotone in $(\delta,\varepsilon)$, \blue{these bounds prove the theorem, including the case $E=0$.}
 
-\section{Auxiliary Results for the Complexity Analysis}
+\endgroup
+
+\section{\blue{Common Lemmas} for the Complexity Analysis}
 \label{app:complexity-auxiliary-results}
-
+This appendix collects the results shared by \Cref{alg:our_algorithm_sgdm,alg:our_algorithm_storm} and used in \Cref{app:stom-complexity,app:storm-complexity}. 
+We first prove the smoothness of $F$ along the iterates as below. 
 \subsection{\blue{Smoothness Constant of $F$}}
 \label{app:smoothness-discussion}
 \begingroup\color{blue}
@@ -167,13 +178,22 @@ For two points $(\bx,\bB)$ and $(\bx',\bB')$ in this region, the gradient of $P(
 by Assumption~\ref{Ass: basic regularity}(ii).
 The coefficient matrix of these two bounds is positive semidefinite, so its spectral norm is at most its trace.
 Hence $P$ is jointly smooth with constant $\frac{\gamma}{n}(L_{\nabla\mathcal{D}}C_{\mathcal{D}B}+G_{\mathcal{D}}^2+1)$.
-Since $F=f+P$, \eqref{eq:derived-smoothness-constant} is a valid smoothness constant.
 \end{proof}
 
 \endgroup
 
-\subsection{Proof of \Cref{Lemma: dual boundedness}}
+\paragraph{Proof of \Cref{Lemma: dual boundedness}}
 \label{app:dual-difference-proof}
+\begin{lemma}[Dual increment bound]
+\label{Lemma: dual boundedness}
+Under \blue{Assumption~\ref{Ass: basic regularity}(ii)}, for all $k \geq 1$,
+    \begin{align}
+        &\|\bm{\Lambda}^{k+1}- \bm{\Lambda}^k \|^2 \notag \\
+        \leq&\,3 \tau^{-2} \|\bB^{k+2} - \bB^{k+1}\|^2 + 3(\tau^{-1} + L_F)^2  \|\bB^{k+1} - \bB^{k}\|^2 + 3L_F^2  \|\bx^{k+2} - \bx^{k+1}\|^2.
+         \label{Eq: dual boundedness}
+\end{align}
+\end{lemma}
+
 \begin{proof}
     Applying the $\bB$-update~\eqref{Eq: the update of B} at iterations $k+1$ and $k+2$ gives
     \begin{align*}
@@ -183,7 +203,7 @@ Since $F=f+P$, \eqref{eq:derived-smoothness-constant} is a valid smoothness cons
     &+\nabla_{\bB}F(\bx^{k+1},\bB^k)
     -\nabla_{\bB}F(\bx^{k+2},\bB^{k+1}).
     \end{align*}
-    By the $L_F$-smoothness of $F$ under \Cref{Ass: basic regularity}(ii),
+    By the \blue{$L_F$-smoothness of $F$ under \Cref{Ass: basic regularity}(ii)},
     \begin{align*}
     \|\bLmbd^{k+1}-\bLmbd^k\|
     \leq{}&\tau^{-1}\|\bB^{k+2}-\bB^{k+1}\|
@@ -201,8 +221,22 @@ Since $F=f+P$, \eqref{eq:derived-smoothness-constant} is a valid smoothness cons
     which is the claimed result.
 \end{proof}
 
-\subsection{Proof of \Cref{Lemma: One-iteration progress of B and Lambda}}
+\paragraph{Proof of \Cref{Lemma: One-iteration progress of B and Lambda}}
 \label{app:primal-dual-progress-proof}
+\begin{lemma}[One-iteration progress on $\bB$ and $\bLmbd$]
+    \label{Lemma: One-iteration progress of B and Lambda}
+    Consider the sequence $\{
+    \bx^{k}, \bB^{k}, \bm{\Lambda}^{k}\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_sgdm}
+    or \Cref{alg:our_algorithm_storm}. Under \Cref{Ass: basic regularity}(ii), \blue{for all $k \geq 1$},
+    \begin{align}
+\label{item: B and Lambda}
+&\calL(\bx^{k+1}, \bB^{k+1}, \bLmbd^{k+1}) - \calL(\bx^{k+1}, \bB^{k}, \bLmbd^{k}) \notag \\
+\le& K_1 \Delta_{\bB}^{k+2} - K_2 \Delta_{\bB}^{k+1} + K_3 \Delta_{\bB}^{k}
++ K_4 \Delta_{\bx}^{k+2} + K_3 \Delta_{\bx}^{k+1},
+\end{align}
+where $K_1=\red{\frac{1}{2\tau}}$, $K_2=\red{\frac{3}{2\tau}-2L_F-\frac{\tau L_F^2}{2}}$, $K_3=\red{6\tau L_F^2}$, and $K_4=\red{\frac{\tau L_F^2}{2}}$.
+\end{lemma}
+
 \begin{proof}
     \blue{By the descent lemma~\eqref{Eq: the descent lemma} for $F(\bx^{k+1},\cdot)$,
     \[
@@ -252,9 +286,9 @@ Before proceeding, throughout Appendices~\ref{app:stom-complexity} and~\ref{app:
 \label{app:stom-complexity}
 
 \blue{This appendix proves the complexity results for DualHash-StoM stated in \Cref{Section: complexity of StoM}.}
-We first present a lemma on continuously differentiable functions with Lipschitz continuous gradients. Since the analysis also requires the relations among the extrapolated iterates, we next establish the key relationships among the iterates generated by \eqref{Eq: the update of x in SGDM} and \eqref{Eq: extrapolated points in SGDM}.
+We first present a lemma \blue{on} continuously differentiable \blue{functions} with Lipschitz continuous \blue{gradients. Since the analysis also requires the relations among the extrapolated iterates, we next establish the key relationships among the iterates} generated by \blue{\eqref{Eq: the update of x in SGDM} and \eqref{Eq: extrapolated points in SGDM}}.
 
-\begin{proposition}[\blue{Proposition 4.1 in \cite{InertialProximalAlternating}}]
+\begin{proposition}[\blue{Proposition 4.1 in~\cite{InertialProximalAlternating}}]
     \label{Pp: relations of xyz} Let $\{\bx^{k}\}_{k \in \mathbb{N}}$,
     $\{\by^{k}\}_{k \in \mathbb{N}}$, and $\{\bz^{k}\}_{k \in \mathbb{N}}$ be sequences
     generated by \eqref{Eq: the update of x in SGDM} and \eqref{Eq: extrapolated points in SGDM}. For all $k \in \mathbb{N}$,
@@ -272,11 +306,10 @@ We first present a lemma on continuously differentiable functions with Lipschitz
 \begin{lemma}
     \label{Lemma: auxiliary lemma for f} Let $f(\bx): \mathbb{R}^{q}\rightarrow \mathbb{R}$
     be a continuously differentiable function with an $L$-Lipschitz continuous gradient.
-    Then, for any $\bx,\, \by,\,\blue{\bg} \in \mathbb{R}^{q}$ and any $\bx^{+}\in \mathbb{R}
-    ^{q}$ defined by
+    Then, \blue{for all $\bx,\, \by,\,\blue{\bg} \in \mathbb{R}^{q}$ and any $\bx^{+}\in \mathbb{R}^{q}$ defined by}
     \[
         \bx^{+}= \by - \eta \blue{\bg}, \hspace{5pt}\eta > 0,
-    \]it holds that
+    \]
     \begin{align}
         \label{Eq: auxiliary lemma for f}f(\bx^{+}) \leq f(\bx) + \langle \nabla f(\bx) - \blue{\bg}, \bx^{+}- \bx \rangle + \frac{L}{2}\|\bx^{+}- \bx\|^{2}+ \frac{1}{2\eta}\|\bx - \by\|^{2}- \frac{1}{2\eta}\|\bx^{+}- \by\|^{2}.
     \end{align}
@@ -294,8 +327,29 @@ We first present a lemma on continuously differentiable functions with Lipschitz
     Invoking the descent lemma for a smooth function yields the result. 
 \end{proof}
 
-\subsection{Proof of \Cref{Lemma: One-iteration progress of x in SGDM}}
+\paragraph{Proof of \Cref{Lemma: One-iteration progress of x in SGDM}}
 \label{app:stom-primal-progress-proof}
+Let us denote the gradient error in the $k$-th iteration as
+\[
+\be^{k} = \blue{\bg_m^{k}} - \nabla_{\bx}F(\bz^{k}, \bB^{k}),
+\]where $\blue{\bg_m^k}$ is defined in \eqref{Eq: the stochastic approximate in SGDM}. Under Assumption~\ref{Ass: main assumptions}\blue{ and uniform sampling without replacement}, one has
+\begin{align}
+    \label{eq: the gradient error in SGDM}
+    \mathbb{E}\!\left[\|\be^k\|^2\right]
+    \leq \blue{\frac{n-b_k}{n-1}\cdot\frac{\sigma^2}{b_k}\leq} \frac{\sigma^2}{b_k}.
+\end{align}
+\blue{The one-iteration progress on $\bx$ is estimated as follows.}
+\begin{lemma}[One-iteration progress on $\bx$]
+    \label{Lemma: One-iteration progress of x in SGDM}
+    Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_sgdm}. Under \Cref{Ass: basic regularity}(ii), \blue{with $\eta_k>0$ and $\alpha_k,\beta_k\in[0,1)$,} \blue{for all $k \geq 1$},
+    \begin{align}
+        \label{Eq: One-iteration progress of x in SGDM}
+        \calL (\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k})
+        \leq -K_5\Delta_{\bx}^{k+1}+K_6\Delta_{\bx}^{k}+ \frac{1}{L_{F}}\|\be^{k}\|^{2},
+    \end{align}
+    where \(K_5 = \frac{1 - \alpha_{k}}{\eta_{k}}- 2L_F\) and \(K_6 = \frac{\alpha_{k}}{\eta_{k}}+ 2L_F\beta_k^2\).
+\end{lemma}
+
 
 \begin{proof}
     Recalling the equivalent relation:
@@ -382,8 +436,7 @@ The technical proof that the coefficients of $\Psi_m$ in \eqref{Eq: the coeffici
     \begin{align}
         C_{4}- K_{6} & = C_{4}- \frac{\alpha}{\eta_{k}}- 2L_{F}\beta_{k}^{2}\notag                                                                                                                                   \\
                      & = \frac{1}{1 - \alpha}\left( (1 - \alpha)C_{4}- \alpha\bar{L}_{F}- (1 + \nu)C_{4}\alpha - 2L_{F}\beta^{2}(1 - \alpha) \right)\notag                                                           \\
-                     & \blue{=} \frac{1}{1 - \alpha}\left( (1 - 2\alpha - \nu)C_{4}- \alpha \left(\bar{L}_{F}+ \frac{2L_{F}\beta^{2}}{\alpha}\right) \right) + \nu C_{4}+ \frac{2L_{F}\beta^{2}\alpha}{1 - \alpha}\notag \\
-                     & \geq \nu C_{4},\notag % \label{Eq: the scaling of the delta2}
+                     & \blue{=} \frac{1}{1 - \alpha}\left( (1 - 2\alpha - \nu)C_{4}- \alpha \left(\bar{L}_{F}+ \frac{2L_{F}\beta^{2}}{\alpha}\right) \right) + \nu C_{4}+ \frac{2L_{F}\beta^{2}\alpha}{1 - \alpha} \geq \nu C_{4},\notag % \label{Eq: the scaling of the delta2}
     \end{align}where the last inequality follows from $\alpha \in (0, \frac{1 - \nu}{2})$
     and
     $C_{4}= \frac{\bar{L}_{F}+ \frac{2L_F \beta^2}{\alpha}}{1 - 2\alpha - \nu}> 0$.
@@ -401,15 +454,23 @@ The technical proof that the coefficients of $\Psi_m$ in \eqref{Eq: the coeffici
     $\tau \in \left(0, \frac{\sqrt{30}-2}{13L_{F}}\right)$ ensures $C_{\bB}> 0$. Consequently, $C_1=K_1=\frac{1}{2\tau}>0$ and $C_2=\frac{1}{2}(K_2-K_1+K_3)=C_{\bB}+K_3>0$, since $K_3=6\tau L_F^2>0$.}
     \blue{Finally, $C_3=K_4>0$ and $C_{\bx}=\nu C_4>0$. Thus all the stated coefficients are positive under \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}.}
 \end{proof}
-\subsection{\blue{Lower Bound of the StoM Potential}}
+
+\paragraph{\blue{Lower Bound of the StoM Potential}}
 \label{app:stom-lower-bound}
+
 \begingroup\color{blue}
-We first record two estimates that are used here and in \Cref{app:storm-lower-bound}.
+\blue{Unlike $F$, the potential $\Psi_m$ contains the coupling term $\langle\bB^k,\bLmbd^k\rangle$ and the negative increments $-C_1\Delta_{\bB}^{k+1}$ and $-C_3\Delta_{\bx}^{k+1}$, so it is not trivially bounded below. The coupling term is controlled by the bounded auxiliary and dual iterates, and under \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} the negative increments are dominated by $F-\underline{\ell}$.}
+We first record two estimates that are used here and in \blue{\Cref{Lemma: lower bound of W}}.
 Let $t:=\tau L_F$. Both parameter settings \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl} and \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm} give $t<\frac{\sqrt{30}-2}{13}<0.27$. Hence, by \eqref{Eq: the coefficients of the Lyapunov function in SGDM},
 \[
 C_1=K_1=\frac{1}{2\tau},\qquad C_3=K_4=\frac{\tau L_F^2}{2}.
 \]
-By Appendix~\ref{app:smoothness-discussion}, $\|\bB^k\|\le R_B$ and $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$, and $0\le h^*\le nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)$ on $\operatorname{dom}h^*$ by \Cref{lem:wtype-conj} and the condition on $\phi^*$ in \Cref{Section: W-regularizer}. Therefore $\langle\bB^k,\bLmbd^k\rangle\ge-\lambda\sqrt{nd}\,R_B$ and $\Delta_{\bB}^{k+1}=\frac12\|\bB^{k+1}-\bB^k\|^2\le2R_B^2$, so for both algorithms and every $k\ge1$,
+By \blue{\Cref{app:smoothness-discussion}}, $\|\bB^k\|\le R_B$ and $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$, and
+\[
+0\le h^*\le nd\sup_{y\in\operatorname{dom}\phi^*}\phi^*(y)
+\quad\text{on }\operatorname{dom}h^*
+\]
+by \Cref{lem:wtype-conj} and the condition on $\phi^*$ in \Cref{Section: W-regularizer}. Therefore $\langle\bB^k,\bLmbd^k\rangle\ge-\lambda\sqrt{nd}\,R_B$ and $\Delta_{\bB}^{k+1}=\frac12\|\bB^{k+1}-\bB^k\|^2\le2R_B^2$, so for both algorithms and every $k\ge1$,
 \begin{equation}
 \label{eq:lb-common}
 \calL(\bx^k,\bB^k,\bLmbd^k)-C_1\Delta_{\bB}^{k+1}
@@ -472,13 +533,13 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
 
 \begin{lemma}[Stationarity error bound]
     \label{Lemma: Stationarity error bound in SGDM} Under Assumptions~\ref{Ass: basic regularity} and~\ref{Ass: main assumptions},
-    for any $k \geq 1$, it holds that
+    \blue{for all $k \geq 1$},
     \begin{align}\label{Eq: the stationarity error bound in SGDM Lemma}
-        \EE [\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))] \leq S_{1}\EE[ \Delta_{\bB}^{k+1}] + S_{2}\EE[ \Delta_{\bB}^{k}] + S_{3}^{k}\EE[ \Delta_{\bm{x}}^{k+1}] + S_{4}^{k}\EE [\Delta_{\bm{x}}^{k}] + \blue{\frac{3\sigma^{2}}{b_{k}}},
+        \EE [\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k}))] \leq S_{1}\EE[ \Delta_{\bB}^{k+1}] + S_{2}\EE[ \Delta_{\bB}^{k}] + S_{3}^{k}\EE[ \Delta_{\bm{x}}^{k+1}] + S_{4}^{k}\EE [\Delta_{\bm{x}}^{k}] + \blue{\frac{3\sigma^{2}}{b_{k}}},
     \end{align}
     where the coefficients are given by
     \begin{align}
-        \label{Eq: the coefficients of stationarity error bound in SGDM}\begin{cases}S_{1}&= \blue{4(\tau^{-2}+ 3)},\\ S_{2}&= 4(1 + 3 (1 + \tau L_{F})^{2}),\\ S_{3}^{k}&= 4(3\eta_{k}^{-2}+ L_{F}^{2}+ 3 (\tau L_{F})^{2}),\\ S_{4}^{k}&= 6 ( L^2_{F}\beta_{k}^{2}+ \blue{2} \eta_{k}^{-2}\alpha_{k}^{2}).\end{cases}
+        \label{Eq: the coefficients of stationarity error bound in SGDM}\begin{cases}S_{1}&= 4(\tau^{-2}+ 3),\\ S_{2}&= 4(1 + 3 (1 + \tau L_{F})^{2}),\\ S_{3}^{k}&= 4(3\eta_{k}^{-2}+ L_{F}^{2}+ 3 (\tau L_{F})^{2}),\\ S_{4}^{k}&= 6 ( L^2_{F}\beta_{k}^{2}+ \blue{2} \eta_{k}^{-2}\alpha_{k}^{2}).\end{cases}
     \end{align}
 \end{lemma}
 % \begin{proof}
@@ -583,7 +644,7 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
     \blue{Under \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}, $\eta_k=\eta/L_F$, $\alpha_k=\alpha$, and $\beta_k=\beta$ are constant, so $S_3^k=S_3$ and $S_4^k=S_4$. Since the four increment terms are nonnegative, \eqref{Eq: the stationarity error bound in SGDM Lemma} gives}
     {\small
     \begin{align}\label{Eq: the stationarity error bound in SGDM rearrange}
-        \mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB^{k}, \bLmbd^{k}))] \leq \blue{\max\{S_{1}, S_{2}, S_{3}, S_{4}\}} \EE [\Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}+ \Delta_{\bx}^{k+1}+ \Delta_{\bx}^{k}] + \blue{\frac{3 \sigma^{2}}{b_{k}}}.\end{align}}
+        \mathbb{E}[\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx^{k}, \bB^{k}, \bLmbd^{k}))] \leq \blue{\max\{S_{1}, S_{2}, S_{3}, S_{4}\}} \EE [\Delta_{\bB}^{k+1}+ \Delta_{\bB}^{k}+ \Delta_{\bx}^{k+1}+ \Delta_{\bx}^{k}] + \blue{\frac{3 \sigma^{2}}{b_{k}}}.\end{align}}
     Similarly, from \eqref{Eq: the descent property of Lyapunov func in SGDM}, we
     obtain
     \[
@@ -601,22 +662,22 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
     Substituting this inequality into \eqref{Eq: the stationarity error bound in SGDM rearrange},
     summing over $k = 1, \cdots,T$, and dividing by $T$, we obtain
     \begin{align*}
-        &\frac{1}{T}\sumT \mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx
+        &\frac{1}{T}\sumT \mathbb{E}[\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx
         ^{k}, \bB^{k}, \bLmbd^{k}))]\\
         &\leq \frac{L_{\Delta}}{T}\sumT
         \left(\EE [\Psi_m(\mathcal{Q}^{k})] - \EE [\Psi_m
         (\mathcal{Q}^{k+1})] \right) + \blue{\left( 3 + \frac{L_{\Delta}}{L_F}\right) \frac{\sigma^{2}}{T}\sumT\frac{1}{b_{k}}},
     \end{align*}\blue{Since $\bx^0=\bx^1$ and $\bB^0=\bB^1$, the negative increment terms give $\Psi_m(\calQ^1)\le\calL(\bx^1,\bB^1,\bLmbd^1)$, so $\EE[\Psi_m(\calQ^1)]-\Psi_m^*\le\Delta_1$.} Denoting
-    $a_{k}= \mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB
+    $a_{k}= \mathbb{E}[\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx^{k}, \bB
     ^{k}, \bLmbd^{k}))]$, we have
     \[
         \frac{1}{T}\sumT a_{k}\leq \frac{L_{\Delta}\Delta_{1}}{T}+ \blue{\left( 3 + \frac{L_{\Delta}}{L_F}
         \right) \frac{\sigma^{2}}{T}\sumT\frac{1}{b_{k}}}.
     \]
-    \blue{By selecting $R$ uniformly from $\{1, \ldots, T\}$, independently of the iterates, and applying the law of total expectation,}
+    \blue{By selecting $R$ uniformly from $\{1, \ldots, T\}$, independently of the \blue{mini-batches}, and applying the law of total expectation,}
     we obtain
     \[
-        \mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}
+        \mathbb{E}[\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx^{R}, \bB^{R}
         , \bLmbd^{R}))] \blue{= \frac{1}{T}\sumT a_{k}} \leq \frac{L_{\Delta}\Delta_{1}}{T}+ \blue{\left( 3 + \frac{L_{\Delta}}{L_F}
         \right) \frac{\sigma^{2}}{T}\sumT\frac{1}{b_{k}}},
     \] and complete the proof.
@@ -631,13 +692,13 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
 \begin{proof}
     When $b_{k}= b = c_{b}T$, \blue{we have $\frac{1}{T}\sumT\frac{1}{b_{k}}=\frac{1}{c_{b}T}$, and hence \Cref{lemma: convergence rate sgdm} gives}
     \[
-        \mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}
+        \mathbb{E}[\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx^{R}, \bB^{R}
         , \bLmbd^{R}))] \leq \frac{1}{T}\left( L_{\Delta}\Delta_{1}+ C_{\sigma}
         \frac{\sigma^{2}}{c_{b}}\right).
     \]
     With the conditions on $T$ in \eqref{Eq: the iterate number upper bound of algorithm SGDM},
     this gives
-    $\mathbb{E}[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}
+    $\mathbb{E}[\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx^{R}, \bB^{R}
     , \bLmbd^{R}))] \leq \varepsilon^{2}$. Then, the oracle complexity
     of SFO is
     \[
@@ -648,8 +709,17 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
 \section{Complexity Analysis of DualHash-StoRM (\texorpdfstring{\Cref{alg:our_algorithm_storm}}{Algorithm 2})}
 \label{app:storm-complexity}
 We adopt the same notation as in \Cref{app:stom-complexity}. 
-\subsection{\blue{Proof of \Cref{Lemma: One-iteration progress of x in STORM}}}
+\paragraph{\blue{Proof of \Cref{Lemma: One-iteration progress of x in STORM}}}
 \label{app:storm-primal-progress-proof}
+Similarly, the following lemma estimates the one-iteration progress
+of the Lagrangian function $\calL$ via the $\bx$-update \eqref{Eq: the update of x in STORM}. \blue{Its proof follows from~\cite[Lemma~2.1]{xu2023momentum}.}
+\begin{lemma}[One-iteration progress on $\bx$~\cite{xu2023momentum}]
+    \label{Lemma: One-iteration progress of x in STORM} Consider the sequence $\{\bx^k, \bB^k, \bm{\Lambda}^k\}_{k \in \NN}$ generated by \Cref{alg:our_algorithm_storm}. \blue{Under \Cref{Ass: basic regularity}(ii),} \blue{for all $k \geq 1$},
+    \begin{align}
+        \label{Eq: the recursive relation of L on x}\calL (\bx^{k+1}, \bB^{k}, \bLmbd^{k}) - \calL (\bx^{k}, \bB^{k}, \bLmbd^{k}) \leq \frac{\eta_{k}}{2}\| \be^{k}\|^{2}- (\eta_{k}^{-1}- L_{F})\Delta_{\bx}^{k+1}.
+    \end{align}
+\end{lemma}
+
 \begin{proof}
     \blue{By the $L_F$-smoothness of $F(\cdot,\bB^k)$, the update \eqref{Eq: the update of x in STORM}, and Young's inequality,}
     \blue{\begin{align}
@@ -675,38 +745,64 @@ We adopt the same notation as in \Cref{app:stom-complexity}.
     \begin{align}
         \label{the descent property of Lyapunov func in STORM first} & \Psi_r(\mathcal{Q}^{k+1}) - \Psi_r(\mathcal{Q}^{k}) \notag                                                                                         \\
         \leq                                                         & - (C_{1}- K_{1}) \Delta_{\bm{B}}^{k+2}-(K_{2}- C_{1}- C_{2}) \Delta_{\bm{B}}^{k+1}- (C_{2}- K_{3}) \Delta_{\bm{B}}^{k}- (C_{3}-K_{4}) \Delta_{\bx}^{k+2}\notag \\
-                                                                     & \blue{-(\eta_{k}^{-1}- L_{F}- K_{3}- C_{3}) \Delta_{\bx}^{k+1}+ \frac{\eta_{k}}{2}\| \be^{k}\|^{2}}.
+                                                                     & -(\eta_{k}^{-1}- L_{F}- K_{3}- C_{3}) \Delta_{\bx}^{k+1}+ \frac{\eta_{k}}{2}\| \be^{k}\|^{2}.
     \end{align}
     By substituting the Lyapunov function coefficients \eqref{Eq: the coefficients of the Lyapunov function in SGDM} into \eqref{the descent property of Lyapunov func in STORM first} \blue{and taking full expectation}, we obtain \eqref{Eq: the descent property of Lyapunov func in storm}. With $\tau$ satisfying \blue{$0<\tau<\frac{\sqrt{30}-2}{13L_F}$}, \Cref{lem:lyapunov-coef-positivity} guarantees that $C_{\bB}>0$.
 \end{proof}
 
-\subsection{\blue{Proof of \Cref{lem:auxiliary-tracking}}}
+\paragraph{\blue{Proof of \Cref{lem:auxiliary-tracking}}}
 \label{app:auxiliary-tracking-proof}
+\begin{lemma}[\blue{Auxiliary-block tracking}]
+\label{lem:auxiliary-tracking}
+\blue{Under \Cref{Ass: basic regularity}(ii), for the iterates generated by
+\Cref{alg:our_algorithm_storm} with parameters satisfying
+\eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm},
+let $r:=\tau\gamma/n$ and}
+\blue{\begin{align*}
+H_k:={}&(1-r)\bigl\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\bigr\|^{2}\\
+&\quad+r\tau^{2}\bigl\|\bLmbd^{k}-\bLmbd^{k-1}\bigr\|^{2},
+\end{align*}}
+\blue{with $\bB^{0}=\bB^{1}$ and $\bLmbd^{0}=\bLmbd^{1}$. Then $H_1=0$, $H_k\geq0$, and, for every $k\geq1$,}
+\blue{\begin{align}
+H_{k+1}-H_k
+&\leq-\frac{r}{8}\Bigl(\|\bB^{k}-\bB^{k-1}\|^{2}
++\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}\Bigr)\notag\\
+&\qquad+\blue{c_{\mathrm{tr}}rG_{\mathcal{D}}^{2}\Delta_{\bx}^{k+1}},
+\label{Eq: auxiliary tracking descent}\\
+\Delta_{\bB}^{k+1}
+&\leq\blue{\frac{c_H}{r}(H_k-H_{k+1})+G\,\Delta_{\bx}^{k+1}},
+\label{Eq: tracking of B increments}
+\end{align}}\blue{where \blue{$G=c_GG_{\mathcal{D}}^{2}$} is defined in
+\eqref{Eq: the constants for storm}, and \blue{$c_H,c_{\mathrm{tr}},c_G>0$ are universal
+constants specified in \blue{the proof below}}.}
+\end{lemma}
+
 \begingroup\color{blue}
 \begin{proof}
     Let $r=\tau\gamma/n$ and define $H_k$ as in \Cref{lem:auxiliary-tracking}. Since the initialization sets
     $\bB^{0}=\bB^{1}$ and $\bLmbd^{0}=\bLmbd^{1}$, we have $H_1=0$ and $H_k\geq0$.
     The $\bB$- and $\bLmbd$-updates, together with
-    $r\leq\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$ and the \red{componentwise} monotonicity and
+    $r\leq\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$ and the \blue{componentwise} monotonicity and
     $1$-Lipschitz continuity of $\operatorname{prox}_{\tau^{-1}h^{*}}$, yield
     \begin{align}
         H_{k+1}-H_k
         &\leq-\frac{r}{8}\Bigl(\|\bB^{k}-\bB^{k-1}\|^{2}
         +\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}\Bigr)\notag\\
-        &\qquad+146rG_{\mathcal{D}}^{2}\Delta_{\bx}^{k+1}.
+        &\qquad+\blue{c_{\mathrm{tr}}rG_{\mathcal{D}}^{2}\Delta_{\bx}^{k+1}}.
         \label{Eq: auxiliary tracking descent in proof}
     \end{align}
     Combining this estimate with the update relations and using $r<2/7$ gives
     \begin{align}
         \Delta_{\bB}^{k+1}
-        \leq\frac{12}{r}(H_k-H_{k+1})+G\,\Delta_{\bx}^{k+1},
+        \leq\blue{\frac{c_H}{r}(H_k-H_{k+1})+G\,\Delta_{\bx}^{k+1}},
     \end{align}
-    where $G=1753G_{\mathcal{D}}^{2}$. This proves
+    where \blue{$c_{\mathrm{tr}}=146$, $c_H=12$, and $G=c_GG_{\mathcal{D}}^{2}$ with
+    $c_G=1753$}. This proves
     \Cref{lem:auxiliary-tracking}.
 \end{proof}
 \endgroup
 
-\subsection{\blue{Lower Bound of the StoRM Potential}}
+\paragraph{\blue{Lower Bound of the StoRM Potential}}
 \label{app:storm-lower-bound}
 \begingroup\color{blue}
 \begin{lemma}[Lower bound of the StoRM potential]
@@ -738,12 +834,12 @@ W_k\ge\underline{\ell}+\left(1-\frac t4\right)\EE\bigl[F(\bx^k,\bB^k)-\underline
 \end{proof}
 \endgroup
 
-\subsection{\blue{Auxiliary Results for DualHash-StoRM}}
+\paragraph{\blue{Auxiliary Results for DualHash-StoRM}}
 \label{app:storm-stationarity-proof}
-We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with analysis comparable to those in \cite[Lemma~2\blue{.2}]{xu2023momentum} and \cite[Lemma 8]{shi2025momentum}. \blue{We provide the proof for completeness.}
+We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with analysis comparable to those in~\cite[Lemma~2\blue{.2}]{xu2023momentum} and~\cite[Lemma~8]{shi2025momentum}. \blue{We provide the proof for completeness.}
 \begin{lemma}[Recursive bound on gradient error]
-    \label{Lemma: Recursive bound on gradient error} Under \Cref{Ass: main assumptions}\blue{(ii) and \Cref{Ass: the mean squared smoothness of F}},
-    for any $k \geq 1$, it holds that
+    \label{Lemma: Recursive bound on gradient error} Under \Cref{Ass: main assumptions}\blue{ and \Cref{Ass: the mean squared smoothness of F}},
+    \blue{for all $k \geq 1$},
     \begin{align}
         \blue{\EE}[\| \be^{k+1}\|^{2}] \leq \left(1 - \rho_{k}\right)^{2}\blue{\EE}[\| \be^{k}\|^{2}] + \frac{2 \rho_{k}^{2}\sigma^{2}}{\blue{b_{k+1}}}+ \frac{4(1 - \rho_{k})^{2}L_{F}^{2}}{\blue{b_{k+1}}}\blue{\EE}\left[\Delta_{\bx}^{k+1}\blue{{}+\Delta_{\bB}^{k+1}}\right]. \notag
     \end{align}
@@ -756,7 +852,7 @@ We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with ana
         & \,+\frac{2(1-\rho_k)^{2}}{b_{k+1}}\cdot\frac1n\sum_{i=1}^{n}\|\nabla_{\bx}F_i(\bx^{k+1},\bb_i^{k+1})-\nabla_{\bx}F_i(\bx^{k},\bb_i^{k})\|^{2}\notag\\
         \leq & \,(1-\rho_k)^{2}\|\be^{k}\|^{2}+\frac{2\rho_k^{2}\sigma^{2}}{b_{k+1}}+\frac{4(1-\rho_k)^{2}L_F^{2}}{b_{k+1}}\left(\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}\right)\quad\text{a.s.},\notag
     \end{align}
-    where the first inequality follows from $\|\bm a+\bm b\|^{2}\leq2\|\bm a\|^{2}+2\|\bm b\|^{2}$, \Cref{Ass: main assumptions}(ii), and the mini-batch variance bound under uniform sampling without replacement, and the last inequality follows from \Cref{Ass: the mean squared smoothness of F}. Taking the full expectation completes the proof.}
+    where the first inequality follows from $\|\bm a+\bm b\|^{2}\leq2\|\bm a\|^{2}+2\|\bm b\|^{2}$, \Cref{Ass: main assumptions}, and the mini-batch variance bound under uniform sampling without replacement, and the last inequality follows from \Cref{Ass: the mean squared smoothness of F}. Taking the full expectation completes the proof.}
 \end{proof}
 
 We now establish a weighted error accumulation bound for the variance-reduced gradient estimator in \Cref{alg:our_algorithm_storm}.
@@ -793,7 +889,7 @@ We now establish a weighted error accumulation bound for the variance-reduced gr
 We derive an upper stationarity error bound for the iterates generated by \Cref{alg:our_algorithm_storm}.
 \begin{lemma}[Stationarity error bound]
     \label{Lemma: Stationarity error bound} Under \Cref{Ass: basic regularity}(ii),
-    for any $k \geq 1$, it holds that
+    \blue{for all $k \geq 1$},
     \begin{align}
         \mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{k}, \bB^{k}, \bm{\Lambda}^{k})) \leq S_{1}\Delta_{\bB}^{k+1}+ S_{2}\Delta_{\bB}^{k}+ S_{3}^{k}\Delta_{\bm{x}}^{k+1}+ 2 \| \be^{k}\|^{2}, \label{Eq: the stationarity error bound in Lemma in storm}
     \end{align}
@@ -861,7 +957,7 @@ the optimality condition of $\bx^{k+1}$ from \eqref{Eq: the update of x in STORM
         \blue{\frac1T\sumT\EE[\mathrm{dist}^{2}(\bm{0},\mathcal K(\bx^k,\bB^k,\bLmbd^k))]
         \leq\frac{\tilde{L}_{\Delta}}{T^{2/3}}\Bigl(\tilde\Delta_1+\frac{\eta_T\sigma^2}{\rho_Tb_1}+\frac{2T\eta_T\rho_T\sigma^2}{b}\Bigr).}
     \]
-    \blue{Substituting $\frac{\eta_T}{\rho_T}=\frac{T^{1/3}}{8\rho\eta\tilde L_F}$, $2T\eta_T\rho_T=\frac{16\rho\eta^3}{\tilde L_F}$, and $\tilde{C}_{\sigma}=\frac{\eta\tilde{L}_{\Delta}}{2\tilde L_F}$,} we obtain \eqref{Eq: the convergence rate of storm} by selecting $R$ uniformly from \blue{$\{1,\ldots,T\}$}.
+    \blue{Substituting $\frac{\eta_T}{\rho_T}=\frac{T^{1/3}}{8\rho\eta\tilde L_F}$, $2T\eta_T\rho_T=\frac{16\rho\eta^3}{\tilde L_F}$, and $\tilde{C}_{\sigma}=\frac{\eta\tilde{L}_{\Delta}}{2\tilde L_F}$,} we obtain \eqref{Eq: the convergence rate of storm} by selecting $R$ uniformly from \blue{$\{1,\ldots,T\}$}\blue{, independently of the mini-batches}.
 \end{proof}
 With this parameter choice, we proceed to analyze the oracle complexity of \Cref{alg:our_algorithm_storm}.
 \subsection{Proof of \Cref{Theorem: the oracle complexity in STORM}}
@@ -882,7 +978,7 @@ With this parameter choice, we proceed to analyze the oracle complexity of \Cref
 % \] where \(\rho\) and \(\eta\) are independent of \(T\).
 % Let us \(l = \frac{1}{3}\) and \(q = \frac{2}{3}\),
 % we want \(\frac{1}{T}\sum_{k=1}^T\text{dist}^2(\bm{0}, \partial \calL^k) = \mathcal{O}(T^{-\frac{2}{3}})\)
-% We denoteare constant independent of \(T\) and \(\Delta_1 = \Psi_r(\calQ^1) - \Psi_r^* \) and the definitions of the \(\Psi_r\) and \(\calQ\) are detailed in Appendix \ref{app:storm-complexity}.
+% We denoteare constant independent of \(T\) and \(\Delta_1 = \Psi_r(\calQ^1) - \Psi_r^* \) and the definitions of the \(\Psi_r\) and \(\calQ\) are \blue{given in \eqref{Eq: the Lyapunov function in STORM}}.
 
 % Let us discuss how to select appropriate parameters.  To ensure the parameter setting \eqref{Eq: the parameters conditions in dualhash-storm}, we set the parameters as follows
 % \[
@@ -893,4 +989,15 @@ With this parameter choice, we proceed to analyze the oracle complexity of \Cref
 % \text{Rate} = \calO (\max \{ T^{l-1}, T^{q-p-1}, T^{-2q}\})
 % \]
 % We can choose \(q = 2l = \frac{2}{3}\) and \(p=\frac{1}{3}\), then the upper bound is of the order \(\calO(T^{-\frac{2}{3})}\)
+
+\section{\blue{Oracle Complexity for the Original Objective}}
+\label{app:original-objective}
+\begin{proof}[Proof of \Cref{cor:original-stationarity}]
+\blue{Apply \Cref{prop:original-certificate} \blue{with $L=L_0$} at $(\bx^R,\bB^R,\bLmbd^R)$ and take expectations, using $\EE\, r_{\mathcal{K}}\le(\EE\, r_{\mathcal{K}}^2)^{1/2}$ and $\EE\sqrt{h}\le(\EE\, h)^{1/2}$ by Jensen's inequality.} \blue{This gives
+\begin{align*}
+\EE\,\varepsilon_R &\le\Bigl(\sqrt{1+G_{\mathcal{D}}^2}+2\sqrt{2\kappa L_0}\Bigr)\varepsilon+2\sqrt{2L_0\,\EE\,h\bigl(\mathcal{D}(\bx^R)\bigr)},\\
+\EE\,\delta_R &\le\sqrt{\frac{2}{L_0}}\Bigl(\sqrt{\kappa}\,\varepsilon+\sqrt{\EE\,h\bigl(\mathcal{D}(\bx^R)\bigr)}\Bigr).
+\end{align*}}
+\end{proof}
+
 % \subsection{Discussion}

@@ -35,7 +35,7 @@ where $\tau$ is a positive scalar parameter. The proximal mapping admits the fol
 properties.
 \begin{proposition}\label{prop:rockafellar}
 \textnormal{\cite{Rockafellar1998VariationalA}}
-    Let $r : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper, \blue{lower semicontinuous, and bounded below}. Then, the following holds.
+    Let $r : \mathbb{R}^{q}\rightarrow \mathbb{R}\cup \{+\infty\}$ be proper, \blue{lower semicontinuous, and bounded below}. Then, the following {statements hold}.
     \begin{enumerate}[label=(\roman*)]
         \item The set $\operatorname{prox}_{\tau r}(\bx)$ is nonempty and compact
             for any $\bx \in \mathbb{R}^{q}$ and $\tau > 0$.
@@ -55,35 +55,7 @@ A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz co
 
 \subsection{\blue{W-type Regularizer: Definition and Properties}}
 \label{Section: W-regularizer}
-\begin{table}[!t]
-\centering
-\color{blue}
-\captionsetup{labelfont={color=blue},textfont={color=blue}}
-\caption{Representative W-type regularizers, with \(\lambda>0\) and \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\). Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\). In the proximal-mapping column, `\textemdash' indicates that no closed-form expression is available.}
-\label{tab:wtype}
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.4}
-\resizebox{\columnwidth}{!}{
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}m{1.9cm}cccc>{\centering\arraybackslash}m{2.2cm}@{}}
-\toprule
-\shortstack[l]{\blue{Regularizer}\\\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\) & Relation to \(Q_1\)\\
-\midrule
-\shortstack[l]{\(\ell_1\)\\\(\lambda\bigl||t|-1\bigr|\)} & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
- & \(\{\pm\lambda\}\) & \(|y|\) & \([-\lambda,\lambda]\)
- & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\sigma)_+\bigr)\) & $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$\\
-\addlinespace[3pt]
-\shortstack[l]{\(\ell_2^2\)\\\(\lambda\bigl||t|-1\bigr|^2\)} & \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh,bai2019proxquant} 
- & \(\{\pm2\lambda\}\) & \(|y|+\frac{y^2}{4\lambda}\) & \(\mathbb{R}\)
- & \(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma/(2\lambda)}\)
- & {\scriptsize $h(\mathcal{D}(\bx))\le\lambda\max\{1,C_{\mathcal{D}}-1\}Q_1(\bx)$}\\
-\midrule
-\shortstack[l]{log-cosh\\\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
- & \(\{\pm\lambda\tanh1\}\)
- & \(|y|+\lambda\psi(|y|/\lambda)\)
- & \([-\lambda,\lambda]\) & \textemdash & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
-\bottomrule
-\end{tabular}}
-\end{table}
+
 Deep hashing aims to learn network parameters \(\bx \in \RR^{\blue{q}}\) that generate binary codes preserving semantic similarity in the Hamming space. A direct formulation is
 \begin{align}
 \label{Eq:direct_deep_hashing_problem}
@@ -105,7 +77,7 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in
   \item\label{W3} \(\phi\) decreases at a nonvanishing rate on \([0,1)\): for every \(b\in(0,1)\) there exists \(c_b>0\) such that \(\phi(s)-\phi(t)\ge c_b(t-s)\) for all \(0\le s<t\le b\).
 \end{enumerate}
 \end{definition}
-Condition~\ref{W1} fixes the W shape and, together with \ref{W2}, makes $\phi$ nondecreasing on $[1,+\infty)$, which determines the convex envelope and the conjugate below; \ref{W3} excludes flat pieces in $(-1,1)$, so that $\phi$ has no stationary point there, which yields the stationarity characterization in \Cref{prop:transfer}. We list representative W-type regularizers from the deep hashing literature together with their conjugates in \Cref{tab:wtype}. \Cref{fig:w-conj-prox} illustrates the regularizer in the $p=1$ row of \Cref{tab:wtype}. Throughout the paper, we refer to this as the $\ell_1$ W-regularizer, which is also the regularizer used in our experiments, defined by
+Condition~\ref{W1} fixes the W shape and, together with \ref{W2}, makes $\phi$ nondecreasing on $[1,+\infty)$, which determines the convex envelope and the conjugate below; \ref{W3} excludes flat pieces in $(-1,1)$, so that $\phi$ has no stationary point there, which yields the stationarity characterization in \Cref{prop:transfer}. We list representative W-type regularizers from the deep hashing literature together with their conjugates in \Cref{tab:wtype}. \Cref{fig:w-conj-prox} illustrates the regularizer in the \blue{$\ell_1$} row of \Cref{tab:wtype}. Throughout the paper, we refer to this as the $\ell_1$ W-regularizer, which is also the regularizer used in our experiments, defined by
 \[
 h(\bz)=\lambda\bigl\||\bz|-\mathbf{1}\bigr\|_1.
 \]\begin{remark}
@@ -187,7 +159,7 @@ Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum
     \end{scope}
 \end{tikzpicture}
 }
-\caption{\blue{The row $p=1$ of Table~\ref{tab:wtype}, drawn with $\lambda=\sigma=1$: (a) the scalar W-type regularizer $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\sigma$ and clips to $[-\lambda,\lambda]$.}}
+\caption{\blue{The \blue{$\ell_1$ row} of Table~\ref{tab:wtype}, drawn with $\lambda=\sigma=1$: (a) the scalar W-type regularizer $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\sigma$ and clips to $[-\lambda,\lambda]$.}}
 \label{fig:w-conj-prox}
 \vspace{-2ex}
 \end{figure}
@@ -226,7 +198,7 @@ We then relax these constraints by the quadratic penalty method~\cite[Sec.~17.1]
 \begin{align}
     \label{Prop: block-wise regularized problem}
     \min_{\bx \in \RR^{q},\,\bB \in \RR^{n\times d}}\ J(\bx,\bB):=F(\bx,\bB)+h(\bB). \tag{P}
-\end{align}This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon Problem~\eqref{Prop: block-wise regularized problem}, we develop a stochastic primal-dual algorithm that addresses the lack of tractable proximal mappings in the nonsmooth composite form and the absence of convergence guarantees in existing deep hashing methods.
+\end{align} This reformulation decomposes the original problem \eqref{Eq: the primal deep hashing problem} into simpler structural blocks, enabling us to exploit the problem structure better. Building upon Problem~\eqref{Prop: block-wise regularized problem}, we develop a stochastic primal-dual algorithm that addresses the lack of tractable proximal mappings in the nonsmooth composite form and the absence of convergence guarantees in existing deep hashing methods.
 \subsection{Basic Assumptions}
 We impose the following basic assumptions on Problem \eqref{Eq: the primal deep hashing problem}.
 \begin{assumption}
@@ -242,6 +214,36 @@ We impose the following basic assumptions on Problem \eqref{Eq: the primal deep 
     \]}
 \end{enumerate}
 \end{assumption}
+
+\begin{table}[!t]
+\centering
+\color{blue}
+\captionsetup{labelfont={color=blue},textfont={color=blue}}
+\caption{Representative W-type regularizers, with \(\lambda>0\) and \(\psi(u):=\frac12[(1+u)\log(1+u)+(1-u)\log(1-u)]\). Outside \(\operatorname{dom}\phi^*\), \(\phi^*=+\infty\). In the proximal-mapping column, `\textemdash' indicates that no closed-form expression is available.}
+\label{tab:wtype}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.4}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}m{1.9cm}cccc>{\centering\arraybackslash}m{2.2cm}@{}}
+\toprule
+\shortstack[l]{\blue{Regularizer}\\\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\sigma\phi^*}(v)\) & Relation to \(Q_1\)\\
+\midrule
+\shortstack[l]{\(\ell_1\)\\\(\lambda\bigl||t|-1\bigr|\)} & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
+ & \(\{\pm\lambda\}\) & \(|y|\) & \([-\lambda,\lambda]\)
+ & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\sigma)_+\bigr)\) & $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$\\
+\addlinespace[3pt]
+\shortstack[l]{\(\ell_2^2\)\\\(\lambda\bigl||t|-1\bigr|^2\)} & \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh,bai2019proxquant} 
+ & \(\{\pm2\lambda\}\) & \(|y|+\frac{y^2}{4\lambda}\) & \(\mathbb{R}\)
+ & \(\operatorname{sgn}(v)\frac{(|v|-\sigma)_+}{1+\sigma/(2\lambda)}\)
+ & {\scriptsize $h(\mathcal{D}(\bx))\le\lambda\max\{1,C_{\mathcal{D}}-1\}Q_1(\bx)$}\\
+\midrule
+\shortstack[l]{log-cosh\\\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}
+ & \(\{\pm\lambda\tanh1\}\)
+ & \(|y|+\lambda\psi(|y|/\lambda)\)
+ & \([-\lambda,\lambda]\) & \textemdash & $h(\mathcal{D}(\bx))\le\lambda Q_1(\bx)$\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \begin{remark}\label{rem:coercivity}
 \blue{Assumption~\ref{Ass: basic regularity}(i) and $\mu>0$ imply that $J$ is coercive for the W-type regularizer defined in \Cref{def:wtype}, since}

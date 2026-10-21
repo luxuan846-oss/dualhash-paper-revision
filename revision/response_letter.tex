@@ -11,6 +11,12 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{assumption}{Assumption}
 \usepackage{cancel}
+% Compile paper/main.tex before this letter to refresh manuscript numbers and pages.
+\usepackage{xr}
+\externaldocument[ms-]{../paper/main}
+\newcommand{\mref}[1]{\ref*{ms-#1}}
+\newcommand{\mpage}[1]{\pageref*{ms-#1}}
+\newcommand{\meq}[1]{(\mref{#1})}
 \usepackage[hidelinks,linktoc=all,hypertexnames=false]{hyperref}
 
 % Shared mathematical notation from paper/ex_shared.tex.
@@ -67,36 +73,43 @@
 \newenvironment{bluequote}{\begin{quote}\normalfont\upshape\color{blue}}{\end{quote}}
 \newcommand{\red}[1]{\begin{color}{red}\itshape #1\end{color}}
 \newcommand{\green}[1]{{\color{green!50!black}#1}}
-\newcommand{\responseLabel}{\colorbox{yellow}{\normalfont\upshape\textbf{Response:}}}
+\newcommand{\responseLabel}{\color{black}\colorbox{yellow}{\normalfont\upshape\textbf{Response:}}}
+
+\newcommand{\pendingreply}[1]{\par\smallskip{\normalfont\upshape\color{red}\textbf{Pending:} #1}\par}
+\pdfstringdefDisableCommands{\def\red#1{#1}\def\blue#1{#1}}
 
 \title{Response to Reviewers}
 \author{}
 \date{}
 
 \begin{document}
-\nocite{bauschkeCombettes2017,bertsekas1997,repettiWiaux2021}
+
 \maketitle
 \begingroup
 \let\reviewitem\item
 \renewcommand{\item}{\reviewitem\itshape}
 
-\noindent Dear Editors and Reviewers,
+\noindent Dear Professor Chouzenoux,
 
 \medskip
-We sincerely thank you for the opportunity to submit a revised version of our manuscript entitled ``DualHash: A Stochastic Primal-Dual Algorithm with Theoretical Guarantee for Deep Hashing.'' We are truly grateful for the time, effort, and professional guidance that the editors and reviewers have devoted to evaluating our work. The critical comments and thoughtful suggestions have been extremely valuable to us and have led to substantial improvements of the manuscript.
+Thank you for your willingness to handle our substantially revised manuscript, now entitled ``DualHash: Stochastic Primal-Dual Algorithms for W-Type Regularized Deep Hashing.'' We appreciate your consideration and the reviewers' careful evaluation. Their comments have prompted substantial revisions to the theoretical analysis and presentation.
 
-We have carefully considered every comment and revised the manuscript accordingly; all changes in the revised manuscript are marked in blue. To make this letter easier to follow, we first list the conventions used below, followed by a summary of the major changes and our point-by-point responses.
+The central concern was whether the primal--dual formulation provides meaningful guarantees for the original nonconvex hashing objective. We agree that this connection was insufficiently established in the submitted manuscript. The revision addresses this concern and revises the stochastic analysis. The principal changes are summarized below, followed by our point-by-point responses.
 
-\par\smallskip
+\section*{Summary of the Major Revisions}
+\begin{enumerate}[leftmargin=2em,before=\let\item\reviewitem]
+\item \textbf{Definition and scope of W-type regularization.} Section~\mref{Section: Problem Reformulation} defines the class through structural conditions and presents representative regularizers with their conjugates and proximal mappings. We distinguish the structural results for this class from the additional assumptions used in the complexity analysis and the particular regularizer used in the experiments.
+\item \textbf{Guarantees for the original hashing objective.} Section~\mref{Section: Methodology} distinguishes the original objective, its quadratic-penalty relaxation, and the min--max formulation. We characterize when KKT stationarity transfers to the penalty model and establish a near-stationarity guarantee for the original objective, separating optimization error from structural error controlled by quantization error. Section~\mref{Sec: guarantees original objective} combines this guarantee with the oracle complexity bounds and states the quantization-error condition needed for small near-stationarity tolerances.
+\item \textbf{Revised stochastic analysis.} Section~\mref{Section: Convergence analysis} and Appendices~\mref{app:complexity-auxiliary-results}--\mref{app:storm-complexity} specify the sampling and expectation framework, revise the gradient-error estimates, and provide lower bounds for the potentials used in the analysis. The initialization, parameter conditions, and treatment of the finite dataset size are also made explicit.
+\item \textbf{Organization and interpretation.} We consolidate the model definitions and preliminaries in Section~\mref{Section: Problem Reformulation}, place the optimality relationships before the algorithms, and move several intermediate estimates into the appendices. Section~\mref{Section: Numerical experiments} clarifies the quantization-error metric and distinguishes the practical dual-step-size variant from the scheme covered by the analysis.
+\end{enumerate}
+
 \noindent\normalfont\upshape\textbf{Conventions used in this response letter.}
 \begin{itemize}[leftmargin=2em,before=\let\item\reviewitem]
-\item The reviewers' comments are reproduced in \textit{italic font} and numbered as in the reports.
-\item Excerpts from the revised manuscript are shown in \blue{blue}, and their locations (section, page, and lines) are indicated in \green{green}.
-\item When an item has been renumbered, we give its number in the submitted manuscript first, followed by its number in the revised manuscript in parentheses, e.g., Lemma~5.4 (now Lemma~5.2). Excerpts from the revised manuscript use the revised numbering.
+\item The reviewers' comments are reproduced in \textit{italic font} and grouped by topic. Their original page, equation, and result numbers are retained in the comments.
+\item Excerpts from the revised manuscript are shown in \blue{blue}. Locations in the revised manuscript are indicated in \green{green} by section, result or equation, and page; page numbers refer to the manuscript, not to this letter.
+\item In our responses, ``now'' identifies a revised manuscript number when an original number is also given. Other manuscript references use the revised numbering. Reference numbers appearing inside the reviewers' comments retain the numbering of the submitted manuscript; our bibliographic citations refer to the bibliography of this letter.
 \end{itemize}
-
-\section*{Summary of the Response Letter}
-\red{[Summary for the AC to be added here.]}
 
 
 \vspace{1em}
@@ -115,7 +128,7 @@ We have carefully considered every comment and revised the manuscript accordingl
 \noindent\textit{Summary.}
  {The paper presents DualHash, a primal-dual reformulation for deep hashing with W-type quantization regularization. My understanding is that the main contribution is an adaptation of primal-dual splitting, combined with stochastic momentum/STORM updates, to deep hashing. The method uses the Fenchel conjugate of a specific W-type regularizer to obtain a closed-form dual proximal update. However, the convexity of the dual/conjugate side is standard.}
 \par\smallskip
-\normalfont\upshape\responseLabel xxx
+\normalfont\upshape\responseLabel We thank the reviewer for this assessment. We agree that convexity of a Fenchel conjugate is a standard fact and is not, by itself, our contribution. The revision focuses on what this dual treatment preserves and what it loses for nonconvex W-type regularization. Section~\mref{Section: Methodology} establishes the exact stationarity relationship and the original-objective near-stationarity bound; Section~\mref{Sec: guarantees original objective} connects that bound to the algorithmic output. The stochastic analysis controls the coupled primal, dual, and estimator errors. We explain these points in the response below.
 
 \section{Major issues}
 
@@ -126,43 +139,34 @@ We have carefully considered every comment and revised the manuscript accordingl
 \par\smallskip
 \normalfont\upshape\responseLabel
 {
-We thank the reviewer for this key question, which concerns the link between our reformulation and the original hashing objective. We agree that the submitted manuscript did not establish this link. The revised manuscript addresses it in a new Section~5.1, which first examines the duality gap between Problems~(P) and~(D) and then relates KKT points of $\calL$ directly to stationary points of Problem~(P)\red{, and finally bounds the near-stationarity of the original objective at approximate KKT points}.
+We thank the reviewer for this key question. We agree that the submitted manuscript did not adequately establish the connection to the original hashing objective. The revision distinguishes the original objective (P0), the quadratic-penalty model (P), and the min--max formulation. Their relationships are established in Sections~\mref{Sec: original optimality relations} and~\mref{Sec: original objective guarantees}.
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=2.2em]
-\item \textbf{Zero duality gap.} \red{Here, zero duality gap and strong duality are equivalent, since both problems attain their optimal values.} Proposition~5.1 shows that every primal--dual optimal pair with zero duality gap is a KKT point of $\calL$. The duality gap splits as
+\item \textbf{Duality gap.} Proposition~\mref{prop:zerogap} shows that a primal--dual optimal pair with zero duality gap is a KKT point of $\calL$. The duality gap decomposes as
 \[
 p^*-d^*=(p^*-p^{**})+(p^{**}-d^*),
 \]
-where $p^{**}$ is the optimal value after replacing $h$ with its convex envelope $h^{**}$; the first term is the loss caused by this replacement, and the second stems from the nonconvexity of $\calL$ in $(\bx,\bB)$. Example~5.1 shows that the first term alone can be positive: for a one-dimensional instance with convex $F$, the second term vanishes and the duality gap equals $\tfrac12$. Hence strong duality between (P) and (D) depends on the instance, and a guarantee for Problem~(P) has to come from the KKT points of $\calL$ themselves.
-\item \textbf{Stationarity relationship.} Proposition~5.2 characterizes exactly when a KKT point of $\calL$ yields a stationary point of Problem~(P): this holds if and only if the Fenchel--Young equality holds for $h$, which is equivalent to $|\tilde b_{ij}|\ge1$ for all $i,j$. This relationship requires no zero duality gap.
-\item \red{\textbf{Guarantee for the original objective.} The algorithm returns an approximate KKT point of $\calL$, whose accuracy is measured by the KKT residual $r_{\calK}$. Compared with $J_0$, $\calL$ introduces two discrepancies: the convexification error $h(\calD(\bx))-h^{**}(\calD(\bx))$ and the constraint violation $\|\bB-\calD(\bx)\|$. Using a smooth lower bound $s_{\bLmbd}$ of $J_0$ induced by Fenchel conjugacy, Lemma~3.1 shows that the constraint violation is absorbed into $r_{\calK}$, and that the structural error is unavoidable. Theorem~3.5 then shows that there exists $\widehat{\bx}$ near $\bx$ with
+where $p^{**}$ is the optimal value after replacing $h$ by $h^{**}$. Example~\mref{ex:gap} gives a scalar instance with convex $F$ and a positive gap of $1/2$. Thus the formulation does not provide an unconditional strong-duality guarantee.
+\item \textbf{Exact stationarity for the penalty model.} Proposition~\mref{prop:transfer} characterizes when a KKT point of $\calL$ is stationary for (P), without requiring zero duality gap. This result holds for the W-type class defined in Definition~\mref{def:wtype}. The proof in Appendix~\mref{app:transfer-proof} uses the conjugate characterization and condition (W3), through Lemma~\mref{lem:no-inner-stationary}; it is not restricted to the $\ell_1$ formula.
+\item \textbf{Approximate stationarity for the original objective.} Theorem~\mref{prop:original-certificate} gives a nearby-point certificate for $J_0$. For $L\ge L_f+\|\bLmbd\|L_{\nabla\calD}$, $L>0$, and $\kappa=(1+m^2)/(4m)$, it gives a point $\widehat{\bx}$ satisfying
 \[
-\operatorname{dist}\bigl(\zero,\partial J_0(\widehat{\bx})\bigr)\le\calO(r_{\calK})+\calO\Bigl(\sqrt{h\bigl(\calD(\bx)\bigr)}\Bigr).
+\|\widehat{\bx}-\bx\|\le\sqrt{\frac2L}\left(\sqrt\kappa\,r_{\calK}+\sqrt{h(\calD(\bx))}\right),
 \]
-The first term is the optimization error, which vanishes as $r_{\calK}\to0$. The second term is the structural error, the price of replacing $h$ by $h^{**}$, and depends only on the network outputs at $\bx$. Remark~3.6 explains its consequences: for $\tanh$ outputs, the structural error is measured exactly by $h(\calD(\bx))$, which equals $\lambda Q_1(\bx)$ for the $\ell_1$ W-regularizer; and when $h$ has a compact dual domain, the structural error does not depend on the penalty parameter $\gamma$, so the guarantee holds for every fixed $\gamma>0$.}
+\[
+\dist(\zero,\partial J_0(\widehat{\bx}))\le
+\left(\sqrt{1+G_{\calD}^2}+2\sqrt{2\kappa L}\right)r_{\calK}
++2\sqrt{2Lh(\calD(\bx))}.
+\]
+The first term is controlled by the KKT residual; the second need not vanish with that residual. For the $\ell_1$ W-regularizer, $h(\calD(\bx))=\lambda Q_1(\bx)$. With a compact dual domain, one can choose $L=L_0:=L_f+\lambda\sqrt{nd}L_{\nabla\calD}$; the structural-error term then has no explicit dependence on $\gamma$. Corollary~\mref{cor:original-stationarity} combines this certificate with the oracle bounds. In particular, $\lambda\EE Q_1(\bx^R)=\calO(\varepsilon^2)$ is a sufficient additional condition for both expected near-stationarity tolerances to be $\calO(\varepsilon)$; the KKT complexity bound alone does not ensure this quantization-error condition.
 \end{enumerate}
-Proposition~5.2 is stated in Section~5.1 and proved in Appendix~A.2 \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.2, Page XX, lines XX--XX)}. For the reviewer's convenience, we reproduce it below.
-\begin{quote}\normalfont\upshape
-\textbf{Proposition 5.2.} Let $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ be a KKT point of $\calL$, i.e., it satisfies (5.1). Then the following statements are equivalent:
+For completeness, the exact stationarity statement is reproduced below \green{(Section~\mref{Sec: original optimality relations}, p.~\mpage{prop:transfer}; proof in Appendix~\mref{app:transfer-proof}, p.~\mpage{app:transfer-proof})}.
+\begin{bluequote}
+\textbf{Proposition \mref{prop:transfer}.} Let $h$ be a W-type regularizer, and let $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ be a KKT point of $\calL$. The following statements are equivalent:
 \begin{enumerate}[label=\textup{(\alph*)}]
-\item $(\tilde{\bx},\tilde{\bB})$ is a stationary point of Problem~(P), i.e., $\zero\in\nabla F(\tilde{\bx},\tilde{\bB})+\{\zero\}\times\partial h(\tilde{\bB})$;
-\item the Fenchel--Young equality holds for $h$ at $(\tilde{\bB},\tilde{\bLmbd})$: $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
-\item $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
+\item $(\tilde{\bx},\tilde{\bB})$ is a stationary point of Problem~(P), i.e., $\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm0$ and $\bm0\in\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})+\partial h(\tilde{\bB})$;
+\item $h(\tilde{\bB})+h^*(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle$;
+\item $|\tilde b_{ij}|\ge1$ for all $i,j$.
 \end{enumerate}
-
-\textit{Proof.} Since $h^{*}$ is proper, lower semicontinuous, and convex, its conjugate is $h^{**}(\bB)=\lambda\sum_{i,j}(|b_{ij}|-1)_{+}$, and the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex} gives
-\[
-\tilde{\bB}\in\partial h^{*}(\tilde{\bLmbd})
-\iff \tilde{\bLmbd}\in\partial h^{**}(\tilde{\bB})
-\iff h^{**}(\tilde{\bB})+h^{*}(\tilde{\bLmbd})=\langle\tilde{\bLmbd},\tilde{\bB}\rangle.\tag{A.4}
-\]
-Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three statements in (A.4) hold, and $\tilde{\bLmbd}=-\nabla_{\bB}F(\tilde{\bx},\tilde{\bB})$ together with $\nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\zero$ shows that (a) holds if and only if $\tilde{\bLmbd}\in\partial h(\tilde{\bB})$.
-
-(b)$\iff$(c). By the last equality in (A.4), (b) holds if and only if $h(\tilde{\bB})=h^{**}(\tilde{\bB})$. Since $h$ and $h^{**}$ are separable and $\lambda\big||b|-1\big|=\lambda(|b|-1)_{+}$ if and only if $|b|\ge1$, this is equivalent to $|\tilde{b}_{ij}|\ge1$ for all $i,j$.
-
-(b)$\Rightarrow$(a). By the definition of $h^{*}$, (b) means that $\tilde{\bB}$ is a global minimizer of $h(\cdot)-\langle\tilde{\bLmbd},\cdot\rangle$. Fermat's rule~\cite[Theorem~10.1]{rockafellar1998variational} and \cite[Exercise~8.8(c)]{rockafellar1998variational} then give $\zero\in\partial h(\tilde{\bB})-\tilde{\bLmbd}$, i.e., $\tilde{\bLmbd}\in\partial h(\tilde{\bB})$, which is (a).
-
-(a)$\Rightarrow$(c). By (A.4) and (a), $\tilde{\bLmbd}\in\partial h(\tilde{\bB})\cap\partial h^{**}(\tilde{\bB})$. Since $h$ and $h^{**}$ are separable~\cite[Proposition~10.5]{rockafellar1998variational}, it suffices to consider a scalar entry $b=\tilde{b}_{ij}$. If $|b|<1$, then $\partial h^{**}(b)=\{0\}$, whereas $\partial h(b)=\{-\lambda\operatorname{sgn}(b)\}$ for $b\neq0$ and $\partial h(0)=\{-\lambda,\lambda\}$; hence $0\notin\partial h(b)$ and the intersection is empty. Therefore $|\tilde{b}_{ij}|\ge1$ for all $i,j$. \hfill$\square$
-\end{quote}
+\end{bluequote}
 }
 \end{itemize}
 
@@ -173,7 +177,8 @@ Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three stat
 \begin{itemize}\itshape
 \item I also found the setting and writing unclear. The term ``W-type regularizer'' is used repeatedly but never properly defined; only one example is given. Even by the start of Section 3, the precise problem being studied is still not fully clear. If ``W-type'' denotes a class of regularizers, that class should be formally specified. If it refers only to the particular regularizer $h(z) = \lambda \lVert |z| - 1 \rVert_1$, the paper should state this much earlier and avoid presenting the results as applying to a broader family.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for this comment. In the revised manuscript, ``W-type regularizer'' denotes a formally specified class: Definition~2.1 characterizes it by conditions (W1)--(W3), and Table~2.1 lists representative members from the deep hashing literature. We now state the scope of each result explicitly. The structural results in Section~3, namely the conjugate formula, the exact stationarity relation, and the near-stationarity certificate for the original objective, hold for every W-type regularizer. The algorithms, the complexity analysis, and the experiments use the $\ell_1$ W-regularizer $h(\bz)=\lambda\||\bz|-\mathbf{1}\|_1$, for three reasons: its conjugate has the compact domain $[-\lambda,\lambda]$, which bounds the multiplier in the complexity analysis; the proximal mapping of its conjugate is available in closed form, so the dual update is explicit; and $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$, so the penalty minimized in training, the structural error in the near-stationarity certificate, and the quantization error reported in the experiments coincide. By contrast, the $p=2$ regularizer has an unbounded dual domain, and the log-cosh regularizer has no closed-form dual proximal mapping. This scope is stated in Section~2 right after the definition of the $\ell_1$ W-regularizer and in the introduction. % VERIFY numbering
+\normalfont\upshape\responseLabel \pendingreply{Section~\mref{Sec:W-type Regularized Deep Hashing Model} currently describes the algorithms and complexity analysis as using the $\ell_1$ W-regularizer, whereas Section~\mref{Section: Convergence analysis} allows the compact-dual-domain W-type subclass. These scope statements still need to be aligned in the manuscript.}
+We thank the reviewer for this comment. Definition~\mref{def:wtype} now specifies the W-type class through conditions (W1)--(W3), and Table~\mref{tab:wtype} lists representative members. The conjugate characterization in Section~\mref{Section: W-regularizer} and the stationarity results in Section~\mref{Section: Methodology} apply to this class. The complexity theorems additionally require a compact dual domain. Our implementation and experiments use the $\ell_1$ W-regularizer $h(\bz)=\lambda\||\bz|-\mathbf{1}\|_1$, whose scalar conjugate has domain $[-\lambda,\lambda]$ and an explicit proximal mapping. For this regularizer, $h(\calD(\bx))=\lambda Q_1(\bx)$, and the structural-error term in Theorem~\mref{prop:original-certificate} is $2\sqrt{2L\lambda Q_1(\bx)}$. The experiments report the normalized metric $Q_1(\bx)/(nd)$. Thus the metric determines the structural error after accounting for the normalization and constants; the two quantities are not identical. The squared W-regularizer has an unbounded dual domain, while the log-cosh conjugate proximal mapping is specified implicitly in Table~\mref{tab:wtype}. \green{(Sections~\mref{Section: W-regularizer}--\mref{Sec:W-type Regularized Deep Hashing Model}, pp.~\mpage{def:wtype}--\mpage{tab:wtype}; Section~\mref{Section: Convergence analysis})}
 \end{itemize}
 
 \subsubsection*{Length and organization}
@@ -181,7 +186,7 @@ Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three stat
 \begin{itemize}\itshape
 \item  {Finally, the paper feels longer than necessary relative to its main contribution. Some of the space spent on standard preliminaries and routine descent arguments could be shortened, cited, or moved further into the supplement. This would allow the main text to focus more sharply on what is actually novel, especially the relationship between the primal-dual reformulation and the original nonconvex W-regularized hashing objective.}
 \par\smallskip
-\normalfont\upshape\responseLabel 
+\normalfont\upshape\responseLabel We agree that the main text should emphasize the connection to the original objective. We have consolidated the model definitions and preliminaries in Section~\mref{Section: Problem Reformulation} and placed the optimality relationships in Section~\mref{Section: Methodology}, before the algorithms. The shared one-iteration estimates and the algorithm-specific primal-progress estimates now appear in Appendices~\mref{app:complexity-auxiliary-results}--\mref{app:storm-complexity}; their proofs are given with the corresponding results. Section~\mref{Section: Convergence analysis} retains the potentials, their descent statements, the rate and complexity results, and the original-objective corollary. We retain the definitions of the limiting subdifferential and proximal mapping because they are used in the stationarity comparison and the nonconvex/convex proximal distinction. \green{(Sections~\mref{Section: Problem Reformulation}--\mref{Section: Convergence analysis}, pp.~\mpage{Section: Problem Reformulation}--\mpage{cor:original-stationarity}; Appendices~\mref{app:complexity-auxiliary-results}--\mref{app:storm-complexity})}
 \end{itemize}
 
 \clearpage
@@ -194,55 +199,67 @@ Since $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ satisfies (5.1), all three stat
 
 \noindent\textit{Opening summary.}
 The aim of this article is to propose a new primal-dual stochastic approach, called DualHash, to address the challenge of `deep hashing' encoding within a non-convex optimisation framework. This has led to the development of two algorithms, DualHash-StoM and DualHash-Stom, based respectively on the principle of momentum acceleration and on a variance reduction technique. The authors present a complexity analysis of the two schemes before conducting experiments to compare their performances with existing methods on image datasets. The proposed article is relatively clear and well-referenced, with a comprehensive introduction. Its strongest and most relevant being the one dedicated to numerical experiments well detailled. However, the theoretical sections contain several weaknesses that need to be addressed in order to fully meet the journal's requirements. For all these reasons, \textbf{I return the article to the authors for major revisions.}
+\par\smallskip
+\normalfont\upshape\responseLabel We thank the reviewer for the detailed evaluation and the positive assessment of the experiments. We agree that the stochastic formalism, proof justifications, and organization required revision. The responses below describe the revised probability model, corrected estimates, and locations of the intermediate results, together with the changes to notation and presentation.
 \medskip
 \noindent\textit{1 Abstract/Introduction.}
 Abstract and introduction appear generally well-written and well-cited to me . It is clear what the authors are trying to achieve in this paper.
+\par\smallskip
+\normalfont\upshape\responseLabel We thank the reviewer for this assessment. The revised introduction retains the problem motivation and now states more explicitly the stationarity question, the quantization-error limitation, and the scope of the complexity guarantees.
 \medskip
 \noindent\textit{5 Complexity analysis.}
 This section brings together a fairly large number of results, including intermediate lemmas and theorems, which may seem a bit exhaustive and even disjoined as it forces the reader to keep referring back and forth to the appendices. To such an extent, my comments relative to proofs postponed in Appendix C or D are covered in a dedicated section, at the end of this document. A few mathematical inaccuracies needs to be reworked and particularly the stochastic formalism of the paper needs to be a little refined. Finally, your complexity analysis involves a lot of parameters whose values tend to vary depending on the subsections, which can sometimes detract from the main point.
+\par\smallskip
+\normalfont\upshape\responseLabel We have reorganized Section~\mref{Section: Convergence analysis} around the Lyapunov functions, their descent properties, and the rate and complexity guarantees. Shared and algorithm-specific intermediate estimates are placed in Appendices~\mref{app:complexity-auxiliary-results}--\mref{app:storm-complexity}. Each algorithm has an explicit parameter setting before its main estimates, and the probability framework is defined once at the beginning of the section.
 \medskip
 \noindent\textit{9 Appendix C.}
 The computational part of the proofs is generally carried out correctly, with only a few minor errors. However some justifications are missing or confused particularly, the way you pass to the conditional expectation.
+\par\smallskip
+\normalfont\upshape\responseLabel We have replaced the incorrect conditional-expectation step by total expectations after the pathwise descent estimate, and supplied the mini-batch variance calculation. We also corrected the stationarity coefficient and noise term and made the coefficient-positivity argument explicit. The individual Appendix~C comments are answered below.
 \medskip
 \noindent\textit{10 Appendix D.}
 The strengths and weaknesses of the proofs contained in this section are similar to those in the previous appendix.
+\par\smallskip
+\normalfont\upshape\responseLabel The revised Appendix~\mref{app:storm-complexity} states the recursive estimator bound in total expectation and includes the effect of the auxiliary-variable increment. The weighted accumulation estimate and the rate proof use this revised bound. We address the conditioning, coefficients, and notation in the individual Appendix~D responses below.
 
 \section{Major issues}
 
 \subsection{Stochastic formalism}
 
 \par\smallskip
-\normalfont\upshape\textbf{General response:} We thank the reviewer for these careful comments regarding the stochastic formalism. We agree that in the original manuscript, the finite-sum average \(\EE_i\) was not clearly distinguished from the conditional expectations \(\EE_{\xi^{[k]}}\) and \(\EE_k\). We have therefore rewritten the sampling assumptions explicitly in finite-sum form, unified the conditional-expectation notation as \(\EE_k[\cdot]=\EE[\cdot\mid\calF_k]\), and stated the corresponding almost-sure convention. We have revised the beginning of Section~4.2, Section~5 and Appendices~C and~D accordingly, as detailed below.
+\normalfont\upshape\textbf{General response:} We thank the reviewer for these careful comments regarding the stochastic formalism. We agree that in the original manuscript, the finite-sum average \(\EE_i\) was not clearly distinguished from the conditional expectations \(\EE_{\xi^{[k]}}\) and \(\EE_k\). We have therefore rewritten the sampling assumptions explicitly in finite-sum form, unified the conditional-expectation notation as \(\EE_k[\cdot]=\EE[\cdot\mid\calF_k]\), and stated the corresponding almost-sure convention. We have revised the beginning of Section~\mref{Sec: DualHash framework}, Section~5 and Appendices~C and~D accordingly, as detailed below.
 
 \begin{itemize}\itshape
 
 \item (Assumption 5.1) In (iii), you use several notations that you forgot to introduce earlier, in particular the conditional expectation operator $\EE_i$. To do so, you also need to clearly define a probability space and a filtration. That is why I would tend to add an extra paragraph and/or move here the one you wrote at the very beginning of the Appendix C.
 
+\normalfont\par\smallskip\upshape\responseLabel We agree that the probability model and expectation operators must be defined before use. Section~\mref{Section: Convergence analysis} now defines the probability space, $\calF_k=\sigma(\calJ_1,\ldots,\calJ_{k-1})$, and $\EE_k[\cdot]=\EE[\cdot\mid\calF_k]$. The former $\EE_i$ is replaced by explicit finite-sum averages in Assumption~\mref{Ass: main assumptions}. The sampling rule is specified at \meq{Eq: minibatch oracle}. The revised passages and assumptions are reproduced in the response to the notation comment immediately below. \green{(pp.~\mpage{Eq: minibatch oracle}--\mpage{Ass: main assumptions})}
+
 \item Equalities or inequalities involving random variables (typically those containing conditional expectations) are `only' verified almost surely; this is why it is important to specify this whenever necessary.
 
-\item (page 29) Notations $\EE_{\xi^{[k]}}$ and $\EE_k$ (rather written $\EE_i$) introduced in the main paper seems to correspond to the same object. Also I would place this notation part in Section 5 instead (see my 3rd point of ``Complexity analysis section).\normalfont
+\normalfont\par\smallskip\upshape\responseLabel We have added the convention that all equalities and inequalities involving conditional expectation hold almost surely. The derivations of the mini-batch variance bound and the recursive estimator bound also display ``a.s.'' explicitly. The final descent and rate estimates are stated using total expectations. \green{(Section~\mref{Section: Convergence analysis}, p.~\mpage{Section: Convergence analysis}; Appendices~\mref{app:stom-complexity} and~\mref{app:storm-complexity})}
+
+\item (page 29) Notations $\EE_{\xi^{[k]}}$ and $\EE_k$ (rather written $\EE_i$) introduced in the main paper seems to correspond to the same object. Also I would place this notation part in Section 5 instead (see my 3rd point of ``Complexity analysis section).
+
+\normalfont\upshape\responseLabel We have unified the notation and moved the probabilistic setup into the main text. The precise changes, including those requested in the two preceding comments, are as follows.
 
 \begin{enumerate}[label=\textbf{(\Roman*)},leftmargin=2.2em,before=\let\item\reviewitem]
 
-\item \textbf{Probabilistic framework and conditional expectation notation.} We have revised Section~4.2 to distinguish the sample index from the iteration index and to define the mini-batch size in the sampling statement \green{(Page XX, lines XX--XX):}
+\item \textbf{Probabilistic framework and conditional expectation notation.} We have revised Section~\mref{Sec: DualHash framework} to distinguish the sample index from the iteration index and to define the mini-batch size in the sampling statement \green{(p.~\mpage{Eq: minibatch oracle})}
 \begin{bluequote}
 Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. [\ldots] At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past.
 \end{bluequote}
-We have replaced the notation \(\EE_{\xi^{[k]}}\) with the unified notation \(\EE_k\), and removed the ambiguous notation \(\EE_i\) by writing the corresponding finite-sum averages explicitly. We have also moved the probabilistic framework to the beginning of Section~5, immediately before Assumption~5.1 (\green{Page XX, lines XX--XX}):
+We have replaced the notation \(\EE_{\xi^{[k]}}\) with the unified notation \(\EE_k\), and removed the ambiguous notation \(\EE_i\) by writing the corresponding finite-sum averages explicitly. We have also moved the probabilistic framework to the beginning of Section~5, immediately before Assumption~\mref{Ass: main assumptions} \green{(p.~\mpage{Section: Convergence analysis})}:
 \begin{bluequote}
-Under the mini-batch sampling scheme introduced in Section~4.2, let $(\Omega,\calF,\PP)$ be the underlying probability space. For $k\geq1$, define $\calF_k:=\sigma(\calJ_1,\ldots,\calJ_{k-1})$ with $\calF_1$ trivial, as the filtration generated by the past mini-batches. We write $\EE_k[\cdot]:=\EE[\cdot\mid\calF_k]$
+Under the mini-batch sampling scheme introduced in Section~\mref{Sec: DualHash framework}, let $(\Omega,\calF,\PP)$ be the underlying probability space. For $k\geq1$, define $\calF_k:=\sigma(\calJ_1,\ldots,\calJ_{k-1})$ with $\calF_1$ trivial, as the filtration generated by the past mini-batches. We write $\EE_k[\cdot]:=\EE[\cdot\mid\calF_k]$
 for the conditional expectation given the past and $\EE[\cdot]$ for the total expectation. All equalities and inequalities involving $\EE_k[\cdot]$ are understood to hold almost surely.
 \end{bluequote}
-The redundant batch-history notation previously introduced in Appendix~C has been removed, and Appendices~C and~D now use the probabilistic notation defined in Section~5 
-(\green{Page XX, lines XX--XX}):
-\begin{bluequote}
-Before proceeding, throughout Appendices~C and~D, we adopt the notation, the probabilistic setting and intermediate results from Section~5.
-\end{bluequote}
-\item \textbf{Finite-sum form of the sampling assumptions.} \red{We apologize for the undefined operator $\EE_i$ in the submitted Assumption~5.1(iii).} It denoted the expectation over an index $i$ drawn uniformly from $\{1,\ldots,n\}$: when $\xi$ is drawn uniformly from a finite set $\{\xi_1,\ldots,\xi_n\}$,
+The redundant batch-history notation previously introduced in Appendix~C has been removed. Appendices~\mref{app:stom-complexity} and~\mref{app:storm-complexity} use the probabilistic notation defined at the beginning of Section~\mref{Section: Convergence analysis}. \green{(pp.~\mpage{app:stom-complexity}, \mpage{app:storm-complexity})}
+\item \textbf{Finite-sum form of the sampling assumptions.} We apologize for the undefined operator $\EE_i$ in the submitted Assumption~\mref{Ass: main assumptions}(iii). It denoted the expectation over an index $i$ drawn uniformly from $\{1,\ldots,n\}$: when $\xi$ is drawn uniformly from a finite set $\{\xi_1,\ldots,\xi_n\}$,
 \[
 \EE_{\xi}[\phi(\bx;\xi)]=\frac{1}{n}\sum_{i=1}^{n}\phi(\bx;\xi_i),
 \]
-and our objective has exactly this structure, $F(\bx,\bB)=\frac{1}{n}\sum_{i=1}^{n}F_i(\bx,\bb_i)$. Since $\EE_i$ is not used elsewhere, we have removed it and written Assumption~5.1 as the finite-sum form of the standard unbiasedness and bounded-variance conditions; the randomness of the algorithm enters only through the mini-batches $\calJ_k$ and is handled by the filtration $\{\calF_k\}$ introduced above \green{(Page XX, lines XX--XX):}
+and our objective has exactly this structure, $F(\bx,\bB)=\frac{1}{n}\sum_{i=1}^{n}F_i(\bx,\bb_i)$. Since $\EE_i$ is not used elsewhere, we have removed it and written Assumption~\mref{Ass: main assumptions} as the finite-sum form of the standard unbiasedness and bounded-variance conditions; the randomness of the algorithm enters only through the mini-batches $\calJ_k$ and is handled by the filtration $\{\calF_k\}$ introduced above \green{(p.~\mpage{Ass: main assumptions})}
 \begin{bluequote}
 There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$,
 \[
@@ -251,7 +268,7 @@ There exists a constant $\sigma^2\geq0$ such that for all $\bx\in\RR^{q}$ and $\
 \frac{1}{n}\sum_{i=1}^{n}\bigl\|\nabla_{\bx}F_i(\bx,\bb_i)-\nabla_{\bx}F(\bx,\bB)\bigr\|^2\leq\sigma^2.
 \]
 \end{bluequote}
-We have also revised Assumption 5.2 on mean-squared smoothness \green{(Page XX, lines XX--XX):}
+We have also revised Assumption~\mref{Ass: the mean squared smoothness of F} on mean-squared smoothness \green{(p.~\mpage{Ass: the mean squared smoothness of F})}
 \begin{bluequote}
 There exists $L_{F} > 0$ such that for all $\bx, \bx' \in \RR^{q}$ and $\bB, \bB' \in \RR^{n\times d}$, it holds that
 \begin{align}
@@ -263,7 +280,7 @@ There exists $L_{F} > 0$ such that for all $\bx, \bx' \in \RR^{q}$ and $\bB, \bB
 \end{align}
 \end{bluequote}
 
-\item \textbf{Conditional expectations and almost-sure statements.} In the revised analysis, conditional expectations appear only in the derivation of (5.11) \red{(now (5.8))}, given in our response to the comment on page~13 below, and in the proof of Lemma~D.1 \red{(now Lemma~D.2)}, where every conditional relation is marked ``a.s.'' \green{(Page XX, lines XX--XX)}. All other inequalities either hold pathwise for every realization of the mini-batches or are stated for total expectations, following the reviewer's suggestion for Lemma~D.1, and therefore require no almost-sure qualifier.
+\item \textbf{Conditional expectations and almost-sure statements.} In the revised analysis, conditional expectations appear only in the derivation of (5.11) (now \meq{eq: the gradient error in SGDM}), given in our response to the comment on page~13 below, and in the proof of Lemma~D.1 (now Lemma~\mref{Lemma: Recursive bound on gradient error}), where every conditional relation is marked ``a.s.'' \green{(p.~\mpage{Lemma: Recursive bound on gradient error})}. All other inequalities either hold pathwise for every realization of the mini-batches or are stated for total expectations, following the reviewer's suggestion for original Lemma~D.1, and therefore require no almost-sure qualifier.
 \end{enumerate}
 
 \item {\itshape (page 13) Give more details to justify
@@ -271,9 +288,9 @@ $\EE[\|\be^k\|^2]\le\sigma^2/b_k$.}
 
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer for this comment. The bound (5.11) \red{(now (5.8))} follows from the standard variance formula for uniform sampling. With the revised probabilistic framework and conditional-expectation notation above, its derivation reads as follows.
+We thank the reviewer for this comment. The bound (5.11) (now \meq{eq: the gradient error in SGDM}) follows from the standard variance formula for uniform sampling. With the revised probabilistic framework and conditional-expectation notation above, its derivation reads as follows.
 \begin{quote}\normalfont\upshape
-\textit{Proof.} Recall that the stochastic gradient error $\be^k$ of Algorithm 4.1 is defined as
+\textit{Proof.} Recall that the stochastic gradient error $\be^k$ of Algorithm~\mref{alg:our_algorithm_sgdm} is defined as
 \[
 \be^k
 =
@@ -294,7 +311,7 @@ of $\calF_k$, define
 -
 \nabla_{\bx}F(\bz^k,\bB^k).
 \]
-Conditionally on $\calF_k$, Assumption~5.1
+Conditionally on $\calF_k$, Assumption~\mref{Ass: main assumptions}
 gives
 \[
 \frac{1}{n}\sum_{i=1}^n \bv_i^k=\zero,
@@ -318,65 +335,63 @@ and
 \quad\text{a.s.}
 \]
 The case $n=1$ is immediate since $\be^k=\zero$. Taking the full
-expectation and using the tower property gives (5.11) \red{(now (5.8))}.
+expectation and using the tower property gives (5.11) (now \meq{eq: the gradient error in SGDM}).
 \hfill$\square$
 \end{quote}
 \end{itemize}
 
-\subsection{\red{Boundedness and lower bounds}}
+\subsection{Boundedness and lower bounds}
 
 \begin{itemize}\itshape
 \item (Lemma 5.1/proof) Having $J$ coercive and lower-bounded is generally not enough to directly obtain the boundedness of $(\bx^k,\bB^k)$. You classically also need to prove that sequence $\{J(\bx^k,\bB^k)\}$ converges (or at least its boundedness). Note also that having boundedness of all level-sets is equivalent to coercivity. Finally, the coercivity of $J$ is not assumed in your assumption 5.1.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for the important comment about the boundedness argument. While we agree that deducing boundedness of the iterates in Lemma~5.1 from coercivity of the objective function $J(\bx,\bB)$ requires a uniform upper bound on the objective values along the iterates, our complexity analysis actually does not require the iterates themselves to be bounded. Rather, it requires lower bounds on the potentials used in the analysis. This was the original motivation for introducing Lemma~5.1.
+\normalfont\upshape\responseLabel We thank the reviewer for identifying the gap in the original boundedness argument. Coercivity alone does not establish boundedness of the iterates without a bound on their objective values. The revised proof does not use that implication. Instead, Appendix~\mref{app:smoothness-discussion} derives uniform bounds for $\bLmbd^k$ and $\bB^k$ directly from the initialization and updates. These bounds provide the region on which $F$ is smooth and are used to establish lower bounds for the potentials. We do not require a separate pathwise boundedness proof for the network-parameter sequence $\{\bx^k\}$.
 
-Regarding coercivity, we already stated in the submitted manuscript (p.~7) that the objective $J$ in~(3.1),
+Regarding coercivity, Assumption~\mref{Ass: basic regularity}(i) now requires the average loss to be bounded below:
 \[
-J(\bx,\bB)=
-\underbrace{\frac1n\sum_{i=1}^n\ell_{s,i}(\bx)}_{=:\,\bar{\ell}_s(\bx)}
-+\frac{\mu}{2}\|\bx\|^2
-+\frac{\gamma}{2n}\sum_{i=1}^n\|\calD_i(\bx)-\bb_i\|^2
-+h(\bB),
+\underline{\ell}:=\inf_{\bx}\bar{\ell}_s(\calD(\bx))>-\infty.
 \]
-is coercive. However, to ensure this property through the model structure, we impose the lower-boundedness assumption on the average loss rather than directly on the objective:
-\[
-\underline{\ell}:=\inf_{\bx}\bar{\ell}_s(\bx)>-\infty.
-\]
-Together with the model structure, this condition ensures both coercivity and lower-boundedness of $J$. We therefore refine the lower-boundedness assumption accordingly; it is now Assumption~2.1(i). This refinement rules out cancellation of the growth of the regularization terms by the loss and justifies the coercivity stated in the manuscript.
+The objective is $J(\bx,\bB)=f(\bx)+P(\bx,\bB)+h(\bB)$, where $f(\bx)=\bar{\ell}_s(\calD(\bx))+\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$. The lower bound on the loss prevents cancellation of the quadratic growth in $\bx$; the penalty and regularizer control $\bB$. Remark~\mref{rem:coercivity} discusses existence of an optimal solution. The iterate bounds used in our analysis are obtained separately from the updates, as explained above.
 
-Under the refined Assumption~2.1(i) and the appropriate parameter conditions, the estimates in our analysis yield the required lower bounds on the potentials. \red{We have made these estimates explicit in Lemma~C.3 for $\Psi_m$ and Lemma~D.1 for $\Psi_r$.} These adjustments preserve the stated complexity orders and the main theoretical contributions of the manuscript.
+Under the refined Assumption~\mref{Ass: basic regularity}(i) and the appropriate parameter conditions, the estimates in our analysis yield the required lower bounds on the potentials. We have made these estimates explicit in Lemma~\mref{Lemma: lower bound of Psi_m} for $\Psi_m$ and Lemma~\mref{Lemma: lower bound of W} for $\Psi_r$. These adjustments preserve the stated complexity orders and the main theoretical contributions of the manuscript.
 \item (Lemma 5.7) Why $R\in 2,...,T+1$ instead of $R\in 1,...,T$ ? Furthermore, I am not particularly in favour of using uniform sampling to present a rate; I would prefer to use the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[dist^2(...)]$. Finally, to use $\Psi_m^*$ you need at least to justify the lower-boundedness of $\{\Psi_m(\calQ^k)\}$ which doesn't seem straightforward.
 \par I would first introduce $L_\Delta$ before mentioning $S_1,S_2,S_3,S_4$ (these constant actually don't appear in (5.17) as such).
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the mini-batches, in Lemma~5.7 (now Lemma~5.5), \red{Theorem~5.2}, and the output step of Algorithm 4.1; the same correction is made in Lemma~5.10 (now Lemma~5.8), \red{Theorem~5.3}, and Algorithm 4.2. Following the reviewer's preference, the proof of Lemma~5.5 now states the averaged bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\calK(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, \red{the lower bound of $\{\EE[\Psi_m(\calQ^k)]\}$ is established in Lemma~C.3; its proof uses $F\ge\underline{\ell}$, the bounds $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$ and $\|\bB^k\|_F\le R_B$ from Appendix~B, and the $L_F$-smoothness of $F$ on $\{\|\bB\|_F\le R_B\}$.} We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~5.5, before $S_1,\ldots,S_4$ are mentioned.
+\normalfont\upshape\responseLabel We thank the reviewer for these remarks. Regarding the index set and the metric: the shift $R\in\{2,\ldots,T+1\}$ was unnecessary, since the averaged bound in the proof runs over $k=1,\ldots,T$. In the revised manuscript, $R$ is selected uniformly from $\{1,\ldots,T\}$, independently of the mini-batches, in Lemma~5.7 (now Lemma~\mref{lemma: convergence rate sgdm}), Theorem~\mref{Theorem: the oracle complexity in SGDM}, and the output step of Algorithm~\mref{alg:our_algorithm_sgdm}; the same correction is made in Lemma~5.10 (now Lemma~\mref{Lemma: convergence rate of storm}), Theorem~\mref{Theorem: the oracle complexity in STORM}, and Algorithm~\mref{alg:our_algorithm_storm}. Following the reviewer's preference, the proof of Lemma~\mref{lemma: convergence rate sgdm} now states the averaged bound for the quadratic metric $\frac{1}{T}\sum_{k=1}^{T}\EE[\dist^2(0,\calK(\bx^k,\bB^k,\bLmbd^k))]$, which equals $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]$ under this choice of $R$. Regarding $\Psi_m^*$, the lower bound of $\{\EE[\Psi_m(\calQ^k)]\}$ is established in Lemma~\mref{Lemma: lower bound of Psi_m}; its proof uses $F\ge\underline{\ell}$, the bounds $\|\bLmbd^k\|_F\le\lambda\sqrt{nd}$ and $\|\bB^k\|_F\le R_B$ from Appendix~B, and the $L_F$-smoothness of $F$ on $\{\|\bB\|_F\le R_B\}$. We have also moved the definition of $L_\Delta$ to the front of the ``where'' clause of Lemma~\mref{lemma: convergence rate sgdm}, before $S_1,\ldots,S_4$ are mentioned.
 \item (Lemma 5.10) Similar comment as for Lemma 5.7, especially the fact you need to justify the lower-boundedness of $\{\Psi_r(\calQ^k)\}$ to be able to invoke $\Psi_r^*$.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer. As for Lemma~5.7 (now Lemma~5.5), the lower bound needed to define $\Psi_r^*$ is given in \red{Lemma~D.1}. It bounds from below the augmented potential $W_k=\EE[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\EE\|\be^k\|^2$, which contains the estimation-error term that the descent inequality produces, and $\Psi_r^*$ is defined from this bound.
+\normalfont\upshape\responseLabel We thank the reviewer. As for Lemma~5.7 (now Lemma~\mref{lemma: convergence rate sgdm}), the lower bound needed to define $\Psi_r^*$ is given in Lemma~\mref{Lemma: lower bound of W}. It bounds from below the augmented potential $W_k=\EE[\Psi_r(\calQ^k)]+\frac{\eta_T}{\rho_T}\EE\|\be^k\|^2$, which contains the estimation-error term that the descent inequality produces, and $\Psi_r^*$ is defined from this bound.
 \end{itemize}
 
-\subsection{\red{Errors in Appendix C (DualHash-StoM)}}
+\subsection{Errors in Appendix C (DualHash-StoM)}
 
 \begin{itemize}\itshape
 \item (Lemma 5.5/proof) See my comments relative to Appendix C.
+\normalfont\par\smallskip\upshape\responseLabel The former Lemma~5.5 is now Lemma~\mref{Lemma: One-iteration progress of x in SGDM}. Its proof applies the generic-direction estimate of Lemma~\mref{Lemma: auxiliary lemma for f} to $F(\cdot,\bB^k)$ and states the substitutions explicitly. The detailed responses to the comments on original Lemmas~C.1 and~5.5 appear below. \green{(Appendix~\mref{app:stom-complexity}, p.~\mpage{Lemma: One-iteration progress of x in SGDM})}
+
 \item (Lemma 5.6/proof) See my comments relative to Appendix C.
+\normalfont\par\smallskip\upshape\responseLabel The former Lemma~5.6 is now Lemma~\mref{Lemma: approximate sufficient descent property in SGDM}. Its proof takes total expectations after the pathwise estimate, uses $\EE\|\be^k\|^2\le\sigma^2/b_k$, and invokes Lemma~\mref{lem:lyapunov-coef-positivity} for the coefficients. We explain the expectation correction and the positivity calculation in the corresponding Appendix~C responses below. \green{(Appendix~\mref{app:stom-descent-proof}, p.~\mpage{app:stom-descent-proof})}
+
 \item (Lemma 5.7/proof) See my comments relative to Appendix C.
+\normalfont\par\smallskip\upshape\responseLabel The former Lemma~5.7 is now Lemma~\mref{lemma: convergence rate sgdm}. The proof uses a single maximum of the four stationarity coefficients, retains the average of the reciprocal batch sizes, and gives $C_\sigma=3+L_\Delta/L_F$. The lower bound needed for the potential is stated separately in Lemma~\mref{Lemma: lower bound of Psi_m}. The detailed rate calculation is given in our response to the original Lemma~5.7 proof below. \green{(Appendix~\mref{app:stom-rate-proof}, p.~\mpage{app:stom-rate-proof})}
+
 \item (Theorem 5.2/proof) See my comments relative to Appendix C.
 \par\smallskip
-\normalfont\upshape\responseLabel These four comments refer to the Appendix~C comments listed below, which are answered individually: Lemmas~C.1--C.3, the proofs of Lemmas~5.5--5.7 (now Lemmas~5.3--5.5), and the proof of \red{Theorem~5.2}.
+\normalfont\upshape\responseLabel These four comments refer to the detailed Appendix~C comments below. The revised primal-progress estimate is Lemma~\mref{Lemma: One-iteration progress of x in SGDM}; the sufficient-descent and rate statements are Lemmas~\mref{Lemma: approximate sufficient descent property in SGDM} and~\mref{lemma: convergence rate sgdm}. Their proofs and the proof of Theorem~\mref{Theorem: the oracle complexity in SGDM} appear in Appendix~\mref{app:stom-complexity}.
 \item (Lemma 5.6/proof) In (C.7) you don't pass to conditional expectation correctly ; this should be be $\EE_{\xi^{[k+1]}}$ before every terms. Fortunately, this doesn't seem compromise your proof to the extent that the ``wrong'' terms in $\EE_{\xi^{[k]}}$ in your inequality seems measurable (to check) and can therefore be written without a conditional expectation, for example $\cancel{\EE_{\xi^{[k]}}[\Delta_{\bx}^k]}\to\EE_{\xi^{[k+1]}}[\Delta_{\bx}^k]=\Delta_{\bx}^k$. Moreover, remind the reader you also use $\EE_{\xi^{[k+1]}}[\|e_k\|^2]\le\sigma^2/b_k$ (to justify).
 \par Finally, to reach the inequality after (C.7), you need to invoke Lemma C.2. For this reason, I would place Lemma C.2 before Lemma C.1.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer. In the proof of Lemma~5.6 (now Lemma~5.4), we now pass to the total expectation $\EE[\cdot]$ right after the pathwise Lyapunov inequality, in line with the reviewer's own suggestion for Lemma~D.1 to work with in-expectation statements. No conditional expectation remains in this proof, so the measurability of the terms in $\EE_{\bxi^{[k]}}$ no longer needs to be checked. The bound $\EE[\|\be^k\|^2]\le\sigma^2/b_k$ used there is justified in our responses on the probabilistic setting and to the comment on page~13 above. The proof now invokes Lemma~C.2 explicitly where the coefficients are substituted. We keep the order of the lemmas, since swapping them would renumber Lemma~C.1 and Lemma~C.2, which are cited throughout the reviewer's comments and this letter.
+\normalfont\upshape\responseLabel We thank the reviewer. In the proof of Lemma~5.6 (now Lemma~\mref{Lemma: approximate sufficient descent property in SGDM}), we take total expectations immediately after the pathwise Lyapunov inequality. The bound $\EE\|\be^k\|^2\le\sigma^2/b_k$ follows from uniform sampling without replacement, as derived above. The coefficient substitutions explicitly invoke Lemma~\mref{lem:lyapunov-coef-positivity}. The generic-direction estimate and the coefficient-positivity result are retained in their mathematical roles in Appendix~\mref{app:stom-complexity}, with explicit cross-references; the argument no longer relies on the incorrect conditional-expectation step.
 \item (Lemma C.2/proof) Before the calculus relative to $K_5-K_3-C_3-C_4$, remind the reader equalities $K_5=\frac{1-\alpha_k}{\eta_k}-L_F$, $C_3=K_4$, $\overline{L}_F=2L_F+K_3+K_4$. In the calculus of $C_4-K_6$, the 3rd line is even an equality. Moreover, this should be $\beta_k$ instead of $\beta$ everywhere.
 \par Regarding the last part, delete the two ``$\ge 0$'' after $C_B$ and $\frac{2}{L_F}C_B$ expression respectively. Otherwise, this would be a logical error as, at this stage of the proof, you have not yet shown that $C_B$ is positive. Moreover, I found $\tau\in\left(0,6\left(\frac{\sqrt{56}-2}{13}\right)\delta\frac{1}{L_F}\right)$. Finally, could you provide additionnal details to justify why $C_B>0$ ensures $C_2>0$ ?
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for the careful verification. In the revised proof of Lemma C.2, we recall $K_5=\frac{1-\alpha_k}{\eta_k}-2L_F$, $C_3=K_4$, and $\overline{L}_F=2L_F+K_3+K_4$ before the computation of $K_5-K_3-C_3-C_4$; we state $\alpha_k=\alpha$ and $\beta_k=\beta$ from the parameter conditions before computing $C_4-K_6$, which makes the use of the constant $\beta$ consistent with the definition of $C_4$; and the third line of that computation is now written as an equality. We have also removed the two premature assertions ``$\ge 0$''.
+\normalfont\upshape\responseLabel We thank the reviewer for the careful verification. In the revised proof of Lemma~\mref{lem:lyapunov-coef-positivity}, we recall $K_5=\frac{1-\alpha_k}{\eta_k}-2L_F$, $C_3=K_4$, and $\overline{L}_F=2L_F+K_3+K_4$ before the computation of $K_5-K_3-C_3-C_4$; we state $\alpha_k=\alpha$ and $\beta_k=\beta$ from the parameter conditions before computing $C_4-K_6$, which makes the use of the constant $\beta$ consistent with the definition of $C_4$; and the third line of that computation is now written as an equality. We have also removed the two premature assertions ``$\ge 0$''.
 
-Regarding the range of $\tau$: with $\delta=1/6$ and $t=\tau L_F$, the general expression of $C_{\bB}$ gives
+Regarding the range of $\tau$: with the explicitly stated coefficients $K_1=1/(2\tau)$, $K_2=3/(2\tau)-2L_F-\tau L_F^2/2$, $K_3=6\tau L_F^2$, $K_4=\tau L_F^2/2$, and $t=\tau L_F$, the expression of $C_{\bB}$ gives
 \[
 \frac{2}{L_F}C_{\bB}=\frac{1}{t}-\frac{13}{2}t-2=\frac{1}{t}\Big(1-2t-\frac{13}{2}t^2\Big).
 \]
-The first term was misprinted as $\frac{2}{t}$ in the submitted manuscript. The value $\frac{\sqrt{56}-2}{13}$ found by the reviewer is exactly what the misprinted coefficient produces, whereas the corrected coefficient gives $C_{\bB}>0$ if and only if $0<\tau<\frac{\sqrt{30}-2}{13L_F}$, which is the range stated in the manuscript. We have corrected the coefficient and written the range as an open interval. We have also added the requested justification: $C_1=K_1=3\delta\tau^{-1}>0$ and $C_2=\frac{1}{2}(K_2-K_1+K_3)=C_{\bB}+K_3>0$, because $K_3=\tau L_F^2/\delta>0$. We now specify $\delta=1/6$ where the coefficients $K_1,\ldots,K_4$ are first defined, and state this range of $\tau$ directly in the parameter settings of both DualHash-StoM and DualHash-StoRM, removing the intermediate constants $\tilde\delta$ and $c_\delta$.
+The first term was misprinted as $\frac{2}{t}$ in the submitted manuscript. The value $\frac{\sqrt{56}-2}{13}$ found by the reviewer is exactly what the misprinted coefficient produces, whereas the corrected coefficient gives $C_{\bB}>0$ if and only if $0<\tau<\frac{\sqrt{30}-2}{13L_F}$, which is the range stated in the manuscript. We have corrected the coefficient and written the range as an open interval. We have also added the requested justification: $C_1=K_1=1/(2\tau)>0$ and $C_2=\frac{1}{2}(K_2-K_1+K_3)=C_{\bB}+K_3>0$, because $K_3=6\tau L_F^2>0$. We now give $K_1,\ldots,K_4$ directly without an auxiliary $\delta$, and state this range of $\tau$ directly in the parameter settings of both DualHash-StoM and DualHash-StoRM, removing the intermediate constants $\tilde\delta$ and $c_\delta$.
 \item (Lemma C.3) In (C.10), I think the correct expression is $S_4^k=6(L_F^2\beta_k^2+\underline{2}\eta_k^{-1}\alpha_k^2)$. To maintain consistency in the structure of your terms, I would rewrite $S_1=4(\tau^{-2}+3)$.
 \par\smallskip
 \normalfont\upshape\responseLabel We thank the reviewer. The coefficient $6$ in front of $\eta_k^{-2}\alpha_k^2$ was indeed a typo: the proof (estimate of $\|\bd_{\bx}^k\|^2$) gives $6\eta_k^{-2}\|\bx^k-\by^k\|^2=12\eta_k^{-2}\alpha_k^2\Delta_{\bx}^k$, so that $S_4^k=6(L_F^2\beta_k^2+2\eta_k^{-2}\alpha_k^2)$, which we have corrected. We note that the exponent of $\eta_k$ is $-2$, since the term arises from $\eta_k^{-2}\|\bx^k-\by^k\|^2$. We have also rewritten $S_1=4(\tau^{-2}+3)$ as suggested.
@@ -384,7 +399,7 @@ The first term was misprinted as $\frac{2}{t}$ in the submitted manuscript. The 
 \par When you sum over $k=1,...,T$, term $(3+L_\Delta)\frac{\sigma^2}{b_k}$ is incorrect and should be $\frac{(3+L_\Delta)\sigma^2}{L_FT}\sum_{k=1}^{T}\frac{1}{b_k}$.
 \par In (5.17), in the upper bound, you thus should obtain $\frac{C_\sigma\sigma^2}{T}\sum_{k=1}^{T}\frac{1}{b_k}$ with $C_\sigma=\frac{3+L_\Delta}{L_F}$.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer. We have adopted the single maximum in \green{Lemma~5.5 and its proof in Appendix~C.4}, with
+\normalfont\upshape\responseLabel We thank the reviewer. We have adopted the single maximum in \green{Lemma~\mref{lemma: convergence rate sgdm} and its proof in Appendix~\mref{app:stom-rate-proof}}, with
 \begin{bluequote}
 \[
 L_{\Delta}:=\frac{\max\{S_1,S_2,S_3,S_4\}}{\min\{C_{\bB},C_{\bx}\}},\qquad
@@ -393,35 +408,35 @@ C_{\sigma}:=\frac{L_{\Delta}}{L_F}+3.
 \end{bluequote}
 The proof now recalls that $\eta_k=\eta/L_F$, $\alpha_k=\alpha$, and $\beta_k=\beta$ are constant, so $S_3^k=S_3$ and $S_4^k=S_4$, and bounds the four nonnegative increment terms using their largest coefficient.
 
-For varying batch sizes, the averaged bound retains $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}$. We also corrected the noise term in Lemma~C.3 (now Lemma~C.4) to $3\sigma^2/b_k$, as given by its proof. Combining this term with $\sigma^2/(b_kL_F)$ from the Lyapunov descent inequality gives the corrected bound (5.17) (now (5.14)):
+For varying batch sizes, the averaged bound retains $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}$. We also corrected the noise term in Lemma~C.3 (now Lemma~\mref{Lemma: Stationarity error bound in SGDM}) to $3\sigma^2/b_k$, as given by its proof. Combining this term with $\sigma^2/(b_kL_F)$ from the Lyapunov descent inequality gives the corrected bound (5.17) (now \meq{Eq: the convergence rate of sgdm}):
 \begin{bluequote}
 \[
 \frac{1}{T}\sum_{k=1}^{T}\EE\big[\dist^2(0,\calK(\bx^k,\bB^k,\bLmbd^k))\big]\le\frac{L_\Delta\Delta_1}{T}+\frac{C_\sigma\sigma^2}{T}\sum_{k=1}^{T}\frac{1}{b_k},\qquad C_\sigma=3+\frac{L_\Delta}{L_F}.
 \]
 \end{bluequote}
-The correction to Lemma C.3 accounts for the difference between $C_\sigma$ and the reviewer's $(3+L_\Delta)/L_F$.
+The correction to original Lemma~C.3, now Lemma~\mref{Lemma: Stationarity error bound in SGDM}, accounts for the difference between $C_\sigma$ and the reviewer's $(3+L_\Delta)/L_F$.
 \item (Theorem 5.2/proof) The previous mistake propagates into the proof of Theorem 5.2.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer. With the constant batch size $b_k=b=c_bT$ used in \red{Theorem~5.2}, we have $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}=\frac{1}{c_bT}$, so the corrected (5.17) (now (5.14)) gives $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]\le\frac{1}{T}\big(L_\Delta\Delta_1+C_\sigma\frac{\sigma^2}{c_b}\big)$. This is the bound used in the proof of \red{Theorem~5.2}, which we have updated to state this substitution explicitly. Hence the iteration bound and the $\calO(\varepsilon^{-4})$ SFO complexity in \red{Theorem~5.2} remain unchanged.
+\normalfont\upshape\responseLabel We thank the reviewer. With the constant batch size $b_k=b=\lceil c_bT\rceil$ used in Theorem~\mref{Theorem: the oracle complexity in SGDM}, we have $\frac{1}{T}\sum_{k=1}^{T}\frac{1}{b_k}=\frac{1}{c_bT}$, so the corrected (5.17) (now \meq{Eq: the convergence rate of sgdm}) gives $\EE[\dist^2(0,\calK(\bx^R,\bB^R,\bLmbd^R))]\le\frac{1}{T}\big(L_\Delta\Delta_1+C_\sigma\frac{\sigma^2}{c_b}\big)$. This is the bound used in the proof of Theorem~\mref{Theorem: the oracle complexity in SGDM}, which we have updated to state this substitution explicitly. Hence the iteration bound and the $\calO(\varepsilon^{-4})$ SFO complexity in Theorem~\mref{Theorem: the oracle complexity in SGDM} remain unchanged.
 \end{itemize}
 
-\subsection{\red{Errors in Appendix D (DualHash-StoRM)}}
+\subsection{Errors in Appendix D (DualHash-StoRM)}
 
 \begin{itemize}\itshape
 \item ((Lemma 5.10)/Theorem 5.3 proofs) See my comments relative to Appendix D.
 \par\smallskip
-\normalfont\upshape\responseLabel This comment refers to the Appendix~D comments listed below, which are answered individually: Lemma~5.9 (now Lemma~5.7), \red{Lemma~D.1 (now Lemma~D.2), Lemma~D.2 (now Lemma~D.3), Lemma~D.4 (now part of the proof of Lemma~5.8)}, and the proofs of Lemma~5.10 (now Lemma~5.8) and \red{Theorem~5.3}. The two notation comments of Appendix~D, on $|\calI_{k+1}|$ and on $C_\delta$, are answered under Notation and terminology.
+\normalfont\upshape\responseLabel This comment refers to the Appendix~D comments listed below, which are answered individually: Lemma~5.9 (now Lemma~\mref{Lemma: approximate sufficient descent property storm}), Lemma~D.1 (now Lemma~\mref{Lemma: Recursive bound on gradient error}), Lemma~D.2 (now Lemma~\mref{Lemma: Weighted error accumulation}), Lemma~D.4 (now part of the proof of Lemma~\mref{Lemma: convergence rate of storm}), and the proofs of Lemma~5.10 (now Lemma~\mref{Lemma: convergence rate of storm}) and Theorem~\mref{Theorem: the oracle complexity in STORM}. The two notation comments of Appendix~D, on $|\calI_{k+1}|$ and on $C_\delta$, are answered under Notation and terminology.
 \item (Lemma 5.9/proof) I don't really catch the interest of intermediate variable $s$ here. You should write (D.1) directly. Moreover, (D.1) is a simple direct consequence of Lemma 5.4 combined with Lemma 5.8. Why make things more complicated with intermediate equations (5.9), (5.7) ?
 \par In (D.2), I don't understand where the term $(C_4-K_6)\Delta_x^k$ comes from.
 \par\smallskip
-\normalfont\upshape\responseLabel \red{We thank the reviewer. The proof of Lemma~5.9 (now Lemma~5.7) no longer uses the intermediate variable $s$: substituting Lemma~5.8 (now Lemma~5.6) and the $\bB$- and $\bLmbd$-estimates of Lemma~5.4 (now Lemma~5.2) into the one-iteration decomposition of $\calL$ gives (D.1) directly. The term $(C_4-K_6)\Delta_{\bx}^k$ in (D.2) was carried over by mistake from the StoM analysis, where the momentum step produces $\Delta_{\bx}^k$; the StoRM update produces no such term and $\Psi_r$ contains no $C_4$. We have removed it} \green{(Appendix~D.2, Page XX, lines XX--XX)}.
+\normalfont\upshape\responseLabel We thank the reviewer. The proof of Lemma~5.9 (now Lemma~\mref{Lemma: approximate sufficient descent property storm}) no longer uses the intermediate variable $s$: substituting Lemma~5.8 (now Lemma~\mref{Lemma: One-iteration progress of x in STORM}) and the $\bB$- and $\bLmbd$-estimates of Lemma~5.4 (now Lemma~\mref{Lemma: One-iteration progress of B and Lambda}) into the one-iteration decomposition of $\calL$ gives \meq{Eq: One-iteration progress in storm} directly. The term $(C_4-K_6)\Delta_{\bx}^k$ in the submitted (D.2) was carried over by mistake from the StoM analysis, where the momentum step produces $\Delta_{\bx}^k$; the StoRM update produces no such term and $\Psi_r$ contains no $C_4$. We have removed it \green{(p.~\mpage{app:storm-descent-proof})}.
 \item (Lemma D.1) In Inequality of Lemma (D.1) and after a quick check of the proof of Lemma 8 of [49], I think this should be $\EE_{\xi^{[k+1]}}[\|\be^k\|^2]$ instead of $\EE_{\xi^{[k]}}[\|\be^k\|^2]$ (similar confusion as in the proof of (C.7)) . If it is so, you can hardly consider $\EE_{\xi^{[k]}}[\|\be^k\|^2]$ as metric for the rest of your analysis. To avoid, this kind of problem, I think you should work with $\EE[\|\be^k\|^2]$ metric instead and present an ``in-expectation'' version of Lemma D.1 i.e. of the form of :
 \[
 \EE[\|\be^{k+1}\|^2]\le ...\EE[\|\be^k\|^2]+...+...\EE[\Delta_{\bx}^{k+1}].
 \]
 The resulting proof should therefore not undergo any significant changes. That is why, in the remaining proofs/results to review, I will assume that the inequalities are passed to the expectation rather than conditional expectation.
 \par\smallskip
-\normalfont\upshape\responseLabel We agree with the reviewer. The correct conditioning is on $\calF_{k+1}=\sigma(\calJ_1,\ldots,\calJ_k)$: given $\calF_{k+1}$, the error $\be^k$ and the points $(\bx^k,\bB^k)$, $(\bx^{k+1},\bB^{k+1})$ are fixed, while $\calJ_{k+1}$ is independent, so that the cross terms with $\be^k$ vanish. Following the reviewer's suggestion, Lemma~D.1 \red{(now Lemma~D.2)} is now stated for total expectations, and the subsequent analysis uses $\EE[\|\be^k\|^2]$ throughout. Compared with [49, Lemma~8], the bound contains the additional term $\Delta_{\bB}^{k+1}$: since $\nabla_{\bx}F_i$ depends on $\bb_i$, the mean-squared smoothness bound involves the increment of $\bB$ as well as that of $\bx$; this term is controlled in the proof of \red{Lemma~D.3}. As this term is not covered by [49], we have added a complete proof of \red{Lemma~D.2} \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We agree with the reviewer. The correct conditioning is on $\calF_{k+1}=\sigma(\calJ_1,\ldots,\calJ_k)$: given $\calF_{k+1}$, the error $\be^k$ and the points $(\bx^k,\bB^k)$, $(\bx^{k+1},\bB^{k+1})$ are fixed, while $\calJ_{k+1}$ is independent, so that the cross terms with $\be^k$ vanish. Following the reviewer's suggestion, Lemma~D.1 (now Lemma~\mref{Lemma: Recursive bound on gradient error}) is now stated for total expectations, and the subsequent analysis uses $\EE[\|\be^k\|^2]$ throughout. Compared with \cite[Lemma~8]{shi2025momentum}, the bound contains the additional term $\Delta_{\bB}^{k+1}$: since $\nabla_{\bx}F_i$ depends on $\bb_i$, the mean-squared smoothness bound involves the increment of $\bB$ as well as that of $\bx$; this term is controlled in the proof of Lemma~\mref{Lemma: Weighted error accumulation}. As this term is not covered by \cite{shi2025momentum}, we have added a complete proof of Lemma~\mref{Lemma: Recursive bound on gradient error} \green{(p.~\mpage{Lemma: Recursive bound on gradient error})}:
 \begin{bluequote}
 \[
 \EE[\|\be^{k+1}\|^{2}]\leq(1-\rho_{k})^{2}\EE[\|\be^{k}\|^{2}]+\frac{2\rho_{k}^{2}\sigma^{2}}{b_{k+1}}+\frac{4(1-\rho_{k})^{2}L_{F}^{2}}{b_{k+1}}\EE\left[\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}\right].
@@ -431,25 +446,25 @@ The resulting proof should therefore not undergo any significant changes. That i
 \par Using (D.3) and more specifically $\rho_k\ge 8\eta_1\eta_kL_F^2$, I obtain $\frac{\rho_k}{8\eta_1L_F^2}-\frac{\eta_k}{2}\ge\frac{\eta_k}{2}$.
 \par As in the proof of Lemma 5.7, you here need to justify that $\{\EE[\Psi_r(\calQ^k)]\}$ is non-increasing.
 \par\smallskip
-\normalfont\upshape\responseLabel \red{We thank the reviewer for this careful check. The reviewer is right that the factor $\frac{1}{8(1-\rho_k)\eta_1L_F^2}$ cannot be replaced by $\frac{1}{8\eta_1L_F^2}$, since the bracket it multiplies need not be nonpositive. In the revised proof of Lemma~D.2 (now Lemma~D.3), the error enters the expected descent property with the weight $\frac{\eta_T}{\rho_T}$, so the coefficients of $\EE[\|\be^k\|^2]$ combine as $\frac{\eta_T}{2}-\eta_T=-\frac{\eta_T}{2}$ and neither $1/(1-\rho_k)$ nor $\eta_1$ appears. The term $\Delta_{\bB}^{k+1}$ of the corrected Lemma~D.1 is controlled in the same proof by a quadratic form $H_k\ge0$ of the $\bB$- and $\bLmbd$-increments with $H_1=0$. The lemma now reads} \green{(Appendix~D, Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We thank the reviewer for this careful check. The reviewer is right that the factor $\frac{1}{8(1-\rho_k)\eta_1L_F^2}$ cannot be replaced by $\frac{1}{8\eta_1L_F^2}$, since the bracket it multiplies need not be nonpositive. In the revised proof of Lemma~D.2 (now Lemma~\mref{Lemma: Weighted error accumulation}), the error enters the expected descent property with the weight $\frac{\eta_T}{\rho_T}$, so the coefficients of $\EE[\|\be^k\|^2]$ combine as $\frac{\eta_T}{2}-\eta_T=-\frac{\eta_T}{2}$ and neither $1/(1-\rho_k)$ nor $\eta_1$ appears. The term $\Delta_{\bB}^{k+1}$ of the corrected Lemma~\mref{Lemma: Recursive bound on gradient error} is controlled in the same proof by a quadratic form $H_k\ge0$ of the $\bB$- and $\bLmbd$-increments with $H_1=0$. The lemma now reads \green{(p.~\mpage{Lemma: Weighted error accumulation})}:
 \begin{bluequote}
 \[
 \frac{1}{T}\sum_{k=1}^{T}\EE\Bigl[C_{\bB}\bigl(\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}\bigr)+\frac{1}{4\eta_T}\Delta_{\bx}^{k+1}+\frac{\eta_T}{2}\|\be^{k}\|^{2}\Bigr]\le\frac{1}{T}\Bigl(\tilde{\Delta}_{1}+\frac{\eta_T\sigma^{2}}{\rho_Tb_1}\Bigr)+\frac{2\eta_T\rho_T\sigma^{2}}{b}.
 \]
 \end{bluequote}
-\red{The proof no longer requires $\{\EE[\Psi_r(\calQ^k)]\}$ to be non-increasing: it sums the expected descent property over $k=1,\ldots,T$ and uses the lower bound $\Psi_r^*$ of Lemma~D.1. The term with $k=1$ is included through $\EE[\|\be^1\|^2]\le\sigma^2/b_1$, which produces the $b_1$-term in Lemma~5.8; the rate in Theorem~5.3 is unchanged.}
+The proof no longer requires $\{\EE[\Psi_r(\calQ^k)]\}$ to be non-increasing: it sums the expected descent property over $k=1,\ldots,T$ and uses the lower bound $\Psi_r^*$ of Lemma~\mref{Lemma: lower bound of W}. The term with $k=1$ is included through $\EE[\|\be^1\|^2]\le\sigma^2/b_1$, which produces the $b_1$-term in Lemma~\mref{Lemma: convergence rate of storm}; the rate in Theorem~\mref{Theorem: the oracle complexity in STORM} is unchanged.
 \item (Lemma D.4 proof) I would justify the first term in (D.12) in a similar way to what you did for the second one, this time by invoking the second inequality in (5.23) and the fact that $\widetilde{S}_4\ge S_1,S_2$. Moreover, I think this is $\widetilde{S}_4$ everywhere instead of $S_4$.
 \par It appears more logical me to substitute (D.13) into (D.12) before passing to expectation.
 \par In (D.15), I think this is $\frac{2(C_\delta^1+4)}{\eta_1}$ instead of $\frac{2(C_\delta^1+4)}{S_4\eta_1}$.
 \par The end of the proof as well as those of Lemma 5.10, Theorem 5.3 are based on the potential new (D.4) inequality. To be reworked accordingly.
 \par\smallskip
-\normalfont\upshape\responseLabel \red{We thank the reviewer for these corrections. We have reworked the end of this proof and the proofs of Lemma~5.10 (now Lemma~5.8) and Theorem~5.3 on the basis of Lemmas~D.2 and D.3. Lemma~D.4 is now part of the proof of Lemma~5.8} \green{(Appendix~D.5, Page XX, lines XX--XX)}. \red{Since all estimates are stated for total expectations, the stationarity bound of Lemma~D.3 (now Lemma~D.4) and the bound of Lemma~D.2 (now Lemma~D.3) are combined directly at the level of $\EE[\cdot]$, so no conditional expectation has to be taken after the substitution. The constant $\widetilde S_4$ no longer appears: $S_1/C_{\bB}$, $S_2/C_{\bB}$, and the coefficient of $\Delta_{\bx}$, which replaces the constant in (D.15), enter the definition of $\tilde L_\Delta$ directly, so the bound on the first term in (D.12) follows from this definition. Lemma~5.8 keeps the bound (5.25) (now (5.23)), and Theorem~5.3 keeps the iteration number (5.26) (now (5.24)); only the constants $\tilde L_\Delta$, $\tilde C_\sigma$, and $\tilde\Delta_1$ are redefined} \green{(Section~5.3, Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We thank the reviewer for these corrections. We have reworked the end of this proof and the proofs of Lemma~5.10 (now Lemma~\mref{Lemma: convergence rate of storm}) and Theorem~\mref{Theorem: the oracle complexity in STORM} on the basis of Lemmas~\mref{Lemma: Weighted error accumulation} and~\mref{Lemma: Stationarity error bound}. Original Lemma~D.4 is now part of the proof of Lemma~\mref{Lemma: convergence rate of storm} \green{(p.~\mpage{app:storm-rate-proof})}. Since all estimates are stated for total expectations, the stationarity bound of Lemma~D.3 (now Lemma~\mref{Lemma: Stationarity error bound}) and the bound of Lemma~D.2 (now Lemma~\mref{Lemma: Weighted error accumulation}) are combined directly at the level of $\EE[\cdot]$, so no conditional expectation has to be taken after the substitution. The constant $\widetilde S_4$ no longer appears: $S_1/C_{\bB}$, $S_2/C_{\bB}$, and the coefficient of $\Delta_{\bx}$, which replaces the constant in (D.15), enter the definition of $\tilde L_\Delta$ directly, so the bound on the first term in (D.12) follows from this definition. Lemma~\mref{Lemma: convergence rate of storm} keeps the bound (5.25) (now \meq{Eq: the convergence rate of storm}), and Theorem~\mref{Theorem: the oracle complexity in STORM} keeps the iteration number (5.26) (now \meq{Eq: the iterate number upper bound of algorithm VR}); the same orders hold under the revised initialization and parameter conditions, with the revised constants $\tilde L_\Delta$, $\tilde C_\sigma$, and $\tilde\Delta_1$ \green{(p.~\mpage{Lemma: convergence rate of storm})}:
 \begin{bluequote}
 \[
 \tilde L_\Delta:=\max\Bigl\{\frac{S_1}{C_{\bB}},\frac{S_2}{C_{\bB}},\frac{48\tilde L_F}{\eta}+\frac{16\eta L_F^2(1+3\tau^2)}{\tilde L_F}\Bigr\},\quad \tilde C_\sigma:=\frac{\eta\tilde L_\Delta}{2\tilde L_F},\quad \tilde\Delta_1:=\calL(\bx^1,\bB^1,\bLmbd^1)-\Psi_r^*.
 \]
 \end{bluequote}
-\red{The rate $\calO(T^{-2/3})$ and the oracle complexity $\calO(\varepsilon^{-3})$ are unchanged.}
+The rate $\calO(T^{-2/3})$ and the oracle complexity $\calO(\varepsilon^{-3})$ are unchanged.
 \end{itemize}
 
 \subsection{Problem formulation and algorithm}
@@ -459,7 +474,7 @@ The resulting proof should therefore not undergo any significant changes. That i
 
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer for this helpful question. The reviewer's reading is exactly what we intended: Problem~(P) is a reformulation of Problem~(3.1) (now Problem~(P0)) that better exploits the structure of the hashing problem. We apologize for the confusion, which would have been avoided had we made the transformation explicit. We address the concerns in two points.
+We thank the reviewer for this helpful question. Problem~(P) is a quadratic-penalty relaxation of the constrained representation of the original objective (submitted (3.1), now (P0)). We do not assert equivalence between (P) and (P0) for a finite penalty parameter. The submitted description did not make this distinction clear. We address the concerns in two points.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
 \item \textbf{$P(\bx,\bB)$ is a quadratic penalty and does not vanish in Problem~(P).} Problem~(P0) is equivalent to
 \[
@@ -467,42 +482,49 @@ We thank the reviewer for this helpful question. The reviewer's reading is exact
 \quad\text{s.t.}\quad \bb_i=\bD_i(\bx),\ \ i=1,\dots,n,
 \]
 whose feasible points satisfy the identity noted by the reviewer.  Since these nonlinear constraints are hard to handle directly, we relax them by a penalty, and we choose the quadratic penalty~\cite[Sec.~17.1]{nocedalWright2006} because it is smooth; this gives $P(\bx,\bB)$. Consequently, $\bB$ becomes a free variable and $P(\bx,\bB)$ vanishes only when $\bb_i=\bD_i(\bx)$ for all $i$. The smoothness of $P$ also allows $\bx$ to be updated by stochastic gradients, while $h$ acts only on $\bB$ and is handled through $h^*$ in closed form.
-\item \textbf{$P(\bx,\bB)$ reduces the quantization error of the network outputs.} The regularizer $h$ pushes $\bb_i$ toward $\{-1,1\}^d$, while $P$ pulls $\bD_i(\bx)$ toward $\bb_i$; hence $\bD_i(\bx)$ itself approaches a binary vector, and its gap to the final code $\operatorname{sgn}(\bD_i(\bx))$ decreases. Indeed, since $\operatorname{sgn}(\bD_i(\bx))$ is a nearest point of $\{-1,1\}^d$ to $\bD_i(\bx)$, and $\operatorname{dist}(\bb_i,\{-1,1\}^d)=\||\bb_i|-\mathbf{1}\|_2\le\lambda^{-1}h(\bb_i)$,
+\item \textbf{Role of the coupling penalty.} The penalty measures the discrepancy between the network output and the auxiliary variable. For the $\ell_1$ W-regularizer, the triangle inequality gives
 \[
-\big\|\bD_i(\bx)-\operatorname{sgn}(\bD_i(\bx))\big\|\le\|\bD_i(\bx)-\bb_i\|+\lambda^{-1}h(\bb_i),
+\big\|\bD_i(\bx)-\operatorname{sgn}(\bD_i(\bx))\big\|\le\|\bD_i(\bx)-\bb_i\|+\lambda^{-1}h(\bb_i).
 \]
-where both terms on the right are penalized in Problem~(P). The same squared term is the quantization term $Q(\bu,\bb)$ in DDSH, DSDH, and DPSH (Table~1.1).
+Indeed, $\operatorname{sgn}(\bD_i(\bx))$ is a nearest binary vector, and $\operatorname{dist}(\bb_i,\{-1,1\}^d)=\||\bb_i|-\mathbf{1}\|_2\le\lambda^{-1}h(\bb_i)$. Thus small mismatch and small $h(\bb_i)$ imply small quantization error. This explains the modeling role of the penalty; it does not assert that the primal--dual iterates decrease either quantity monotonically. Theorem~\mref{prop:original-certificate} states separately the original-objective guarantee and its dependence on quantization error.
 \end{enumerate}
-We have made this transformation explicit in the revised manuscript; for your convenience, the revised passage is reproduced below \green{(Section~3.2, Page XX, lines XX--XX)}:
+We have made this transformation explicit in the revised manuscript; for your convenience, the revised passage is reproduced below \green{(p.~\mpage{Sec:W-type Regularized Deep Hashing Model}; p.~\mpage{Prop: block-wise regularized problem})}:
 \begin{bluequote}
-    We then employ variable splitting by introducing \blue{continuous} auxiliary variables \(\bb_i\blue{\in\RR^d}\) \blue{subject to} \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\), \blue{which yields the following equivalent nonlinearly constrained problem:
+Using variable splitting, we introduce continuous auxiliary variables \(\bb_i\in\RR^d\) and \(\bB=[\bb_1^\top;\ldots;\bb_n^\top]\in\RR^{n\times d}\), subject to \(\bb_i=\bD_i(\bx)\) for all \(i=1,\dots,n\), to obtain the following equivalent nonlinearly constrained problem: 
 \begin{align}
-    \min_{\bx \in \RR^{q}, \bB \in \RR^{n\times d}} \quad & \frac{1}{n} \sum_{i=1}^n f_i (\bx) + \sum_{i=1}^n h(\bb_i) \notag \\
-    \text{s.t.} \quad & \bb_i = \bD_i(\bx), \; \forall i=1,\dots,n\blue{,} \notag
-\end{align}}
-and then \blue{relax these constraints by} the quadratic penalty method \cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
-\begin{align}
-    \min_{\bx \in \RR^{q}, \bB \in \RR^{n\times d}} J(\bx, \bB) = \overbrace{\underbrace{\frac{1}{n}\sum_{i=1}^n f_i(\bx)}_{f(\bx)} + \underbrace{\frac{\gamma}{2n} \sum_{i=1}^n \| \bD_i(\bx) - \bb_i\|^2}_{P(\bx, \bB)}}^{F(\bx, \bB) = \frac{1}{n}\sum_{i=1}^n F_i(\bx, \bb_i)} + \underbrace{\sum_{i=1}^n h(\bb_i)}_{h(\bB)}, \tag{P}
+    \min_{\bx \in \RR^{q},\ \bB \in \RR^{n\times d}}\quad \frac{1}{n}\sum_{i=1}^{n} f_i(\bx)+\sum_{i=1}^{n}h(\bb_i)\quad \text{s.t.}\quad \bb_i=\bD_i(\bx),\ \forall i=1,\dots,n. \notag
 \end{align}
-where $\gamma>0$ is the penalty parameter.
+Let \(\gamma>0\) be a penalty parameter and define
+\begin{align}
+    F(\bx,\bB):= \frac{1}{n}\sum_{i=1}^{n}F_i(\bx,\bb_i),\qquad F_i(\bx,\bb_i):= f_i(\bx)+\frac{\gamma}{2}\|\bD_i(\bx)-\bb_i\|^2. \notag
+\end{align}
+Averaging over \(i\) gives the decomposition \(F=f+P\), where
+\begin{align}
+    f(\bx):= \frac{1}{n}\sum_{i=1}^{n}f_i(\bx),\qquad P(\bx,\bB):= \frac{\gamma}{2n}\sum_{i=1}^{n}\|\bD_i(\bx)-\bb_i\|^2. \notag
+\end{align}
+\blue{With the scaled penalty parameter $m:=\gamma/n$, we have $P(\bx,\bB)=\frac{m}{2}\|\mathcal{D}(\bx)-\bB\|^2$.}
+We then relax these constraints by the quadratic penalty method~\cite[Sec.~17.1]{nocedalWright2006} to obtain the following two-block finite-sum optimization problem:
+\begin{align}
+    \min_{\bx \in \RR^{q},\,\bB \in \RR^{n\times d}}\ J(\bx,\bB):=F(\bx,\bB)+h(\bB). \tag{P}
+\end{align}
 \end{bluequote}
 
 \item (page 9) In (4.5) first line, to avoid any confusion I would write ``$(\tau^{-1}h^*)$'' instead of ``$(1/\tau h^*)$''. Moreover, I think a $1/\tau$ factor is missing before $(2\bB^{k+1}-\bB^k)$.
 \par\smallskip
-\normalfont\upshape\responseLabel {We thank the reviewer for pointing out the unclear notation and the typo.} The typo was confined to the first line of (4.5); all subsequent derivations were based on the correct update, which now reads \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel {We thank the reviewer for pointing out the unclear notation and the typo.} The first line of the submitted (4.5) omitted the scale factor. The corrected update is now \meq{Eq: the update of lambda} and reads \green{(p.~\mpage{Eq: the update of lambda})}:
 \begin{bluequote}
 \begin{align}
 \bLmbd^{k+1} &= \operatorname*{arg\,min}_{\bLmbd}\Big\{h^*(\bLmbd)-\langle\bLmbd,2\bB^{k+1}-\bB^k\rangle+\frac{\tau}{2}\|\bLmbd-\bLmbd^k\|^2\Big\} \notag\\
-&= \prox_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \tag{4.5}
+&= \prox_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \tag{\mref{Eq: the update of lambda}}
 \end{align}
 \end{bluequote}
 \item \red{(Algorithms 4.1,4.2) Reading through your pseudo-code, one might think the choice of every batch size is determined before the algorithm is run. In the case of a constant batch size $b_k=b$, that makes perfect sense otherwise, it seems a bit strange to me.}
 \par\smallskip
-\normalfont\upshape\responseLabel {We thank the reviewer for this careful observation.} We agree that the general notation $\{b_k\}$ could give this impression. In both algorithms the batch size is constant, and we have revised the pseudo-code to make this explicit.
+\normalfont\upshape\responseLabel We thank the reviewer. The algorithm boxes describe the updates with generic parameter sequences, while Section~\mref{Section: Convergence analysis} specifies the schedules used for the complexity guarantees. For clarity, these schedules are fixed from the iteration budget $T$:
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item \textbf{DualHash-StoM.} The batch size is the constant $b=c_bT$ for all iterations. It is set from the iteration budget $T$ before the run and remains unchanged during the run.
-\item \textbf{DualHash-StoRM.} An initial batch $b_1=c_bT^{1/3}$ initializes the recursive estimator, followed by a constant batch size $b$ for all $k\ge2$. Since the recursive estimator reduces the variance by itself, $b$ can be any positive integer, including $b=1$; see Lemma~5.8 under condition~(5.27).
-\item \textbf{Practice.} Our experiments also use a constant batch size \green{(Section~6.1, Page XX, lines XX--XX)}:
+\item \textbf{DualHash-StoM.} Equations~\meq{Eq: the parameters conditions of dualhash-sgdm in suppl} and~\meq{Eq: the parameters conditions of dualhash-sgdm} specify constant step and momentum parameters and $b_k=b=\lceil c_bT\rceil$, with full-batch truncation as discussed below.
+\item \textbf{DualHash-StoRM.} Equations~\meq{Eq: the parameters conditions in dualhash-storm}--\meq{Eq: the constants for storm} specify an initial batch $b_1=\lceil c_bT^{1/3}\rceil$ followed by a constant batch $b\in\{1,\ldots,n\}$. The lower bound on $\rho$ depends on $b$, so choosing $b=1$ also requires choosing the other parameters accordingly.
+\item \textbf{Practice.} Our experiments also use a constant batch size \green{(Experimental Setup, p.~21)}:
 \begin{bluequote}
 We use a fixed mini-batch size of 256 for CIFAR-10 and 128 for NUS-WIDE and ImageNet-100.
 \end{bluequote}
@@ -512,17 +534,17 @@ We use a fixed mini-batch size of 256 for CIFAR-10 and 128 for NUS-WIDE and Imag
 \par\smallskip
 \normalfont\upshape\responseLabel {We appreciate this insightful practical question.} We are glad to clarify this point. The reviewer is right that $b=c_bT$ grows with the iteration budget; below we explain how the constraint $b\le n$ is accommodated.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item \textbf{When $c_bT\le n$ can be met.} For a constant batch size $b$, Lemma~5.5 gives
+\item \textbf{When $c_bT\le n$ can be met.} For a constant batch size $b$, Lemma~\mref{lemma: convergence rate sgdm} gives
 \[
 \EE\big[\mathrm{dist}^{2}\big(\zero,\mathcal K(\bx^{R},\bB^{R},\bLmbd^{R})\big)\big]\le\frac{L_\Delta\Delta_1}{T}+\frac{C_\sigma\sigma^2}{b}.
 \]
-The first term is controlled by $T$ and the second by $b$; the choice $b=c_bT$ balances the two, and the free constant $c_b$ adjusts this balance. Since $b=c_bT\approx(c_bL_\Delta\Delta_1+C_\sigma\sigma^2)/\varepsilon^2$, a sufficiently small $c_b$ gives $b\le n$ whenever $\varepsilon^2>C_\sigma\sigma^2/n$.
-\item \textbf{When $c_bT$ exceeds $n$.} The mini-batch is drawn uniformly without replacement \green{(Section~4.2, Page XX, lines XX--XX)}:
+The first term is controlled by $T$ and the second by $b$. For example, $T\ge2L_\Delta\Delta_1/\varepsilon^2$ and $b\ge2C_\sigma\sigma^2/\varepsilon^2$ suffice for the displayed bound to be at most $\varepsilon^2$. This mini-batch choice requires $\lceil2C_\sigma\sigma^2/\varepsilon^2\rceil\le n$. When it does not hold, the exact full-batch case below removes the variance term.
+\item \textbf{When $c_bT$ exceeds $n$.} The mini-batch is drawn uniformly without replacement \green{(p.~\mpage{Eq: minibatch oracle})}:
 \begin{bluequote}
 At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, independently of the past.
 \end{bluequote}
-Under this sampling, the gradient error is bounded by $\frac{n-b}{n-1}\cdot\frac{\sigma^2}{b}$, which vanishes at $b=n$. Hence, when $c_bT>n$, taking $b=n$ yields exact gradients, and the bound of \red{Theorem~5.2} reduces to $L_\Delta\Delta_1/T\le\varepsilon^2$. With $b=\min\{\lceil c_bT\rceil,n\}$, the guarantee thus extends to every $\varepsilon>0$.
-\item \textbf{The StoRM variant.} DualHash-StoRM uses $b_1=c_bT^{1/3}=\calO(\varepsilon^{-1})$ at the first iteration and a constant $b$ afterwards, which may be as small as $1$, while attaining the improved $\calO(\varepsilon^{-3})$ complexity. \red{By the same argument, taking $b_1=\min\{\lceil c_bT^{1/3}\rceil,n\}$ keeps this guarantee for every $\varepsilon>0$, since $b_1=n$ gives an exact initial estimator.}
+Under this sampling, the gradient error is bounded by $\frac{n-b}{n-1}\cdot\frac{\sigma^2}{b}$, which vanishes at $b=n$. Hence, when $c_bT>n$, taking $b=n$ yields exact gradients, and the bound of Theorem~\mref{Theorem: the oracle complexity in SGDM} reduces to $L_\Delta\Delta_1/T\le\varepsilon^2$. With $b=\min\{\lceil c_bT\rceil,n\}$, the guarantee thus extends to every $\varepsilon>0$.
+\item \textbf{The StoRM variant.} DualHash-StoRM uses $b_1=\lceil c_bT^{1/3}\rceil=\calO(\varepsilon^{-1})$ at the first iteration and a constant $b$ afterwards, which may be as small as $1$, while attaining the improved $\calO(\varepsilon^{-3})$ complexity. By the same argument, taking $b_1=\min\{\lceil c_bT^{1/3}\rceil,n\}$ keeps this guarantee for every $\varepsilon>0$, since $b_1=n$ gives an exact initial estimator.
 \end{enumerate}
 
 \end{itemize}
@@ -532,9 +554,9 @@ Under this sampling, the gradient error is bounded by $\frac{n-b}{n-1}\cdot\frac
 \begin{itemize}\itshape
 \item (page 4) Regarding to Table 1.1, your paper seems to be the first one to conduct a complexity analysis for deep hashing methods. Are you totally sure of this ?
 \par\smallskip
-\normalfont\upshape\responseLabel \red{We thank the reviewer for asking us to clarify the scope of our contribution.}
+\normalfont\upshape\responseLabel We thank the reviewer for asking us to clarify the scope of our contribution.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item We do not claim to be the first to study complexity across the entire deep hashing literature. Table~1.1 compares selected methods; it should not be read as an exhaustive priority claim or as excluding other forms of theoretical guarantees for hashing.
+\item We do not claim to be the first to study complexity across the entire deep hashing literature. Table~\mref{Table: summary of deep hashing algorithms} compares selected methods; it should not be read as an exhaustive priority claim or as excluding other forms of theoretical guarantees for hashing.
 \item Our contribution concerns the specific nonsmooth W-type regularized hashing model and its stochastic multi-block primal-dual formulation. We use the conjugate $h^*$ to obtain a tractable dual update and establish non-asymptotic oracle complexity bounds for the KKT residual of the resulting formulation. The contribution lies in combining this structure with stochastic momentum estimators and controlling their errors together with the primal and dual updates. We regard this as a contribution connecting optimization theory with deep hashing applications, while recognizing the contributions of prior hashing and stochastic optimization methods.
 \end{enumerate}
 
@@ -544,106 +566,36 @@ Under this sampling, the gradient error is bounded by $\frac{n-b}{n-1}\cdot\frac
 
 \subsection{Proof exposition and organization}
 
-\textbf{General response:} We thank the reviewer for the detailed reading of our proofs. In the revision, we have (i) numbered all equations referred to in the proofs, (ii) moved all proofs to the appendix, with a pointer after each statement, and (iii) added the missing intermediate steps. The detailed responses follow.
+\textbf{General response:} We thank the reviewer for the detailed reading. We have reorganized the theoretical results and their proofs and added explanations of the stochastic estimates and notation. The responses below distinguish changes made in the manuscript from clarifications supplied here.
 \begin{itemize}\itshape
 \item (page 5) I would give a number to the equation relative the reformulation of Problem (1.1). Also explain what the functions $f$ and $c$ are supposed to represent (for example is $f=1/n\sum f_i$ ? ...).
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer for the careful comment.
-\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item We have numbered the equation as \green{(1.2)}.
-\item We first make the correspondence explicit. Following the auxiliary-variable reformulations in~\cite{wang2025augmentedrnn,jin2025multicomposite}, let
-$\bb_i=\bD_i(\bx)$ and define
-$\bw=(\bx,\bB)\in\RR^{q}\times\RR^{n\times d}$, where
-$\bB=[\bb_1^\top;\dots;\bb_n^\top]$. Then Problem~(1.1) is equivalent to
-\begin{equation}
-\label{Eq: lifted constrained formulation}
-    \min_{\bw}\; f(\bw)+h(\bw)
-    \quad\text{s.t.}\quad
-    \bc(\bw)=\zero,
-\end{equation}
-where
+\pendingreply{The lifted display in Related Work is still unnumbered, and $f(\bw)$, $h(\bw)$, and $\bc(\bw)$ are not defined beside it. The definitions supplied in this response need to be reflected at that manuscript location, together with an equation number, to fully implement this request.}
+We thank the reviewer. The lifted formulation is discussed in Section~\mref{Section: related work}. To make the correspondence explicit here, set $\bw=(\bx,\bB)$ and define
 \[
-f(\bw)=\frac{1}{n}\sum_{i=1}^{n}f_i(\bx),
-\qquad
-h(\bw)=\sum_{i=1}^{n}h(\bb_i),
+f(\bw):=\frac1n\sum_{i=1}^n f_i(\bx),\qquad
+h(\bw):=\sum_{i=1}^n h(\bb_i),\qquad
+\bc(\bw):=\bB-\calD(\bx).
 \]
-and
+Then the original objective (P0) has the equivalent constrained representation
 \[
-\bc(\bw)=\bB-\calD(\bx),
-\qquad
-\calD(\bx)
-=
-[\bD_1(\bx)^\top;\dots;\bD_n(\bx)^\top].
+\min_{\bw}\ f(\bw)+h(\bw)\quad\text{s.t.}\quad\bc(\bw)=\zero.
 \]
-The equivalence is understood in the following sense:
-$\bx^\ast$ is a global minimizer of Problem~(1.1) if and only if
-$(\bx^\ast,\calD(\bx^\ast))$ is a global minimizer of
-\eqref{Eq: lifted constrained formulation}. 
-
-\item We clarify that Problem~(1.2) admits a compact form in the stacked variable $\bw=(\bx,\bB)$, which connects it to the literature on nonconvex constrained optimization, including the auxiliary-variable reformulations in~\cite{wang2025augmentedrnn,jin2025multicomposite}. Inspired by the success of splitting methods in multiblock nonconvex nonsmooth optimization, we keep $\bx$ and $\bB$ as separate blocks to exploit the structure of hashing: the network parameters $\bx$ are updated by stochastic first-order steps, while the auxiliary variable $\bB$ admits a closed-form gradient and a dual treatment of the W-type regularizer.
-\end{enumerate}
-We have replaced the unbolded variable $w$ with the stacked variable $\bw$ and revised the constrained formulation as follows (\green{Page XX, lines XX--XX}):
-\begin{bluequote}
-  From a constrained optimization perspective, Problem~(1.1) can be reformulated via an auxiliary-variable lifting technique~\cite{wang2025augmentedrnn,jin2025multicomposite} as a nonlinearly constrained optimization problem of the form
-\begin{equation}
-%   \label{Eq: the constrained reformulation}
-  \min_{\bw}\; f(\bw) + h(\bw)
-  \quad \text{s.t.}\quad
-  \bc(\bw) = 0. \tag{1.2}
-\end{equation}
-\end{bluequote}
+Feasibility fixes $\bB=\calD(\bx)$, so minimizers correspond through $\bx\mapsto(\bx,\calD(\bx))$. Section~\mref{Sec:W-type Regularized Deep Hashing Model} writes this representation explicitly in $(\bx,\bB)$ and explains the subsequent quadratic-penalty relaxation. The displayed lifting in Related Work remains unnumbered; we therefore refer to its section and to the explicit model passage rather than claim that an equation numbered (1.2) was added. \green{(Section~\mref{Section: related work}, p.~\mpage{Section: related work}; Section~\mref{Sec:W-type Regularized Deep Hashing Model}, pp.~\mpage{Sec:W-type Regularized Deep Hashing Model}--\mpage{Prop: block-wise regularized problem})}
 
 \item (page 6) Remind the reader that $\bd^k$ correspond to the current direction at iteration $k$ (you might even recall the generic scheme $\bx^{k+1}=\bx^k-\eta_k\bd^k$). Moreover, give a number to the equation relative to $\bd^k$ update's rule for StoRM algorithm.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer for pointing out this notation problem. We should have presented the mini-batch oracle and the update direction more clearly. We have revised the notation and numbered the recursion as follows.
-\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item The current direction at iteration $k$ is now denoted by $\bg^k\in\RR^{q}$, and the generic scheme $\bx^{k+1}=\by^k-\eta_k\bg^k$ is recalled in (4.3). The oracle $\tilde{\nabla}_{\bx}F(\cdot,\cdot;\calJ_k)$, with $\calJ_k$ drawn uniformly from all subsets of $\{1,\dots,n\}$ of size $b_k$, is defined once in (4.6). StoM and StoRM are two instances of $\bg^k$: StoM takes $\bg^k=\bg_m^k=\tilde{\nabla}_{\bx}F(\bz^k,\bB^k;\calJ_k)$ with the update (4.9), and StoRM takes $\bg^k=\bg_s^k$ with $\by^k=\bx^k$ and the update (4.11).
-\par
-\noindent\green{Section~4.1 (Page XX, lines XX--XX):}
-\begin{bluequote}
-\[
-\bx^{k+1}=\by^k-\eta_k\bg^k,\tag{4.3}
-\]
-where $\by^k$ is the base point of the step and $\bg^k$ is a stochastic estimator of $\nabla_{\bx}F$ at a query point.
-\end{bluequote}
-\par
-\noindent\green{Section~4.2 (Page XX, lines XX--XX; Page XX, lines XX--XX):}
-\begin{bluequote}
-\[
-\tilde{\nabla}_{\bx}F(\bx,\bB;\calJ_k):=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bx,\bb_i),\tag{4.6}
-\]
-$[\ldots]$ Taking $\by^k=\bx^k$ and $\bg^k=\bg_s^k$ in (4.3), with $\bg_s^k$ given by the recursion (4.10), yields
-\[
-\bx^{k+1}=\bx^k-\eta_k\bg_s^k.\tag{4.11}
-\]
-\end{bluequote}
-\item The StoRM recursion is numbered (2.3) in Section~2 and (4.10) in Section~4.2.
-\par
-\noindent\green{Section~2 (Page XX, lines XX--XX):}
-\begin{bluequote}
-A standard momentum-based stochastic first-order method constructs the stochastic direction $\bg^{k}=\rho_{k-1}\nabla\phi(\bx^{k};\xi^{k})+(1-\rho_{k-1})\bg^{k-1}$. StoRM introduces the correction term $(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k};\xi^{k})-\nabla\phi(\bx^{k-1};\xi^{k})\bigr)$ into the momentum estimator above, leading to the recursive estimator
-\[
-\bg^{k}=\begin{cases}
-\nabla\phi(\bx^{k};\xi^{k}), & k=1,\\[1mm]
-\nabla\phi(\bx^{k};\xi^{k})+(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1};\xi^{k})\bigr), & k>1.
-\end{cases}\tag{2.3}
-\]
-In Section~4.2, (2.3) is instantiated as $\bg_s^k$ in (4.10), which serves as the search direction $\bg^k$ in the update (4.3).
-\end{bluequote}
-\item The symbol $\bd^k$ is reserved for the stationarity measure defined in Appendix~A, equation~(A.5).
-\end{enumerate}
+We thank the reviewer. The current direction is denoted by $\bg^k$, and the generic update is \meq{Eq: the generic update of x}. The mini-batch oracle is defined in \meq{Eq: minibatch oracle}. StoM uses $\bg_m^k$ from \meq{Eq: the stochastic approximate in SGDM}, whereas StoRM uses $\bg_s^k$ from \meq{Eq: the stochastic approximate in STORM}. The generic StoRM tutorial has been removed from the preliminaries; the revised manuscript introduces the estimator directly for this model in Section~\mref{Sec: DualHash StoRM}. Thus the formerly unnumbered generic recursion is replaced by the numbered, instantiated recursion. The symbol $\bd^k$ is reserved for the KKT-residual vector in \meq{Eq: the components of the subgradient}. \green{(Sections~\mref{Sec: DualHash StoM}--\mref{Sec: DualHash StoRM}, pp.~\mpage{Eq: minibatch oracle}--\mpage{Eq: the stochastic approximate in STORM}; Appendix~\mref{app:optimality-properties}, p.~\mpage{Eq: the components of the subgradient})}
 \item (page 6) Give a number to the equation relative to deep hashing + typo under the min `` $x\underline{\in}\RR^q$ ''.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have numbered the formulation and restored the membership symbol in Section~3. We have also added an explicit reference to this equation when introducing the W-type regularized surrogate, clarifying its connection to the direct deep-hashing problem \green{(Page XX, lines XX--XX):}
+We have numbered the direct hashing formulation as \meq{Eq:direct_deep_hashing_problem} and restored the membership symbol. The W-type model (P0) is explicitly described as its continuous surrogate \green{(Section~\mref{Section: W-regularizer}, p.~\mpage{Eq:direct_deep_hashing_problem}; Section~\mref{Sec:W-type Regularized Deep Hashing Model}, p.~\mpage{Eq: the primal deep hashing problem})}:
 \begin{bluequote}
-A direct formulation is
 \[
-\min_{\bx \in \RR^{q}}\ \frac{1}{n}\sum_{i=1}^{n}\ell_{s,i}\!\big(\operatorname{sgn}(\bC_i(\bx))\big), \tag{3.1}
+\min_{\bx\in\RR^q}\ \frac1n\sum_{i=1}^n\ell_{s,i}\!\bigl(\operatorname{sgn}(\calD(\bx))\bigr).\tag{\mref{Eq:direct_deep_hashing_problem}}
 \]
-[$\cdots$] Consequently, we formulate the following core optimization problem for W-type regularized deep hashing methods, which serves as a continuous surrogate of Problem~(3.1):
 \end{bluequote}
 
 \item (Relation (C.8)) Remind the reader the expression of $\bd^k$ (this can be throughout a reference to an equation). Regarding your definitions relative to StoM, do we have $\bG^k=-\bd^k$ ? If not, how do you define $\bd^k$ otherwise (in section 2, you only remind the update's rule relative to StoRM) ? Furthermore, it is not clear how you define $\bd_{\bx}^k,\bd_{\bB}^k,\bd_{\bLmbd}^k$.
@@ -651,9 +603,9 @@ A direct formulation is
 \normalfont\upshape\responseLabel
 We apologize for the unclear definitions. We now use distinct notation for the search directions and the components of the stationarity measure. We address each question below.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item No, $\bG^k\neq-\bd^k$. In the submitted version, $\bd^k$ denoted both the StoRM update direction in Section~2 and the stationarity measure in Appendix~C. All update directions are now denoted by $\bg$: $\bg_m^k$ in (4.8) for StoM (formerly $\bG^k$), $\bg_s^k$ in (4.10) for StoRM, and the generic direction in Lemma~C.1.
-\item $\bd^k$ now denotes only the stationarity measure, an element of the KKT mapping $\calK(\bx^k,\bB^k,\bLmbd^k)$ in (5.2). Its components $\bd_{\bx}^k,\bd_{\bB}^k,\bd_{\bLmbd}^k$ are the $\bx$-, $\bB$-, and $\bLmbd$-blocks, defined in (A.5); $\calG_{\bLmbd}^k$ is given explicitly by the optimality condition of the $\bLmbd$-update (4.5).
-\item Relation (C.8) (now (A.6)) \green{(Page XX, lines XX--XX):}
+\item No, $\bG^k\neq-\bd^k$. In the submitted version, $\bd^k$ denoted both the StoRM update direction in Section~2 and the stationarity measure in Appendix~C. All update directions are now denoted by $\bg$: $\bg_m^k$ in \meq{Eq: the stochastic approximate in SGDM} for StoM (formerly $\bG^k$), $\bg_s^k$ in \meq{Eq: the stochastic approximate in STORM} for StoRM, and the generic direction in Lemma~\mref{Lemma: auxiliary lemma for f}.
+\item $\bd^k$ now denotes only the stationarity measure, an element of the KKT mapping $\calK(\bx^k,\bB^k,\bLmbd^k)$ in \meq{Eq: KKT mapping}. Its components $\bd_{\bx}^k,\bd_{\bB}^k,\bd_{\bLmbd}^k$ are the $\bx$-, $\bB$-, and $\bLmbd$-blocks, defined in \meq{Eq: the components of the subgradient}; $\calG_{\bLmbd}^k$ is given explicitly by the optimality condition of the $\bLmbd$-update \meq{Eq: the update of lambda}.
+\item Relation (C.8) (now \meq{Eq: the stationarity error bound in proof}) \green{(p.~\mpage{Eq: the components of the subgradient})}
 \end{enumerate}
 \begin{bluequote}
 Our complexity bounds concern $\EE[\dist^{2}(\zero,\calK(\bx^{k},\bB^{k},\bLmbd^{k}))]$. For $\bd^{k}\in\calK(\bx^{k},\bB^{k},\bLmbd^{k})$, let us denote $\bd^{k}=(\bd_{\bx}^{k},\bd_{\bB}^{k},\bd_{\bLmbd}^{k})$ and
@@ -662,32 +614,32 @@ Our complexity bounds concern $\EE[\dist^{2}(\zero,\calK(\bx^{k},\bB^{k},\bLmbd^
 \bd_{\bx}^{k}=\nabla_{\bx}F(\bx^{k},\bB^{k}),\\
 \bd_{\bB}^{k}=\nabla_{\bB}F(\bx^{k},\bB^{k})+\bLmbd^{k},\\
 \bd_{\bLmbd}^{k}=\bB^{k}-\calG_{\bLmbd}^{k},
-\end{cases}\tag{A.5}
+\end{cases}\tag{\mref{Eq: the components of the subgradient}}
 \]
-where $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^{k})\in\partial h^{*}(\bLmbd^{k})$ for $k\ge2$ by the optimality condition of the $\bLmbd$-update (4.5), implying
+where $\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by proximal optimality of the algorithm initialization and subgradient inversion, and $\calG_{\bLmbd}^{k}:=2\bB^{k}-\bB^{k-1}+\tau(\bLmbd^{k-1}-\bLmbd^k)\in\partial h^*(\bLmbd^k)$ for $k\ge2$ by the optimality condition of the dual update, implying
 \[
-\dist^{2}(\zero,\calK(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd_{\bx}^{k}\|^{2}+\|\bd_{\bB}^{k}\|^{2}+\|\bd_{\bLmbd}^{k}\|^{2}.\tag{A.6}
+\dist^{2}(\zero,\calK(\bx^{k},\bB^{k},\bLmbd^{k}))\le\|\bd_{\bx}^{k}\|^{2}+\|\bd_{\bB}^{k}\|^{2}+\|\bd_{\bLmbd}^{k}\|^{2}.\tag{\mref{Eq: the stationarity error bound in proof}}
 \]
 \end{bluequote}
 \item (Lemma 5.2/proof) Some objects as $G$ function is not explicitly defined, making your proof a bit hard to follow. Moreover, which subdifferential property do you use to conclude ? To rework.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We apologize for the unclear proof. We have revised the statement and proof of Lemma~5.2 (now Proposition~5.1) as follows; the proposition is stated in Section~5.1, and its proof is given in Appendix~A.1, with a pointer after the statement.
+We apologize for the unclear proof. Original Lemma~5.2 is now Proposition~\mref{prop:zerogap}, stated in Section~\mref{Sec: original optimality relations} and proved in Appendix~\mref{app:zero-gap-proof}.
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=2.2em]
 \item \textbf{The function $G$.} $G$ was a typo for the penalty term $P$; it no longer appears in the proof.
-\item \textbf{Zero duality gap.} The proof in the submitted version already relied on a zero duality gap: together with the first condition in (5.2), the second condition $h(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$ is the zero-gap characterization in~[6, Theorem~2.158], and it is this equality that yields $\bB^*\in\partial h^*(\bLmbd^*)$. However, the statement of the original Lemma~5.2 did not include this assumption, and we apologize for this omission. Proposition~5.1 now states it explicitly; without it the conclusion fails, see Example~5.1 and our response to Reviewer~1(a).
-\item \textbf{Subdifferential property.} Since $-h^*$ is concave, $\partial(-h^*)$ differs from $-\partial h^*$ in general, so $\zero\in\partial\calL$ was not the right conclusion. Proposition~5.1 now concludes $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$, which is exactly the KKT system (A.2)--(A.3). The only subdifferential property used is the subgradient inversion rule for the convex function $h^{**}$~\cite[Theorem~23.5]{rockafellar1970convex}, combined with the Fenchel--Young inequality. This does not affect the complexity results: the vector $\bd^k$ in (A.5), on which all bounds in Section~5 are proved, satisfies $\bd^k\in\calK(\bx^k,\bB^k,\bLmbd^k)$, hence $\dist(\zero,\calK(\bx^k,\bB^k,\bLmbd^k))\le\|\bd^k\|$ and the stated bounds hold verbatim for the KKT residual.
-\item \textbf{Coercivity.} While the submitted proof began by invoking the coercivity of $\calL$, this step is not needed: $p^*$ is finite because Problem~(P) has an optimal solution, and the zero duality gap gives $\inf_{\bx,\bB}\calL(\bx,\bB,\bLmbd^*)=d^*=p^*>-\infty$. We have therefore removed this sentence and the reference to Assumption~5.1(i). The existence of an optimal solution of Problem~(P) is now discussed in Remark~2.4: Assumption~2.1(i), the term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$ in $f_i$, and $h(\bB)\ge\lambda\|\bB\|_1-\lambda nd$ make $J=F+h$ coercive, which guarantees that Problem~(P) has an optimal solution.
+\item \textbf{Zero duality gap.} The proof in the submitted version already relied on a zero duality gap: together with the first condition in the submitted (5.2), the second condition $h(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$ is the equality required for the zero-gap argument, and it is this equality that yields $\bB^*\in\partial h^*(\bLmbd^*)$. However, the statement of the original Lemma~5.2 did not include this assumption, and we apologize for this omission. Proposition~\mref{prop:zerogap} now states it explicitly; without it the conclusion fails, see Example~\mref{ex:gap} and our response to Reviewer~1(a).
+\item \textbf{Subdifferential property.} Since $-h^*$ is concave, $\partial(-h^*)$ differs from $-\partial h^*$ in general, so $\zero\in\partial\calL$ was not the right conclusion. Proposition~\mref{prop:zerogap} now concludes $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$, which is exactly the KKT system \meq{Eq: the sufficient and necessary condition for primal}--\meq{Eq: the sufficient and necessary condition for dual}. The only subdifferential property used is the subgradient inversion rule for the convex function $h^{**}$~\cite[Theorem~23.5]{rockafellar1970convex}, combined with the Fenchel--Young inequality. This does not affect the complexity results: the vector $\bd^k$ in \meq{Eq: the components of the subgradient}, on which all bounds in Section~5 are proved, satisfies $\bd^k\in\calK(\bx^k,\bB^k,\bLmbd^k)$, hence $\dist(\zero,\calK(\bx^k,\bB^k,\bLmbd^k))\le\|\bd^k\|$ and the stated bounds hold verbatim for the KKT residual.
+\item \textbf{Coercivity.} While the submitted proof began by invoking the coercivity of $\calL$, this step is not needed: $p^*$ is finite because Problem~(P) has an optimal solution, and the zero duality gap gives $\inf_{\bx,\bB}\calL(\bx,\bB,\bLmbd^*)=d^*=p^*>-\infty$. We have therefore removed this sentence and the reference to submitted Assumption~5.1(i). The existence of an optimal solution of Problem~(P) is now discussed in Remark~\mref{rem:coercivity}: Assumption~\mref{Ass: basic regularity}(i), the term $\frac{\mu}{2}\|\bx\|^2$ with $\mu>0$ in $f_i$, and the nonnegative penalty and W-regularizer make $J=F+h$ coercive, which guarantees that Problem~(P) has an optimal solution.
 \end{enumerate}
-For your convenience, we reproduce the revised statement and the last step of the proof \green{(Section~5.1, Page XX, lines XX--XX; Appendix~A.1, Page XX, lines XX--XX)}:
+For your convenience, we reproduce the revised statement and the last step of the proof \green{(p.~\mpage{prop:zerogap}; p.~\mpage{app:zero-gap-proof})}:
 \begin{bluequote}
-\textbf{Proposition 5.1.} Suppose that \red{$(\bx^*,\bB^*)$ and $\bLmbd^*$ are optimal solutions of Problems~(P) and~(D)}, respectively, with zero duality gap. Then $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$.
+\textbf{Proposition~\mref{prop:zerogap}.} Suppose that $(\bx^*,\bB^*)$ and $\bLmbd^*$ are optimal solutions of Problems~(P) and~(D), respectively, with zero duality gap. Then $(\bx^*,\bB^*,\bLmbd^*)\in\operatorname{crit}\calL$, i.e., $\zero\in\calK(\bx^*,\bB^*,\bLmbd^*)$.
 
-\textit{Proof.} [\ldots] For the second condition in (A.1), since $h^{**}\le h$, the Fenchel--Young inequality for $h^{**}$ yields
+\textit{Proof.} [\ldots] For the second condition in \meq{Eq: the sufficient and necessary condition}, since $h^{**}\le h$, the Fenchel--Young inequality for $h^{**}$ yields
 $\langle\bLmbd^*,\bB^*\rangle\le h^{**}(\bB^*)+h^*(\bLmbd^*)\le h(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$.
 Thus $h^{**}(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$, which, by the subgradient inversion rule~\cite[Theorem~23.5]{rockafellar1970convex}, gives
 \[
-\bB^{*}\in\partial h^{*}(\bLmbd^{*}).\tag{A.3}
+\bB^{*}\in\partial h^{*}(\bLmbd^{*}).\tag{\mref{Eq: the sufficient and necessary condition for dual}}
 \]
 [\ldots]
 \end{bluequote}
@@ -696,9 +648,9 @@ Thus $h^{**}(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$, which, by the s
 \normalfont\upshape\responseLabel
 We apologize for the missing steps. We have added the full derivation of (5.9) and address both questions below.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item Lemma~5.4 is now Lemma~5.2, and inequality (5.9) is now (B.3). We have added the derivation of (B.3) before it: the descent lemma (2.2) is applied to $F(\bx^{k+1},\cdot)$, the conjugate term is handled through $\calG_{\bLmbd}^{k}\in\partial h^*(\bLmbd^k)$ and the convexity of $h^*$, and the $\bB$-updates at iterations $k$ and $k-1$ identify the remaining vector. For your convenience, the added derivation reads \green{(Appendix~B.3, Page XX, lines XX--XX)}:
+\item Original Lemma~\mref{Lemma: approximate sufficient descent property in SGDM} is now Lemma~\mref{Lemma: One-iteration progress of B and Lambda}, and original inequality (5.9) is now \meq{Eq: the recursive relation of L on B and Lambda}. The proof applies the descent lemma to $F(\bx^{k+1},\cdot)$, uses convexity of $h^*$, and then substitutes the update identities. The initialization also supplies the identity at $k=1$, as explained after the excerpt. \green{(Appendix~\mref{app:complexity-auxiliary-results}, pp.~\mpage{Lemma: One-iteration progress of B and Lambda}--\mpage{Eq: the recursive relation of L on B and Lambda})}
 \begin{bluequote}
-\textit{Proof.} [\ldots] By the descent lemma~(2.2) for $F(\bx^{k+1},\cdot)$,
+\textit{Proof.} [\ldots] By the descent lemma~\meq{Eq: the descent lemma} for $F(\bx^{k+1},\cdot)$,
     \[
         F(\bx^{k+1},\bB^{k+1})-F(\bx^{k+1},\bB^{k})\le\langle\nabla_{\bB}F(\bx^{k+1},\bB^{k}),\bB^{k+1}-\bB^{k}\rangle+\frac{L_F}{2}\|\bB^{k+1}-\bB^{k}\|^{2}.
     \]
@@ -710,7 +662,7 @@ We apologize for the missing steps. We have added the full derivation of (5.9) a
     \[
         \nabla_{\bB}F(\bx^{k+1},\bB^{k})+\bLmbd^{k}=-\tau^{-1}(\bB^{k+1}-\bB^{k}).
     \]
-    For the conjugate term, $\calG_{\bLmbd}^{k}\in\partial h^{*}(\bLmbd^{k})$ defined after (A.5) and the convexity of $h^{*}$ give
+    For the conjugate term, $\calG_{\bLmbd}^{k}\in\partial h^{*}(\bLmbd^{k})$ defined after \meq{Eq: the components of the subgradient} and the convexity of $h^{*}$ give
     \[
         -h^{*}(\bLmbd^{k+1})+h^{*}(\bLmbd^{k})\le-\langle\calG_{\bLmbd}^{k},\bLmbd^{k+1}-\bLmbd^{k}\rangle.
     \]
@@ -718,27 +670,27 @@ We apologize for the missing steps. We have added the full derivation of (5.9) a
     \[
         \calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})-\calL(\bx^{k+1},\bB^{k},\bLmbd^{k})\le-\Bigl(\tau^{-1}-\frac{L_F}{2}\Bigr)\|\bB^{k+1}-\bB^{k}\|^{2}+\langle\bLmbd^{k+1}-\bLmbd^{k},\bB^{k+1}-\calG_{\bLmbd}^{k}\rangle.
     \]
-    By the $\bB$-updates at iterations $k$ and $k-1$ and the expression of $\calG_{\bLmbd}^{k}$, we have
+    For $k\ge2$, by the $\bB$-updates at iterations $k$ and $k-1$ and the expression of $\calG_{\bLmbd}^{k}$, we have
     \[
         \bB^{k+1}-\calG_{\bLmbd}^{k}=\tau\bigl(\nabla_{\bB}F(\bx^{k},\bB^{k-1})-\nabla_{\bB}F(\bx^{k+1},\bB^{k})\bigr),
     \]
     and hence
 \begin{align*}
 &\calL(\bx^{k+1},\bB^{k+1},\bLmbd^{k+1})-\calL(\bx^{k+1},\bB^{k},\bLmbd^{k})\\
-\le&-\Bigl(\tau^{-1}-\frac{L_F}{2}\Bigr)\|\bB^{k+1}-\bB^{k}\|^{2}+\Bigl\langle\bLmbd^{k+1}-\bLmbd^{k},\tau\bigl(\nabla_{\bB}F(\bx^{k},\bB^{k-1})-\nabla_{\bB}F(\bx^{k+1},\bB^{k})\bigr)\Bigr\rangle.\tag{B.5}
+\le&-\Bigl(\tau^{-1}-\frac{L_F}{2}\Bigr)\|\bB^{k+1}-\bB^{k}\|^{2}+\Bigl\langle\bLmbd^{k+1}-\bLmbd^{k},\tau\bigl(\nabla_{\bB}F(\bx^{k},\bB^{k-1})-\nabla_{\bB}F(\bx^{k+1},\bB^{k})\bigr)\Bigr\rangle.\tag{\mref{Eq: the recursive relation of L on B and Lambda}}
 \end{align*}
 [\ldots]
 \end{bluequote}
-\item All proofs, including this one, are now given in the appendix, with pointers in the main text; the reason for the original placement and the new organization are explained in our response to the corresponding general comment.
+\item For $k=1$, the proof uses $\calG_{\bLmbd}^1=\bB^1$, $\bB^0=\bB^1$, and $\nabla_{\bB}F(\bx^1,\bB^1)+\bLmbd^1=\zero$. These follow from the proximal initialization $\bB^1=\prox_{m^{-1}h^{**}}(\calD(\bx^1))$, $\bLmbd^1=m(\calD(\bx^1)-\bB^1)$. This supplies the first step needed when the estimates are summed from $k=1$. The proof is now in Appendix~\mref{app:complexity-auxiliary-results}, together with the shared lemma.
 \end{enumerate}
 \item (Lemma 5.8) I understand the connection between your algorithm and those presented in [62]. However, I think a brief proof would be welcome, particularly to explain why you do not obtain the same coefficients in the right-hand side of (5.20) as in the original paper.
 \par\smallskip
 \normalfont\upshape\responseLabel
 We thank the reviewer for this suggestion. We have added the proof and explain the difference in coefficients below.
 \begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item We have added the proof of Lemma~5.8 (now Lemma~5.6) in Appendix~D.1; for your convenience, we repeat the statement and proof below \green{(Page XX, lines XX--XX)}:
+\item We have added the proof of Lemma~5.8 (now Lemma~\mref{Lemma: One-iteration progress of x in STORM}) in Appendix~\mref{app:storm-complexity}; for your convenience, we repeat the statement and proof below \green{(p.~\mpage{Lemma: One-iteration progress of x in STORM})}:
 \begin{bluequote}
-\textbf{Lemma 5.6} (One-iteration progress on $\bx$). Consider the sequence $\{\bx^k,\bB^k,\bLmbd^k\}_{k\in\NN}$ generated by Algorithm~4.2. Under Assumption~2.1(ii), for any $k\geq1$, it holds that
+\textbf{Lemma~\mref{Lemma: One-iteration progress of x in STORM}} (One-iteration progress on $\bx$). Consider the sequence $\{\bx^k,\bB^k,\bLmbd^k\}_{k\in\NN}$ generated by Algorithm~\mref{alg:our_algorithm_storm}. Under Assumption~\mref{Ass: basic regularity}(ii), for any $k\geq1$, it holds that
 \[
 \calL(\bx^{k+1},\bB^{k},\bLmbd^{k})-\calL(\bx^{k},\bB^{k},\bLmbd^{k})\leq\frac{\eta_k}{2}\|\be^{k}\|^{2}-(\eta_k^{-1}-L_F)\Delta_{\bx}^{k+1}.
 \]
@@ -746,7 +698,7 @@ We thank the reviewer for this suggestion. We have added the proof and explain t
 \[
 \calL(\bx^{k+1},\bB^{k},\bLmbd^{k})-\calL(\bx^{k},\bB^{k},\bLmbd^{k})=F(\bx^{k+1},\bB^{k})-F(\bx^{k},\bB^{k}).
 \]
-By the $L_F$-smoothness of $F(\cdot,\bB^{k})$ and the $\bx$-update (4.11), we have
+By the $L_F$-smoothness of $F(\cdot,\bB^{k})$ and the $\bx$-update \meq{Eq: the update of x in STORM}, we have
 \begin{align*}
 F(\bx^{k+1},\bB^{k})-F(\bx^{k},\bB^{k})&\leq\langle\nabla_{\bx}F(\bx^{k},\bB^{k}),\bx^{k+1}-\bx^{k}\rangle+\frac{L_F}{2}\|\bx^{k+1}-\bx^{k}\|^{2}\\
 &=-\eta_k\langle\nabla_{\bx}F(\bx^{k},\bB^{k}),\bg_s^{k}\rangle+\frac{\eta_k^{2}L_F}{2}\|\bg_s^{k}\|^{2}.
@@ -759,35 +711,26 @@ F(\bx^{k+1},\bB^{k})-F(\bx^{k},\bB^{k})&\leq\frac{\eta_k}{2}\|\be^{k}\|^{2}-\fra
 where the equality uses $\|\bx^{k+1}-\bx^{k}\|^{2}=\eta_k^{2}\|\bg_s^{k}\|^{2}=2\Delta_{\bx}^{k+1}$. This completes the proof.
 \hfill$\square$
 \end{bluequote}
-\item Our bound is the intermediate estimate (2.3) in the proof of [62, Lemma~2.1] with $r\equiv0$, in which case $\bg^k=\bg_s^k$ and $\Delta_{\bx}^{k+1}=\frac{\eta_k^2}{2}\|\bg_s^k\|^2$, so that (5.20) \red{(now (5.18))} reads
+\item Our bound is the intermediate estimate (2.3) in the proof of \cite[Lemma~2.1]{xu2023momentum} with $r\equiv0$, in which case $\bg^k=\bg_s^k$ and $\Delta_{\bx}^{k+1}=\frac{\eta_k^2}{2}\|\bg_s^k\|^2$, so that (5.20) (now \meq{Eq: the recursive relation of L on x}) reads
 \[
 \calL(\bx^{k+1},\bB^{k},\bLmbd^{k})-\calL(\bx^{k},\bB^{k},\bLmbd^{k})\leq\underline{\frac{\eta_k}{2}}\,\|\be^{k}\|^{2}-(\eta_k^{-1}-L_F)\Delta_{\bx}^{k+1}.
 \]
-Since [62] measures stationarity by the gradient mapping $\bar{\bg}^k$, it converts the step term in (2.3) through
+Since \cite{xu2023momentum} measures stationarity by the gradient mapping $\bar{\bg}^k$, it converts the step term in (2.3) through
 \[
 -\|\bg^k\|^2\leq-\frac12\|\bar{\bg}^k\|^2+\|\be^k\|^2,
 \]
-which leads to the final statement of [62, Lemma~2.1],
+which leads to the final statement of \cite[Lemma~2.1]{xu2023momentum},
 \[
 \Phi(\bx^{k+1})-\Phi(\bx^k)\leq \underline{\frac{\eta_k}{2}(2-\eta_kL)}\,\|\be^k\|^2-\frac{\eta_k}{4}(1-\eta_kL)\|\bar{\bg}^k\|^2 .
 \]
-In our analysis, the step term $\Delta_{\bx}^{k+1}$ is combined with the estimates of the $\bB$- and $\bLmbd$-updates in the Lyapunov function $\Psi_r$, and stationarity is measured by the KKT residual, which is bounded separately in \red{Lemma~D.4}. We therefore keep the bound in the step form.
+In our analysis, the step term $\Delta_{\bx}^{k+1}$ is combined with the estimates of the $\bB$- and $\bLmbd$-updates in the Lyapunov function $\Psi_r$, and stationarity is measured by the KKT residual, which is bounded separately in Lemma~\mref{Lemma: Stationarity error bound}. We therefore keep the bound in the step form.
 \end{enumerate}
 
 \item Some proofs are placed in the main paper and others similar in the appendix (for example Lemma 5.4/Lemma 5.5). Is there a specific reason for this ?
 
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer for this question. We explain the original arrangement and the revised one below.
-\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item In the submitted version, the proof of Lemma~5.4 (now Lemma~5.2) was kept in the main text because this estimate, on the $(\bB,\bLmbd)$-updates, is shared by DualHash-StoM and DualHash-StoRM, whereas Lemma~5.5 (now Lemma~5.3) concerns the $\bx$-update of DualHash-StoM only and was deferred to the algorithm-specific appendix. We agree that this split made the exposition uneven.
-\item In the revision, all proofs are given in the appendix, and the main text keeps the statements with pointers to their proofs; the proofs of Lemmas~5.2 and~5.3 are in Appendices~B.3 and~C.1, respectively. 
-
-\item The appendix is organized as follows: Appendix~A contains the proofs of the propositions in Section~5.1, Appendix~B the auxiliary results shared by both algorithms (the smoothness constant of $F$ and the proofs of Lemmas~5.1 and~5.2), Appendix~C the analysis of DualHash-StoM, and Appendix~D the analysis of DualHash-StoRM.
-\begin{bluequote}
-The one-iteration progress on $\bx$ is estimated as follows, with the proof provided in Appendix~C.1.
-\end{bluequote}
-\end{enumerate}
+We agree that the earlier placement was uneven. The shared $(\bB,\bLmbd)$ estimate is now Lemma~\mref{Lemma: One-iteration progress of B and Lambda} in Appendix~\mref{app:complexity-auxiliary-results}. The primal-progress estimates are Lemmas~\mref{Lemma: One-iteration progress of x in SGDM} and~\mref{Lemma: One-iteration progress of x in STORM} in Appendices~\mref{app:stom-complexity} and~\mref{app:storm-complexity}, respectively, with their proofs. Appendix~\mref{app:optimality-properties} treats the regularizer and optimality results; Appendix~\mref{app:original-objective} proves the original-objective corollary; and Appendix~\mref{app:experiments} gives the experimental supplement. Section~\mref{Section: Convergence analysis} retains the principal descent, rate, and complexity statements and points to their proofs.
 
 \item (page 10) ``the set $\mathrm{crit}(\calL)$... is nonempty'', I would place this fact in Assumption 5.1.
 \par\smallskip
@@ -796,7 +739,8 @@ We thank the reviewer for this suggestion. The nonemptiness of $\operatorname{cr
 \item (Assumption 5.1) I would reformulate (ii) as ``$F$ is $L_F$-smooth ($L_F\in(0,+\infty)$) over $\RR^q\times\RR^{n\times d}$;''.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer for this suggestion. A global smoothness assumption on $F$ over $\RR^q\times\RR^{n\times d}$ cannot hold in our setting: the coupling term $\frac{m}{2}\|\calD(\bx)-\bB\|^2$ in $F$ has the $\bx$-gradient $m\nabla\calD(\bx)^*(\calD(\bx)-\bB)$, whose Lipschitz constant grows with $\|\bB\|$. We therefore impose smoothness on $f$ and $\calD$ in Assumption~2.1(ii), and show that $F$ is $L_F$-smooth, with an explicit $L_F\in(0,+\infty)$, on the region $\RR^q\times\{\bB:\|\bB\|\le R_B\}$ that contains all iterates \green{(Assumption~2.1, Section~5, and Appendix~B, Page XX, lines XX--XX)}:
+\pendingreply{The smoothness argument uses the bounded-$\bB$ region containing the iterates, but the variance and mean-squared-smoothness assumptions are still stated for all $\bB$. Their domains need to be reconciled with the regional argument; this response does not establish the global oracle assumptions from the basic regularity assumptions.}
+We thank the reviewer for this suggestion. A global smoothness bound on $F$ over $\RR^q\times\RR^{n\times d}$ does not follow from the stated basic assumptions: the coupling term $\frac{m}{2}\|\calD(\bx)-\bB\|^2$ in $F$ has the $\bx$-gradient $m\nabla\calD(\bx)^*(\calD(\bx)-\bB)$, whose available Lipschitz bound depends on $\|\bB\|$ for a nonlinear $\calD$. We therefore impose smoothness on $f$ and $\calD$ in Assumption~\mref{Ass: basic regularity}(ii), and show that $F$ is $L_F$-smooth, with an explicit $L_F\in(0,+\infty)$, on the region $\RR^q\times\{\bB:\|\bB\|\le R_B\}$ that contains all iterates \green{(p.~\mpage{Ass: basic regularity}; p.~\mpage{app:smoothness-discussion})}:
 \begin{bluequote}
 \begin{itemize}[leftmargin=2em,before=\let\item\reviewitem]
 \item[{(ii)}] The function $f$ is $L_f$-smooth on $\RR^q$, and $\nabla\calD$ is $L_{\nabla\calD}$-Lipschitz on $\RR^q$, with $L_f,L_{\nabla\calD}>0$. There exist constants $C_{\calD},G_{\calD}>0$ such that $\|\calD(\bx)\|\le C_{\calD}$ and $\|\nabla\calD(\bx)\|\le G_{\calD}$ for all $\bx\in\RR^q$.
@@ -806,7 +750,7 @@ We thank the reviewer for this suggestion. A global smoothness assumption on $F$
 \item (page 13) For better consistency and since you state that $C_1,C_2,C_3,C_4$ are independent of $k$, you should introduce (5.14) setup before (5.12) and (5.13).
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer for this suggestion. We have moved the constant-parameter setting before the Lyapunov function and its coefficients in \green{Section~5.2 (Page XX, lines XX--XX)}:
+We thank the reviewer for this suggestion. We have moved the constant-parameter setting before the Lyapunov function and its coefficients \green{(p.~\mpage{Eq: the parameters conditions of dualhash-sgdm in suppl})}:
 \begin{bluequote}
 We choose constant algorithm parameters as follows, with $\bar{L}_F:=2L_F+K_3+K_4$:
 \begin{align*}
@@ -819,10 +763,10 @@ $\eta =\frac{(1 - 2\alpha - \nu)/2}{\frac{\bar{L}_{F}}{L_{F}} +
 $0<\nu<1$, $0<\alpha<(1-\nu)/2$, and $0<\beta<1$.
 These parameters are independent of $T$.
 \end{bluequote}
-This order makes the independence of $C_1,C_2,C_3,C_4$ from $k$ explicit when they are introduced. Before the complexity theorem, we now give only the batch-size choice $b_k=b=c_bT$ and refer to the constant-parameter setting above.
+This order makes the independence of $C_1,C_2,C_3,C_4$ from $k$ explicit when they are introduced. Before the complexity theorem, we now give the batch-size choice $b_k=b=\lceil c_bT\rceil$ and refer to the constant-parameter setting above.
 \item (Lemma C.1) I would replace $\nabla f(\bz)$ by a generic direction $\bd\in\RR^q$, this doesn't change the proof. The reason is that, in the proof of Lemma 5.5, you apply (C.1) by considering $\bG^k$, which is not a gradient strictly speaking (but merely an oracle).
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for this remark. We have restated Lemma~C.1 for an arbitrary direction; since $\bd^k$ already denotes the element of the KKT mapping in (A.5), we denote this direction by $\bg$ \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We thank the reviewer for this remark. We have restated Lemma~\mref{Lemma: auxiliary lemma for f} for an arbitrary direction; since $\bd^k$ already denotes the element of the KKT mapping in \meq{Eq: the components of the subgradient}, we denote this direction by $\bg$ \green{(p.~\mpage{Lemma: auxiliary lemma for f})}:
 \begin{bluequote}
 Let $f(\bx):\RR^q\to\RR$ be a continuously differentiable function with an $L$-Lipschitz continuous gradient. Then, for any $\bx,\by,\bg\in\RR^q$ and any $\bx^+\in\RR^q$ defined by
 \[
@@ -836,9 +780,9 @@ f(\bx^{+})\leq f(\bx)+\langle\nabla f(\bx)-\bg,\bx^{+}-\bx\rangle+\frac{L}{2}\|\
 \item (Lemma 5.5/proof) To better justify (C.3), simply say you apply Lemma C.1 to $F(.,\bB^k)$ considering $\bx=\bx_k,\by=\by_k,\eta=\eta_k,\bd=\bG^k$. The rest of the proof appears correct to me.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have added the substitution $F(\cdot,\bB^k)$, $\bx=\bx^k$, $\by=\by^k$, $\eta=\eta_k$, and $\bg=\bg_m^k$ in the proof \green{(Page XX, lines XX--XX):}
+We have added the substitution $F(\cdot,\bB^k)$, $\bx=\bx^k$, $\by=\by^k$, $\eta=\eta_k$, and $\bg=\bg_m^k$ in the proof \green{(p.~\mpage{Lemma: One-iteration progress of x in SGDM})}
 \begin{bluequote}
-Then, applying (C.1) to $F(\cdot,\bB^{k})$, which is $L_F$-smooth, with $\bx=\bx^{k}$, $\by=\by^{k}$, $\eta=\eta_{k}$, and $\bg=\bg_m^{k}$ (so that $\bx^{+}=\bx^{k+1}$ by (4.9)), yields [\ldots]
+Then, applying \meq{Eq: auxiliary lemma for f} to $F(\cdot,\bB^{k})$, which is $L_F$-smooth, with $\bx=\bx^{k}$, $\by=\by^{k}$, $\eta=\eta_{k}$, and $\bg=\bg_m^{k}$ (so that $\bx^{+}=\bx^{k+1}$ by \meq{Eq: the update of x in SGDM}), yields [\ldots]
 \end{bluequote}
 \end{itemize}
 
@@ -851,24 +795,21 @@ Then, applying (C.1) to $F(\cdot,\bB^{k})$, which is $L_F$-smooth, with $\bx=\bx
 \item In some places, you use of letter $d_x$ to denote the space dimension relative to variable $x$ and sometimes letter $q$ instead. I would prefer the use of letter $q$ everywhere, $d_x$ notation suggests that the space dimension may change depending on the value of $x$ which is a bit confusing.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have replaced $d_x$ by $q$ consistently throughout the manuscript \green{(Page XX, lines XX--XX):}
+We have replaced $d_x$ by $q$ consistently throughout the manuscript \green{(p.~\mpage{def:wtype})}
 \begin{bluequote}
 Deep hashing aims to learn network parameters $\bx\in\RR^{q}$ that generate binary codes preserving semantic similarity in the Hamming space.
 \end{bluequote}
 \item $h$ and $h^*$ functions are used for vectors and matrix objects. This is an acceptable abuse of notation in the context of your work provided that this is clearly stated, for example in your notation subsection.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have added the convention in the Notations paragraph \green{(Page XX, lines XX--XX):}
-\begin{bluequote}
-For simplicity, we use the same symbols $h$ and $h^*$ for their scalar forms and their separable extensions to vectors and matrices whenever no confusion can arise. The Fenchel conjugate of $h$ is $h^*(\bLmbd):=\sup_{\bZ\in\RR^{n\times d}}\{\langle\bLmbd,\bZ\rangle-h(\bZ)\}$.
-\end{bluequote}
+The scalar, vector, and matrix convention is now stated in Definition~\mref{def:wtype}, where $h(\bz)=\sum_j\phi(z_j)$ and $h(\bZ)=\sum_{i,j}\phi(z_{ij})$ are defined explicitly. The same convention applies to $h^*$ and $h^{**}$. This convention is located with the regularizer definition rather than in the Notations paragraph. \green{(Section~\mref{Section: W-regularizer}, p.~\mpage{def:wtype})}
 \item Some `non-matrix' variables (for example, $\bD^k$, $\bG^k$) are written in capital letters, which does not strictly adhere to the conventions you set out in the notations subsection.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have renamed the two stochastic directions as $\bg_m^k$ and $\bg_s^k$ and updated their definitions \green{(Page XX, lines XX--XX; Page XX, lines XX--XX and XX--XX):}
+We have renamed the two stochastic directions as $\bg_m^k$ and $\bg_s^k$ and updated their definitions \green{(p.~\mpage{Eq: the stochastic approximate in SGDM}; p.~\mpage{Eq: the stochastic approximate in STORM})}
 \begin{bluequote}
 \[
-\bg_m^k:=\nabla_{\bx}F(\bz^k,\bB^k;\calJ_k)=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bz^k,\bb_i^k),
+\bg_m^k:=\tilde{\nabla}_{\bx}F(\bz^k,\bB^k;\calJ_k)=\frac{1}{b_k}\sum_{i\in\calJ_k}\nabla_{\bx}F_i(\bz^k,\bb_i^k),
 \qquad
 \bx^{k+1}=\by^k-\eta_k\bg_m^k.
 \]
@@ -876,27 +817,14 @@ We have renamed the two stochastic directions as $\bg_m^k$ and $\bg_s^k$ and upd
 \item (page 5) Your definition of closeness for $f$ is equivalent to those of the lower semicontinuity (see for example chapter 1 of [1]. In the appendix, you mention the two terms (closeness in Def A.1, lower semicontinuity Prop A.2) . Because the second one, appears more popular to me, I would suggest to work with lower semicontinuity everywhere.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have replaced the function terminology in the preliminary definitions \green{(Page XX, lines XX--XX):}
-\begin{bluequote}
-For a proper, lower semicontinuous, and convex function $f$, the proximal mapping of $f$ is defined as
-\begin{align}
-\prox_{\tau f}(\by):=\arg\min_{\bx\in\dom(f)}\left\{f(\bx)+\frac{1}{2\tau}\|\bx-\by\|^2\right\}.
-\end{align}
-\end{bluequote}
+We now use ``lower semicontinuous'' in the preliminary definitions. The proximal mapping is defined for a proper, lower semicontinuous, bounded-below function $r$; convexity is imposed only for the single-valuedness statement. This also accommodates the nonconvex W-type regularizer. \green{(Section~\mref{Section: Problem Reformulation}, p.~\mpage{prop:rockafellar})}
 \item (page 28) See my first comment of preliminaries section about closeness vs lower-semicontinuity.
 \par\smallskip
 \normalfont\upshape\responseLabel
-The content of Definition~A.1 and Proposition~A.2 is now stated in Section~2, where only ``lower semicontinuous'' is used \green{(Page XX, lines XX--XX)}:
-\begin{bluequote}
-An extended real-valued function $f:\RR^{q}\to[-\infty,+\infty]$ is called \textit{proper} if $f(\bx)>-\infty$ for all $\bx\in\RR^{q}$ and its domain $\dom(f):=\{\bx\in\RR^{q}\mid f(\bx)<+\infty\}$ is nonempty; it is called \textit{lower semicontinuous} if its epigraph $\epi(f):=\{(\bx,t)\in\RR^{q+1}\mid f(\bx)\le t\}$ is closed. [...] The \textit{(limiting) subdifferential} of a function $f:\RR^{q}\to[-\infty,+\infty]$ at a point $\bx$ where $f(\bx)$ is finite is given by
-\[
-\partial f(\bx):=\Bigl\{\bv\in\RR^{q}:\ \exists\,\bx^{k}\xrightarrow{f}\bx,\ \bv^{k}\to\bv\ \text{with}\ \liminf_{\substack{\by\to\bx^{k}\\ \by\neq\bx^{k}}}\frac{f(\by)-f(\bx^{k})-\langle\bv^{k},\by-\bx^{k}\rangle}{\|\by-\bx^{k}\|}\ge0\ \text{for all } k\Bigr\}.
-\]
-[...] if $f(\bx_{1},\bx_{2})=f_{1}(\bx_{1})+f_{2}(\bx_{2})$ with $f_{1},f_{2}$ proper and lower semicontinuous, then $\partial f(\bx_{1},\bx_{2})=\partial f_{1}(\bx_{1})\times\partial f_{2}(\bx_{2})$.
-\end{bluequote}
+The relevant definitions and subdifferential rules are now stated in Section~\mref{Section: Problem Reformulation}, using ``lower semicontinuous'' consistently. The generic function is denoted by $r$, its limiting subdifferential is defined in \meq{Eq: limiting subdifferential}, and the smooth-sum and separable-sum rules are stated immediately afterwards. \green{(p.~\mpage{Eq: limiting subdifferential})}
 \item (Appendix B) I didn't really understand how you deduce, from the expression of $L_s$ that $L_F$ is $n$-independent. I would rather say that $L_F$ can be bounded by a constant independent of $n$. Following one of my previous comment, I don't really like the use of $\calO$ notation speaking of constants.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer. We agree that the expression of $L_s$ did not justify the claim that $L_F$ is independent of $n$. We have removed this claim and the informal $\calO(1)$ statement. The smoothness constant is now given explicitly in Appendix~B \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We thank the reviewer. We agree that the expression of $L_s$ did not justify the claim that $L_F$ is independent of $n$. We have removed this claim and the informal $\calO(1)$ statement. The smoothness constant is now given explicitly in Appendix~B \green{(p.~\mpage{eq:derived-smoothness-constant})}:
 \begin{bluequote}
 \[
 L_F=2L_f+\frac{\gamma}{n}\bigl(L_{\nabla\calD}C_{\calD B}+2G_{\calD}^2+1\bigr),
@@ -906,7 +834,7 @@ and is used only through this formula in the analysis.
 \item Why do you keep $|\calI_{k+1}|$ instead of using notation $b_{k+1}$?
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have replaced the cardinality notation by $b_{k+1}$ throughout Appendix~D \green{(Page XX, lines XX--XX):}
+We have replaced the cardinality notation by $b_{k+1}$ throughout Appendix~D \green{(p.~\mpage{Lemma: Recursive bound on gradient error})}
 \begin{bluequote}
 \[
 \EE[\|\be^{k+1}\|^2]\leq(1-\rho_k)^2\EE[\|\be^k\|^2]+\frac{2\rho_k^2\sigma^2}{b_{k+1}}+\frac{4(1-\rho_k)^2L_F^2}{b_{k+1}}\EE[\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}].
@@ -915,78 +843,39 @@ We have replaced the cardinality notation by $b_{k+1}$ throughout Appendix~D \gr
 \item (page 7) Variable $\bb_i$ denotes first $sgn(\bD_i(\bx))$ and then, in subsection 3.2, corresponds to $\bD_i(\bx)$, please clarify with two separated notations.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We now reserve $\bb_i$ for the continuous auxiliary variable and write the binary code as $\bh_i=\operatorname{sgn}(\bD_i(\bx))$ \green{(Page XX, lines XX--XX):}
-\begin{bluequote}
-The model is trained to produce the $i$-th continuous network output $\bD_i(\bx)$ with W-type regularization $h$, and binary codes are obtained post-training via $\bh_i=\operatorname{sgn}(\bD_i(\bx))\in\{-1,1\}^{d}$.
-\end{bluequote}
+We now reserve $\bb_i$ for the continuous auxiliary variable and write the binary code directly as $\operatorname{sgn}(\bD_i(\bx))\in\{-1,1\}^d$. The model passage introduces the equality $\bb_i=\bD_i(\bx)$ only in the constrained lifting, before relaxing it by the quadratic penalty. \green{(Section~\mref{Sec:W-type Regularized Deep Hashing Model}, pp.~\mpage{Eq: the primal deep hashing problem}--\mpage{Prop: block-wise regularized problem})}
 \item (page 7) I would place definition in (4.1) in the subsection notations. Do not forget to mention the fact you use the same notations for both vectors and matrices (see 4th remark of ``General comments'' section)
 \par\smallskip
 \normalfont\upshape\responseLabel
-\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item We have moved the definition to the Notations paragraph and corrected the domain to $\RR^{n\times d}$ \green{(Page XX, lines XX--XX):}
-\begin{bluequote}
-The Fenchel conjugate of $h$ is $h^*(\bLmbd):=\sup_{\bZ\in\RR^{n\times d}}\{\langle\bLmbd,\bZ\rangle-h(\bZ)\}$ for $\bLmbd\in\RR^{n\times d}$.
-\end{bluequote}
-\item The convention that $h$ and $h^*$ are used for both vectors and matrices is now stated in the Notations paragraph; see our response to the comment on $h$ and $h^*$ above.
-\end{enumerate}
+We now give the general conjugate definition in Section~\mref{Section: Problem Reformulation}, before defining the W-type class. Definition~\mref{def:wtype} states the vector/matrix extension convention, and Lemma~\mref{lem:wtype-conj} states the separable conjugate formula. These replace the earlier matrix-specific definition in the algorithm section. \green{(pp.~\mpage{prop:rockafellar}--\mpage{lem:wtype-conj})}
 \item (page 6) Wouldn't it be ``$f(\bx)=\EE_{\epsilon}[F(\bx,\epsilon)]$'' instead ? Moreover, what function $F:(\bx,\epsilon)\mapsto F(\bx,\epsilon)$ is supposed to represent, is this a generic one ?
 \par\smallskip
 \normalfont\upshape\responseLabel
-\begin{enumerate}[label={[\roman*]},before=\let\item\reviewitem]
-\item Yes, the expectation is taken with respect to the random variable; the objective is now written as $\phi(\bx)=\EE_{\xi}[\phi(\bx;\xi)]$.
-\item The stochastic problem in Section~2 is a generic one introduced only to explain the StoRM estimator. To avoid the clash with $f$ and $F$ in Problem~(P), it is now written with $\phi$ \green{(Page XX, lines XX--XX):}
-\begin{bluequote}
-Consider a stochastic optimization problem with objective
-\[
-\phi(\bx)=\EE_{\xi}[\phi(\bx;\xi)], \qquad \xi\in\Xi.
-\]
-A standard momentum-based stochastic first-order method constructs the stochastic direction
-\begin{align*}
-    \bg^{k} = \rho_{k-1}\nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bg^{k-1}, \qquad \rho_{k-1}\in[0,1],
-\end{align*}
-which is generally a biased estimator of $\nabla\phi(\bx^{k})$. The iterate is then updated according to
-\[
-\bx^{k+1}=\bx^{k}-\eta_k\bg^{k}.
-\]
-StoRM introduces the correction term
-\[
-(1-\rho_{k-1})\bigl(\nabla\phi(\bx^{k};\xi^{k})-\nabla\phi(\bx^{k-1};\xi^{k})\bigr)
-\]
-into the momentum estimator above, leading to the recursive estimator
-\begin{align}
-        \bg^{k}=\left\{\begin{array}{ll}
-        \nabla\phi(\bx^{k};\xi^{k}), & \text{if } k=1, \\[1mm]
-        \nabla\phi(\bx^{k};\xi^{k}) +(1-\rho_{k-1})\bigl(\bg^{k-1}-\nabla\phi(\bx^{k-1};\xi^{k})\bigr), & \text{if } k>1,
-    \end{array}\right.\tag{2.3}
-\end{align}
-\end{bluequote}
-\end{enumerate}
+We thank the reviewer for identifying the ambiguous use of $f$ and $F$. The generic stochastic-optimization tutorial has been removed from the preliminaries. The revised manuscript defines the finite-sum objective $F$ in the model section and introduces the mini-batch oracle directly in \meq{Eq: minibatch oracle}. Section~\mref{Sec: DualHash StoRM} then gives the model-specific recursive estimator \meq{Eq: the stochastic approximate in STORM}. This avoids using the same symbols for a separate generic objective. \green{(Section~\mref{Sec:W-type Regularized Deep Hashing Model}, p.~\mpage{Prop: block-wise regularized problem}; Section~\mref{Sec: DualHash StoRM}, p.~\mpage{Eq: the stochastic approximate in STORM})}
 
 \item (Prop A.2) In (iii), I would rather write $\hat{\partial}f_1(\overline{\bx}_1),\hat{\partial}f_2(\overline{\bx}_2)$ instead of $\hat{\partial}_{\bx_1}f_1(\overline{\bx}_1),\hat{\partial}_{\bx_2}f_2(\overline{\bx}_2)$
 \par\smallskip
 \normalfont\upshape\responseLabel
-The content of Proposition~A.2 is now stated in Section~2, where the analysis uses only the limiting subdifferential. The separable rule is written without coordinate subscripts \green{(Page XX, lines XX--XX)}:
+The separable-sum rule is now stated in Section~\mref{Section: Problem Reformulation}, without coordinate subscripts. The text uses the limiting subdifferential and the generic notation $r,r_1,r_2$:
 \begin{bluequote}
-If $f(\bx_{1},\bx_{2})=f_{1}(\bx_{1})+f_{2}(\bx_{2})$ with $f_{1},f_{2}$ proper and lower semicontinuous, then $\partial f(\bx_{1},\bx_{2})=\partial f_{1}(\bx_{1})\times\partial f_{2}(\bx_{2})$.
+If $r(\bx_1,\bx_2)=r_1(\bx_1)+r_2(\bx_2)$ with $r_1,r_2$ proper and lower semicontinuous, then $\partial r(\bx_1,\bx_2)=\partial r_1(\bx_1)\times\partial r_2(\bx_2)$.
 \end{bluequote}
+\green{(p.~\mpage{Eq: limiting subdifferential})}
 \item (page 12) In the definition of $\Delta_B^k$, there is no need to specify the `$F$' for the norm as there is no ambiguity here.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have removed the subscript in the complexity-analysis notation \green{(Page XX, lines XX--XX):}
+We have removed the subscript in the complexity-analysis notation \green{(p.~\mpage{Eq: One-iteration progress decomposition})}
 \begin{bluequote}
 \[\Delta_{\bx}^{k}=\frac{\|\bx^{k}-\bx^{k-1}\|^{2}}{2},\qquad \Delta_{\bB}^{k}=\frac{\|\bB^{k}-\bB^{k-1}\|^{2}}{2}.\]
 \end{bluequote}
 \item \red{(Lemma D.4) I would change notation $C_\delta^1$ by $C_\delta$ (you did this in the proof).
 \par\smallskip
 \normalfont\upshape\responseLabel
-We thank the reviewer. The constants $C_\delta^1$ and $c_\delta$ served only to bound $\tau$. We now state the condition $0<\tau<\frac{\sqrt{30}-2}{13L_F}$ directly, in the parameter settings of both algorithms, and use it in the proof of \red{Lemma~D.3} as $r\le\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$ with $r=\tau\gamma/n$, so neither constant appears in the revised manuscript \green{(Page XX, lines XX--XX)}.}
+We thank the reviewer. The constants $C_\delta^1$ and $c_\delta$ served only to bound $\tau$. We now state the condition $0<\tau<\frac{\sqrt{30}-2}{13L_F}$ directly, in the parameter settings of both algorithms, and use it in the proof of Lemma~\mref{lem:auxiliary-tracking} as $r\le\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$ with $r=\tau\gamma/n$, so neither constant appears in the revised manuscript \green{(p.~\mpage{lem:auxiliary-tracking})}.}
 \item (Remark 5.1) ``The smoothness constant $L_F$ remains $\calO(1)$'', useless comment, a non-zero constant being always a $\calO(1)$.
 \par\smallskip
 \normalfont\upshape\responseLabel
-We have replaced it with an explicit bound independent of $n$ \green{(Page XX, lines XX--XX):}
-\begin{bluequote}
-The smoothness constant $L_F$ is bounded by a constant independent of the sample size $n$.
-\end{bluequote}
+We have removed the informal $\calO(1)$ statement and the claim that $L_F$ is independent of $n$. The revised text gives the explicit constant \meq{eq:derived-smoothness-constant} and uses its independence of the iteration budget $T$. This is consistent with our response to the Appendix~B comment above. \green{(Appendix~\mref{app:smoothness-discussion}, p.~\mpage{eq:derived-smoothness-constant})}
 \end{itemize}
 
 
@@ -999,92 +888,53 @@ The smoothness constant $L_F$ is bounded by a constant independent of the sample
 \item (page 2) ``using subgradients may result in slow convergence and oscillation.'' add references to illustrate such a fact.
 
 \par\smallskip
-\normalfont\upshape\responseLabel We have revised the sentence and added the following references \green{(Page XX, lines XX--XX)}:
-
+\normalfont\upshape\responseLabel We have added Nesterov~\cite{nesterov2005smooth} for the slow convergence of classical subgradient methods and Bolte, Pauwels, and R\'ios-Zertuche~\cite{bolte2024longterm} for oscillatory behavior. \green{(Section~\mref{Section: Introduction}, p.~\mpage{Eq: the general nonlinear composite problem in intro})}
 \begin{bluequote}
-The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence [46] and oscillatory behavior [6].
+The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.
 \end{bluequote}
-
-\noindent[46] Yu.~Nesterov, \emph{Smooth minimization of non-smooth functions}, Mathematical Programming, 103 (2005), pp.~127--152.\\
-
-\noindent[6] J.~Bolte, E.~Pauwels, and R.~R{\'\i}os-Zertuche, \emph{Long term dynamics of the subgradient method for Lipschitz path differentiable functions}, Journal of the European Mathematical Society, 26 (2024), pp.~2533--2563.
-
-\par\smallskip
-\noindent The corresponding passages in these works read as follows.
-\begin{quote}
-
-[46, Section~1]: ``Historically, the subgradient methods were the first numerical schemes for non-smooth convex minimization. [\ldots] the main drawback of these schemes, the slow rate of convergence, is compensated by the very low complexity of each iteration.''\\[2pt]
-
-[6, p.~2536]: ``When $f$ is nonsmooth, the descent property does not hold anymore and oscillations appear both in values $f(x_i)$ and in space $x_i$.''\\[2pt]
-[6, Figure~1, p.~2535]: ``The sequence converges to the unique global minimum, but is constantly oscillating.''
-
-\end{quote}
-
 \item (page 2) ``inverse imaging problems'' I would also add additional references, in the vein of [3] et al.
 
 \par\smallskip
-\normalfont\upshape\responseLabel We have added the following references \green{(Page XX, line XX)}:
-\begin{bluequote}
-inverse imaging problems [20, 11, 50, 54, 37]
-\end{bluequote}
-
-\noindent[11] A.~Chambolle and T.~Pock, \emph{A first-order primal-dual algorithm for convex problems with applications to imaging}, Journal of Mathematical Imaging and Vision, 40 (2011), pp.~120--145.\\
-
-\noindent[50] A.~Repetti and Y.~Wiaux, \emph{Variable metric forward-backward algorithm for composite minimization problems}, SIAM Journal on Optimization, 31 (2021), pp.~1215--1241.
+\normalfont\upshape\responseLabel The imaging references in the introduction now include Chambolle and Pock~\cite{chambolleFirstOrderPrimalDualAlgorithm2011} and the suggested work of Repetti and Wiaux~\cite{repettiWiaux2021}. \green{(Section~\mref{Section: Introduction}, p.~\mpage{Eq: the general nonlinear composite problem in intro}, paragraph on proximal methods)}
 
 \item (page 6) Add reference [2] for descent lemma.
 \par\smallskip
-\normalfont\upshape\responseLabel We have added the reference \green{(Page XX, lines XX--XX)}:
-
-\begin{bluequote}
-For an $L_f$-smooth function, the descent lemma [3] states that [$\cdots$]
-\end{bluequote}
-
-\noindent[3] D.~P. Bertsekas, \emph{Nonlinear Programming}, 2nd ed., Athena Scientific, Belmont, MA, 1999.
+\normalfont\upshape\responseLabel We have cited Bertsekas's \emph{Nonlinear Programming}~\cite{bertsekas1997} directly in the sentence introducing the descent lemma \meq{Eq: the descent lemma}. The bibliography identifies the book rather than its journal review. \green{(Section~\mref{Section: Problem Reformulation}, p.~\mpage{Eq: the descent lemma})}
 
 \item (page 17) including pointwise [...] methods'' add references.
 
 \par\smallskip
-\normalfont\upshape\responseLabel We have added the following references \green{(Page XX, line XX)}:
-
-\begin{bluequote}
-[$\cdots$] including pointwise [52], pairwise [41], and tripletwise [61] methods.
-\end{bluequote}
-
-\noindent[52] F.~Shen, C.~Shen, W.~Liu, and H.~T. Shen, \emph{Supervised discrete hashing}, in Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2015, pp.~37--45.\\
-
-\noindent[41] H.~Liu, R.~Wang, S.~Shan, and X.~Chen, \emph{Deep supervised hashing for fast image retrieval}, in Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2016, pp.~2064--2072.\\
-
-\noindent[61] X.~Wang, Y.~Shi, and K.~M. Kitani, \emph{Deep supervised hashing with triplet labels}, in Asian Conference on Computer Vision (ACCV), 2016, pp.~70--84.
+\normalfont\upshape\responseLabel The Training Setup paragraph now cites Shen et al.~\cite{shenSupervisedDiscreteHashing2015} for pointwise methods, Liu et al.~\cite{liu2016dsh} for pairwise methods, and Wang et al.~\cite{wang2016DTSH} for tripletwise methods. \green{(Section~\mref{Section: Numerical experiments}, p.~21, Experimental Setup)}
 
 \item (Prop A.3) I agree with the results of (i), (ii) and (iii) but the corresponding lemma/article (Lemma 5.2 [45]) doesn't not appear to be the correct reference.
 \par\smallskip
-\normalfont\upshape\responseLabel We thank the reviewer for identifying this error. We have corrected the reference in Proposition~A.3 (now Proposition~C.1) \green{(Page XX, line XX)}:
-\begin{bluequote}
-For Algorithm 4.1, the key relationships among iterates via the momentum acceleration framework in (4.9) are established as follows.
-
-Proposition B.1 (Proposition 4.1 in [48]).
-\end{bluequote}
-\noindent[48] T.~Pock and S.~Sabach, \emph{Inertial proximal alternating linearized minimization (iPALM) for nonconvex and nonsmooth problems}, SIAM Journal on Imaging Sciences, 9 (2016), pp.~1756--1787.\end{itemize}
+\normalfont\upshape\responseLabel We thank the reviewer for identifying the incorrect reference. Original Proposition~A.3 is now Proposition~\mref{Pp: relations of xyz}, which cites Proposition~4.1 of Pock and Sabach~\cite{pock2016inertial}. \green{(Appendix~\mref{app:stom-complexity}, p.~\mpage{Pp: relations of xyz})}
+\end{itemize}
 
 \subsection{Wording}
 
 \par\smallskip
-\normalfont\upshape\textbf{General Response:} We thank the reviewer for these suggestions. All four passages have been revised as suggested. Where an item needs further explanation, \textbf{we respond to it individually}.
+\normalfont\upshape\textbf{General Response:} We thank the reviewer for these suggestions. We respond to each wording suggestion below and identify the text used in the current manuscript.
 
 \begin{itemize}\itshape
 \item (page 1) I would reformulate as ``Mathematically, this amounts \textbf{to carry out} a projection onto [...]. \textbf{Such a process can be interpreted as} a nonconvex discrete optimization problem[...], where the date fidelity criterion \textbf{is based on} pairwise similarity...''
 
+\normalfont\par\smallskip\upshape\responseLabel We have revised the first paragraph to say that hashing learns a mapping to the binary hypercube that preserves semantic neighborhoods. The next sentence now reads: \blue{``Such a process can be interpreted as a nonconvex discrete optimization problem akin to lossy image compression, where the data fidelity criterion is based on pairwise similarity rather than pixel-level reconstruction.''} This incorporates the proposed sentence structure while specifying that the learned mapping preserves similarity. \green{(Introduction, p.~\mpage{Section: Introduction})}
+
 \item (page 3) ``[...] deep hashing; directly extending their results to our setting is nontrivial.'' I would cut the sentence in two, for example : ``[...] deep-hashing. A direct extension of their results to our setting is far from being trivial. ''
 
 \par\smallskip
-{\normalfont\upshape\responseLabel We have split the sentence as suggested and added why the extension is nontrivial \green{(Page XX, lines XX--XX)}:
+{\normalfont\upshape\responseLabel We have split the sentence as suggested and added why the extension is nontrivial \green{(Introduction, p.~3)}:
 \begin{bluequote}
-However, all consider only the \emph{deterministic} setting, whereas ours addresses the \emph{stochastic} finite-sum formulation that naturally arises in large-scale deep hashing. A direct extension of their results to our setting is far from trivial, since the stochastic gradient errors are coupled with the dual dynamics introduced below. We control them jointly through a Lyapunov analysis (Section~5), which yields non-asymptotic oracle complexity bounds in the stochastic setting.
+However, all consider only the \emph{deterministic} setting, whereas ours addresses the \emph{stochastic} finite-sum formulation that naturally arises in large-scale deep hashing. A direct extension of their results to our setting is far from trivial, since the stochastic gradient errors are coupled with the dual dynamics. We control them jointly through a Lyapunov analysis (Section~5), which yields non-asymptotic oracle complexity bounds in the stochastic setting.
 \end{bluequote}}
 
 \item (page 11) ``The presence [...] renders the Lagrangian (4.2) non-descent'', I understand what you're saying, but the wording is still a bit vague. I would reformulate as ``The presence of dual variables $\Lambda$ makes it difficult to establish a descent property for the Lagrangian''.
+\normalfont\par\smallskip\upshape\responseLabel We have replaced ``non-descent'' by the explicit statement: \blue{``the dual update can increase $\calL$, so $\calL$ need not decrease along the iterates and standard descent arguments do not apply directly.''} The following sentence introduces the Lyapunov functions used to obtain approximate descent. \green{(Section~\mref{Section: Convergence analysis}, p.~\mpage{Eq: One-iteration progress decomposition})}
+
 \item (page 13) ``To handle the oscillation of (4.2). I would reformulate as ``To handle the oscillations of the Lagrangian function $\calL$''.
+\normalfont\par\smallskip\upshape\responseLabel The opening of Section~\mref{Section: complexity of StoM} now identifies the function explicitly as $\calL$, instead of referring to the old equation number. It reads \blue{``To handle the oscillation of $\calL$, we first set the parameters''}, followed by the parameter conditions and the Lyapunov function. The intended meaning is that $\calL$ need not decrease at each iteration, as clarified in the preceding response. \green{(p.~\mpage{Section: complexity of StoM})}
+
 \end{itemize}
 
 
@@ -1093,64 +943,98 @@ However, all consider only the \emph{deterministic} setting, whereas ours addres
 \begin{itemize}\itshape
 \item (page 18) Is there a particular reason why you are using a step size of $0.1\tau$ rather than $\tau$ when updating $\Lambda_k$?
 \par\smallskip
-{\normalfont\upshape\responseLabel The analysis uses the same parameter $\tau$ in the $\bB$- and $\bLmbd$-updates because it yields an exact cancellation in the descent estimate of Section~5. Combining the $\bB$-update with the optimality condition of the $\bLmbd$-update gives
+{\normalfont\upshape\responseLabel The analysis uses the same parameter $\tau$ in the $\bB$- and $\bLmbd$-updates because it yields an exact cancellation in the descent estimate of Section~5. For $k\ge2$, combining the $\bB$-update with the optimality condition of the $\bLmbd$-update gives
 \[
 \bB^{k+1}-\calG_{\bLmbd}^{k}=\tau\bigl(\nabla_{\bB}F(\bx^{k},\bB^{k-1})-\nabla_{\bB}F(\bx^{k+1},\bB^{k})\bigr),
 \qquad \calG_{\bLmbd}^{k}\in\partial h^*(\bLmbd^{k}),
 \]
-so the dual term is controlled by the smoothness of $F$ alone. In the experiments, the factor $0.1$ is an empirical choice obtained by hyperparameter tuning.}
+so the dual term is controlled by the smoothness of $F$ alone. In the experiments, the factor $0.1$ is an empirical choice obtained by hyperparameter tuning. The Hyperparameter Settings paragraph now explicitly describes this as a practical dual-step-size variant and states that the analysis covers the unified $\tau$-scheme. We do not claim that the stated theorem directly covers this variant. \green{(Experimental Setup, p.~21)}}
 \item \red{It would have been interesting to also display, in Tables 6.2 and 6.3, the performances of DualHash-StoRM.}
 \par\smallskip
-{\normalfont\upshape\responseLabel \red{We thank the reviewer for this suggestion. DualHash-StoM attained higher mAP than DualHash-StoRM in seven of the eight AlexNet settings in Table~6.1. Based on these results, we focused the ResNet-50 experiments on DualHash-StoM and did not conduct corresponding experiments with DualHash-StoRM. The behavior of DualHash-StoRM is reported in Table~6.1 and Figure~6.1.}}
+{\normalfont\upshape\responseLabel We thank the reviewer for this suggestion. DualHash-StoM attained higher mAP than DualHash-StoRM in seven of the eight AlexNet settings in Table~\mref{Table: baselines mAP}. Based on these results, we focused the ResNet-50 experiments on DualHash-StoM and did not conduct corresponding experiments with DualHash-StoRM. The behavior of DualHash-StoRM is reported in Table~\mref{Table: baselines mAP} and Figure~\mref{fig:training_loss_map_2datasets}.}
 \item \red{I think you could try increasing the size of a few figures (especially 6.4).}
 \par\smallskip
-{\normalfont\upshape\responseLabel \red{We have enlarged Figures~6.3--6.5, in particular Figure~6.4.}}
+{\normalfont\upshape\responseLabel Figures~\mref{fig:quantization_error}, \mref{fig:His_64_NUSWIDE}, and~\mref{fig:His_16_NUSWIDE} now use the full text width. The training, retrieval, and sensitivity figures use $95\%$ of the text width. These settings give the plots more space for axes and legends. \green{(Section~\mref{Section: Numerical experiments}, pp.~\mpage{fig:quantization_error}--\mpage{fig:sensitivity_analysis_DualHash})}}
 \end{itemize}
 
 \section{Typographical and formatting issues}
 
 \par\smallskip
-\textbf{General response:} We thank the reviewer for the careful reading. All items below have been corrected, and the manuscript has been proofread for similar errors. Where an item needs further explanation, \textbf{we respond to it individually}.
+\textbf{General response:} We thank the reviewer for the careful reading. We address every item below, specifying the corrected wording or explaining where the original passage has been replaced or removed.
 
 \begin{itemize}\itshape
 \item (page 1) ``$W$-type regularization such as $z\mapsto \lvert |z|-1\rvert$''.
 
+\normalfont\par\smallskip\upshape\responseLabel We have made the scalar/vector distinction explicit. The introduction gives the vector example $\bz\mapsto\lVert|\bz|-\mathbf1\rVert_1$, while Figure~\mref{Fig: the W and V regularizations} shows the scalar function $\phi(x)=\bigl||x|-1\bigr|$. Definition~\mref{def:wtype} specifies how the scalar regularizer extends to vectors and matrices. \green{(pp.~\mpage{Fig: the W and V regularizations}, \mpage{def:wtype})}
+
 \item (page 1) (Typo ?) ``up to $512\times$''
 \par\smallskip
-{\normalfont\upshape\responseLabel \red{We apologize for the unclear wording and the misleading phrase ``up to.''} The factor $512$ is the storage compression ratio of encoding a $1024$-dimensional \texttt{float32} feature vector as a $64$-bit binary code:
+{\normalfont\upshape\responseLabel We apologize for the unclear wording and the misleading phrase ``up to.'' The factor $512$ is the storage compression ratio of encoding a $1024$-dimensional \texttt{float32} feature vector as a $64$-bit binary code:
 \[
 \frac{1024\times 32\ \text{bits}}{64\ \text{bits}}=512.
 \]
-The ratio depends on the feature dimension, the numerical precision, and the code length, so $512$ is the value for this specific setting and ``up to'' was inaccurate. We have revised the statement \green{(Page XX, lines XX--XX)}:
+The ratio depends on the feature dimension, the numerical precision, and the code length, so $512$ is the value for this specific setting and ``up to'' was inaccurate. We have revised the statement \green{(Introduction, p.~1)}:
 \begin{bluequote}
 reducing storage by a factor of $512$ (a $1024$-dimensional \texttt{float32} feature vector versus a $64$-bit binary code)
 \end{bluequote}}
 \item (page 1) ``such as $z\mapsto \lvert |z|-1\rvert$''.
+\normalfont\par\smallskip\upshape\responseLabel The example now uses the vector notation $\bz\mapsto\lVert|\bz|-\mathbf1\rVert_1$ consistently with the hashing model. The corresponding one-dimensional illustration retains absolute values. \green{(Introduction, p.~\mpage{Fig: the W and V regularizations})}
+
 \item (page 2-3) ``reformulate the problem as \textbf{one of constrainted optimization}''.
+\normalfont\par\smallskip\upshape\responseLabel The revised Related Work paragraph describes the lifting as \blue{``a nonlinearly constrained optimization problem''}. Section~\mref{Sec:W-type Regularized Deep Hashing Model} then writes the constraints $\bb_i=\bD_i(\bx)$ explicitly and distinguishes this equivalent constrained representation from its quadratic-penalty relaxation. \green{(Sections~\mref{Section: related work} and~\mref{Sec:W-type Regularized Deep Hashing Model})}
+
 \item (page 3) ``the challenging composite term $h\circ \bD$''
+\normalfont\par\smallskip\upshape\responseLabel The introduction now writes the composite term explicitly as $h(\mathcal D(\bx))$, using the stacked network output $\mathcal D$. This is the same composition denoted by $h\circ\mathcal D$. The subsequent sentence explains the effect of replacing $h$ by its biconjugate. \green{(Introduction, paragraph preceding the main contributions)}
+
 \item (page 4/Related work) ``W-type regularizer such as $z\mapsto \lVert|z|-1\rVert_1$'', ``employ $z\mapsto \lVert|z|-1\rVert_2^2$ as a smooth surrogate for $z\mapsto \lVert|z|-1\rVert_1$''.
+\normalfont\par\smallskip\upshape\responseLabel The revised text uses bold vector notation and distinguishes the $\ell_1$ W-regularizer $\lVert|\bz|-\mathbf1\rVert_1$ from the squared W-regularizer $\lVert|\bz|-\mathbf1\rVert_2^2$. Related Work now identifies the latter as a squared W-type penalty; it no longer calls this function a smooth surrogate of the former. The smooth squared mismatch $\|\bD_i(\bx)-\bb_i\|^2$ used with auxiliary codes is a separate term. \green{(Section~\mref{Section: related work}; Table~\mref{tab:wtype})}
+
 \item (page 5) ``and \sout{the} stochastic majorization-minimization subspace methods''.
+\normalfont\par\smallskip\upshape\responseLabel The extra article has been removed. The passage now reads \blue{``and stochastic majorization-minimization subspace methods''}. \green{(Section~\mref{Section: related work}, paragraph on primal-dual and stochastic splitting methods)}
+
 \item (page 6) ``A \uline{differentiable} function $f:\RR^q\to\RR$ is said to be $L_f$-smooth''.
+\normalfont\par\smallskip\upshape\responseLabel We have explicitly required differentiability. The definition now begins \blue{``A differentiable function $g$''} and uses $L_g$ for its gradient Lipschitz constant, reserving $f$ for the model objective. \green{(Section~\mref{Section: Problem Reformulation}, p.~\mpage{Eq: the descent lemma})}
+
 \item (page 13) ``descent property of $\underline{\{}\Psi_m(\calQ^k)\underline{\}}$''.
+\normalfont\par\smallskip\upshape\responseLabel Section~\mref{Section: complexity of StoM} now introduces the \blue{``Lyapunov function and sequence''} explicitly. Lemma~\mref{Lemma: approximate sufficient descent property in SGDM} states the estimate for $\EE[\Psi_m(\calQ^{k+1})]-\EE[\Psi_m(\calQ^k)]$, making clear that the descent statement concerns successive sequence values. \green{(pp.~\mpage{Eq: the Lyapunov function in SGDM}--\mpage{Lemma: approximate sufficient descent property in SGDM})}
+
 \item (page 13) ``\uline{are} established in Lemma C.2''.
+\normalfont\par\smallskip\upshape\responseLabel We have used the plural verb ``are'' and updated the cross-reference. The sentence now states that positivity of the Lyapunov coefficients and descent constants \blue{``are established in''} Lemma~\mref{lem:lyapunov-coef-positivity}. \green{(p.~\mpage{Eq: the descent coefficients of potential function in SGDM})}
+
 \item ``From (5.25), to \uline{achieve}''.
+\normalfont\par\smallskip\upshape\responseLabel The sentence has been rewritten as \blue{``To achieve the desired oracle complexity, we choose''}, followed by the prescribed initial batch size. The current rate bound is \meq{Eq: the convergence rate of storm}. \green{(p.~\mpage{Theorem: the oracle complexity in STORM})}
+
 \item (page 17) ``regularization term $h(\bz)=\lambda\lVert|\bz|-1\rVert_1$ (the first z was not in bold).
+\normalfont\par\smallskip\upshape\responseLabel The argument is now bold in both occurrences: $h(\bz)=\lambda\lVert|\bz|-1\rVert_1$. \green{(Section~\mref{Section: Numerical experiments}, Training Setup paragraph)}
+
 \item (page 17) ``are provided in the Supplementary Materials \uline{E}''.
+\normalfont\par\smallskip\upshape\responseLabel The supplementary material has been reorganized. The experimental details are now in Appendix~\mref{app:experiments}, entitled ``Experimental Details'', so the old appendix letter E is no longer the correct location. The former sentence with that letter is absent from the revised Experimental Setup. \green{(Appendix~\mref{app:experiments}, p.~\mpage{app:experiments})}
+
 \item (page 17) ``to observe convergence behaviour\uline{s}''.
+\normalfont\par\smallskip\upshape\responseLabel The sentence containing ``to observe convergence behaviour'' has been removed during the reorganization. Section~\mref{Subsection: Convergence validation and performance efficiency analysis} now describes the training-loss and mAP curves directly, with the curves shown in Figure~\mref{fig:training_loss_map_2datasets}. \green{(p.~\mpage{fig:training_loss_map_2datasets})}
+
 \item (page 22) ``helps \uline{to} produce high mAP''.
+\normalfont\par\smallskip\upshape\responseLabel The current sentence reads \blue{``Lower quantization error helps produce high mAP.''} We retain the grammatical construction ``helps produce''; the surrounding discussion specifies the high-bit setting and reports the corresponding empirical comparison. \green{(Section~\mref{Subsection: Further analysis}, high-bit regime discussion)}
+
 \item ``including image \uline{reconstruction}''.
+\normalfont\par\smallskip\upshape\responseLabel The prospective application sentence containing this phrase has been removed from the conclusion. The revised conclusion focuses on the hashing results established and tested in this paper. Accordingly, the questioned wording no longer appears there.
+
 \item ``and binary neural networks'' (no comma).
+\normalfont\par\smallskip\upshape\responseLabel The prospective sentence about binary neural networks has been removed from the conclusion, together with its punctuation issue. The conclusion now stays with the theoretical and experimental findings for deep hashing.
+
 \item (page 28) In the equality just before Prop A.2, one of the $x$ is not in bold.
 \par\smallskip
-{\normalfont\upshape\responseLabel Since the subdifferential facts in Definition~A.1 and Proposition~A.2 underpin the first-order optimality conditions in Section~5.1, their content is now stated in Section~2, where all vector variables are set in bold. The equality in question, i.e., the convex-case formula, is replaced by the following statement \green{(Page XX, lines XX--XX)}:
+{\normalfont\upshape\responseLabel The subdifferential definitions and rules now appear in Section~\mref{Section: Problem Reformulation}, using bold vector notation and the generic function $r$. The convex-case formula is replaced by the following statement \green{(p.~\mpage{Eq: limiting subdifferential})}:
 \begin{bluequote}
-When $f$ is continuously differentiable or convex, the above subdifferential coincides with the classical gradient or convex subdifferential of $f$.
+When $r$ is continuously differentiable or convex, the above subdifferential coincides with the classical gradient or convex subdifferential of $r$.
 \end{bluequote}}
 
 \item (Lemma C.3/proof) ``is deduced from the $\underline{L_F}$-smoothness of $\underline{F(.,\bB^k)}$''.
 \par To justify (C.15), I would mention inequality $(a+b)^2\le 2a^2+2b^2$ just after the $F$ smoothness (and not after the inequality).
 \par ``\sout{yield} conduct to (C.9).''
 \par To justify (C.16), I would have mentioned Lemma 5.3 directly instead of (5.6).
+\normalfont\par\smallskip\upshape\responseLabel We have addressed all four points in the proof of Lemma~\mref{Lemma: Stationarity error bound in SGDM}. The text now explicitly invokes the $L_F$-smoothness of $F(\cdot,\bB^k)$. Before the estimate of $\|\bd_{\bB}^k\|^2$, it states both the smoothness property and $(a+b)^2\le2(a^2+b^2)$. The final substitution is described as \blue{``which leads to''} the stationarity bound. For the dual component, the proof explicitly invokes Lemma~\mref{Lemma: dual boundedness} with index $k-1$ for $k\ge2$, and treats $k=1$ using the initialization. \green{(Appendix~\mref{app:stom-rate-proof}, pp.~\mpage{Lemma: Stationarity error bound in SGDM}--\mpage{Eq: dLambda})}
+
 \end{itemize}
 
 \section{Clarification and possible misunderstanding}
@@ -1161,21 +1045,18 @@ When $f$ is continuously differentiable or convex, the above subdifferential coi
 \begin{itemize}\itshape
 \item (page 2) ``its composition with neural network outputs $h(\bD{}i(x))$'' sounds a bit unclear to me.
 \par\smallskip
-\normalfont\upshape\responseLabel We now define $\bD_i(\bx)$ when Problem~(1.1) is introduced, so that $h(\bD_i(\bx))$ reads as the regularizer applied to the network output of the $i$-th sample \green{(Page XX, lines XX--XX)}:
-\begin{bluequote}
-where $\bx\in\RR^{q}$ collects the network parameters, $\bD_i(\bx)\in\RR^{d}$ is the continuous network output for the $i$-th sample, $f_i$ and $\bD_i$ are continuously differentiable, and $h$ is a proper and lower semicontinuous regularizer.
-\end{bluequote}
+\normalfont\upshape\responseLabel We now identify $\bD_i(\bx)$ directly after the original objective (P0) in the introduction as the continuous output for sample $i$. We also define the stacked output $\calD(\bx)=[\bD_1(\bx)^\top;\ldots;\bD_n(\bx)^\top]$. Thus $h(\bD_i(\bx))$ is the regularizer applied to the output for sample $i$. \green{(Section~\mref{Section: Introduction}, p.~\mpage{Eq: the general nonlinear composite problem in intro})}
 \item (page 2) ``when $h$ is component-wise nondecreasing'', to verify but after quickly checked [29], I think $h$ also need to be convex. This would corroborate your next sentence ``when $h$ itself is nonconvex...''.
 \par\smallskip
-\normalfont\upshape\responseLabel We agree. The cited monotonicity-based result~\cite{hu23} indeed assumes a weakly convex outer function, so both cited conditions rely on the (weak) convexity of $h$. Since our argument only needs that these methods require $h\circ\bD$ to be convex or weakly convex, which fails for our nonconvex W-type regularizer, we have removed the sufficient-condition examples and now state this point directly \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel We agree. The cited monotonicity-based result~\cite{hu23} indeed assumes a weakly convex outer function, so both cited conditions rely on the (weak) convexity of $h$. Since our argument only needs that these methods require $h\circ\bD$ to be convex or weakly convex, which is not guaranteed for the W-type composition considered here, we have removed the sufficient-condition examples and now state this point directly \green{(Introduction, p.~3)}:
 \begin{bluequote}
 For nonsmooth compositional optimization, [$\cdots$] significant research has been conducted when $h\circ\bD$ is either convex [$\cdots$] or weakly convex [$\cdots$]. However, when $h$ itself is nonconvex, as in our setting, $h\circ\bD$ is not necessarily weakly convex, rendering these methods inapplicable.
 \end{bluequote}
 \item (page 8) What do you mean by ``inexpensive gradient'' ?
 \par\smallskip
-\normalfont\upshape\responseLabel By ``inexpensive'' we meant that the $\bB$-update requires neither stochastic sampling nor backpropagation through the network. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}\big(\bB-\calD(\bx)\big)$, once the network outputs $\calD(\bx^{k+1})$ are available, the update (4.4) is a \red{componentwise} operation on an $n\times d$ matrix, and the $\bLmbd$-update (4.5) is a closed-form proximal step of $h^*$. As the word was informal, we have removed it and now describe only the computational structure \green{(Page XX, lines XX--XX)}:
+\normalfont\upshape\responseLabel The intended distinction was between a componentwise update of $\bB$ and a gradient computation with respect to network parameters. Since $\nabla_{\bB}F(\bx,\bB)=\frac{\gamma}{n}(\bB-\calD(\bx))$, the $\bB$-update is explicit once the network outputs are available. Obtaining those outputs still requires computation; the SFO bounds count sampled gradients with respect to $\bx$, not total implementation work. The revised algorithm description therefore states the computational form directly \green{(Section~\mref{Sec: DualHash framework}, p.~\mpage{Eq: the update of B})}:
 \begin{bluequote}
-Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\calD(\bx^{k+1})$ is available, this step is evaluated from the closed-form expression of $\nabla_{\bB}F$.
+Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed-form expression of $\nabla_{\bB}F$.
 \end{bluequote}
 \end{itemize}
 
@@ -1287,4 +1168,5 @@ Second, $\bB$ is updated by a gradient descent step on $\calL$; once $\calD(\bx^
 \bibliographystyle{unsrt}
 \bibliography{revision_refs}
 
+\endgroup
 \end{document}

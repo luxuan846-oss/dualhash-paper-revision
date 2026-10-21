@@ -4,44 +4,39 @@
 We consider deep supervised pairwise hashing in our experiments, which aims to learn binary codes that minimize Hamming distances for similar pairs and maximize them for dissimilar pairs. Let $\bA = \{\ba_i \in \RR^{d_a} : i = 1, \ldots, n\}$ be the training set with label vectors $\by_i \in \{0,1\}^C$, where $d_a$ is the input dimension and $C$ is the number of classes. The label vectors are one-hot for single-label datasets and multi-hot for multi-label datasets.
 
 \paragraph{Network Architecture}
-A CNN extracts features from $\ba_i$, followed by a fully connected hash layer \blue{that produces} \red{the continuous code} $\red{\bD_i(\bx)\in\RR^d}$.
+A CNN extracts features from $\ba_i$, followed by a fully connected hash layer \blue{that produces} \blue{the continuous code} $\blue{\bD_i(\bx)\in\RR^d}$.
 
 \paragraph{Loss Function}
-For \red{post-training binary} codes $\red{\operatorname{sgn}(\bD_i(\bx))}\in\{-1,1\}^d$, the Hamming distance is
+For \blue{post-training binary} codes $\blue{\operatorname{sgn}(\bD_i(\bx))}\in\{-1,1\}^d$, the Hamming distance is
 \begin{equation*}
- d_{ij}^h = \tfrac{1}{2}\left(d - \left\langle \red{\operatorname{sgn}(\bD_i(\bx))}, \red{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right).
+ d_{ij}^h = \tfrac{1}{2}\left(d - \left\langle \blue{\operatorname{sgn}(\bD_i(\bx))}, \blue{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right).
 \end{equation*}
 Following~\cite{xiaSupervisedHashingImage2014,laiSimultaneousFeatureLearning2015}, similarity $s^o_{ij} = 1$ if samples share labels, else $0$. The likelihood is:
 \[
 \begin{aligned}
-P\bigl(s^o_{ij} \mid \red{\operatorname{sgn}(\bD_i(\bx))},\red{\operatorname{sgn}(\bD_j(\bx))}\bigr)
-={}&\ \red{\operatorname{sig}_{\kappa}}\!\left(\left\langle \red{\operatorname{sgn}(\bD_i(\bx))},\red{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right)^{s^o_{ij}}\\
-&\times\left(1 - \red{\operatorname{sig}_{\kappa}}\!\left(\left\langle \red{\operatorname{sgn}(\bD_i(\bx))},\red{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right)\right)^{1 - s^o_{ij}}.
+P\bigl(s^o_{ij} \mid \blue{\operatorname{sgn}(\bD_i(\bx))},\blue{\operatorname{sgn}(\bD_j(\bx))}\bigr)
+={}&\ \blue{\operatorname{sig}_{\kappa}}\!\left(\left\langle \blue{\operatorname{sgn}(\bD_i(\bx))},\blue{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right)^{s^o_{ij}}\\
+&\times\left(1 - \blue{\operatorname{sig}_{\kappa}}\!\left(\left\langle \blue{\operatorname{sgn}(\bD_i(\bx))},\blue{\operatorname{sgn}(\bD_j(\bx))} \right\rangle\right)\right)^{1 - s^o_{ij}}.
 \end{aligned}
 \]
-where
-\[
-\red{\operatorname{sig}_{\kappa}}(\red{t}) = (1 + \exp(-\red{\kappa t}))^{-1},\qquad \red{\kappa} < 1.
-\]
-Using continuous codes $\red{\bD_i(\bx)}$ and $s^h_{ij} = \tfrac{1}{2} \langle \red{\bD_i(\bx)}, \red{\bD_j(\bx)} \rangle$, the loss becomes:
+where $\blue{\operatorname{sig}_{\kappa}}(\blue{t}) = (1 + \exp(-\blue{\kappa t}))^{-1}$, $\blue{\kappa} < 1$.
+
+Using continuous codes $\blue{\bD_i(\bx)}$ and $s^h_{ij} = \tfrac{1}{2} \langle \blue{\bD_i(\bx)}, \blue{\bD_j(\bx)} \rangle$, the loss becomes:
 \begin{align}
 \label{Eq: the pairwise CE loss}
-\min_{\bx} \; \red{\ell}_{\calS}(\bx) = \blue{\frac{1}{|\calS|}\sum_{s^o_{ij}\in\calS}\Bigl[\log\bigl(1+\exp(\kappa s^h_{ij})\bigr)-\kappa\,s^o_{ij}s^h_{ij}\Bigr]}.
+\min_{\bx} \; \blue{\ell}_{\calS}(\bx) = \blue{\frac{1}{|\calS|}\sum_{s^o_{ij}\in\calS}\Bigl[\log\bigl(1+\exp(\kappa s^h_{ij})\bigr)-\kappa\,s^o_{ij}s^h_{ij}\Bigr]}.
 \end{align}
 Substituting \eqref{Eq: the pairwise CE loss} into Problem~\eqref{Prop: block-wise regularized problem} gives the objective used in our experiments:
 \begin{align}
 % \label{Eq: the pairwise quantization-based hashing}
 \min_{\bx \in \calX, \bB \in \RR^{n\times d}} \;
 &\blue{\frac{1}{|\calS|}\sum_{s^o_{ij}\in\calS}\Bigl[\log\bigl(1+\exp(\kappa s^h_{ij})\bigr)-\kappa\,s^o_{ij}s^h_{ij}\Bigr]} \notag \\
-&+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \red{\bD_i(\bx)}\|_2^2
+&+ \frac{\gamma}{2n}\sum_{i=1}^n \| \bb_i - \blue{\bD_i(\bx)}\|_2^2
 + \sum_{i=1}^n \lambda \|\,|\bb_i| - \bm{1}\,\|_1. \notag
 \end{align}
 
 \paragraph{Out-of-Sample Extension}
-For an unseen query $\ba^{\red{\mathrm{qry}}} \notin \bA$, its binary code is predicted as:
-\[
-\operatorname{sgn}\!\bigl(\red{\bD}(\bx; \ba^{\red{\mathrm{qry}}})\bigr).
-\]
+For an unseen query $\ba^{\blue{\mathrm{qry}}} \notin \bA$, its binary code is predicted as $\operatorname{sgn}\!\bigl(\blue{\bD}(\bx; \ba^{\blue{\mathrm{qry}}})\bigr)$.
 
 % \paragraph{Evaluation Protocols}
 % Following~\cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:

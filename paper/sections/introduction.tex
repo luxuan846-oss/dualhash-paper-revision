@@ -47,7 +47,7 @@ These regularizers impose sharp penalties to encourage variables towards binary 
 \label{Eq: the general nonlinear composite problem in intro}
 \min_{\bx \in \RR^{q}} \quad \blue{J_0(\bx):=}\frac{1}{n} \sumn f_i (\bx) + \sumn h(\bD_i(\bx)),
 \tag{\blue{P0}}
-\end{align}\blue{where \(\bx\) collects the network parameters, \(\bD_i(\bx)\) is the continuous output for sample \(i\), \(f_i\) is the sample loss, and \(h\) is the W-type regularizer.} In practice, researchers typically apply stochastic (sub)gradient methods (SGD) directly to optimize Problem \eqref{Eq: the general nonlinear composite problem in intro}, and deep hashing follows this paradigm as well. \blue{The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.}
+\end{align}\blue{where \(\bx\) collects the network parameters, \(\bD_i(\bx)\) is the continuous output for sample \(i\), \blue{$\mathcal{D}(\bx):=[\bD_1(\bx)^\top;\ldots;\bD_n(\bx)^\top]$ stacks these outputs,} \(f_i\) is the sample loss, and \(h\) is the W-type regularizer.} In practice, researchers typically apply stochastic (sub)gradient methods (SGD) directly to optimize Problem \eqref{Eq: the general nonlinear composite problem in intro}, and deep hashing follows this paradigm as well. \blue{The regularizer is often nonsmooth; for such objectives, classical subgradient methods may exhibit slow convergence~\cite{nesterov2005smooth} and oscillatory behavior~\cite{bolte2024longterm}.}
 
 The proximal operator is a powerful tool for handling nonsmooth 
 regularizers, with widespread applications in signal/image processing 

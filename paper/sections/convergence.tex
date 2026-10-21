@@ -4,10 +4,10 @@ We now analyze the complexity of the proposed algorithms in terms
 of the number of stochastic first-order oracle (SFO) calls
 required to find an $\varepsilon$-KKT point of $\calL$.
 Given $\varepsilon>0$, a random point $(\bx,\bB,\bLmbd)$
-is called an \emph{$\varepsilon$-KKT point} if
+\blue{is called an \emph{$\varepsilon$-KKT point} if}
 \begin{equation}
 \label{equ:esp}
-\mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)\big]
+\mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\blue{\mathcal{K}}(\bx,\bB,\bLmbd)\big)\big]
 \leq\varepsilon^2.
 \end{equation}
 \blue{Let $T$ denote the maximum number of iterations. Under the mini-batch sampling scheme
@@ -215,6 +215,7 @@ with \blue{$\tilde{L}_{\Delta}$ and $\tilde{C}_{\sigma}$ from \Cref{Lemma: conve
 \label{Sec: guarantees original objective}
 \blue{We now present, with \blue{proof in \Cref{app:original-objective}}, the oracle complexity guarantee of DualHash for the original Problem~\eqref{Eq: the primal deep hashing problem}, which follows from combining the KKT-residual bounds in \Cref{Theorem: the oracle complexity in SGDM,Theorem: the oracle complexity in STORM} with \Cref{prop:original-certificate}.}
 
+\begingroup\color{blue}
 \begin{corollary}\label{cor:original-stationarity}
 Under the assumptions of \Cref{Theorem: the oracle complexity in SGDM} (resp.\ \Cref{Theorem: the oracle complexity in STORM}), \blue{let $(\bx^R,\bB^R,\bLmbd^R)$ be the output of \Cref{alg:our_algorithm_sgdm} (resp.\ \Cref{alg:our_algorithm_storm}), obtained with} $\calO(\varepsilon^{-4})$ (resp.\ $\calO(\varepsilon^{-3})$) SFO calls. Then $\bx^R$ is $(\delta_R,\varepsilon_R)$-near-stationary for \blue{Problem~\eqref{Eq: the primal deep hashing problem}}, where \blue{$\delta_R$ and $\varepsilon_R$ are the bounds of \Cref{prop:original-certificate} at $(\bx^R,\bB^R,\bLmbd^R)$ with $L=L_0$, and satisfy
 \begin{align*}
@@ -223,6 +224,7 @@ Under the assumptions of \Cref{Theorem: the oracle complexity in SGDM} (resp.\ \
 \end{align*}
 with $\kappa$ and $L_0$ given in \Cref{lem:smooth-lower-bound} and \Cref{prop:original-certificate}.}
 \end{corollary}
+\endgroup
 
-\blue{\Cref{cor:original-stationarity} makes \Cref{prop:original-certificate} concrete for the algorithm output: the optimization error is reduced to $\calO(\varepsilon)$ at the oracle complexities of \Cref{Theorem: the oracle complexity in SGDM,Theorem: the oracle complexity in STORM}, whereas the structural error is determined by the quantization error of the output, which is inherent to continuous relaxation (\Cref{Section: Introduction}). In particular, for the $\ell_1$ W-regularizer, $\bx^R$ is $(\calO(\varepsilon),\calO(\varepsilon))$-near-stationary for Problem~\eqref{Eq: the primal deep hashing problem} whenever $\lambda\,\EE\,Q_1(\bx^R)=\calO(\varepsilon^2)$, i.e., when the network outputs are close enough to binary codes, which can be monitored in practice by computing $Q_1(\bx^R)$. It is worth emphasizing that, with our reformulation and algorithm, DualHash attains the smallest quantization error among the compared methods on the challenging multi-label NUS-WIDE dataset (\Cref{Subsection: Further analysis}), so the structural error remains small in practice and the guarantee for the original objective is practically meaningful.}
+\blue{\Cref{cor:original-stationarity} makes \Cref{prop:original-certificate} concrete for the algorithm output: the optimization error is reduced to $\calO(\varepsilon)$ at the oracle complexities of \Cref{Theorem: the oracle complexity in SGDM,Theorem: the oracle complexity in STORM}, whereas the structural error is determined by the quantization error of the output, which is inherent to continuous relaxation (\Cref{Section: Introduction}). In particular, for the $\ell_1$ W-regularizer, $\bx^R$ is \blue{$(\delta_R,\varepsilon_R)$-near-stationary for Problem~\eqref{Eq: the primal deep hashing problem}, with $\EE\delta_R=\calO(\varepsilon)$ and $\EE\varepsilon_R=\calO(\varepsilon)$,} whenever $\lambda\,\EE\,Q_1(\bx^R)=\calO(\varepsilon^2)$, \blue{i.e., when the expected quantization error is sufficiently small.} It is worth emphasizing that, with our reformulation and algorithm, DualHash attains the smallest quantization error among the compared methods on the challenging multi-label NUS-WIDE dataset (\Cref{Subsection: Further analysis}), so the structural error remains small in practice and the guarantee for the original objective is practically meaningful.}
 

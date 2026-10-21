@@ -191,7 +191,12 @@ whose dual problem is
 \begingroup\color{blue}
 which is obtained by minimizing over $\bY$ using the definition of the conjugate function $h^*$.
 
-In general, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard for nonconvex quadratic programs~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for the min--max problem~\eqref{Eq: minmax problem} below. Following~\cite{chambolleFirstOrderPrimalDualAlgorithm2011,
+It is worth noting that the nonconvex--concave min--max problem associated with $\calL$ is closely related to Problem~\eqref{Prop: the dual problem} and admits the following equivalent formulation:
+\begin{equation}\label{Eq: minmax problem}
+\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB) = \min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd).
+\end{equation}
+
+In general, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard for nonconvex quadratic programs~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for the min--max problem~\eqref{Eq: minmax problem}. Following~\cite{chambolleFirstOrderPrimalDualAlgorithm2011,
 clasonAccelerationGlobalConvergence2019,
 botBohm2023alternating}, we call
 $(\tilde{\bx},\tilde{\bB},\tilde{\bLmbd})$ a
@@ -236,10 +241,7 @@ Equivalently,
 % $\bm{0}\in\mathcal{K}$. We therefore use
 % $\bm{0}\in\mathcal{K}$. 
 
-It is worth noting that the nonconvex--concave min--max problem associated with $\calL$ is closely related to Problem~\eqref{Prop: the dual problem} and admits the following equivalent formulation:
-\begin{equation}\label{Eq: minmax problem}
-\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB) = \min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd).
-\end{equation}Notice that KKT points of $\calL$ correspond one-to-one to stationary points of the min--max problem~\eqref{Eq: minmax problem}, i.e.,
+Notice that KKT points of $\calL$ correspond one-to-one to stationary points of the min--max problem~\eqref{Eq: minmax problem}, i.e.,
 \begin{equation}\label{Eq: saddle-KKT-convexified}
 \nabla_{\bx}F(\tilde{\bx},\tilde{\bB})=\bm{0},
 \qquad

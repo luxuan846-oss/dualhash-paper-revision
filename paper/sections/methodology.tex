@@ -3,7 +3,7 @@
 \subsection{Algorithmic Framework}
 \blue{Having established the stationarity relationships and guarantees for the original objective, we now present the \textbf{DualHash} framework, a \blue{stochastic first-order multiblock primal--dual method}}. 
 
-\blue{From \Cref{tab:wtype}, the proximal mapping of $\phi$ is set-valued at the origin because of its nonconvexity, whereas the convexity of $\phi^*$ (\Cref{lem:wtype-conj}) makes its proximal mapping single-valued and nonexpansive.} By the separability of $h^*$, its proximal mapping is computed componentwise \blue{using the scalar mappings in \Cref{tab:wtype}}:
+\blue{For the regularizers in \Cref{tab:wtype}, the proximal mapping of $\phi$ is set-valued at the origin, whereas the convexity of $\phi^*$ (\Cref{lem:wtype-conj}) makes its proximal mapping single-valued and nonexpansive.} By the separability of $h^*$, its proximal mapping is computed componentwise:
 \begin{equation}
 \label{Eq: the proximal mapping of conjugate function}
 \blue{[\operatorname{prox}_{\sigma h^*}(\bLmbd)]_{ij}
@@ -38,7 +38,7 @@ Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when th
 \caption{DualHash-StoM}
 \label{alg:our_algorithm_sgdm}
 \begin{algorithmic}[1]
-\STATE \textbf{Initialize:} $\bx^0=\bx^1\in\RR^q$, $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$, $\bB^0=\bB^1$, and $\bLmbd^0=\bLmbd^1$; parameters $\{\alpha_k\},\{\beta_k\}\subset[0,1)$, $\{\eta_k\}$, $\tau$, and $T$.
+\STATE \textbf{Initialize:} \blue{$\bx^0=\bx^1\in\RR^q$, $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$, $\bB^0=\bB^1$, and $\bLmbd^0=\bLmbd^1$}; parameters $\{\alpha_k\},\{\beta_k\}\subset[0,1)$, $\{\eta_k\}$, $\tau$, and $T$.
 \FOR{\blue{$k = 1, \ldots, T$}}
   \STATE \blue{Compute $\by^k$ and $\bz^k$ by \eqref{Eq: extrapolated points in SGDM}}
   \STATE \blue{Draw $\calJ_k$ and compute $\bg_m^k$ by \eqref{Eq: the stochastic approximate in SGDM}}
@@ -55,7 +55,7 @@ Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when th
   \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
   \]
 \ENDFOR
-\STATE \textbf{Output:} { $(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$.}
+\STATE \textbf{Output:} { \blue{$(\bx^R,\bB^R,\bLmbd^R)$}, where $R$ is drawn uniformly from $\{1,\ldots,T\}$.}
 \end{algorithmic}
 \end{algorithm}
 We first present a momentum-based instance. At iteration $k$, we form two extrapolated points
@@ -104,7 +104,7 @@ The overall algorithm, DualHash-StoM, is summarized in \Cref{alg:our_algorithm_s
 % \end{align}
 % \blue{In Section~\ref{Sec: Algorithm implementations}, \eqref{Eq: the generic StoRM estimator} is instantiated as $\bg_s^k$ in \eqref{Eq: the stochastic approximate in STORM}, which serves as the search direction $\bg^k$ in the update \eqref{Eq: the generic update of x}.}
 
-Alternatively, we consider the StoRM estimator~\cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations. We construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
+Alternatively, we consider the StoRM estimator~\cite{cutkoskyMomentumBasedVarianceReduction2019} for the $\bx$-update, which achieves variance reduction without requiring full-gradient or large-batch gradient computations \blue{after initialization}. We construct a mini-batch recursive momentum estimator \blue{$\bg_s^k$ of $\nabla_{\bx} F(\bx^k, \bB^k)$, calling the oracle \eqref{Eq: minibatch oracle} with the same mini-batch $\calJ_k$ at two query points:}
 \begin{equation}
 \label{Eq: the stochastic approximate in STORM}
 \blue{\bg_s^k} :=
@@ -124,7 +124,7 @@ The overall algorithm, DualHash-StoRM, is summarized in \Cref{alg:our_algorithm_
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]
-\STATE \textbf{Initialize:} $\bx^0=\bx^1\in\RR^q$, $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$, $\bB^0=\bB^1$, and $\bLmbd^0=\bLmbd^1$; parameters $\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$, $\tau$, and $T$.
+\STATE \textbf{Initialize:} \blue{$\bx^0=\bx^1\in\RR^q$, $\bB^1=\operatorname{prox}_{m^{-1}h^{**}}(\mathcal{D}(\bx^1))$, $\bLmbd^1=m(\mathcal{D}(\bx^1)-\bB^1)$, $\bB^0=\bB^1$, and $\bLmbd^0=\bLmbd^1$}; parameters $\{\rho_k\}\subset(0,1)$, $\{\eta_k\}$, $\tau$, and $T$.
 \FOR{$k = 1, \ldots, T$}
   \STATE Draw $\calJ_k$ and compute \blue{$\bg_s^k$} by \eqref{Eq: the stochastic approximate in STORM}
   \STATE Update $\bx^{k+1}$ by
@@ -140,7 +140,7 @@ The overall algorithm, DualHash-StoRM, is summarized in \Cref{alg:our_algorithm_
   \bLmbd^{k+1} = \operatorname*{arg\,min}_{\bLmbd} \Big\{ h^*(\bLmbd) - \langle \bLmbd, 2\bB^{k+1} - \bB^k \rangle + \frac{\tau}{2} \| \bLmbd - \bLmbd^k\|^2 \Big\}
   \]
 \ENDFOR
-\STATE \textbf{Output:} {$(\bx^R,\bB^R,\bLmbd^R)$, where $R$ is drawn uniformly from $\{1,\ldots,T\}$.}
+\STATE \textbf{Output:} \blue{$(\bx^R,\bB^R,\bLmbd^R)$}, where $R$ is drawn uniformly from $\{1,\ldots,T\}$.
 \end{algorithmic}
 \end{algorithm}
 

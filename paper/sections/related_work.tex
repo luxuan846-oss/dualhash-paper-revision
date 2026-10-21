@@ -9,20 +9,17 @@
 \toprule
 \textbf{Type} & \textbf{Method} & \textbf{\blue{W-type Regularizer}} & \textbf{Optimization} & \textbf{Complexity} \\
 \midrule
-    \multirow{4}{*}{\centering Discrete}
-    & DDSH~\cite{liDeepSupervisedHashing} & \multirow{4}{*}{\centering \blue{$\ell_2^2$}} & BQP & \multirow{12}{*}{\centering \textemdash} \\
+    \multirow{3}{*}{\centering Discrete}
+    & DDSH~\cite{liDeepSupervisedHashing} & \multirow{3}{*}{\centering \blue{$\ell_2^2$}} & BQP & \multirow{9}{*}{\centering \textemdash} \\
     & DSDH~\cite{li2017deep} & & $\operatorname{sgn}$ update & \\
     & DPSH~\cite{liFeatureLearningBased2016} & & DCC & \\
-    & \blue{DSARH~\cite{zhang2026dsarh}} & & \blue{DCC + PGD-based AT} & \\
     \cmidrule(lr){1-4}
-    \multirow{8}{*}{\centering Continuous}
+    \multirow{6}{*}{\centering Continuous}
     & DSH~\cite{liuDeepSupervisedHashing} & \blue{$\ell_1$} & \multirow{3}{*}{\centering SGDM} & \\
     & DTSH~\cite{wang2016DTSH} & \blue{$\ell_2^2$} & & \\
     & DHN~\cite{zhuDeepHashingNetwork2016} & \blue{log-cosh} & & \\
     \cmidrule(lr){2-4}
     & MDSHC~\cite{wang2023deep} & \blue{$\ell_1$} & RMSProp & \\
-    & \blue{MambaHash~\cite{he2025mambahash}} & \blue{$\ell_2^2$} & \blue{RMSProp} & \\
-    & \blue{CRH~\cite{yin2026crh}} & \blue{$\ell_2^2$} & \blue{Adam + center reassignment} & \\
     \cmidrule(lr){2-4}
     & HashNet~\cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering \blue{\textemdash}} & SGDM & \\
     & OrthoHash~\cite{hoeOneLossAll2021} & & Adam & \\
@@ -35,8 +32,8 @@
     % \vspace{-5pt}
     \parbox{\linewidth}{\scriptsize
     \textbf{Notes}: 
-    \blue{The \textbf{Type} column indicates whether binary codes are explicitly updated; DSARH is grouped with Discrete because its unified-hashing branch uses DCC updates.}
-    \blue{For continuous methods, regularizer names follow \Cref{tab:wtype}, and `\textemdash' indicates no explicit regularizer.} DCC stands for Discrete Cyclic Coordinate \blue{Descent}, \blue{PGD-based AT for projected-gradient adversarial training,} while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the \blue{oracle complexity}, with `\textemdash' indicating that \blue{no corresponding complexity guarantee is reported in the cited work}.}
+    \blue{The \textbf{Type} column indicates whether binary codes are explicitly updated.}
+    \blue{For continuous methods, regularizer names follow \Cref{tab:wtype}, and `\textemdash' indicates no explicit regularizer.} DCC stands for Discrete Cyclic Coordinate \blue{Descent}, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the \blue{oracle complexity}, with `\textemdash' indicating that \blue{no corresponding complexity guarantee is reported in the cited work}.}
      \vspace{-2ex}
 \end{table}
 \paragraph{Optimization in Deep Hashing} 

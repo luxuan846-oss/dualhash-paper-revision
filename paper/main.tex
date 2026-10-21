@@ -32,7 +32,7 @@ In this paper, using Fenchel duality, \blue{we move the nonconvex W-type regular
 \blue{We show that this min--max problem captures the stationarity of the original deep hashing objective up to the quantization error.}
 \blue{Building on this problem, we} present a stochastic primal-dual hashing algorithm, referred to as DualHash, \blue{with oracle complexity guarantees.}
 We derive two algorithm instances: a momentum-\blue{based} version with $\mathcal{O}(\varepsilon^{-4})$ \blue{oracle} complexity and an improved $\mathcal{O}(\varepsilon^{-3})$ version using variance reduction\blue{, both for $\varepsilon$-KKT points of the \blue{min--max} problem, which yield near-stationarity guarantees for the original objective}.
-Experiments on three standard datasets demonstrate \blue{competitive} retrieval accuracy and reduced quantization error, validating the practical value of DualHash for image retrieval problems.
+Experiments on three standard datasets demonstrate competitive retrieval accuracy and reduced quantization error, validating the practical value of DualHash for image retrieval problems.
 Our implementation of DualHash is available at \url{https://github.com/RailLee/DualHash}.
 \end{abstract}
 \begin{keywords}
@@ -92,5 +92,4 @@ image retrieval, stochastic optimization, oracle complexity,
 % \newpage
 \input{sections/supplementaryB}   % → A, B, C, D
 \input{sections/supplementaryA}   % → E
-
 \end{document}

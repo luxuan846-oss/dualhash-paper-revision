@@ -14,12 +14,12 @@ standard image retrieval datasets. All experiments use PyTorch 1.12.1 with CUDA 
 % Visualizations are implemented using Python on macOS 15.3.2. 
 % % The codes are available at {\url{https://anonymous.4open.science/r/DualHash_NeurIPS}.}
 \subsection{Experimental Setup}
-\paragraph{Datasets} \textbf{CIFAR-10}\footnote{\url{https://www.cs.toronto.edu/~kriz/cifar.html}} is a \textbf{single-label} dataset \blue{with} 10 classes. 
-\blue{We} randomly sample 1,000 images per class (10,000 total) for training, 500 per class (5,000 total) for validation, and 500 per class (5,000 total) for testing.
+\paragraph{Datasets} \textbf{CIFAR-10}\footnote{\url{https://www.cs.toronto.edu/~kriz/cifar.html}} is a \textbf{single-label} dataset with 10 classes. 
+We randomly sample 1,000 images per class (10,000 total) for training, 500 per class (5,000 total) for validation, and 500 per class (5,000 total) for testing.
 \textbf{NUS-WIDE}\footnote{\url{http://lms.comp.nus.edu.sg/research/NUS-WIDE.htm}} is a \textbf{multi-label} dataset. 
 % Following~\cite{liuHashingGraphs, laiSimultaneousFeatureLearning2015, liuDeepSupervisedHashing}.
-\blue{We} use a subset of 195,834 images from the 21 most frequent concepts (each with at least 5,000 images) and randomly sample 700 images per class (14,700 total) for training, 300 per class (6,300 total) for validation, and 300 per class (6,300 total) for testing.
-\textbf{ImageNet}\footnote{\url{https://www.image-net.org/}} \blue{is a single-label dataset.} Following~\cite{Cao2017HashNetDL}, we randomly select 100 categories to create ImageNet-100. We use 100 images per category (10,000 total) for training, 30 per category (3,000 total) for validation, and 50 per category (5,000 total) for testing. The training, validation, and testing sets are mutually exclusive with no data overlap.
+We use a subset of 195,834 images from the 21 most frequent concepts (each with at least 5,000 images) and randomly sample 700 images per class (14,700 total) for training, 300 per class (6,300 total) for validation, and 300 per class (6,300 total) for testing.
+\textbf{ImageNet}\footnote{\url{https://www.image-net.org/}} is a single-label dataset. Following~\cite{Cao2017HashNetDL}, we randomly select 100 categories to create ImageNet-100. We use 100 images per category (10,000 total) for training, 30 per category (3,000 total) for validation, and 50 per category (5,000 total) for testing. The training, validation, and testing sets are mutually exclusive with no data overlap.
 
 % \vspace{3pt}
 \paragraph{Training Setup} Our method is compatible with different similarity measurement paradigms, including \blue{pointwise~\cite{shenSupervisedDiscreteHashing2015}, pairwise~\cite{liuDeepSupervisedHashing}, and tripletwise~\cite{wang2016DTSH}} methods. In our experiments, we focus on deep supervised pairwise hashing using a pairwise cross-entropy loss \( f \) and the nonsmooth \blue{W-type regularizer} \( h(\blue{\bz}) = \lambda \| |\bz| -1 \|_1 \).
@@ -41,7 +41,7 @@ For the non-deep method (SDH~\cite{shenSupervisedDiscreteHashing2015}), we use t
 % \vspace{3pt}
 \paragraph{Hyperparameter Settings} 
 {Unless the original implementation imposes a method-specific component, all deep baselines are trained under the same data splits, evaluation protocol, backbone family, image preprocessing, and early-stopping rule as DualHash.} All models are trained for a maximum of 300 epochs with early stopping based on validation mAP. We use a fixed mini-batch size of 256 for CIFAR-10 and 128 for NUS-WIDE and ImageNet-100.
-For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ with step decay, approximating $\eta_k \sim O(L_F^{-1})$ without computing $L_F$. For DualHash-StoRM, $\eta_k$ is chosen from $\{5 \times 10^{-3}, 5 \times 10^{-2}, 5 \times 10^{-1}\}$ following $\mathcal{O}(T^{-1/3})$ scaling, and $\rho_k$ is selected from $\{0.01, 0.05, 0.1, 0.2, 0.7\}$ \blue{on the validation set}. For DualHash-StoM, we set the momentum parameters $\alpha_k = \beta_k = 0.905$. Baselines follow their official optimizer settings. We tune $\lambda \in \{10^{-3}, 10^{-2}, 5\times 10^{-2}, 10^{-1}\}$. For all datasets, we set $\tau = 10^{-2}$, $\lambda = 5 \times 10^{-2}$, and $\gamma = 3$. In our practical implementation, we use a dual-step-size variant for multipliers \(\bm{\Lambda}\), i.e., the \(\bm{\Lambda}\)-update uses step size \(0.1\tau\), while the theoretical analysis is stated for the unified \(\tau\)-scheme in \Cref{Sec: DualHash framework,Section: Convergence analysis}. 
+For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ with step decay, approximating $\eta_k \sim O(L_F^{-1})$ without computing $L_F$. For DualHash-StoRM, $\eta_k$ is chosen from $\{5 \times 10^{-3}, 5 \times 10^{-2}, 5 \times 10^{-1}\}$ following $\mathcal{O}(T^{-1/3})$ scaling, and $\rho_k$ is selected from $\{0.01, 0.05, 0.1, 0.2, 0.7\}$ on the validation set. For DualHash-StoM, we set the momentum parameters $\alpha_k = \beta_k = 0.905$. Baselines follow their official optimizer settings. We tune $\lambda \in \{10^{-3}, 10^{-2}, 5\times 10^{-2}, 10^{-1}\}$. For all datasets, we set $\tau = 10^{-2}$, $\lambda = 5 \times 10^{-2}$, and $\gamma = 3$. In our practical implementation, we use a dual-step-size variant for multipliers \(\bm{\Lambda}\), i.e., the \(\bm{\Lambda}\)-update uses step size \(0.1\tau\), while the theoretical analysis is stated for the unified \(\tau\)-scheme in \Cref{Sec: DualHash framework,Section: Convergence analysis}. 
 % All results represent averages over 10 independent runs. 
 % \vspace{3pt}
 \subsection{Convergence Validation}
@@ -188,7 +188,7 @@ For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently m
     % \vspace{-1mm}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/sensitivity_2datasets.pdf}
-    \caption{The mAP results of DualHash-StoM with different settings of \(\eta\) and \blue{\(\gamma\)} for 64-bit and 16-bit codes on CIFAR-10 and NUS-WIDE.}
+    \caption{The mAP results of DualHash-StoM with different settings of \(\eta\) and \(\gamma\) for 64-bit and 16-bit codes on CIFAR-10 and NUS-WIDE.}
     \label{fig:sensitivity_analysis_DualHash}
 \end{figure}
 To elucidate the mechanisms behind the performance of DualHash, following~\cite{hoeOneLossAll2021},
@@ -201,7 +201,7 @@ with the mean of inter-class distance (the orange dotted line). In contrast, MDS
 This demonstrates that reducing quantization error enhances code quality primarily by compressing intra-class distributions.
 
 % \vspace{3pt}
-{\noindent\textbf{(2) Quantization Error \blue{of} DualHash.}
+{\noindent\textbf{(2) DualHash Achieves Lower Quantization Error via Dual-Space Reformulation.}
 As shown in \Cref{fig:quantization_error}(a), DualHash attains the smallest quantization error across different bit lengths among all evaluated methods. This performance advantage stems from a fundamental methodological innovation: DualHash employs a novel dual-space reformulation of the W-regularization. The convexity property inherent in our dual formulation's conjugate function yields significant optimization advantages compared to directly optimizing the original nonconvex regularization or activation functions.}
 
 % \vspace{3pt}
@@ -216,9 +216,9 @@ At $K = 16$ (\Cref{fig:quantization_error}(b) and (c)), we observe a contrasting
 
 % \vspace{3pt}
 \subsection{Parameter Sensitivity Analysis}
-To explore the sensitivity of key hyperparameters $\eta$ and \blue{$\gamma$} in 
-DualHash, we conduct a grid search with $\eta \in \{\blue{10^{-5}}, 10^{-3}, 
-10^{-2}, \blue{1}\}$ and \blue{$\gamma \in \{0.3, 3, 30, 100\}$}. Unlike many deep hashing 
+To explore the sensitivity of key hyperparameters $\eta$ and $\gamma$ in 
+DualHash, we conduct a grid search with $\eta \in \{10^{-5}, 10^{-3}, 
+10^{-2}, 1\}$ and $\gamma \in \{0.3, 3, 30, 100\}$. Unlike many deep hashing 
 methods that exhibit significant hyperparameter sensitivity, DualHash-StoM 
 demonstrates robust performance across a wide range of hyperparameter 
 combinations (see \Cref{fig:sensitivity_analysis_DualHash}). 

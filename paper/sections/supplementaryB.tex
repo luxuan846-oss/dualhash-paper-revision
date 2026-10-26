@@ -6,15 +6,15 @@
 \begin{proof}
 Let \(\psi(t):=\phi(\max\{|t|,1\})\). By \ref{W1}--\ref{W2}, \(\phi\) is convex and nonnegative on \([1,+\infty)\), with \(\phi(1)=0\); hence it is nondecreasing there. Thus \(s\mapsto\phi(\max\{s,1\})\) is convex and nondecreasing on \([0,+\infty)\), so \(\psi\) is convex and satisfies \(\psi\le\phi\). Conversely, any convex \(q\le\phi\) satisfies \(q(\pm1)\le0\), hence \(q\le0=\psi\) on \([-1,1]\), while \(q\le\phi=\psi\) on \(|t|\ge1\). Therefore \(\phi^{**}=\psi\), the largest lower semicontinuous convex minorant of \(\phi\)~\cite[Theorem~12.2]{rockafellar1970convex}. For \(|t|<1\), \ref{W1} gives \(\phi(t)>0=\psi(t)\), proving the contact-set formula.
 
-\blue{We next prove (b). The first three properties are standard. As a pointwise supremum of affine functions of \(y\), \(\phi^*\) is lower semicontinuous and convex, and the evenness of \(\phi\) gives \(\phi^*(-y)=\phi^*(y)\). Evaluating the definition of \(\phi^*\) at \(t=\pm1\) and using \(\phi(\pm1)=0\), we obtain \(\phi^*(y)\ge\max\{y,-y\}=|y|\) for all \(y\). Moreover, \(\phi\ge0\) gives \(\phi^*(0)=-\inf_{t}\phi(t)=0\), so \(\phi^*\) is proper.
+\blue{For (b), the definition of \(\phi^*\) as a supremum of affine functions gives lower semicontinuity and convexity, while the evenness of \(\phi\) gives \(\phi^*(-y)=\phi^*(y)\). Evaluating at \(t=\pm1\) yields \(\phi^*(y)\ge|y|\). Since \(\phi^*(0)=-\inf_t\phi(t)=0\), \(\phi^*\) is proper.
 
-It remains to show that \(\operatorname{dom}\phi^*\) has nonempty interior, which follows from the linear growth of \(\phi\). Let \(a:=\phi(2)\), so \(a>0\) by \ref{W1}. For \(t>2\), we write \(2\) as a convex combination of \(1\) and \(t\) with weights \((t-2)/(t-1)\) and \(1/(t-1)\). The convexity of \(\phi\) on \([1,+\infty)\) in \ref{W2} and \(\phi(1)=0\) then give \(a\le\phi(t)/(t-1)\). Combining this with the evenness of \(\phi\), we have
+To show that \(\operatorname{dom}\phi^*\) has nonempty interior, let \(a:=\phi(2)>0\). By \ref{W2}, \(\phi(1)=0\), and \(2=\frac{t-2}{t-1}\cdot1+\frac{1}{t-1}\cdot t\) for \(t>2\), we have \(a\le\phi(t)/(t-1)\). Together with evenness, this gives
 \[
 \phi(t)\ge a(|t|-1)\qquad\text{for all } |t|\ge2.
 \]
 Now fix \(y\) with \(|y|<a\). For \(|t|\ge2\), the above bound yields \(ty-\phi(t)\le(|y|-a)|t|+a\le a\); for \(|t|<2\), \(\phi\ge0\) yields \(ty-\phi(t)\le2|y|<2a\). Taking the supremum over \(t\) gives \(\phi^*(y)\le2a\), so \((-a,a)\subset\operatorname{dom}\phi^*\).
 
-Finally, since \(h\) is a sum of \(\phi\) over the entries, the supremum in the definition of \(h^*\) splits entrywise, which gives \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\). Applying the same argument to \(h^*\) gives \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\). Since \(\phi-\phi^{**}\ge0\) entrywise, \(h(\bB)=h^{**}(\bB)\) holds if and only if \(\phi(b_{ij})=\phi^{**}(b_{ij})\) for all \(i,j\), that is, by (a), if and only if \(|b_{ij}|\ge1\) for all \(i,j\).}
+Finally, separability gives \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\) and \(h^{**}(\bB)=\sum_{i,j}\phi^{**}(b_{ij})\). Since \(\phi-\phi^{**}\ge0\), equality \(h(\bB)=h^{**}(\bB)\) holds exactly when each summand agrees, which by (a) is equivalent to \(|b_{ij}|\ge1\) for all \(i,j\).}
 \end{proof}
 \endgroup
 
@@ -60,7 +60,7 @@ Finally, since \(h\) is a sum of \(\phi\) over the entries, the supremum in the 
 If \(\phi\) satisfies \ref{W1} and \ref{W3}, then \(0\notin\partial\phi(t)\) for every \(t\in(-1,1)\).
 \end{lemma}
 \begin{proof}
-Fix \(t\in[0,1)\) and \(b\in(t,1)\). If \(t'\in[0,b)\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+h\), \(h\downarrow0\), gives \(v\le-c_b\). At \(t'=0\), evenness gives \(\phi(h)\le\phi(0)-c_b|h|\) for \(h<0\), hence also \(v\ge c_b\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-b,0)\) are at least \(c_b\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-c_b]\cup[c_b,\infty)\) for \(|t|<b\).
+Fix \(t\in[0,1)\) and \(\red{\theta}\in(t,1)\). If \(t'\in[0,\red{\theta})\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+\red{\delta}\), \(\red{\delta}\downarrow0\), gives \(v\le-\red{c_{\theta}}\). At \(t'=0\), evenness gives \(\phi(\red{\delta})\le\phi(0)-\red{c_{\theta}}|\red{\delta}|\) for \(\red{\delta}<0\), hence also \(v\ge \red{c_{\theta}}\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-\red{\theta},0)\) are at least \(\red{c_{\theta}}\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-\red{c_{\theta}}]\cup[\red{c_{\theta}},\infty)\) for \(|t|<\red{\theta}\).
 \end{proof}
 
 \begin{proof}
@@ -96,6 +96,28 @@ where \blue{$\calG_{\bLmbd}^{1}:=\bB^1\in\partial h^*(\bLmbd^1)$ by proximal opt
 \label{app:original-certificate-proof}
 \begingroup
 \color{blue}
+The proof of \Cref{prop:original-certificate} uses the smooth lower model
+\[
+s_{\bLmbd}(\by):=f(\by)+\langle\bLmbd,\mathcal{D}(\by)\rangle-h^*(\bLmbd)\le J_0(\by).
+\]
+\begin{lemma}\label{lem:smooth-lower-bound}
+Under Assumption~\ref{Ass: basic regularity}(ii), let $h$ be a W-type regularizer defined in \Cref{def:wtype}, and let $\kappa:=(1+m^2)/(4m)$. Then, for any $(\bx,\bB,\bLmbd)$ satisfying $r_{\mathcal{K}}<\infty$, the following hold:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $s_{\bLmbd}\le J_0$ on $\RR^q$, and $s_{\bLmbd}$ is $L_s(\|\bLmbd\|)$-smooth with $L_s(\|\bLmbd\|):=L_f+\|\bLmbd\|L_{\nabla\mathcal{D}}$;
+\item $\|\nabla s_{\bLmbd}(\bx)\|\le\sqrt{1+G_{\mathcal{D}}^2}\;r_{\mathcal{K}}$;
+\item the gap at $\bx$ satisfies
+\begin{equation}\label{eq:lower-bound-gap}
+\begin{split}
+J_0(\bx)-s_{\bLmbd}(\bx) \in\bigl[\,h(\mathcal{D}(\bx))-h^{**}(\mathcal{D}(\bx)), h(\mathcal{D}(\bx))+\kappa\,r_{\mathcal{K}}^2\,\bigr].
+\end{split}
+\end{equation}
+For the $\ell_1$ W-regularizer, if $\mathcal{D}(\bx)\in[-1,1]^{n\times d}$, then
+\[
+J_0(\bx)-s_{\bLmbd}(\bx)\in
+\bigl[\,\lambda Q_1(\bx),\ \lambda Q_1(\bx)+\kappa\,r_{\mathcal{K}}^2\,\bigr].
+\]
+\end{enumerate}
+\end{lemma}
 \paragraph{\blue{Smooth lower bound.}}
 Write $D=\mathcal{D}(\bx)$ and choose $V\in\partial h^*(\bLmbd)$ closest to $\bB$. Such a point exists because this set is nonempty and closed when $r_{\mathcal K}<\infty$. Set
 \[
@@ -158,7 +180,7 @@ R_B:=C_{\mathcal{D}}+\frac{n\lambda\sqrt{nd}}{\gamma}.
 This region contains all primal iterates under the prescribed initializations and step sizes, and $L_F$ is independent of $T$.
 
 \begin{proof}
-For a W-type regularizer with compact dual domain, $\bB^1\in\partial h^*(\bLmbd^1)$ and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$.
+For a W-type regularizer with \red{$\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$}, $\bB^1\in\partial h^*(\bLmbd^1)$ and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$.
 Since $L_F\ge\gamma/n$, the prescribed step sizes satisfy $0<\tau\gamma/n<1$.
 Since $\phi^{**}$ is even and convex, its proximal mapping preserves sign and does not increase magnitude. Thus the algorithm initialization and Assumption~\ref{Ass: basic regularity}(ii) give $\|\bB^1\|\le\|\mathcal{D}(\bx^1)\|\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|\le R_B$, then \eqref{Eq: the update of B} gives
 \[
@@ -328,7 +350,7 @@ We first present a lemma \blue{on} continuously differentiable \blue{functions} 
 Let us denote the gradient error in the $k$-th iteration as
 \[
 \be^{k} = \blue{\bg_m^{k}} - \nabla_{\bx}F(\bz^{k}, \bB^{k}),
-\]where $\blue{\bg_m^k}$ is defined in \eqref{Eq: the stochastic approximate in SGDM}. Under Assumption~\ref{Ass: main assumptions}\blue{ and uniform sampling without replacement}, one has
+\]where $\blue{\bg_m^k}$ is defined in \eqref{Eq: the stochastic approximate in SGDM}. Under Assumption~\ref{Ass: main assumptions}\blue{ and \red{the sampling rule in Section~\ref{Sec: DualHash framework}~\cite[Chapter~2]{cochran1977sampling}}}, one has
 \begin{align}
     \label{eq: the gradient error in SGDM}
     \mathbb{E}\!\left[\|\be^k\|^2\right]
@@ -397,9 +419,9 @@ Let us denote the gradient error in the $k$-th iteration as
     expectation on both sides, we obtain
     {\small
     \begin{align}
-        \label{the descent property of Lyapunov func in SGDM first} & \EE\left[\Psi_m(\mathcal{Q}^{k+1})\right] - \EE\left[\Psi_m(\mathcal{Q}^{k})\right]\notag                                                                               \\
-        \leq                                                        & - (C_{1}- K_{1}) \EE[\Delta_{\bm{B}}^{k+2}] -(K_{2}- C_{1}- C_{2}) \EE[\Delta_{\bm{B}}^{k+1}] - (C_{2}- K_{3}) \EE[\Delta_{\bm{B}}^{k}] \notag                     \\
-                                                                    & - (C_{3}-K_{4}) \EE[\Delta_{\bx}^{k+2}]- (K_{5}-K_{3}-C_{3}-C_{4}) \EE[\Delta_{\bx}^{k+1}] - (C_{4}- K_{6}) \EE[\Delta_{\bx}^{k}] + \frac{\sigma^{2}}{b_{k}L_{F}}.
+        \label{the descent property of Lyapunov func in SGDM first} & \blue{\EE}\left[\Psi_m(\mathcal{Q}^{k+1})\right] - \blue{\EE}\left[\Psi_m(\mathcal{Q}^{k})\right]\notag                                                                               \\
+        \leq                                                        & - (C_{1}- K_{1}) \blue{\EE}[\Delta_{\bm{B}}^{k+2}] -(K_{2}- C_{1}- C_{2}) \blue{\EE}[\Delta_{\bm{B}}^{k+1}] - (C_{2}- K_{3}) \blue{\EE}[\Delta_{\bm{B}}^{k}] \notag                     \\
+                                                                    & - (C_{3}-K_{4}) \blue{\EE}[\Delta_{\bx}^{k+2}]- (K_{5}-K_{3}-C_{3}-C_{4}) \blue{\EE}[\Delta_{\bx}^{k+1}] - (C_{4}- K_{6}) \blue{\EE}[\Delta_{\bx}^{k}] + \frac{\sigma^{2}}{b_{k}L_{F}}.
     \end{align}}Then, \blue{by \Cref{lem:lyapunov-coef-positivity},} substituting the values of coefficients in \eqref{Eq: the coefficients of the Lyapunov function in SGDM}
     and parameter conditions \eqref{Eq: the parameters conditions of dualhash-sgdm in suppl}
     into \eqref{the descent property of Lyapunov func in SGDM first}, we derive
@@ -687,7 +709,7 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
 \label{app:stom-oracle-proof}
 % \setcounter{proof}{0}
 \begin{proof}
-    When $b_{k}= b = c_{b}T$, \blue{we have $\frac{1}{T}\sumT\frac{1}{b_{k}}=\frac{1}{c_{b}T}$, and hence \Cref{lemma: convergence rate sgdm} gives}
+    When $b_{k}= b = \lceil c_{b}T\rceil$, \blue{we have $\frac{1}{T}\sumT\frac{1}{b_{k}}\leq\frac{1}{c_{b}T}$, and hence \Cref{lemma: convergence rate sgdm} gives}
     \[
         \mathbb{E}[\mathrm{dist}^{2}(\blue{\bm{0}, \mathcal K}(\bx^{R}, \bB^{R}
         , \bLmbd^{R}))] \leq \frac{1}{T}\left( L_{\Delta}\Delta_{1}+ C_{\sigma}
@@ -699,7 +721,7 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
     , \bLmbd^{R}))] \leq \varepsilon^{2}$. Then, the oracle complexity
     of SFO is
     \[
-        \text{Complexity}= (T-1)b_{k}=\calO(T^{2}) = \calO(\varepsilon^{-4}).
+        \text{Complexity}= {\color{red}Tb}=\calO(T^{2}) = \calO(\varepsilon^{-4}).
     \]
 \end{proof}
 
@@ -717,15 +739,21 @@ of the Lagrangian function $\calL$ via the $\bx$-update \eqref{Eq: the update of
 \end{lemma}
 
 \begin{proof}
-    \blue{By the $L_F$-smoothness of $F(\cdot,\bB^k)$, the update \eqref{Eq: the update of x in STORM}, and Young's inequality,}
-    \blue{\begin{align}
-        &\calL(\bx^{k+1},\bB^k,\bLmbd^k)-\calL(\bx^k,\bB^k,\bLmbd^k)\notag\\
-        &=F(\bx^{k+1},\bB^k)-F(\bx^k,\bB^k)\notag\\
-        &\leq\eta_k\langle\be^k,\bg_s^k\rangle-\eta_k\Bigl(1-\frac{\eta_kL_F}{2}\Bigr)\|\bg_s^k\|^2\notag\\
-        &\leq\frac{\eta_k}{2}\|\be^k\|^2-\frac{\eta_k}{2}(1-\eta_kL_F)\|\bg_s^k\|^2\notag\\
-        &=\frac{\eta_k}{2}\|\be^k\|^2-(\eta_k^{-1}-L_F)\Delta_{\bx}^{k+1},\notag
-    \end{align}}
-    \blue{where we used $\nabla_{\bx}F(\bx^k,\bB^k)=\bg_s^k-\be^k$ and $2\Delta_{\bx}^{k+1}=\eta_k^2\|\bg_s^k\|^2$.}
+    \blue{Recalling the equivalent relation:
+    \[
+        \calL(\bx^{k+1},\bB^{k},\bLmbd^{k})-\calL(\bx^{k},\bB^{k},\bLmbd^{k})=F(\bx^{k+1},\bB^{k})-F(\bx^{k},\bB^{k}).
+    \]
+    By the $L_F$-smoothness of $F(\cdot,\bB^{k})$ and the $\bx$-update \eqref{Eq: the update of x in STORM}, we have
+    \begin{align*}
+        F(\bx^{k+1},\bB^{k})-F(\bx^{k},\bB^{k})&\leq\langle\nabla_{\bx}F(\bx^{k},\bB^{k}),\bx^{k+1}-\bx^{k}\rangle+\frac{L_F}{2}\|\bx^{k+1}-\bx^{k}\|^{2}\\
+        &=-\eta_k\langle\nabla_{\bx}F(\bx^{k},\bB^{k}),\bg_s^{k}\rangle+\frac{\eta_k^{2}L_F}{2}\|\bg_s^{k}\|^{2}.
+    \end{align*}
+    Using the definition of $\be^{k}$, we have $-\langle\nabla_{\bx}F(\bx^{k},\bB^{k}),\bg_s^{k}\rangle=\langle\be^{k},\bg_s^{k}\rangle-\|\bg_s^{k}\|^{2}$. By the Cauchy--Schwarz inequality, it holds $\eta_k\langle\be^{k},\bg_s^{k}\rangle\leq\frac{\eta_k}{2}\|\be^{k}\|^{2}+\frac{\eta_k}{2}\|\bg_s^{k}\|^{2}$, which together with the above inequality implies
+    \begin{align*}
+        F(\bx^{k+1},\bB^{k})-F(\bx^{k},\bB^{k})&\leq\frac{\eta_k}{2}\|\be^{k}\|^{2}-\frac{\eta_k}{2}(1-\eta_kL_F)\|\bg_s^{k}\|^{2}\\
+        &=\frac{\eta_k}{2}\|\be^{k}\|^{2}-(\eta_k^{-1}-L_F)\Delta_{\bx}^{k+1},
+    \end{align*}
+    where the equality uses $\|\bx^{k+1}-\bx^{k}\|^{2}=\eta_k^{2}\|\bg_s^{k}\|^{2}=2\Delta_{\bx}^{k+1}$.}
 \end{proof}
 
 \subsection{Proof of \Cref{Lemma: approximate sufficient descent property storm}}
@@ -752,20 +780,20 @@ of the Lagrangian function $\calL$ via the $\bx$-update \eqref{Eq: the update of
 \blue{Under \Cref{Ass: basic regularity}(ii), for the iterates generated by
 \Cref{alg:our_algorithm_storm} with parameters satisfying
 \eqref{Eq: the parameters conditions in dualhash-storm}--\eqref{Eq: the constants for storm},
-let $r:=\tau\gamma/n$ and}
+let $\tilde\tau:=\tau\gamma/n$ and}
 \blue{\begin{align*}
-H_k:={}&(1-r)\bigl\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\bigr\|^{2}\\
-&\quad+r\tau^{2}\bigl\|\bLmbd^{k}-\bLmbd^{k-1}\bigr\|^{2},
+H_k:={}&(1-\tilde\tau)\bigl\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\bigr\|^{2}\\
+&\quad+\tilde\tau\tau^{2}\bigl\|\bLmbd^{k}-\bLmbd^{k-1}\bigr\|^{2},
 \end{align*}}
 \blue{with $\bB^{0}=\bB^{1}$ and $\bLmbd^{0}=\bLmbd^{1}$. Then $H_1=0$, $H_k\geq0$, and, for every $k\geq1$,}
 \blue{\begin{align}
 H_{k+1}-H_k
-&\leq-\frac{r}{8}\Bigl(\|\bB^{k}-\bB^{k-1}\|^{2}
+&\leq-\frac{\tilde\tau}{8}\Bigl(\|\bB^{k}-\bB^{k-1}\|^{2}
 +\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}\Bigr)\notag\\
 &\qquad+\blue{c_{\mathrm{tr}}rG_{\mathcal{D}}^{2}\Delta_{\bx}^{k+1}},
 \label{Eq: auxiliary tracking descent}\\
 \Delta_{\bB}^{k+1}
-&\leq\blue{\frac{c_H}{r}(H_k-H_{k+1})+G\,\Delta_{\bx}^{k+1}},
+&\leq\blue{\frac{c_H}{\tilde\tau}(H_k-H_{k+1})+G\,\Delta_{\bx}^{k+1}},
 \label{Eq: tracking of B increments}
 \end{align}}\blue{where \blue{$G=c_GG_{\mathcal{D}}^{2}$} is defined in
 \eqref{Eq: the constants for storm}, and \blue{$c_H,c_{\mathrm{tr}},c_G>0$ are universal
@@ -774,26 +802,69 @@ constants specified in \blue{the proof below}}.}
 
 \begingroup\color{blue}
 \begin{proof}
-    Let $r=\tau\gamma/n$ and define $H_k$ as in \Cref{lem:auxiliary-tracking}. Since the initialization sets
-    $\bB^{0}=\bB^{1}$ and $\bLmbd^{0}=\bLmbd^{1}$, we have $H_1=0$ and $H_k\geq0$.
-    The $\bB$- and $\bLmbd$-updates, together with
-    $r\leq\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$ and the \blue{componentwise} monotonicity and
-    $1$-Lipschitz continuity of $\operatorname{prox}_{\tau^{-1}h^{*}}$, yield
-    \begin{align}
-        H_{k+1}-H_k
-        &\leq-\frac{r}{8}\Bigl(\|\bB^{k}-\bB^{k-1}\|^{2}
-        +\|\tau(\bLmbd^{k}-\bLmbd^{k-1})-(\bB^{k}-\bB^{k-1})\|^{2}\Bigr)\notag\\
-        &\qquad+\blue{c_{\mathrm{tr}}rG_{\mathcal{D}}^{2}\Delta_{\bx}^{k+1}}.
-        \label{Eq: auxiliary tracking descent in proof}
-    \end{align}
-    Combining this estimate with the update relations and using $r<2/7$ gives
-    \begin{align}
-        \Delta_{\bB}^{k+1}
-        \leq\blue{\frac{c_H}{r}(H_k-H_{k+1})+G\,\Delta_{\bx}^{k+1}},
-    \end{align}
-    where \blue{$c_{\mathrm{tr}}=146$, $c_H=12$, and $G=c_GG_{\mathcal{D}}^{2}$ with
-    $c_G=1753$}. This proves
-    \Cref{lem:auxiliary-tracking}.
+    Let $m:=\gamma/n$, so that $\tilde\tau=\tau m$ and $\nabla_{\bB}F(\bx,\bB)=m(\bB-\mathcal{D}(\bx))$. Since $m\le L_F$, the condition on $\tau$ gives $\tilde\tau\le\tau L_F<\frac{\sqrt{30}-2}{13}<\frac27$.
+
+    By the updates \eqref{Eq: the update of B} and \eqref{Eq: the update of lambda}, we have
+    \begin{align*}
+        \bB^{k+1}&=(1-\tilde\tau)\bB^k-\tau\bLmbd^k+\tilde\tau\mathcal{D}(\bx^{k+1}),\\
+        \bLmbd^{k+1}&=\operatorname{prox}_{\tau^{-1}h^*}\bigl(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\bigr).
+    \end{align*}
+    The initialization gives $m(\bB^1-\mathcal{D}(\bx^1))+\bLmbd^1=\bm{0}$ and $\bB^1\in\partial h^*(\bLmbd^1)$; with $\bB^0=\bB^1$ and $\bLmbd^0=\bLmbd^1$, both identities therefore also hold for $k=0$. For $k\ge1$, let
+    \begin{equation*}
+        \bm{U}^k:=\bB^k-\bB^{k-1},\qquad
+        \bm{V}^k:=\tau(\bLmbd^k-\bLmbd^{k-1})-\bm{U}^k,\qquad
+        \bm{S}^k:=\mathcal{D}(\bx^{k+1})-\mathcal{D}(\bx^k).
+    \end{equation*}
+    Then $\bm{U}^1=\bm{V}^1=\bm{0}$, so $H_1=0$; clearly $H_k\ge0$, and
+    \begin{equation*}
+        H_k=(1-\tilde\tau)\|\bm{V}^k\|^2+\tilde\tau\|\bm{U}^k+\bm{V}^k\|^2=\tilde\tau\|\bm{U}^k\|^2+2\tilde\tau\langle\bm{U}^k,\bm{V}^k\rangle+\|\bm{V}^k\|^2.
+    \end{equation*}
+    Subtracting consecutive $\bB$-updates gives $\bm{U}^{k+1}=-\tilde\tau\bm{U}^k-\bm{V}^k+\tilde\tau\bm{S}^k$. By separability and convexity of $h^*$, its proximal mapping is componentwise nondecreasing and nonexpansive. Thus, for each $(i,j)$, there exists $\omega=\omega_{ij}^k\in[0,1]$ such that
+    \[
+        \tau(\Lambda_{ij}^{k+1}-\Lambda_{ij}^k)=\omega\bigl(V_{ij}^k+2U_{ij}^{k+1}\bigr).
+    \]
+    Subtracting $U_{ij}^{k+1}$ and using the $\bm{U}$-recursion, we obtain for $\bm{y}^k:=(U_{ij}^k,V_{ij}^k)^\top$
+    \begin{equation}
+        \label{Eq: increment dynamics}
+        \bm{y}^{k+1}=\bm{M}_\omega\bm{y}^k+\tilde\tau\begin{pmatrix}1\\2\omega-1\end{pmatrix}S_{ij}^k,\qquad
+        \bm{M}_\omega:=\begin{pmatrix}-\tilde\tau&-1\\ \tilde\tau (1-2\omega)&1-\omega\end{pmatrix}.
+    \end{equation}
+   
+
+    To estimate $H_{k+1}-H_k$, let $\bm{\Pi}:=\begin{pmatrix}\tilde\tau&\tilde\tau\\ \tilde\tau&1\end{pmatrix}\succ0$, so that $H_k=\sum_{i,j}(\bm{y}^k)^\top\bm{\Pi}\bm{y}^k$. For $0<\tilde\tau\le\frac27$, direct calculation gives
+    \begin{align*}
+        \bm{\Pi}-\bm{M}_0^\top\bm{\Pi}\bm{M}_0
+        &=\begin{pmatrix}\tilde\tau-\tilde\tau^2+\tilde\tau^3&\tilde\tau^2\\ \tilde\tau^2&\tilde\tau\end{pmatrix}\succeq\frac{\tilde\tau}{2}\bm{I},\\
+        \bm{\Pi}-\bm{M}_1^\top\bm{\Pi}\bm{M}_1
+        &=\begin{pmatrix}\tilde\tau-\tilde\tau^2-3\tilde\tau^3&\tilde\tau-2\tilde\tau^2\\ \tilde\tau-2\tilde\tau^2&1-\tilde\tau\end{pmatrix}\succeq\frac{\tilde\tau}{4}\bm{I}.
+    \end{align*}
+    For the first inequality, the shifted leading entry $\frac{\tilde\tau}{2}-\tilde\tau^2+\tilde\tau^3$ is positive and the shifted determinant is $\tilde\tau^2(\frac14-\frac{\tilde\tau}{2}-\frac{\tilde\tau^2}2)\ge\frac{13}{196}\tilde\tau^2$. For the second, the shifted leading entry divided by $\tilde\tau$ is $\frac34-\tilde\tau-3\tilde\tau^2\ge\frac{43}{196}$, and the shifted determinant satisfies $\tilde\tau (\frac34-\frac{47}{16}\tilde\tau+\frac94\tilde\tau^2-\frac14\tilde\tau^3)\ge\frac{243}{2744}\tilde\tau>0$, since the polynomial in parentheses is decreasing on $(0,\frac27]$. Since $\bm{M}_\omega=(1-\omega)\bm{M}_0+\omega\bm{M}_1$ and $\bm{M}\mapsto\bm{y}^\top\bm{M}^\top\bm{\Pi}\bm{M}\bm{y}$ is convex,
+    \begin{equation*}
+        (\bm{M}_\omega\bm{y})^\top\bm{\Pi}\bm{M}_\omega\bm{y}\le\bm{y}^\top\bm{\Pi}\bm{y}-\frac{\tilde\tau}{4}\|\bm{y}\|^2\qquad\text{for all }\bm{y}\in\RR^2,\ \omega\in[0,1].
+    \end{equation*}
+    Since $\|\bm{\Pi}\|\le\operatorname{tr}\bm{\Pi}\le\frac97$, $\|\bm{M}_\omega\|\le(2+2\tilde\tau^2)^{1/2}\le\frac32$, and $1+(2\omega-1)^2\le2$, expanding \eqref{Eq: increment dynamics} gives
+    \begin{align*}
+        &(\bm{y}^{k+1})^\top\bm{\Pi}\bm{y}^{k+1}-(\bm{y}^k)^\top\bm{\Pi}\bm{y}^k\\
+        &\le-\frac{\tilde\tau}{4}\|\bm{y}^k\|^2+6\tilde\tau\|\bm{y}^k\||S_{ij}^k|+\tilde\tau (S_{ij}^k)^2\\
+        &\le-\frac{\tilde\tau}{8}\|\bm{y}^k\|^2+73\tilde\tau (S_{ij}^k)^2,
+    \end{align*}
+    where the last inequality follows from Young's inequality.
+    Summing over all entries gives
+    \begin{equation}
+        \label{Eq: tracking descent in increments}
+        H_{k+1}-H_k\le-\frac{\tilde\tau}{8}\bigl(\|\bm{U}^k\|^2+\|\bm{V}^k\|^2\bigr)+73\tilde\tau\|\bm{S}^k\|^2.
+    \end{equation}
+    By \Cref{Ass: basic regularity}(ii), $\|\bm{S}^k\|^2\le G_{\mathcal{D}}^2\|\bx^{k+1}-\bx^k\|^2=2G_{\mathcal{D}}^2\Delta_{\bx}^{k+1}$, which proves \eqref{Eq: auxiliary tracking descent} with $c_{\mathrm{tr}}=146$.
+
+    Finally, using $\bm{U}^{k+1}=-\tilde\tau\bm{U}^k-\bm{V}^k+\tilde\tau\bm{S}^k$ and $\tilde\tau<1$, we obtain
+    \begin{equation*}
+        \|\bm{U}^{k+1}\|^2\le3\bigl(\|\bm{U}^k\|^2+\|\bm{V}^k\|^2\bigr)+3\tilde\tau^2\|\bm{S}^k\|^2.
+    \end{equation*}
+    Bounding $\|\bm{U}^k\|^2+\|\bm{V}^k\|^2$ by \eqref{Eq: tracking descent in increments} and using $3\tilde\tau^2<1$ yields
+    \begin{equation*}
+        \|\bm{U}^{k+1}\|^2\le\frac{24}{\tilde\tau}(H_k-H_{k+1})+1753\|\bm{S}^k\|^2.
+    \end{equation*}
+    Since $\Delta_{\bB}^{k+1}=\frac12\|\bm{U}^{k+1}\|^2$ and $\|\bm{S}^k\|^2\le2G_{\mathcal{D}}^2\Delta_{\bx}^{k+1}$, this gives \eqref{Eq: tracking of B increments} with $c_H=12$ and $c_G=1753$.
 \end{proof}
 \endgroup
 
@@ -847,7 +918,7 @@ We provide a recursive bound on the gradient error vector $\{\be^{k}\}$ with ana
         & \,+\frac{2(1-\rho_k)^{2}}{b_{k+1}}\cdot\frac1n\sum_{i=1}^{n}\|\nabla_{\bx}F_i(\bx^{k+1},\bb_i^{k+1})-\nabla_{\bx}F_i(\bx^{k},\bb_i^{k})\|^{2}\notag\\
         \leq & \,(1-\rho_k)^{2}\|\be^{k}\|^{2}+\frac{2\rho_k^{2}\sigma^{2}}{b_{k+1}}+\frac{4(1-\rho_k)^{2}L_F^{2}}{b_{k+1}}\left(\Delta_{\bx}^{k+1}+\Delta_{\bB}^{k+1}\right)\quad\text{a.s.},\notag
     \end{align}
-    where the first inequality follows from $\|\bm a+\bm b\|^{2}\leq2\|\bm a\|^{2}+2\|\bm b\|^{2}$, \Cref{Ass: main assumptions}, and the mini-batch variance bound under uniform sampling without replacement, and the last inequality follows from \Cref{Ass: the mean squared smoothness of F}. Taking the full expectation completes the proof.}
+    where the first inequality follows from $\|\bm a+\bm b\|^{2}\leq2\|\bm a\|^{2}+2\|\bm b\|^{2}$, \Cref{Ass: main assumptions}, and the mini-batch variance bound \blue{under the sampling rule in Section~\ref{Sec: DualHash framework}}, and the last inequality follows from \Cref{Ass: the mean squared smoothness of F}. Taking the full expectation completes the proof.}
 \end{proof}
 
 We now establish a weighted error accumulation bound for the variance-reduced gradient estimator in \Cref{alg:our_algorithm_storm}.
@@ -868,13 +939,13 @@ We now establish a weighted error accumulation bound for the variance-reduced gr
     From \Cref{Lemma: Recursive bound on gradient error} and
     \Cref{lem:auxiliary-tracking}, we obtain
     \begin{align}
-        &\blue{\EE[\|\be^{k+1}\|^{2}]+\frac{48L_F^{2}}{br}\EE[H_{k+1}]}\notag\\
-        &\blue{\leq(1-\rho_T)\EE[\|\be^{k}\|^{2}]+\frac{48L_F^{2}}{br}\EE[H_{k}]+\frac{2\rho_T^{2}\sigma^{2}}{b}+\frac{4L_F^{2}(1+G)}{b}\EE[\Delta_{\bx}^{k+1}],}
+        &\blue{\EE[\|\be^{k+1}\|^{2}]+\frac{48L_F^{2}}{b\tilde\tau}\EE[H_{k+1}]}\notag\\
+        &\blue{\leq(1-\rho_T)\EE[\|\be^{k}\|^{2}]+\frac{48L_F^{2}}{b\tilde\tau}\EE[H_{k}]+\frac{2\rho_T^{2}\sigma^{2}}{b}+\frac{4L_F^{2}(1+G)}{b}\EE[\Delta_{\bx}^{k+1}],}
         \label{Eq: error recursion with tracking}
     \end{align}
     where the inequality follows from \blue{$(1-\rho_T)^{2}\leq1-\rho_T$}. \blue{Multiplying \eqref{Eq: error recursion with tracking} by $\frac{\eta_T}{\rho_T}$, adding it to \eqref{Eq: descent of Psi_r in weighted error bound}, and applying $\frac{\eta_T}{\rho_T}\cdot\frac{4L_F^{2}(1+G)}{b}\leq\frac{1}{4\eta_T}$, which is equivalent to the lower bound on $\rho$ in \eqref{Eq: the constants for storm},} yields the following expected descent property of the Lyapunov function $\Psi_r$:
     \begin{align}
-        &\blue{\EE\Bigl[\Psi_r(\calQ^{k+1})+\frac{\eta_T}{\rho_T}\Bigl(\|\be^{k+1}\|^{2}+\frac{48L_F^{2}}{br}H_{k+1}\Bigr)\Bigr]-\EE\Bigl[\Psi_r(\calQ^{k})+\frac{\eta_T}{\rho_T}\Bigl(\|\be^{k}\|^{2}+\frac{48L_F^{2}}{br}H_{k}\Bigr)\Bigr]}\notag\\
+        &\blue{\EE\Bigl[\Psi_r(\calQ^{k+1})+\frac{\eta_T}{\rho_T}\Bigl(\|\be^{k+1}\|^{2}+\frac{48L_F^{2}}{b\tilde\tau}H_{k+1}\Bigr)\Bigr]-\EE\Bigl[\Psi_r(\calQ^{k})+\frac{\eta_T}{\rho_T}\Bigl(\|\be^{k}\|^{2}+\frac{48L_F^{2}}{b\tilde\tau}H_{k}\Bigr)\Bigr]}\notag\\
         &\blue{\leq-\EE\Bigl[C_{\bB}\bigl(\Delta_{\bB}^{k+1}+\Delta_{\bB}^{k}\bigr)+\frac{1}{4\eta_T}\Delta_{\bx}^{k+1}+\frac{\eta_T}{2}\|\be^{k}\|^{2}\Bigr]+\frac{2\eta_T\rho_T\sigma^{2}}{b}.}
         \label{Eq: expected descent of Psi_r with error}
     \end{align}
@@ -958,13 +1029,13 @@ With this parameter choice, we proceed to analyze the oracle complexity of \Cref
 \subsection{Proof of \Cref{Theorem: the oracle complexity in STORM}}
 \label{app:storm-oracle-proof}
 \begin{proof}
-    When $b_1=c_bT^{1/3}$, we have
+    When $b_1=\lceil c_bT^{1/3}\rceil$, we have
     \[
         \EE[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))]\le\frac{1}{T^{2/3}}\Bigl(\tilde{L}_{\Delta}\tilde{\Delta}_{1}+\tilde{C}_{\sigma}\Bigl(\frac{\sigma^{2}}{4\rho\eta^{2}c_b}+\frac{32\rho\eta^{2}\sigma^{2}}{b}\Bigr)\Bigr).
     \]
     With the conditions on $T$ in \eqref{Eq: the iterate number upper bound of algorithm VR}, this gives $\EE[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))]\le\varepsilon^2$. Then, the oracle complexity is
     \[
-        \text{Complexity}= b_{1}+ (T-1)b = \calO(T^{\frac{1}{3}}) + \calO(T) = \calO(T) = \calO(\varepsilon^{-3}),
+        \text{Complexity}= b_{1}+ {\color{red}2}(T-1)b = \calO(T^{\frac{1}{3}}) + \calO(T) = \calO(T) = \calO(\varepsilon^{-3}),
     \]
     which completes the proof.
 \end{proof}

@@ -6,9 +6,8 @@
 \blue{For the regularizers in \Cref{tab:wtype}, the proximal mapping of $\phi$ is set-valued at the origin, whereas the convexity of $\phi^*$ (\Cref{lem:wtype-conj}) makes its proximal mapping single-valued and nonexpansive.} By the separability of $h^*$, its proximal mapping is computed componentwise:
 \begin{equation}
 \label{Eq: the proximal mapping of conjugate function}
-\blue{[\operatorname{prox}_{\sigma h^*}(\bLmbd)]_{ij}
-=\operatorname{prox}_{\sigma\phi^*}(\Lambda_{ij}),
-\qquad \sigma>0,}
+\blue{[\operatorname{prox}_{{\color{red}\tau^{-1}} h^*}(\bLmbd)]_{ij}
+=\operatorname{prox}_{{\color{red}\tau^{-1}}\phi^*}(\Lambda_{ij}),}
 \end{equation}
 \blue{and \Cref{tab:wtype} records closed-form expressions when they are available.} This motivates us to perform a proximal step to update $\bLmbd$.
 
@@ -24,7 +23,7 @@ The framework accommodates different stochastic estimators $\bg^k$, including mo
 \bB^{k+1} &= \bB^k - \tau \nabla_{\bB}\calL(\bx^{k+1},\bB^k,\bLmbd^k) \notag\\
 &= \bB^k - \tau\big(\nabla_{\bB}F(\bx^{k+1},\bB^k)+\bLmbd^k\big), \label{Eq: the update of B}\\
 \bLmbd^{k+1} &= \operatorname*{arg\,min}_{\bLmbd}\Big\{h^*(\bLmbd)-\langle\bLmbd,2\bB^{k+1}-\bB^k\rangle+\frac{\tau}{2}\|\bLmbd-\bLmbd^k\|^2\Big\} \notag\\
-&= \operatorname{prox}_{\tau^{-1}h^*}\big(\bLmbd^k+\tau^{-1}(2\bB^{k+1}-\bB^k)\big). \label{Eq: the update of lambda}
+&= \operatorname{prox}_{\blue{\tau^{-1}}h^*}\big(\bLmbd^k+\blue{\tau^{-1}}(2\bB^{k+1}-\bB^k)\big). \label{Eq: the update of lambda}
 \end{align}
 
 Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when the number of training samples $n$ is large, as is typical in deep learning, both instances replace it with a mini-batch estimator. We next present two instances of the stochastic update~\eqref{Eq: the generic update of x}, which differ in the momentum technique and in the point at which the stochastic gradient is queried. Throughout, $i\in\{1,\ldots,n\}$ indexes training samples and $k$ indexes iterations. At iteration $k$, we draw $\calJ_k$ uniformly from all subsets of $\{1,\ldots,n\}$ of size $b_k$, \blue{independently of the past. For any point $(\bx,\bB)$ determined before $\calJ_k$ is drawn, define
@@ -35,6 +34,7 @@ Since computing the full gradient $\nabla_{\bx} F(\bx,\bB)$ is expensive when th
 \subsection{DualHash with \blue{Momentum}}
 \label{Sec: DualHash StoM}
 \begin{algorithm}[t]
+\color{black}
 \caption{DualHash-StoM}
 \label{alg:our_algorithm_sgdm}
 \begin{algorithmic}[1]
@@ -121,6 +121,7 @@ Alternatively, we consider the StoRM estimator~\cite{cutkoskyMomentumBasedVarian
 The overall algorithm, DualHash-StoRM, is summarized in \Cref{alg:our_algorithm_storm}.
 
 \begin{algorithm}[t]
+\color{black}
 \caption{DualHash-StoRM}
 \label{alg:our_algorithm_storm}
 \begin{algorithmic}[1]

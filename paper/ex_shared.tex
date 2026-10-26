@@ -8,6 +8,10 @@
 % 图形和表格包
 \usepackage{algorithm,algorithmic}
 \usepackage{etoolbox}
+% keep algorithm frames black even when the float lands after colored text
+\makeatletter
+\g@addto@macro\fs@ruled{\def\@fs@pre{\color{black}\hrule height.8pt depth0pt \kern2pt}}
+\makeatother
 \AtBeginEnvironment{algorithmic}{%
   \setlength{\abovedisplayskip}{3pt}%
   \setlength{\belowdisplayskip}{3pt}%

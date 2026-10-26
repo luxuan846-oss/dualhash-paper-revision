@@ -1,41 +1,5 @@
 \subsection{Related Work}
 \label{Section: related work}
-\begin{table}[t]
-    \centering
-    \caption{\blue{Comparison of representative deep hashing methods in terms of regularizer, optimization strategy, and oracle complexity.}}
-    \label{Table: summary of deep hashing algorithms}
-    \resizebox{\linewidth}{!}{
-\begin{tabular}{ccccc}
-\toprule
-\textbf{Type} & \textbf{Method} & \textbf{\blue{W-type Regularizer}} & \textbf{Optimization} & \textbf{Complexity} \\
-\midrule
-    \multirow{3}{*}{\centering Discrete}
-    & DDSH~\cite{liDeepSupervisedHashing} & \multirow{3}{*}{\centering \blue{$\ell_2^2$}} & BQP & \multirow{9}{*}{\centering \textemdash} \\
-    & DSDH~\cite{li2017deep} & & $\operatorname{sgn}$ update & \\
-    & DPSH~\cite{liFeatureLearningBased2016} & & DCC & \\
-    \cmidrule(lr){1-4}
-    \multirow{6}{*}{\centering Continuous}
-    & DSH~\cite{liuDeepSupervisedHashing} & \blue{$\ell_1$} & \multirow{3}{*}{\centering SGDM} & \\
-    & DTSH~\cite{wang2016DTSH} & \blue{$\ell_2^2$} & & \\
-    & DHN~\cite{zhuDeepHashingNetwork2016} & \blue{log-cosh} & & \\
-    \cmidrule(lr){2-4}
-    & MDSHC~\cite{wang2023deep} & \blue{$\ell_1$} & RMSProp & \\
-    \cmidrule(lr){2-4}
-    & HashNet~\cite{Cao2017HashNetDL} & \multirow{2}{*}{\centering \blue{\textemdash}} & SGDM & \\
-    & OrthoHash~\cite{hoeOneLossAll2021} & & Adam & \\
-    \cmidrule(lr){2-5}
-    & \textbf{DualHash-StoM} & \multirow{2}{*}{\blue{$\ell_1$}} & \multirow{2}{*}{Sto Primal-Dual} & $\mathcal{O}(\varepsilon^{-4})$ \\
-    & \textbf{DualHash-StoRM} & & & $\mathcal{O}(\varepsilon^{-3})$ \\
-    \bottomrule
-    \end{tabular} 
-    }
-    % \vspace{-5pt}
-    \parbox{\linewidth}{\scriptsize
-    \textbf{Notes}: 
-    \blue{The \textbf{Type} column indicates whether binary codes are explicitly updated.}
-    \blue{For continuous methods, regularizer names follow \Cref{tab:wtype}, and `\textemdash' indicates no explicit regularizer.} DCC stands for Discrete Cyclic Coordinate \blue{Descent}, while BQP denotes Binary Quadratic Programming. The \textbf{Complexity} column reports the \blue{oracle complexity}, with `\textemdash' indicating that \blue{no corresponding complexity guarantee is reported in the cited work}.}
-     \vspace{-2ex}
-\end{table}
 \paragraph{Optimization in Deep Hashing} 
 \blue{Besides W-type regularizers,}
 alternative strategies either introduce auxiliary hash codes with a 
@@ -53,11 +17,10 @@ composed with nonlinear network mappings remain limited. This is the gap we aim 
 \paragraph{Stochastic Nonconvex Constrained Optimization}
 From a constrained optimization perspective, Problem~\eqref{Eq: the general nonlinear composite problem in intro} \blue{can be reformulated via a variable lifting technique~\cite{wang2025augmentedrnn,jin2025multicomposite} as a nonlinearly constrained optimization problem of the form
 \begin{equation}
-  % \label{Eq: the constrained reformulation}
+  \label{Eq: the constrained reformulation}
   \min_{\bw}\; f(\bw) + h(\bw)
   \quad \text{s.t.}\quad
   \bc(\bw) = 0. 
-  \notag
 \end{equation}}Several recent works have established oracle complexity results for first-order stochastic augmented-Lagrangian and penalty methods for problems of this type. For instance, Jin and Wang~\cite{jin2022stochastic} proposed a single-loop stochastic primal-dual method based on a linearized augmented-Lagrangian function, achieving oracle complexities of $\mathcal{O}(\varepsilon^{-6})$ from an arbitrary initial point and $\mathcal{O}(\varepsilon^{-5})$ from a feasible one for locating an $\varepsilon$-KKT point. By incorporating the recursive momentum estimator of~\cite{cutkoskyMomentumBasedVarianceReduction2019}, Shi et al.~\cite{shi2025momentum} developed a momentum-based linearized augmented-Lagrangian method, improving these bounds to $\mathcal{O}(\varepsilon^{-4})$, or the nearly optimal $\mathcal{O}(\varepsilon^{-3})$ when initialized at a nearly feasible point. To certify a stronger notion of stationarity that deterministically enforces constraint violation of at most $\varepsilon$, Lu et al.~\cite{lu2024variancereducedfirstordermethodsdeterministically} introduced a linearized quadratic-penalty method with truncated momentum. Under a regularity condition on the constraint gradients, recursive momentum yields the nearly optimal complexity $\widetilde{\mathcal{O}}(\varepsilon^{-3})$. 
 
 \smallskip

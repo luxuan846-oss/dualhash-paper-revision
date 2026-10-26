@@ -14,6 +14,7 @@ standard image retrieval datasets. All experiments use PyTorch 1.12.1 with CUDA 
 % Visualizations are implemented using Python on macOS 15.3.2. 
 % % The codes are available at {\url{https://anonymous.4open.science/r/DualHash_NeurIPS}.}
 \subsection{Experimental Setup}
+\label{Subsection: Experimental Setup}
 \paragraph{Datasets} \textbf{CIFAR-10}\footnote{\url{https://www.cs.toronto.edu/~kriz/cifar.html}} is a \textbf{single-label} dataset with 10 classes. 
 We randomly sample 1,000 images per class (10,000 total) for training, 500 per class (5,000 total) for validation, and 500 per class (5,000 total) for testing.
 \textbf{NUS-WIDE}\footnote{\url{http://lms.comp.nus.edu.sg/research/NUS-WIDE.htm}} is a \textbf{multi-label} dataset. 
@@ -39,7 +40,8 @@ any newly added layers with Kaiming initialization\footnote{Although DSDH~\cite{
 For the non-deep method (SDH~\cite{shenSupervisedDiscreteHashing2015}), we use the following input features: 512-dimensional GIST vectors for CIFAR-10, 500-dimensional bag-of-words features for NUS-WIDE, and 1024-dimensional CNN features for ImageNet-100. For evaluation, we use the training set as the retrieval database and the test set as queries.
 
 % \vspace{3pt}
-\paragraph{Hyperparameter Settings} 
+\paragraph{Hyperparameter Settings}
+\label{Paragraph: Hyperparameter Settings}
 {Unless the original implementation imposes a method-specific component, all deep baselines are trained under the same data splits, evaluation protocol, backbone family, image preprocessing, and early-stopping rule as DualHash.} All models are trained for a maximum of 300 epochs with early stopping based on validation mAP. We use a fixed mini-batch size of 256 for CIFAR-10 and 128 for NUS-WIDE and ImageNet-100.
 For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\}$ with step decay, approximating $\eta_k \sim O(L_F^{-1})$ without computing $L_F$. For DualHash-StoRM, $\eta_k$ is chosen from $\{5 \times 10^{-3}, 5 \times 10^{-2}, 5 \times 10^{-1}\}$ following $\mathcal{O}(T^{-1/3})$ scaling, and $\rho_k$ is selected from $\{0.01, 0.05, 0.1, 0.2, 0.7\}$ on the validation set. For DualHash-StoM, we set the momentum parameters $\alpha_k = \beta_k = 0.905$. Baselines follow their official optimizer settings. We tune $\lambda \in \{10^{-3}, 10^{-2}, 5\times 10^{-2}, 10^{-1}\}$. For all datasets, we set $\tau = 10^{-2}$, $\lambda = 5 \times 10^{-2}$, and $\gamma = 3$. In our practical implementation, we use a dual-step-size variant for multipliers \(\bm{\Lambda}\), i.e., the \(\bm{\Lambda}\)-update uses step size \(0.1\tau\), while the theoretical analysis is stated for the unified \(\tau\)-scheme in \Cref{Sec: DualHash framework,Section: Convergence analysis}. 
 % All results represent averages over 10 independent runs. 
@@ -79,14 +81,14 @@ For DualHash-StoM, the learning rate $\eta_k$ is selected from $\{10^{-4}, 10^{-
     \textbf{Bold} values indicate the best results.
     }
 \end{table}
-\begin{figure}[!tbp]
+\begin{figure}[!tp]
     % \vspace{-1mm}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/ex1_4figures_new.pdf}
     \caption{Training loss and the mAP results of DualHash and baselines for 64-bit codes on CIFAR-10 and NUS-WIDE datasets.}
     \label{fig:training_loss_map_2datasets}
 \end{figure}
-\begin{figure}[!tbp]
+\begin{figure}[!tp]
     % \vspace{-1mm}
     \centering
     \includegraphics[width=0.95\linewidth]{results_images/ex2_4figures.pdf}
@@ -163,41 +165,34 @@ For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently m
 
 \subsection{Quantization Error Analysis}
 \label{Subsection: Further analysis}
-\begin{figure}[!tbp]
+\begin{figure}[!tp]
 % \vspace{-2ex}
     \centering
     \includegraphics[width=\linewidth]{results_images/quantization_error_further_analysis.pdf}
     \caption{Quantization error and its impact on retrieval performance across different numbers of bits on  NUS-WIDE.}
     \label{fig:quantization_error}
 \end{figure}
-\begin{figure}[!tbp]
+\begin{figure}[!tp]
     % \vspace{-2ex}
     \centering
     \includegraphics[width=\linewidth]{results_images/hamming_hig_64.pdf}
     \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines for 64-bit codes on the NUS-WIDE dataset. The arrow annotation is the separability in Hamming distances, \(\EE [D_{inter}] - \EE [D_{intra}]\). We normalized the frequency so that the sum over all bins equals 1.}
     \label{fig:His_64_NUSWIDE}
 \end{figure}
-\begin{figure}[!tbp]
+\begin{figure}[!tp]
     % \vspace{-2ex}
     \centering
     \includegraphics[width=\linewidth]{results_images/hamming_hig_16.pdf}
     \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 16-bit codes on NUS-WIDE.}
     \label{fig:His_16_NUSWIDE}
 \end{figure}
-\begin{figure}[!tbp]
-    % \vspace{-1mm}
-    \centering
-    \includegraphics[width=0.95\linewidth]{results_images/sensitivity_2datasets.pdf}
-    \caption{The mAP results of DualHash-StoM with different settings of \(\eta\) and \(\gamma\) for 64-bit and 16-bit codes on CIFAR-10 and NUS-WIDE.}
-    \label{fig:sensitivity_analysis_DualHash}
-\end{figure}
 To elucidate the mechanisms behind the performance of DualHash, following~\cite{hoeOneLossAll2021},
 we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig:His_64_NUSWIDE,fig:His_16_NUSWIDE}) across different bit lengths $K\blue{=d}$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet~\cite{Cao2017HashNetDL} and OrthoHash~\cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH~\cite{wang2016DTSH} and MDSHC~\cite{wang2023deep} (both utilizing {W-type regularization}).
 
 % \vspace{3pt}
 \noindent\textbf{(1) Quantization Error Correlates with Intra- and Inter-class Distances.}
-We find that methods achieving smaller quantization errors produce hash codes with reduced intra-class distances and enhanced inter-class separability, as shown in \Cref{fig:quantization_error}(a) and \Cref{fig:His_16_NUSWIDE,fig:His_64_NUSWIDE}. In the 64-bit setting (\Cref{fig:His_64_NUSWIDE}), both HashNet and DualHash exhibit similar inter-class distributions (close to Hamming distance $K/2 = 32$). However, DualHash's lower quantization error (0.0906 vs. 0.1390) enables significantly superior separability, i.e., the difference in the mean of intra-class distance (the blue dotted line)
-with the mean of inter-class distance (the orange dotted line). In contrast, MDSHC's high quantization error (0.8023) leads to substantially larger intra-class distances and weaker inter-class separation, yielding a $5\times$ inferior separability ratio (24.19 vs. 4.47). 
+We find that methods achieving smaller quantization errors produce hash codes with reduced intra-class distances and enhanced inter-class separability, as shown in \Cref{fig:quantization_error}(a) and \Cref{fig:His_16_NUSWIDE,fig:His_64_NUSWIDE}. In the 64-bit setting (\Cref{fig:His_64_NUSWIDE}), both HashNet and DualHash exhibit similar inter-class distributions (close to Hamming distance $K/2 = 32$). However, DualHash's lower quantization error (0.0906 vs. 0.1390) enables significantly superior separability, i.e., the difference between the mean of intra-class distance (the blue dotted line)
+and the mean of inter-class distance (the orange dotted line). In contrast, MDSHC's high quantization error (0.8023) leads to substantially larger intra-class distances and weaker inter-class separation, yielding a $5\times$ inferior separability ratio (24.19 vs. 4.47). 
 This demonstrates that reducing quantization error enhances code quality primarily by compressing intra-class distributions.
 
 % \vspace{3pt}
@@ -216,6 +211,13 @@ At $K = 16$ (\Cref{fig:quantization_error}(b) and (c)), we observe a contrasting
 
 % \vspace{3pt}
 \subsection{Parameter Sensitivity Analysis}
+\begin{figure}[!tp]
+    % \vspace{-1mm}
+    \centering
+    \includegraphics[width=0.95\linewidth]{results_images/sensitivity_2datasets.pdf}
+    \caption{The mAP results of DualHash-StoM with different settings of \(\eta\) and \(\gamma\) for 64-bit and 16-bit codes on CIFAR-10 and NUS-WIDE.}
+    \label{fig:sensitivity_analysis_DualHash}
+\end{figure}
 To explore the sensitivity of key hyperparameters $\eta$ and $\gamma$ in 
 DualHash, we conduct a grid search with $\eta \in \{10^{-5}, 10^{-3}, 
 10^{-2}, 1\}$ and $\gamma \in \{0.3, 3, 30, 100\}$. Unlike many deep hashing 

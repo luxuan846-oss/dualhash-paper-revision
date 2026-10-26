@@ -191,9 +191,9 @@ whose dual problem is
 \begingroup\color{blue}
 which is obtained by minimizing over $\bY$ using the definition of the conjugate function $h^*$.
 
-It is worth noting that the nonconvex--concave min--max problem associated with $\calL$ is closely related to Problem~\eqref{Prop: the dual problem} and admits the following equivalent formulation:
+\red{The} min--max problem associated with $\calL$ is closely related to Problem~\eqref{Prop: the dual problem} and admits the following equivalent \red{nonconvex-linear minimax formulation~\cite{xu2026rada}}:
 \begin{equation}\label{Eq: minmax problem}
-\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB) = \min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd).
+\min_{\bx,\bB}\ F(\bx,\bB)+h^{**}(\bB) = \min_{\bx,\bB}\max_{\bLmbd}\calL(\bx,\bB,\bLmbd).\tag{\red{NC-L}}
 \end{equation}
 
 In general, a saddle point of $\calL$ may fail to exist, and even checking whether a point is a local minimizer of the nonconvex problem \eqref{Prop: block-wise regularized problem} is NP-hard for nonconvex quadratic programs~\cite{Murty1987NP}. We therefore seek points satisfying the first-order necessary optimality condition for the min--max problem~\eqref{Eq: minmax problem}. Following~\cite{chambolleFirstOrderPrimalDualAlgorithm2011,
@@ -320,34 +320,10 @@ Given $\delta,\varepsilon\ge0$, a point $\bx$ is called \emph{$(\delta,\varepsil
 \end{equation}
 where $\partial$ denotes the limiting subdifferential defined in~\eqref{Eq: limiting subdifferential}.
 \end{definition}
-To address the nonsmoothness of $J_0$, we introduce a smooth lower bound based on Fenchel duality.
-The following lemma bounds $\|\nabla s_{\bLmbd}(\bx)\|$ by the KKT residual and gives a two-sided bound on the gap $J_0(\bx)-s_{\bLmbd}(\bx)$.
-\[
-s_{\bLmbd}(\by):=f(\by)+\langle\bLmbd,\mathcal{D}(\by)\rangle-h^*(\bLmbd)\le J_0(\by).
-\]
-\begin{lemma}\label{lem:smooth-lower-bound}
-Under Assumption~\ref{Ass: basic regularity}(ii), let $h$ be a W-type regularizer defined in \Cref{def:wtype}, and let $\kappa:=(1+m^2)/(4m)$. Then, for any $(\bx,\bB,\bLmbd)$ satisfying $r_{\mathcal{K}}<\infty$, the following hold:
-\begin{enumerate}[label=\textup{(\alph*)}]
-\item $s_{\bLmbd}\le J_0$ on $\RR^q$, and $s_{\bLmbd}$ is $L_s(\|\bLmbd\|)$-smooth with $L_s(\|\bLmbd\|):=L_f+\|\bLmbd\|L_{\nabla\mathcal{D}}$;
-\item $\|\nabla s_{\bLmbd}(\bx)\|\le\sqrt{1+G_{\mathcal{D}}^2}\;r_{\mathcal{K}}$;
-\item the gap at $\bx$ satisfies
-\begin{equation}\label{eq:lower-bound-gap}
-\begin{split}
-J_0(\bx)-s_{\bLmbd}(\bx) \in\bigl[\,h(\mathcal{D}(\bx))-h^{**}(\mathcal{D}(\bx)), h(\mathcal{D}(\bx))+\kappa\,r_{\mathcal{K}}^2\,\bigr].
-\end{split}
-\end{equation}
-For the $\ell_1$ W-regularizer, if $\mathcal{D}(\bx)\in[-1,1]^{n\times d}$, then
-\[
-J_0(\bx)-s_{\bLmbd}(\bx)\in
-\bigl[\,\lambda Q_1(\bx),\ \lambda Q_1(\bx)+\kappa\,r_{\mathcal{K}}^2\,\bigr].
-\]
-\end{enumerate}
-\end{lemma}
-The following theorem bounds the near-stationarity of $J_0$ explicitly. The proof is given in \Cref{app:original-certificate-proof}.
+
+The following theorem\red{, proved in \Cref{app:original-certificate-proof},} bounds the near-stationarity of $J_0$ explicitly.
 \begin{theorem}\label{prop:original-certificate}
-Under the conditions of \Cref{lem:smooth-lower-bound},
-let $L>0$ satisfy
-$L\ge L_s(\|\bLmbd\|)$. Then there exists $\widehat{\bx}\in\RR^q$ such that
+\red{Under Assumption~\ref{Ass: basic regularity}(ii), let $h$ be a W-type regularizer defined in \Cref{def:wtype}, let $\kappa:=(1+m^2)/(4m)$, and let $L>0$ satisfy $L\ge L_f+\|\bLmbd\|L_{\nabla\mathcal{D}}$. Then, for any $(\bx,\bB,\bLmbd)$ satisfying $r_{\mathcal{K}}<\infty$,} there exists $\widehat{\bx}\in\RR^q$ such that
 \begin{align*}
 \|\widehat{\bx}-\bx\|
 &\le\sqrt{\frac{2}{L}}
@@ -363,20 +339,24 @@ $L\ge L_s(\|\bLmbd\|)$. Then there exists $\widehat{\bx}\in\RR^q$ such that
 2\sqrt{2L\,h(\mathcal{D}(\bx))}
 }_{\text{structural error}}.
 \end{align*}
-Moreover, the structural error satisfies
+\red{If $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$}, then $\|\bLmbd\|\le\lambda\sqrt{nd}$, and one can take $L=L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}$, independent of $\bLmbd$.
+\end{theorem}
+
+\red{For the regularizers in \Cref{tab:wtype}, the structural error in \Cref{prop:original-certificate} satisfies}
 \[
 2\sqrt{2L\,h(\mathcal{D}(\bx))}\ 
 \begin{cases}
-\le 2\sqrt{2Lc\,Q_1(\bx)}, & \text{in general},\\
+\le 2\sqrt{2Lc\,Q_1(\bx)}, & \text{\red{for each row}},\\
 = 2\sqrt{2L\lambda\,Q_1(\bx)}, & \text{for the $\ell_1$ W-regularizer},
 \end{cases}
 \]
-where $c$ and $\lambda$ are given in \Cref{tab:wtype}. If $h$ has a compact dual domain, then $\|\bLmbd\|\le\lambda\sqrt{nd}$, and one can take $L=L_0:=L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}$, independent of $\bLmbd$.
-\end{theorem}
+\red{where $c$ is the constant in the last column of \Cref{tab:wtype}.}
 
-{The theorem shows that the quantization error is, to a large extent, \blue{the gap between the min--max problem and the original objective}.} Specifically, the optimization error can be made arbitrarily small by driving $r_{\mathcal{K}}$ to zero, whereas the structural error, determined by the continuous outputs $\mathcal{D}(\bx)$, need not vanish as $r_{\mathcal{K}}\to0$. The structural error is measured by $h(\mathcal{D}(\bx))$, the W-type penalty that many deep hashing methods add to the training loss, and is controlled by the quantization error, with equality for the $\ell_1$ W-regularizer. Hence, driving both $r_{\mathcal{K}}$ and $Q_1(\bx)$ to zero yields near-stationary points of the original problem.
 
-{It is worth noting that the penalty parameter $\gamma$ affects only the optimization error, and can therefore be fixed, without the limit $\gamma\to\infty$ required by penalty methods. A larger regularization parameter $\lambda$ may accelerate binarization during training, but it also increases the structural error through its dependence on $\lambda$ and $L_0$; designing W-type regularizers or output layers that drive $\mathcal{D}(\bx)$ toward $\pm1$ without relying on a large $\lambda$ is left for future work.}
+{The theorem shows that the quantization error \red{controls the structural component of} \blue{the gap between the min--max problem and the original objective}.} Specifically, the optimization error can be made arbitrarily small by driving $r_{\mathcal{K}}$ to zero, whereas the structural error, determined by the continuous outputs $\mathcal{D}(\bx)$, need not vanish as $r_{\mathcal{K}}\to0$. The structural error is measured by $h(\mathcal{D}(\bx))$, the W-type penalty that many deep hashing methods add to the training loss, and is controlled by the quantization error, with equality for the $\ell_1$ W-regularizer. Hence, driving both $r_{\mathcal{K}}$ and $Q_1(\bx)$ to zero yields near-stationary points of the original problem.
+
+% \begin{remark}[\red{Roles of $\gamma$ and $\lambda$}]\red{The} penalty parameter $\gamma$ affects only the optimization error, and can therefore be fixed, without the limit $\gamma\to\infty$ required by penalty methods. A larger regularization parameter $\lambda$ may accelerate binarization during training, but it also increases the structural error through its dependence on $\lambda$ and $L_0$; designing W-type regularizers or output layers that drive $\mathcal{D}(\bx)$ toward $\pm1$ without relying on a large $\lambda$ is left for future work.
+% \end{remark}
 \endgroup
 % \end{remark}
 

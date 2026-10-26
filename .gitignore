@@ -37,3 +37,4 @@
 # Separate local checkouts
 /paper-overleaf/
 /.claude/worktrees/
+!/revision/manuscript_labels.aux

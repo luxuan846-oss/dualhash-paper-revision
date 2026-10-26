@@ -15,7 +15,11 @@
 \usepackage{lineno}
 % Compile paper/main.tex before this letter to refresh manuscript numbers and pages. 
 \usepackage{xr}
-\externaldocument[ms-]{../paper/main}
+% Manuscript labels: the live ../paper/main.aux locally; on Overleaf (outputs are renamed to output.aux)
+% the committed snapshot manuscript_labels.aux. Refresh it after compiling the paper:
+%   cp paper/main.aux revision/manuscript_labels.aux
+\IfFileExists{../paper/main.aux}{\externaldocument[ms-]{../paper/main}}{%
+  \IfFileExists{manuscript_labels.aux}{\externaldocument[ms-]{manuscript_labels}}{\externaldocument[ms-]{revision/manuscript_labels}}}
 \newcommand{\mref}[1]{\ref*{ms-#1}}
 \newcommand{\mpage}[1]{\pageref*{ms-#1}}
 \newcommand{\meq}[1]{(\mref{#1})}
@@ -1335,8 +1339,129 @@ Second, $\bB$ is updated by a gradient descent step on $\calL$, using the closed
 
 \noindent The authors
 
-\bibliographystyle{../paper/siamplain}
-\bibliography{../paper/refers}
+% The bibliography is inlined so that the letter compiles on Overleaf without BibTeX paths.
+% To regenerate after changing citations: restore the two lines below, compile, and paste the new .bbl.
+% \bibliographystyle{../paper/siamplain}
+% \bibliography{../paper/refers}
+\begin{thebibliography}{10}
+
+\bibitem{bai2019proxquant}
+{\sc Y.~Bai, Y.-X. Wang, and E.~Liberty}, {\em {ProxQuant}: Quantized neural
+  networks via proximal operators}, in International Conference on Learning
+  Representations (ICLR), 2019.
+
+\bibitem{Bertsekas1997}
+{\sc D.~P. Bertsekas}, {\em Nonlinear Programming}, Athena Scientific, Belmont,
+  MA, 2nd~ed., 1999.
+
+\bibitem{bolte2024longterm}
+{\sc J.~Bolte, E.~Pauwels, and R.~R{\'\i}os-Zertuche}, {\em Long term dynamics
+  of the subgradient method for {L}ipschitz path differentiable functions},
+  Journal of the European Mathematical Society, 26 (2024), pp.~2533--2563.
+
+\bibitem{chambolleFirstOrderPrimalDualAlgorithm2011}
+{\sc A.~Chambolle and T.~Pock}, {\em A first-order primal-dual algorithm for
+  convex problems with applications to imaging}, Journal of Mathematical
+  Imaging and Vision, 40 (2011), pp.~120--145.
+
+\bibitem{semanticHashCenters2025}
+{\sc L.~Chen, R.~Liu, Y.~Zhou, X.~Ma, Y.~Chen, and D.~Zhang}, {\em Deep hashing
+  with semantic hash centers for image retrieval}, ACM Transactions on
+  Information Systems, 43 (2025), pp.~160:1--160:38.
+
+\bibitem{cochran1977sampling}
+{\sc W.~G. Cochran}, {\em Sampling Techniques}, John Wiley \& Sons, New York,
+  3rd~ed., 1977.
+
+\bibitem{he2025mambahash}
+{\sc C.~He and H.~Wei}, {\em {{{MambaHash}}}: Visual state space deep hashing
+  model for large-scale image retrieval}, in Proceedings of the International
+  Conference on Multimedia Retrieval (ICMR), 2025, pp.~442--450.
+
+\bibitem{hu23}
+{\sc Q.~Hu, D.~Zhu, and T.~Yang}, {\em Non-smooth weakly-convex finite-sum
+  coupled compositional optimization}, in Advances in Neural Information
+  Processing Systems (NeurIPS), A.~Oh, T.~Naumann, A.~Globerson, K.~Saenko,
+  M.~Hardt, and S.~Levine, eds., vol.~36, Curran Associates, Inc., 2023,
+  pp.~5348--5403.
+
+\bibitem{jin2022stochastic}
+{\sc L.~Jin and X.~Wang}, {\em A stochastic primal-dual method for a class of
+  nonconvex constrained optimization}, Computational Optimization and
+  Applications, 83 (2022), pp.~143--180.
+
+\bibitem{liuDeepSupervisedHashing}
+{\sc H.~Liu, R.~Wang, S.~Shan, and X.~Chen}, {\em Deep supervised hashing for
+  fast image retrieval}, in Proceedings of the IEEE Conference on Computer
+  Vision and Pattern Recognition (CVPR), 2016, pp.~2064--2072.
+
+\bibitem{nesterov2005smooth}
+{\sc Y.~Nesterov}, {\em Smooth minimization of non-smooth functions},
+  Mathematical Programming, 103 (2005), pp.~127--152.
+
+\bibitem{nocedalWright2006}
+{\sc J.~Nocedal and S.~J. Wright}, {\em Numerical Optimization}, Springer, New
+  York, 2nd~ed., 2006.
+
+\bibitem{InertialProximalAlternating}
+{\sc T.~Pock and S.~Sabach}, {\em Inertial proximal alternating linearized
+  minimization ({iPALM}) for nonconvex and nonsmooth problems}, SIAM Journal on
+  Imaging Sciences, 9 (2016), pp.~1756--1787.
+
+\bibitem{repetti2021variable}
+{\sc A.~Repetti and Y.~Wiaux}, {\em Variable metric forward-backward algorithm
+  for composite minimization problems}, SIAM Journal on Optimization, 31
+  (2021), pp.~1215--1241.
+
+\bibitem{rockafellar1970convex}
+{\sc R.~T. Rockafellar}, {\em Convex Analysis}, Princeton University Press,
+  1970.
+
+\bibitem{shenSupervisedDiscreteHashing2015}
+{\sc F.~Shen, C.~Shen, W.~Liu, and H.~T. Shen}, {\em Supervised discrete
+  hashing}, in Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR), 2015, pp.~37--45.
+
+\bibitem{shi2025momentum}
+{\sc Q.~Shi, X.~Wang, and H.~Wang}, {\em A momentum-based linearized augmented
+  {L}agrangian method for nonconvex constrained stochastic optimization},
+  Mathematics of Operations Research, 51 (2025), pp.~92--133.
+
+\bibitem{wang2023deep}
+{\sc L.~Wang, Y.~Pan, C.~Liu, H.~Lai, J.~Yin, and Y.~Liu}, {\em Deep hashing
+  with minimal-distance-separated hash centers}, in Proceedings of the IEEE/CVF
+  Conference on Computer Vision and Pattern Recognition (CVPR), 2023,
+  pp.~23455--23464.
+
+\bibitem{wang2016DTSH}
+{\sc X.~Wang, Y.~Shi, and K.~M. Kitani}, {\em Deep supervised hashing with
+  triplet labels}, in Asian Conference on Computer Vision (ACCV), 2016,
+  pp.~70--84.
+
+\bibitem{xu2023momentum}
+{\sc Y.~Xu and Y.~Xu}, {\em Momentum-based variance-reduced proximal stochastic
+  gradient method for composite nonconvex stochastic optimization}, Journal of
+  Optimization Theory and Applications, 196 (2023), pp.~266--297.
+
+\bibitem{yin2026crh}
+{\sc S.~Yin, Z.~Yin, Y.~Hou, R.~Liu, Y.~Chen, and D.~Zhang}, {\em
+  Codebook-centric deep hashing: End-to-end joint learning of semantic hash
+  centers and neural hash function}, in Proceedings of the AAAI Conference on
+  Artificial Intelligence, vol.~40, 2026, pp.~12018--12026.
+
+\bibitem{yuanCentralSimilarityQuantization2020}
+{\sc L.~Yuan, T.~Wang, X.~Zhang, F.~E. Tay, Z.~Jie, W.~Liu, and J.~Feng}, {\em
+  Central {{Similarity Quantization}} for {{Efficient Image}} and {{Video
+  Retrieval}}}, in 2020 {{IEEE}}/{{CVF Conference}} on {{Computer Vision}} and
+  {{Pattern Recognition}} ({{CVPR}}), Seattle, WA, USA, jun 2020, IEEE,
+  pp.~3080--3089.
+
+\bibitem{zhuDeepHashingNetwork2016}
+{\sc H.~Zhu, M.~Long, J.~Wang, and Y.~Cao}, {\em Deep hashing network for
+  efficient similarity retrieval}, in AAAI Conference on Artificial
+  Intelligence (AAAI), 2016, pp.~2415--2421.
+
+\end{thebibliography}
 
 \endgroup
 \end{document}

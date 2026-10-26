@@ -124,7 +124,7 @@
 \medskip
 \noindent Sincerely,
 
-\noindent The authors of Submission {\color{red}[new manuscript number]}
+\noindent The authors of Submission [new manuscript number]
 
 \bigskip
 % \subsection*{Decision letter for Submission M187198 (Editor's remarks to the author)}
@@ -480,7 +480,7 @@ where $c_1'$ is defined in \meq{eq:lb-common} and is independent of $T$.
 
 % \item (Theorem 5.2/proof) See my comments relative to Appendix C.
 % \normalfont\par\smallskip\upshape\responseLabel \chg{We answer this comment in \hyperref[resp:r2:thm52]{our response on the proof of Theorem~5.2} below.}
-\item (Lemma 5.6/proof) In (C.7) you don't pass to conditional expectation correctly ; this should be be $\EE_{\xi_{\textcolor{red}{[k+1]}}}$ before every terms. Fortunately, this doesn't seem compromise your proof to the extent that the ``wrong'' terms in $\EE_{\xi_{\textcolor{red}{[k]}}}$ in your inequality seems measurable (to check) and can therefore be written without a conditional expectation, for example $\cancel{\EE_{\xi_{\textcolor{red}{[k]}}}[\Delta_{\bx}^k]}\to\EE_{\xi_{\textcolor{red}{[k+1]}}}[\Delta_{\bx}^k]=\Delta_{\bx}^k$. Moreover, remind the reader you also use $\EE_{\xi_{\textcolor{red}{[k+1]}}}[\|e_k\|^2]\le\sigma^2/b_k$ (to justify).
+\item (Lemma 5.6/proof) In (C.7) you don't pass to conditional expectation correctly ; this should be be $\EE_{\xi_{[k+1]}}$ before every terms. Fortunately, this doesn't seem compromise your proof to the extent that the ``wrong'' terms in $\EE_{\xi_{[k]}}$ in your inequality seems measurable (to check) and can therefore be written without a conditional expectation, for example $\cancel{\EE_{\xi_{[k]}}[\Delta_{\bx}^k]}\to\EE_{\xi_{[k+1]}}[\Delta_{\bx}^k]=\Delta_{\bx}^k$. Moreover, remind the reader you also use $\EE_{\xi_{[k+1]}}[\|e_k\|^2]\le\sigma^2/b_k$ (to justify).
 \label{resp:r2:c7}
 \par Finally, to reach the inequality after (C.7), you need to invoke Lemma C.2. For this reason, I would place Lemma C.2 before Lemma C.1.
 \par\smallskip
@@ -567,7 +567,7 @@ When $b_{k}=b=\lceil c_{b}T\rceil$, \mk{we have $\frac{1}{T}\sum_{k=1}^{T}\frac{
 % \item ((Lemma 5.10)/Theorem 5.3 proofs) See my comments relative to Appendix D.
 % \par\smallskip
 % \normalfont\upshape\responseLabel \chg{We answer these comments individually below; the two notation comments on $|\calI_{k+1}|$ and $C_\delta$ are answered in \hyperref[resp:r2:notation]{Section~\ref*{resp:r2:notation}}.}
-\item (Lemma 5.9/proof) I don't really catch the interest of intermediate variable $s$ here. You should write (D.1) directly. Moreover, (D.1) is a simple direct consequence of Lemma 5.4 combined with Lemma 5.8. Why make things more complicated with intermediate equations (5.9), \textcolor{red}{5.7)} ?
+\item (Lemma 5.9/proof) I don't really catch the interest of intermediate variable $s$ here. You should write (D.1) directly. Moreover, (D.1) is a simple direct consequence of Lemma 5.4 combined with Lemma 5.8. Why make things more complicated with intermediate equations (5.9), 5.7) ?
 \par In (D.2), I don't understand where the term $(C_4-K_6)\Delta_x^k$ comes from.
 \par\smallskip
 \normalfont\upshape\responseLabel \chg{We agree, and we thank the reviewer for this simplification. The proof of Lemma~5.9 (now} \green{Lemma~\mref{Lemma: approximate sufficient descent property storm}}\chg{) now writes (D.1) directly, without $s$} \green{(p.~\mpage{app:storm-descent-proof})}\chg{:}
@@ -590,7 +590,7 @@ Substituting the one-iteration progress \meq{Eq: the recursive relation of L on 
 \end{aligned}
 \]
 \end{bluequote}
-\item (Lemma D.1) In Inequality of Lemma (D.1) and after a quick check of the proof of Lemma 8 of [49], I think this should be $\EE_{\xi_{\textcolor{red}{[k+1]}}}[\|\be^k\|^2]$ instead of $\EE_{\xi_{\textcolor{red}{[k]}}}[\|\be^k\|^2]$ (similar confusion as in the proof of (C.7)) . If it is so, you can hardly consider $\EE_{\xi_{\textcolor{red}{[k]}}}[\|\be^k\|^2]$ as metric for the rest of your analysis. To avoid, this kind of problem, I think you should work with $\EE[\|\be^k\|^2]$ metric instead and present an ``in-expectation'' version of Lemma D.1 i.e. of the form of :
+\item (Lemma D.1) In Inequality of Lemma (D.1) and after a quick check of the proof of Lemma 8 of [49], I think this should be $\EE_{\xi_{[k+1]}}[\|\be^k\|^2]$ instead of $\EE_{\xi_{[k]}}[\|\be^k\|^2]$ (similar confusion as in the proof of (C.7)) . If it is so, you can hardly consider $\EE_{\xi_{[k]}}[\|\be^k\|^2]$ as metric for the rest of your analysis. To avoid, this kind of problem, I think you should work with $\EE[\|\be^k\|^2]$ metric instead and present an ``in-expectation'' version of Lemma D.1 i.e. of the form of :
 \[
 \EE[\|\be^{k+1}\|^2]\le ...\EE[\|\be^k\|^2]+...+...\EE[\Delta_{\bx}^{k+1}].
 \]
@@ -827,7 +827,7 @@ Thus $h^{**}(\bB^*)+h^*(\bLmbd^*)=\langle\bLmbd^*,\bB^*\rangle$, which, by the s
 \]
 [\ldots]
 \end{bluequote}
-\item (Lemma 5.4/proof) I don't really understand how you reach inequality (5.9). Provide far more details (intermediate inequalities, mention descent lemma whenever it is used, how you deal with the conjugate quantities...)\textcolor{red}{)}. Assuming (5.9) holds, the rest of the proof is correct. Moreover, why did you choose to include this proof here while those of its counterpart (iteration progress on $\bx$) is presented in the appendix ?
+\item (Lemma 5.4/proof) I don't really understand how you reach inequality (5.9). Provide far more details (intermediate inequalities, mention descent lemma whenever it is used, how you deal with the conjugate quantities...)). Assuming (5.9) holds, the rest of the proof is correct. Moreover, why did you choose to include this proof here while those of its counterpart (iteration progress on $\bx$) is presented in the appendix ?
 \par\smallskip
 \normalfont\upshape\responseLabel
 \chg{We agree that the derivation of (5.9) omitted several steps.} We have added the full derivation of (5.9) and address both questions below.
@@ -1151,7 +1151,7 @@ The ratio depends on the feature dimension, the numerical precision, and the cod
 \begin{bluequote}
 [\ldots] is able to reduce storage by a factor of $512$ (a $1024$-dimensional \texttt{float32} feature vector versus a $64$-bit binary code) [\ldots]
 \end{bluequote}}
-\item (page 1) ``such as $z\mapsto \lvert |z|-1\rvert$\textcolor{red}{''}
+\item (page 1) ``such as $z\mapsto \lvert |z|-1\rvert$''
 \normalfont\par\smallskip\upshape\responseLabel The example now uses the vector notation $\bz\mapsto\lVert|\bz|-\mathbf1\rVert_1$ consistently with the hashing model. The corresponding one-dimensional illustration retains absolute values. \green{(Introduction, p.~\mpage{Fig: the W and V regularizations})}
 
 \item (page 2-3) ``reformulate the problem as \textbf{one of constrainted optimization}''.

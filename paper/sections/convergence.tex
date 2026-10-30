@@ -20,11 +20,11 @@ given the past and $\mathbb E[\cdot]$ for the total expectation. All equalities 
 inequalities involving $\mathbb E_k[\cdot]$ are understood to hold almost surely.} 
 
 For the complexity analysis, we retain Assumption~\ref{Ass: basic regularity} from
-Section~\ref{Section: Problem Reformulation}. \blue{Throughout this section, assume that $h$ is the $\ell_1$ W-regularizer or, more generally, a W-type regularizer with \red{$\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$} (\Cref{Section: Problem Reformulation}).} \blue{Let $L_F:=2L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}+\frac{\gamma}{n}\bigl(2L_{\nabla\mathcal{D}}C_{\mathcal{D}}+2G_{\mathcal{D}}^2+1\bigr)$. Under the prescribed initialization and step sizes, $F$ is $L_F$-smooth along the iterates (\blue{\Cref{app:smoothness-discussion}}), which is essential for our analysis.} \red{The same appendix shows that $\|\bB^k\|\le R_B$ for all $k\ge1$, where $R_B:=C_{\mathcal{D}}+n\lambda\sqrt{nd}/\gamma$.} We then impose the following stochastic-oracle assumption on Problem \eqref{Prop: block-wise regularized problem} used in this section.
+Section~\ref{Section: Problem Reformulation}. \blue{Throughout this section, assume that $h$ is the $\ell_1$ W-regularizer or, more generally, a W-type regularizer with $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$ (\Cref{Section: Problem Reformulation}).} \blue{Let $L_F:=2L_f+\lambda\sqrt{nd}\,L_{\nabla\mathcal{D}}+\frac{\gamma}{n}\bigl(2L_{\nabla\mathcal{D}}C_{\mathcal{D}}+2G_{\mathcal{D}}^2+1\bigr)$. Under the prescribed initialization and step sizes, $F$ is $L_F$-smooth along the iterates (\blue{\Cref{app:smoothness-discussion}}), which is essential for our analysis.} \blue{The same appendix shows that $\|\bB^k\|\le R_B$ for all $k\ge1$, where $R_B:=C_{\mathcal{D}}+n\lambda\sqrt{nd}/\gamma$.} We then impose the following stochastic-oracle assumption on Problem \eqref{Prop: block-wise regularized problem} used in this section.
 \begin{assumption}
 \label{Ass: main assumptions}
 \leavevmode
-\red{There exists $\sigma^2\geq0$ such that, for all} $\bx\in\RR^{q}$ and $\bB\in\RR^{n\times d}$ \red{with $\|\bB\|\le R_B$},
+\blue{There exists $\sigma^2\geq0$ such that, for all} $\bx\in\RR^{\blue{q}}$ and $\bB\in\RR^{n\times d}$ \blue{with $\|\bB\|\le R_B$},
     \begin{align}
         \label{Eq: finite-sum sampling identities}% [2026-10-25] removed the identity (1/n)sum grad F_i = grad F, which holds by definition of F
         \blue{\frac{1}{n}\sum_{i=1}^{n}
@@ -34,8 +34,8 @@ Section~\ref{Section: Problem Reformulation}. \blue{Throughout this section, ass
     \end{align}
 \end{assumption}
 
-Our analysis aims to bound $\mathbb{E}\big[\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)\big]$. 
-\red{The presence of the dual variable $\bLmbd$ makes it difficult to establish a descent property for $\calL$.}
+Our analysis aims to bound $\mathbb{E}\big[\blue{\operatorname{dist}^{2}\big(\bm{0},\mathcal{K}(\bx,\bB,\bLmbd)\big)}\big]$. 
+\blue{The presence of the dual variable $\bLmbd$ makes it difficult to establish a descent property for $\calL$.}
 % \red{This quantity is controlled by the increments of successive iterates and the gradient error (\Cref{Lemma: Stationarity error bound in SGDM,Lemma: Stationarity error bound}), which a descent argument for a merit function would bound.} However,
 % \blue{the dual update can increase $\calL$, so $\calL$ need not decrease along the iterates and standard descent arguments do not apply directly}~\cite{xu2023momentum,zhang2022stochastic}.
 To this end, we construct suitable Lyapunov functions (see \eqref{Eq: the Lyapunov function in SGDM} and \eqref{Eq: the Lyapunov function in STORM}) to obtain the approximate descent property. We first analyze the dual dynamics by establishing bounds on $\|\bLmbd^{k+1}-\bLmbd^k\|^2$ in terms of the primal residuals, enabling the Lyapunov construction \blue{(\Cref{Lemma: dual boundedness})}.
@@ -127,14 +127,14 @@ Under \blue{Assumptions~\ref{Ass: basic regularity} and}~\ref{Ass: main assumpti
 assumption, widely used in variance reduction methods~\cite{arjevani2023lower,fang2018spider,tran2020hybridvrsgd,driggs2021stochastic}.
 \begin{assumption}
 \label{Ass: the mean squared smoothness of F}
-There exists $L_{F} > 0$ such that \blue{for all $\bx, \bx' \in \RR^{q}$ and $\bB, \bB' \in \RR^{n\times d}$} \red{with $\|\bB\|,\|\bB'\|\le R_B$}, it holds that
+There exists $L_{F} > 0$ such that \blue{for all $\bx, \bx' \in \RR^{q}$ and $\bB, \bB' \in \RR^{n\times d}$} \blue{with $\|\bB\|,\|\bB'\|\le R_B$}, it holds that
 \begin{align}
     \label{eq:mss}
     \blue{\frac{1}{n}\sum_{i=1}^{n}}
     \left\| \nabla_{\bx} F_{i}(\bx,\bb_i) - \nabla_{\bx} F_{i}(\bx',\bb_i')\right\|^{2}
     \leq L^{2}_F \left[ \|\bx - \bx'\|^{2} + \|\bB - \bB'\|^{2} \right].
 \end{align}
-\end{assumption}\blue{By Jensen's inequality, \eqref{eq:mss} implies that $\nabla_{\bx}F$ is $L_F$-Lipschitz in $(\bx,\bB)$. The converse need not hold.} \red{With a slight abuse of notation, we also use $L_F$ for this constant.}
+\end{assumption}\blue{By Jensen's inequality, \eqref{eq:mss} implies that $\nabla_{\bx}F$ is $L_F$-Lipschitz in $(\bx,\bB)$. The converse need not hold.} \blue{With a slight abuse of notation, we also use $L_F$ for this constant.}
 
 \blue{With a slight abuse of notation, $\be^k$ denotes the algorithm-specific gradient error, and $\mathcal{Q}^k$ the corresponding iterate tuple.} Let us denote the gradient error \[\be^{k} = \blue{\bg_s^{k}} - \nabla_{\bx}F(\bx^{k}, \bB^{k})
 ,\]where $\blue{\bg_s^k}$ is defined in \eqref{Eq: the stochastic approximate in STORM}. \blue{We first set the parameters of \Cref{alg:our_algorithm_storm} as}

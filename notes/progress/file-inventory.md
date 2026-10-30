@@ -27,7 +27,7 @@
 
 ## 保留的材料
 
-- `paper/DualHash(2).pdf`、编辑决定与审稿报告是版本核对依据。
+- `paper/DualHash_submission.pdf`、编辑决定与审稿报告是版本核对依据。
 - `revision/materal/` 中两份带“副本”的审稿 PDF 与 `revision/supplementary/` 对应文件的字节内容不同；保留可能存在的批注或导出差异。
 - `revision/supplementary/0_DualHash.pdf` 与提交版字节内容不同，保留版本区分。
 - `revision/research/`、历史对话、有界性草稿与申诉信用于追溯论证；阅读时以最新源码确认当前状态。

@@ -179,13 +179,6 @@ For P@r=2 (\Cref{fig:retrieval_2datasets} (b),(d)), DualHash-StoM consistently m
     \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines for 64-bit codes on the NUS-WIDE dataset. The arrow annotation is the separability in Hamming distances, \(\EE [D_{inter}] - \EE [D_{intra}]\). We normalized the frequency so that the sum over all bins equals 1.}
     \label{fig:His_64_NUSWIDE}
 \end{figure}
-\begin{figure}[!tp]
-    % \vspace{-2ex}
-    \centering
-    \includegraphics[width=\linewidth]{results_images/hamming_hig_16.pdf}
-    \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 16-bit codes on NUS-WIDE.}
-    \label{fig:His_16_NUSWIDE}
-\end{figure}
 To elucidate the mechanisms behind the performance of DualHash, following~\cite{hoeOneLossAll2021},
 we examine the quantization error (the discrepancy between continuous outputs and binary codes, \Cref{fig:quantization_error}) and the Hamming distance distributions of the resulting hash codes (\Cref{fig:His_64_NUSWIDE,fig:His_16_NUSWIDE}) across different bit lengths $K\blue{=d}$ on the NUS-WIDE dataset. We compare DualHash-StoM against four deep hashing methods: HashNet~\cite{Cao2017HashNetDL} and OrthoHash~\cite{hoeOneLossAll2021} (employing distinct quantization strategies), and DTSH~\cite{wang2016DTSH} and MDSHC~\cite{wang2023deep} (both utilizing {W-type regularization}).
 
@@ -210,26 +203,6 @@ At $K = 64$ (Figures \ref{fig:quantization_error}(d) and (e)), lower quantizatio
 At $K = 16$ (\Cref{fig:quantization_error}(b) and (c)), we observe a contrasting pattern: both extremely low and extremely high quantization error methods yield suboptimal performance. Notably, DTSH, which maintains intermediate quantization error, achieves superior mAP. Methods with very low quantization error (e.g., DualHash and HashNet) exhibit relatively lower mAP, particularly on multi-label datasets (e.g., NUS-WIDE). Specifically, we observe that  DualHash generates hash codes with low intra-class distances and high inter-class separation. This creates relatively clean class separation, but the actual visual relationships between images may get lost. Consequently, DualHash excels on simple datasets like CIFAR-10 but shows relatively lower performance on complex datasets like NUS-WIDE (multi-label) and ImageNet-100 (large-scale single-label).
 
 % \vspace{3pt}
-\subsection{Parameter Sensitivity Analysis}
-\begin{figure}[!tp]
-    % \vspace{-1mm}
-    \centering
-    \includegraphics[width=0.95\linewidth]{results_images/sensitivity_2datasets.pdf}
-    \caption{The mAP results of DualHash-StoM with different settings of \(\eta\) and \(\gamma\) for 64-bit and 16-bit codes on CIFAR-10 and NUS-WIDE.}
-    \label{fig:sensitivity_analysis_DualHash}
-\end{figure}
-To explore the sensitivity of key hyperparameters $\eta$ and $\gamma$ in 
-DualHash, we conduct a grid search with $\eta \in \{10^{-5}, 10^{-3}, 
-10^{-2}, 1\}$ and $\gamma \in \{0.3, 3, 30, 100\}$. Unlike many deep hashing 
-methods that exhibit significant hyperparameter sensitivity, DualHash-StoM 
-demonstrates robust performance across a wide range of hyperparameter 
-combinations (see \Cref{fig:sensitivity_analysis_DualHash}). 
-Specifically, 64-bit codes achieve excellent stability with mAP variations 
-below 3\% on CIFAR-10 and 8\% on NUS-WIDE. While 16-bit codes show greater 
-sensitivity (up to 18\% on CIFAR-10), this behavior is consistent with the 
-intrinsic optimization challenges of extremely compact hash codes. Overall, 
-the method demonstrates strong stability for standard hash lengths ($\geq$64 bits), 
-which simplifies hyperparameter tuning in practical high-precision retrieval 
-applications.
+\blue{\noindent\textbf{Parameter sensitivity.} DualHash-StoM is robust to the hyperparameters $\eta$ and $\gamma$: for 64-bit codes, the mAP varies by less than 3\% on CIFAR-10 and 8\% on NUS-WIDE over a grid search (\Cref{app:sensitivity}).}
 
 \endgroup

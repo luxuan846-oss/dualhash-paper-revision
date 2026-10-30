@@ -63,7 +63,7 @@ A mapping $\mathcal{M} : \blue{\Omega} \to \RR^l$ is said to be $C$-Lipschitz co
 % where \(n\) is the number of training samples, \blue{\(\bD_i:\RR^q\to\RR^d\) is the continuous network output mapping for sample \(i\), \(\mathcal{D}(\bx):=[\bD_1(\bx)^\top;\ldots;\bD_n(\bx)^\top]\), and \(\ell_{s,i}:\RR^{n\times d}\to\RR\) is a similarity-preserving loss} (e.g., pairwise cross-entropy~\cite{zhuDeepHashingNetwork2016}). This objective is hard to optimize by backpropagation because \(\operatorname{sgn}(\cdot)\) is nondifferentiable and has zero gradient almost everywhere.
 
 \begingroup\color{blue}
-\red{To reduce the quantization error introduced by continuous relaxation}, penalties with W-shaped graphs, vanishing exactly at
+To reduce the quantization error introduced by continuous relaxation, penalties with W-shaped graphs, vanishing exactly at
 $\pm1$, are added to drive the continuous outputs toward $\{-1,1\}^d$. Such penalties
 are standard in deep hashing~\cite{liuDeepSupervisedHashing,yuanCentralSimilarityQuantization2020,he2025mambahash,
 yin2026crh}. Their formulas differ, but our analysis depends only on their common
@@ -73,13 +73,13 @@ Let \(\phi:\mathbb{R}\to[0,+\infty)\). For \(\bz\in\mathbb{R}^{d}\) and \(\bZ\in
 \begin{enumerate}[label=\textup{(W\arabic*)}]
   \item\label{W1} \(\phi\) is even and continuous, and \(\phi(t)=0\) if and only if \(t\in\{-1,1\}\);
   \item\label{W2} \(\phi\) is convex on \([1,+\infty)\);
-  \item\label{W3} \(\phi\) decreases at a nonvanishing rate on \([0,1)\): for every \(\red{\theta}\in(0,1)\) there exists \(\red{c_{\theta}}>0\) such that \(\phi(s)-\phi(t)\ge \red{c_{\theta}}(t-s)\) for all \(0\le s<t\le\red{\theta}\).
+  \item\label{W3} \(\phi\) decreases at a nonvanishing rate on \([0,1)\): for every \(\theta\in(0,1)\) there exists \(c_{\theta}>0\) such that \(\phi(s)-\phi(t)\ge c_{\theta}(t-s)\) for all \(0\le s<t\le\theta\).
 \end{enumerate}
 \end{definition}
 Condition~\ref{W1} fixes the W shape and, together with \ref{W2}, makes $\phi$ nondecreasing on $[1,+\infty)$, which determines the convex envelope and the conjugate below; \ref{W3} excludes flat pieces in $(-1,1)$, so that $\phi$ has no stationary point there, which yields the stationarity characterization in \Cref{prop:transfer}. We list representative W-type regularizers from the deep hashing literature together with their conjugates in \Cref{tab:wtype}. Throughout the paper, we refer to this as the $\ell_1$ W-regularizer, which is also the regularizer used in our experiments, defined by
 \begin{equation}\label{eq:l1-w-regularizer}
 h(\bz)=\lambda\bigl\||\bz|-\mathbf{1}\bigr\|_1.
-\end{equation}\red{\Cref{fig:w-conj-prox} illustrates this regularizer.}
+\end{equation}\Cref{fig:w-conj-prox} illustrates this regularizer.
 \begin{remark}
 {The structural results in \Cref{Section: Methodology} hold for every W-type regularizer, whereas the algorithms, the complexity analysis, and the experiments use the $\ell_1$ W-regularizer, which has a \emph{compact dual domain}, i.e., $\operatorname{dom}\phi^*=[-\lambda,\lambda]$.}
 \end{remark}
@@ -148,18 +148,18 @@ Consequently, \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\), \(h^{**}(\bB)=\sum
         \draw[densely dotted,thin] (-2,-1)--(0,-1);
         \draw[densely dotted,thin] (0,1)--(2,1);
 
-        \node[above] at (-2,0.10) {$\red{-(\lambda+\tau^{-1})}$};
-        \node at (-1,-0.42) {$\red{-\tau^{-1}}$};
-        \node at ( 1,-0.42) {$\red{\tau^{-1}}$};
-        \node at ( 2,-0.42) {$\red{\lambda+\tau^{-1}}$};
+        \node[above] at (-2,0.10) {$\blue{-(\lambda+\tau^{-1})}$};
+        \node at (-1,-0.42) {$\blue{-\tau^{-1}}$};
+        \node at ( 1,-0.42) {$\blue{\tau^{-1}}$};
+        \node at ( 2,-0.42) {$\blue{\lambda+\tau^{-1}}$};
         \node[left] at (0, 1) {$\lambda$};
         \node[left] at (0,-1) {$-\lambda$};
 
-        \node at (0,-2) {$\text{(c)}\ \blue{\operatorname{prox}_{{\color{red}\tau^{-1}}\phi^*}(v)}$};
+        \node at (0,-2) {$\text{(c)}\ \blue{\operatorname{prox}_{\tau^{-1}\phi^*}(v)}$};
     \end{scope}
 \end{tikzpicture}
 }
-\caption{\blue{The \red{$\ell_1$ W-regularizer~\eqref{eq:l1-w-regularizer}}, drawn with $\lambda=\red{\tau^{-1}}=1$: (a) the scalar W-type regularizer $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\red{\tau^{-1}}$ and clips to $[-\lambda,\lambda]$.}}
+\caption{\blue{The $\ell_1$ W-regularizer~\eqref{eq:l1-w-regularizer}, drawn with $\lambda=\tau^{-1}=1$: (a) the scalar W-type regularizer $\phi$, (b) its conjugate $\phi^*$, finite on $[-\lambda,\lambda]$, and (c) the proximal mapping of $\phi^*$, which soft-thresholds at $\tau^{-1}$ and clips to $[-\lambda,\lambda]$.}}
 \label{fig:w-conj-prox}
 \vspace{-2ex}
 \end{figure}
@@ -172,7 +172,7 @@ With the W-type regularizer \(h\) \blue{defined in \Cref{def:wtype}}, the model 
 \min_{\bx \in \RR^{\blue{q}}} \quad \blue{J_0(\bx):=}\frac{1}{n}\sum_{i=1}^n f_i(\bx) + \sum_{i=1}^n h(\bD_i(\bx)),
 \tag{\blue{P0}}
 \end{align}where
-\blue{\(f_i(\bx):=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^2\) with \(\mu>0\)\red{, and \(\ell_{s,i}:\RR^{n\times d}\to\RR\) is a similarity-preserving loss (e.g., pairwise cross-entropy~\cite{zhuDeepHashingNetwork2016})}.}
+\blue{\(f_i(\bx):=\ell_{s,i}\!\left(\mathcal{D}(\bx)\right)+\frac{\mu}{2}\|\bx\|^2\) with \(\mu>0\), and \(\ell_{s,i}:\RR^{n\times d}\to\RR\) is a similarity-preserving loss (e.g., pairwise cross-entropy~\cite{zhuDeepHashingNetwork2016}).}
 
 \blue{Following~\cite{bai2019proxquant}, we define the $\ell_1$ quantization error in deep hashing problems as follows:
 \begin{equation}
@@ -226,15 +226,15 @@ We impose the following basic assumptions on Problem \eqref{Eq: the primal deep 
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{@{}c>{\centering\arraybackslash}m{1.9cm}cccc>{\centering\arraybackslash}m{2.2cm}@{}}
 \toprule
-\shortstack[c]{Regularizer\\\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{{\color{red}\tau^{-1}}\phi^*}(v)\) & Relation to \(Q_1\)\\
+\shortstack[c]{Regularizer\\\(\phi(t)\)} & Algorithm & \(\partial\phi(0)\) & \(\phi^*(y)\) & \(\operatorname{dom}\phi^*\) & \(\operatorname{prox}_{\tau^{-1}\phi^*}(v)\) & Relation to \(Q_1\)\\
 \midrule
 \shortstack[c]{\(\ell_1\)\\\(\lambda\bigl||t|-1\bigr|\)} & \cite{liuDeepSupervisedHashing,wang2023deep,bai2019proxquant}
  & \(\{\pm\lambda\}\) & \(|y|\) & \([-\lambda,\lambda]\)
- & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-{\color{red}\tau^{-1}})_+\bigr)\) & $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$\\
+ & \(\operatorname{clip}\bigl(\operatorname{sgn}(v)(|v|-\tau^{-1})_+\bigr)\) & $h(\mathcal{D}(\bx))=\lambda Q_1(\bx)$\\
 \addlinespace[3pt]
 \shortstack[c]{\(\ell_2^2\)\\\(\lambda\bigl||t|-1\bigr|^2\)} & \cite{wang2016DTSH,he2025mambahash,semanticHashCenters2025,yin2026crh,bai2019proxquant} 
  & \(\{\pm2\lambda\}\) & \(|y|+\frac{y^2}{4\lambda}\) & \(\mathbb{R}\)
- & \(\operatorname{sgn}(v)\frac{(|v|-{\color{red}\tau^{-1}})_+}{1+{\color{red}\tau^{-1}}/(2\lambda)}\)
+ & \(\operatorname{sgn}(v)\frac{(|v|-\tau^{-1})_+}{1+\tau^{-1}/(2\lambda)}\)
  & {\scriptsize $h(\mathcal{D}(\bx))\le\lambda\max\{1,C_{\mathcal{D}}-1\}Q_1(\bx)$}\\
 \midrule
 \shortstack[c]{log-cosh\\\(\lambda\log\cosh(|t|-1)\)} & \cite{zhuDeepHashingNetwork2016,yuanCentralSimilarityQuantization2020}

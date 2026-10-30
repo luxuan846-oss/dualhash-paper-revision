@@ -60,7 +60,7 @@ Finally, separability gives \(h^*(\bLmbd)=\sum_{i,j}\phi^*(\Lambda_{ij})\) and \
 If \(\phi\) satisfies \ref{W1} and \ref{W3}, then \(0\notin\partial\phi(t)\) for every \(t\in(-1,1)\).
 \end{lemma}
 \begin{proof}
-Fix \(t\in[0,1)\) and \(\red{\theta}\in(t,1)\). If \(t'\in[0,\red{\theta})\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+\red{\delta}\), \(\red{\delta}\downarrow0\), gives \(v\le-\red{c_{\theta}}\). At \(t'=0\), evenness gives \(\phi(\red{\delta})\le\phi(0)-\red{c_{\theta}}|\red{\delta}|\) for \(\red{\delta}<0\), hence also \(v\ge \red{c_{\theta}}\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-\red{\theta},0)\) are at least \(\red{c_{\theta}}\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-\red{c_{\theta}}]\cup[\red{c_{\theta}},\infty)\) for \(|t|<\red{\theta}\).
+Fix \(t\in[0,1)\) and \(\theta\in(t,1)\). If \(t'\in[0,\theta)\) and \(v\in\hat\partial\phi(t')\), then \ref{W3} with \(s=t'\) and \(t'+\delta\), \(\delta\downarrow0\), gives \(v\le-c_{\theta}\). At \(t'=0\), evenness gives \(\phi(\delta)\le\phi(0)-c_{\theta}|\delta|\) for \(\delta<0\), hence also \(v\ge c_{\theta}\); thus \(\hat\partial\phi(0)=\emptyset\). By evenness, Fr\'echet subgradients at points of \((-\theta,0)\) are at least \(c_{\theta}\). Passing to limits, \(\partial\phi(t)\subset(-\infty,-c_{\theta}]\cup[c_{\theta},\infty)\) for \(|t|<\theta\).
 \end{proof}
 
 \begin{proof}
@@ -180,7 +180,7 @@ R_B:=C_{\mathcal{D}}+\frac{n\lambda\sqrt{nd}}{\gamma}.
 This region contains all primal iterates under the prescribed initializations and step sizes, and $L_F$ is independent of $T$.
 
 \begin{proof}
-For a W-type regularizer with \red{$\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$}, $\bB^1\in\partial h^*(\bLmbd^1)$ and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$.
+For a W-type regularizer with $\operatorname{dom}\phi^*\subseteq[-\lambda,\lambda]$, $\bB^1\in\partial h^*(\bLmbd^1)$ and \eqref{Eq: the update of lambda} give $\|\bLmbd^k\|\le\lambda\sqrt{nd}$ for all $k\ge1$.
 Since $L_F\ge\gamma/n$, the prescribed step sizes satisfy $0<\tau\gamma/n<1$.
 Since $\phi^{**}$ is even and convex, its proximal mapping preserves sign and does not increase magnitude. Thus the algorithm initialization and Assumption~\ref{Ass: basic regularity}(ii) give $\|\bB^1\|\le\|\mathcal{D}(\bx^1)\|\le C_{\mathcal{D}}\le R_B$. If $\|\bB^k\|\le R_B$, then \eqref{Eq: the update of B} gives
 \[
@@ -350,7 +350,7 @@ We first present a lemma \blue{on} continuously differentiable \blue{functions} 
 Let us denote the gradient error in the $k$-th iteration as
 \[
 \be^{k} = \blue{\bg_m^{k}} - \nabla_{\bx}F(\bz^{k}, \bB^{k}),
-\]where $\blue{\bg_m^k}$ is defined in \eqref{Eq: the stochastic approximate in SGDM}. Under Assumption~\ref{Ass: main assumptions}\blue{ and \red{the sampling rule in Section~\ref{Sec: DualHash framework}~\cite[Chapter~2]{cochran1977sampling}}}, one has
+\]where $\blue{\bg_m^k}$ is defined in \eqref{Eq: the stochastic approximate in SGDM}. Under Assumption~\ref{Ass: main assumptions}\blue{ and the sampling rule in Section~\ref{Sec: DualHash framework}~\cite[Chapter~2]{cochran1977sampling}}, one has
 \begin{align}
     \label{eq: the gradient error in SGDM}
     \mathbb{E}\!\left[\|\be^k\|^2\right]
@@ -721,7 +721,7 @@ We then bound the three terms on the right-hand side of \eqref{Eq: the stationar
     , \bLmbd^{R}))] \leq \varepsilon^{2}$. Then, the oracle complexity
     of SFO is
     \[
-        \text{Complexity}= {\color{red}Tb}=\calO(T^{2}) = \calO(\varepsilon^{-4}).
+        \text{Complexity}= \blue{Tb}=\calO(T^{2}) = \calO(\varepsilon^{-4}).
     \]
 \end{proof}
 
@@ -1035,7 +1035,7 @@ With this parameter choice, we proceed to analyze the oracle complexity of \Cref
     \]
     With the conditions on $T$ in \eqref{Eq: the iterate number upper bound of algorithm VR}, this gives $\EE[\mathrm{dist}^{2}(\bm{0}, \mathcal K(\bx^{R}, \bB^{R}, \bm{\Lambda}^{R}))]\le\varepsilon^2$. Then, the oracle complexity is
     \[
-        \text{Complexity}= b_{1}+ {\color{red}2}(T-1)b = \calO(T^{\frac{1}{3}}) + \calO(T) = \calO(T) = \calO(\varepsilon^{-3}),
+        \text{Complexity}= b_{1}+ \blue{2}(T-1)b = \calO(T^{\frac{1}{3}}) + \calO(T) = \calO(T) = \calO(\varepsilon^{-3}),
     \]
     which completes the proof.
 \end{proof}

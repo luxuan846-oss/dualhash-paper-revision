@@ -12,10 +12,21 @@
 % 允许更多浮动体
 \setcounter{topnumber}{3}
 \setcounter{bottomnumber}{2}
+\addtolength{\headheight}{3.1pt}\addtolength{\topmargin}{-3.1pt}
 
 \setcounter{totalnumber}{4}
 \setcounter{dbltopnumber}{4}
 \raggedbottom
+
+% Line labels for the response letter: every \label{X} in numbered running
+% text also records the current line number as ln:X (read by \mline in the
+% letter). Labels in math, floats, or unnumbered parts get no line label.
+\makeatletter
+\AtBeginDocument{%
+  \let\ms@label\label
+  \renewcommand{\label}[1]{\ms@label{#1}%
+    \ifmmode\else\ifinner\else\ifLineNumbers\linelabel{ln:#1}\fi\fi\fi}}
+\makeatother
 
 \begin{document}
 
@@ -29,7 +40,7 @@ from the discrete nature of quantization in generating the codes.
 \blue{W-type regularizations, such as $\bz\mapsto\lVert|\bz|-\mathbf{1}\rVert_1$, are widely adopted and empirically effective at pushing network outputs toward binary values.}
 However, existing methods often directly optimize these regularizations without convergence guarantees.
 While proximal gradient methods offer a promising solution, the coupling between W-type regularizers and neural network outputs results in composite forms that generally lack closed-form proximal solutions.
-In this paper, using Fenchel duality, \red{we reformulate the nonconvex W-type regularization term through its convex conjugate, yielding} \blue{a min--max problem with} \blue{tractable proximal updates.}
+In this paper, using Fenchel duality, we \blue{reformulate} the nonconvex W-type regularization \blue{term through its convex conjugate, yielding} \blue{a min--max problem with} \blue{tractable proximal updates.}
 \blue{We show that this min--max problem captures the stationarity of the original deep hashing objective up to the quantization error.}
 \blue{Building on this problem, we} present a stochastic primal-dual hashing algorithm, referred to as DualHash, \blue{with oracle complexity guarantees.}
 We derive two algorithm instances: a momentum-\blue{based} version with $\mathcal{O}(\varepsilon^{-4})$ \blue{oracle} complexity and an improved $\mathcal{O}(\varepsilon^{-3})$ version using variance reduction\blue{, both for $\varepsilon$-KKT points of the \blue{min--max} problem, which yield near-stationarity guarantees for the original objective}.

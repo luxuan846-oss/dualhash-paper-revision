@@ -15,7 +15,7 @@
 先读 `AGENTS.md` 和 `notes/progress/PROJECT_STATUS.md`，再按以下顺序阅读：
 
 1. **编辑决定与审稿意见：** `revision/supplementary/` 中的决定信与审稿报告，以及 `notes/project/editor-correspondence.md`。
-2. **提交版原稿：** `paper/DualHash(2).pdf`。
+2. **提交版原稿：** `paper/DualHash_submission.pdf`。
 3. **当前修订稿：** `paper/main.tex`、`paper/ex_shared.tex`、`paper/sections/*.tex` 和 `paper/refers.bib`，包括相关附录。
 4. **回稿信：** `revision/response_letter.tex`，用于定位审稿问题与理解修订思路。
 5. **证明与历史材料：** `revision/research/`、`revision/materal/`、`revision/boundedness_responses_v2.tex`、`revision/appeal_letter.tex` 及必要的参考文献，按当前问题查阅。

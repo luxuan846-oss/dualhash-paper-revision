@@ -38,6 +38,39 @@ Substituting \eqref{Eq: the pairwise CE loss} into Problem~\eqref{Prop: block-wi
 \paragraph{Out-of-Sample Extension}
 For an unseen query $\ba^{\mathrm{qry}} \notin \bA$, its binary code is predicted as $\operatorname{sgn}\!\bigl(\bD(\bx; \ba^{\mathrm{qry}})\bigr)$.
 
+\subsection{Hamming Distance Histograms with 16-bit Codes}
+\label{app:hamming-16}
+\begin{figure}[!htbp]
+    % \vspace{-2ex}
+    \centering
+    \includegraphics[width=\linewidth]{results_images/hamming_hig_16.pdf}
+    \caption{Histogram of intra-class and inter-class Hamming distances of DualHash and baselines with 16-bit codes on NUS-WIDE.}
+    \label{fig:His_16_NUSWIDE}
+\end{figure}
+
+\subsection{Parameter Sensitivity Analysis}
+\label{app:sensitivity}
+\begin{figure}[!htbp]
+    % \vspace{-1mm}
+    \centering
+    \includegraphics[width=0.95\linewidth]{results_images/sensitivity_2datasets.pdf}
+    \caption{The mAP results of DualHash-StoM with different settings of \(\eta\) and \(\gamma\) for 64-bit and 16-bit codes on CIFAR-10 and NUS-WIDE.}
+    \label{fig:sensitivity_analysis_DualHash}
+\end{figure}
+To explore the sensitivity of key hyperparameters $\eta$ and $\gamma$ in 
+DualHash, we conduct a grid search with $\eta \in \{10^{-5}, 10^{-3}, 
+10^{-2}, 1\}$ and $\gamma \in \{0.3, 3, 30, 100\}$. Unlike many deep hashing 
+methods that exhibit significant hyperparameter sensitivity, DualHash-StoM 
+demonstrates robust performance across a wide range of hyperparameter 
+combinations (see \Cref{fig:sensitivity_analysis_DualHash}). 
+Specifically, 64-bit codes achieve excellent stability with mAP variations 
+below 3\% on CIFAR-10 and 8\% on NUS-WIDE. While 16-bit codes show greater 
+sensitivity (up to 18\% on CIFAR-10), this behavior is consistent with the 
+intrinsic optimization challenges of extremely compact hash codes. Overall, 
+the method demonstrates strong stability for standard hash lengths ($\geq$64 bits), 
+which simplifies hyperparameter tuning in practical high-precision retrieval 
+applications.
+
 % \paragraph{Evaluation Protocols}
 % Following~\cite{liuDeepSupervisedHashing}, we adopt four evaluation metrics:
 
